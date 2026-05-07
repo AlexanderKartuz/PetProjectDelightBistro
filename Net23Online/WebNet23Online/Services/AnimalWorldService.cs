@@ -9,6 +9,7 @@ namespace WebNet23Online.Services
 {
     public class AnimalWorldService : IAnimalWorldService
     {
+        public const string DEFAULT_URL = "/images/animal-world/default.jpg";
         private IZooRepository _zooRepository;
         private IAnimalFamilyRepository _animalFamilyRepository;
         private IAnimalSpeciesRepository _animalSpeciesRepository;
@@ -35,7 +36,7 @@ namespace WebNet23Online.Services
             {
                 if (string.IsNullOrEmpty(animal.Url))
                 {
-                    animal.Url = "/images/animal-world/default.jpg";
+                    animal.Url = DEFAULT_URL;
                 }
             }
 
@@ -125,7 +126,7 @@ namespace WebNet23Online.Services
         {
             var user = _authService.GetUser();
             var animalFamily = _animalFamilyRepository.Get(viewModel.AnimalFamilyId);
-            var url = "/images/animal-world/default.jpg";
+            var url = DEFAULT_URL;
             if (viewModel.AnimalSpeciesImage != null)
             {
                 var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
