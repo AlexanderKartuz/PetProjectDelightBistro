@@ -1,0 +1,32 @@
+﻿@using WebNet23Online.Models.JapaneseDomesticMarket
+@model JapaneseDomesticMarketViewModels
+@{
+    Layout = "_LayoutJapaneseDomesticMarket";
+}
+<div class="container">
+    <div class="feedback-container">
+        <form method="post">
+            <div> <label>Производитель</label></div>
+            <div>
+                @Html.DropDownListFor(x => x.ManufactureId, Model.AllManufacturer)
+            </div>
+            <div> <label>Марка</label></div>
+            <div>
+                @Html.TextBoxFor(x => x.Marka, new { type = "text", placeholder = "на латинице" })
+            </div>
+            <div> <label>Модель</label></div>
+            <div>
+                @Html.TextBoxFor(x => x.Model, new { type = "text", placeholder = "на латинице" })
+            </div>
+            <div><label>Цена</label></div>
+            <div>
+                @Html.TextBoxFor(x => x.Price, new { type = "number", placeholder = "" })
+            </div>
+            <div class="title-form">Прикрепите фотографию</div>
+            <div>
+                @Html.TextBoxFor(x => x.Url, new { type = "url", placeholder = "URL" })
+            </div>
+            <button type="submit" class="link-button">Отправить</button>
+        </form>
+    </div>
+</div>
