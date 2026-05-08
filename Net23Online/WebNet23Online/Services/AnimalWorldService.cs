@@ -29,7 +29,7 @@ namespace WebNet23Online.Services
 
         public StartPageAnimalWorldInfoViewModel GetStartInfo()
         {
-            var zoos = _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetRandomElements());
+            //var zoos = _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetRandomElements());
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
             foreach (var animal in animalSpecies)
@@ -42,7 +42,7 @@ namespace WebNet23Online.Services
 
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
-                Zoos = zoos,
+                //Zoos = zoos,
                 AnimalFamilies = animalFamilies,
                 AnimalSpecies = animalSpecies,
             };

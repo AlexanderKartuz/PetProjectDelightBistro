@@ -50,8 +50,9 @@
                 </div>
                 <div>
                     <h3>@species.AnimalSpeciesName</h3>
-                    <p><strong>@AnimalWorld.Habitat:</strong> @species.NativeRange</p>
+                    <p><strong>@AnimalWorld.Habitat:</strong>@species.NativeRange</p>
                     <p>@species.Description</p>
+                    <p><strong>@AnimalWorld.Zoos: </strong>@string.Join(", ", species.Zoos)</p>
                 </div>
             </div>
         }

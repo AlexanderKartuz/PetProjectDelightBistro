@@ -37,6 +37,7 @@ namespace WebNet23Online.Services
                 Url = animalSpecies.AnimalSpeciesUrl,
                 NativeRange = animalSpecies.NativeRange,
                 Description = animalSpecies.Description,
+                Zoos = animalSpecies.ZooData.Select(s => s.ZooName).ToList()
             });
             return animalSpecies.ToList();
         }
