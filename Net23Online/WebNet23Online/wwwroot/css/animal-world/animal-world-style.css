@@ -44,6 +44,10 @@ body {
     text-align: center;
 }
 
+.image-container img {
+    max-width: 100%;
+}
+
 .input-text {
     width: 400px;
     padding: 10px;
@@ -108,6 +112,13 @@ body {
 
 .entity-card {
     margin-bottom: 14px;
+}
+
+.entity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 15px 0 30px;
 }
 
 .entity-image {

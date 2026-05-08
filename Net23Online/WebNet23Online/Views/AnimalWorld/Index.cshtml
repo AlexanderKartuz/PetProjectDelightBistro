@@ -16,42 +16,20 @@
         <img src="~/images/animal-world/animals.jpg" />
     </div>
     <div class="green-title">
-        <h2>@AnimalWorld.Zoos</h2>
-    </div>
-    <hr class="green-line">
-    @if (Model.Zoos.Any())
-    {
-        @foreach (var zoo in Model.Zoos)
-        {
-            <div class="animal entity-card">
-                <h3>@zoo.ZooName</h3>
-                <p><strong>@AnimalWorld.Address:</strong> @zoo.Address</p>
-                <p>@zoo.Description</p>
-                @if (zoo.AnimalSpecies.Any())
-                {
-                    <p><strong>@AnimalWorld.AnimalFamilies:</strong></p>
-                    @string.Join(", ", zoo.AnimalFamilies.Select(a => a.AnimalFamilyName))
-                }
-            </div>
-        }
-    }
-    else
-    {
-        <p class="empty-list-note">@AnimalWorld.NoZoos.</p>
-    }
-    <div class="green-title">
         <h2>@AnimalWorld.AnimalFamilies</h2>
     </div>
     <hr class="green-line">
     @if (Model.AnimalFamilies.Any())
     {
-        @foreach (var family in Model.AnimalFamilies)
-        {
-            <div class="animal entity-card">
-                <h3>@family.AnimalFamilyName</h3>
-                <p>@family.Description</p>
-            </div>
-        }
+        <div class="entity-grid">
+            @foreach (var family in Model.AnimalFamilies)
+            {
+                <div class="animal entity-card">
+                    <h3>@family.AnimalFamilyName</h3>
+                    <p>@family.Description</p>
+                </div>
+            }
+        </div>
     }
     else
     {
