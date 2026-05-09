@@ -163,7 +163,13 @@ namespace WebNet23Online.Services
 
         public List<ZooViewModel> GetAllZoos()
         {
-            return _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetAllWithAnimalSpecies());
+            var zoos = _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetAll());
+            foreach (var zoo in zoos)
+            {
+                zoo.AnimalFamilies = _zooRepository.GetZooAnimalFamilies(zoo.Id);
+            }
+
+            return zoos;
         }
     }
 }
