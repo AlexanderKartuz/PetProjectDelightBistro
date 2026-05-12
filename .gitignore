@@ -425,4 +425,3 @@ FodyWeavers.xsd
 
 # Ignore steam user avatars
 **/wwwroot/images/steam/avatars/
-**/wwwroot/images/steam/avatars/*

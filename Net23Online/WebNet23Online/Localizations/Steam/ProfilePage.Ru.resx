@@ -117,65 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Avatar_Hint_Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Avatar_Hint_Text" xml:space="preserve">
+    <value>Загрузите фотографию профиля (JPG, PNG, GIF)</value>
   </data>
-  <data name="Back_To_Catalog_Button" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Back_To_Catalog_Button" xml:space="preserve">
+    <value>Вернуться к каталогу</value>
   </data>
-  <data name="Cancel_Button" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Cancel_Button" xml:space="preserve">
+    <value>Отмена</value>
   </data>
-  <data name="Change_Avatar_Button" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Change_Avatar_Button" xml:space="preserve">
+    <value>Сменить аватар</value>
   </data>
-  <data name="Delete_Account_Button" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Delete_Account_Button" xml:space="preserve">
+    <value>Удалить аккаунт</value>
   </data>
-  <data name="Delete_Confirmation_Message" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Delete_Confirmation_Message" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить свою учетную запись? Это действие невозможно отменить!</value>
   </data>
-  <data name="FirstName_Placeholder" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="FirstName_Placeholder" xml:space="preserve">
+    <value>Введите свое имя</value>
   </data>
-  <data name="Label_FirstName" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Label_FirstName" xml:space="preserve">
+    <value>Имя</value>
   </data>
-  <data name="Label_Language" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Label_Language" xml:space="preserve">
+    <value>Preferred Language</value>
   </data>
-  <data name="Label_LastName" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Label_LastName" xml:space="preserve">
+    <value>Фамилия</value>
   </data>
-  <data name="Label_Mobilephone" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Label_Mobilephone" xml:space="preserve">
+    <value>Мобильный телефон</value>
   </data>
-  <data name="Label_Username" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Label_Username" xml:space="preserve">
+    <value>Имя пользователя</value>
   </data>
-  <data name="Language_Hint_Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Language_Hint_Text" xml:space="preserve">
+    <value>Выберите предпочитаемый вами язык интерфейса</value>
   </data>
-  <data name="LastName_Placeholder" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="LastName_Placeholder" xml:space="preserve">
+    <value>Введите свою фамилию</value>
   </data>
-  <data name="Mobilephone_Placeholder" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Mobilephone_Placeholder" xml:space="preserve">
+    <value>+1 234 567 8900</value>
   </data>
-  <data name="No_Avatar_Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="No_Avatar_Text" xml:space="preserve">
+    <value>Нет аватара</value>
   </data>
-  <data name="Page_Title" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Page_Title" xml:space="preserve">
+    <value>Профиль пользователя</value>
   </data>
-  <data name="Save_Profile_Button" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Save_Profile_Button" xml:space="preserve">
+    <value>Сохранить профиль</value>
   </data>
-  <data name="Select_Language_Option" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Select_Language_Option" xml:space="preserve">
+    <value>Выберите язык</value>
   </data>
-  <data name="Username_Placeholder" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Username_Placeholder" xml:space="preserve">
+    <value>Введите имя пользователя</value>
   </data>
 </root>

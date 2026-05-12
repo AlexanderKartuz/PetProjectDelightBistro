@@ -11,6 +11,5 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         void Registration(UserData user);
         void UpdateLanguage(int userId, Language language);
         void UpdateProfile(UserData userData);
-        void DeleteUser(int userId);
     }
 }

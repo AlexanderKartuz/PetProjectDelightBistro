@@ -148,7 +148,8 @@ namespace WebNet23Online.Controllers
             return File(fileStrem, "text/csv");
         }
 
-        public IActionResult SteamUserProfile()
+        [HttpGet]
+        public IActionResult SteamProfile()
         {
             var user = _authService.GetUser();
             var currentUserLanguage = _authService.GetLanguage();
@@ -189,7 +190,7 @@ namespace WebNet23Online.Controllers
             HttpContext.SignOutAsync().Wait();
             _authService.SignIn(user);
 
-            return RedirectToAction(nameof(SteamUserProfile));
+            return RedirectToAction(nameof(SteamProfile));
         }
 
         [HttpPost]
@@ -201,7 +202,7 @@ namespace WebNet23Online.Controllers
             HttpContext.SignOutAsync().Wait();
             _authService.SignIn(user);
 
-            return RedirectToAction(nameof(SteamUserProfile));
+            return RedirectToAction(nameof(SteamProfile));
         }
 
         [HttpPost]
@@ -209,7 +210,7 @@ namespace WebNet23Online.Controllers
         {
             if (avatar == null || avatar.Length == 0)
             {
-                return RedirectToAction(nameof(SteamUserProfile));
+                return RedirectToAction(nameof(SteamProfile));
             }
 
             var user = _authService.GetUser()!;
@@ -234,7 +235,7 @@ namespace WebNet23Online.Controllers
             user.AvatarUrl = $"/{pathToFolder.Replace("\\", "/")}/{fileName}";
             _userRepository.Update(user);
 
-            return RedirectToAction(nameof(SteamUserProfile));
+            return RedirectToAction(nameof(SteamProfile));
         }
 
         [HttpPost]
@@ -257,7 +258,7 @@ namespace WebNet23Online.Controllers
                 }
             }
 
-            _userRepository.DeleteUser(userId);
+            _userRepository.Delete(userId);
             HttpContext.SignOutAsync().Wait();
 
             return RedirectToAction(nameof(SteamController.Index), "Steam");
