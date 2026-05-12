@@ -6,6 +6,7 @@ using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Models.Steam;
 
 using WebNet23Online.Services.Interfaces;
+using WebNet23Online.Services.Interfaces.Steam;
 
 namespace WebNet23Online.Services
 {

@@ -37,7 +37,17 @@
                 <div class="auth-buttons">
                     @if (authService.IsAuthenticated())
                     {
-                        <span class="username">@SteamShared.Top_Bar_Welcome_Text, @authService.GetUserName()!</span>
+                        <div class="user-info">
+                            @if (!string.IsNullOrEmpty(authService.GetUser()?.AvatarUrl))
+                            {
+                                <img src="@authService.GetUser().AvatarUrl" alt="Avatar" class="user-avatar-small" />
+                            }
+                            else
+                            {
+                                <div class="user-avatar-placeholder-small"></div>
+                            }
+                            <a class="username-link" href="/User/SteamProfile">@SteamShared.Top_Bar_Welcome_Text, @authService.GetUserName()!</a>
+                        </div>
                         <a class="logout-btn" href="/Auth/Logout">@SteamShared.Top_Bar_Logout_Button</a>
                     }
                     else

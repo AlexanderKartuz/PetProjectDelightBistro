@@ -14,6 +14,7 @@ using WebNet23Online.Services;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
+using WebNet23Online.Services.Interfaces.Steam;
 using WebNet23Online.Services.LittleLemon;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -10,6 +10,7 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         public void Remove(DataModel model);
         public DataModel? Get(int id);
         public void Update(DataModel model);
+        public void Delete(int id);
         public bool Any();
     }
 }
