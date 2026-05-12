@@ -9,6 +9,7 @@ namespace WebNet23Online.Models.DelightBistro
         [Required]
         [IsUniqueIngredient]
         public string Name { get; set; }
+        public int Quantity { get; set; } = 10;
         public bool IsSelected { get; set; } = false;
     }
 }

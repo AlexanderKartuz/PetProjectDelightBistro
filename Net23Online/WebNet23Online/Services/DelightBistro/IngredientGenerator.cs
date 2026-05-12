@@ -35,6 +35,7 @@ namespace WebNet23Online.Services.DelightBistro
             {
                 Id = ingredientData.Id,
                 Name = ingredientData.Name,
+                //Quantity=
             };
             return ingredientViewModel;
         }
@@ -46,6 +47,9 @@ namespace WebNet23Online.Services.DelightBistro
                 Id = x.Id,
                 Name = x.Name,
                 IsSelected = foodItemData != null && foodItemData.IngredientsList.Any(i => i.Id == x.Id),
+                Quantity = foodItemData?.FoodItemIngredientDatas
+                .FirstOrDefault(fi => fi.IngredientDataId == x.Id)?
+                .QuantityOfIngredients ?? 10
             }).ToList();
 
             return ingredientsViewModel;

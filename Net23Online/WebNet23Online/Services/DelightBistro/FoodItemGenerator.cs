@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
+using WebNet23Online.Data.DataModels;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
@@ -47,8 +48,16 @@ namespace WebNet23Online.Services.DelightBistro
 
         public void CreateFoodItemData(CreateFoodItemViewModel viewModel)
         {
-            var selectedIngredients = GetSelectedIngredients(viewModel);
+            //var selectedIngredients = GetSelectedIngredients(viewModel); // delete?
             var selectedMenu = GetSelectedMenu(viewModel);
+
+            var links = viewModel.SelectedIngredientsId.Select(id =>
+            new FoodItemIngredientData
+            {
+                IngredientDataId = id,
+                QuantityOfIngredients = viewModel.IngredientQuantities
+                .TryGetValue(id, out var q) ? q : 10
+            }).ToList();
 
             var newFoodItemData = new FoodItemData()
             {
@@ -57,7 +66,8 @@ namespace WebNet23Online.Services.DelightBistro
                 ImgURL = viewModel.ImgURL,
 
                 MenuData = selectedMenu,
-                IngredientsList = selectedIngredients,
+                //IngredientsList = selectedIngredients, // delete?
+                FoodItemIngredientDatas = links,
                 Creator = _authService.GetUser()
             };
 
@@ -69,8 +79,16 @@ namespace WebNet23Online.Services.DelightBistro
 
         public void ChangeFoodItemData(CreateFoodItemViewModel viewModel)
         {
-            var selectedIngredients = GetSelectedIngredients(viewModel);
+            //var selectedIngredients = GetSelectedIngredients(viewModel); // delete?
             var selectedMenu = GetSelectedMenu(viewModel);
+
+            var links = viewModel.SelectedIngredientsId.Select(id =>
+            new FoodItemIngredientData
+            {
+                IngredientDataId = id,
+                QuantityOfIngredients = viewModel.IngredientQuantities
+                .TryGetValue(id, out var q) ? q : 10
+            }).ToList();
 
             var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredients(viewModel.Id);
 
@@ -78,7 +96,9 @@ namespace WebNet23Online.Services.DelightBistro
             changedFoodItemData.Price = viewModel.Price;
             changedFoodItemData.ImgURL = viewModel.ImgURL;
             changedFoodItemData.MenuData = selectedMenu;
-            changedFoodItemData.IngredientsList = selectedIngredients;
+            //changedFoodItemData.IngredientsList = selectedIngredients;
+            changedFoodItemData.FoodItemIngredientDatas = links;
+
 
             _foodItemRepository.Update(changedFoodItemData);
             GetImgFile(viewModel, changedFoodItemData);
@@ -87,6 +107,18 @@ namespace WebNet23Online.Services.DelightBistro
 
         public FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData)
         {
+            List<string> ingredientList; // name - grams
+            if (foodItemData.FoodItemIngredientDatas?.Any() == true/* is { Count: > 0 }*/)
+            {
+                ingredientList = foodItemData.FoodItemIngredientDatas
+                    .Select(x => $"{x.IngredientData.Name} - {x.QuantityOfIngredients}")
+                    .ToList();
+            }
+            else
+            {
+                ingredientList = foodItemData.IngredientsList.Select(x => x.Name).ToList();
+            }
+
             var foodItemViewModel = new FoodItemViewModel
             {
                 Id = foodItemData.Id,
@@ -94,8 +126,9 @@ namespace WebNet23Online.Services.DelightBistro
                 Price = foodItemData.Price,
                 ImgURL = foodItemData.ImgURL,
                 MenuType = foodItemData.MenuData?.Name ?? "Общее меню",
-                Ingredients = foodItemData.IngredientsList
-                .Select(fi => fi.Name).ToList(),
+                //Ingredients = foodItemData.IngredientsList // delete?
+                //.Select(fi => fi.Name).ToList(),           // delete?
+                Ingredients = ingredientList,
                 Creator = foodItemData.Creator?.Name,
                 CreatorId = foodItemData.CreatorId,
             };

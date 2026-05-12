@@ -53,6 +53,8 @@
                         <input type="checkbox" name="SelectedIngredientsId"
                                value="@inredient.Id" @(inredient.IsSelected ? "checked" : "") />
                         <label>@inredient.Name</label>
+
+                        <input type="number" name="IngredientQuantities[@inredient.Id]" value="@(inredient.Quantity > 0 ? inredient.Quantity : 10)" />
                     </div>
                 }
                 
