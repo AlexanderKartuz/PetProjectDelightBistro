@@ -249,6 +249,9 @@
   <data name="SpeciesName" xml:space="preserve">
     <value>Название вида</value>
   </data>
+  <data name="UploadImage" xml:space="preserve">
+    <value>Загрузить изображение</value>
+  </data>
   <data name="VisitBooked" xml:space="preserve">
     <value>Посещение забронировано</value>
   </data>

@@ -60,6 +60,12 @@ body {
     border-radius: 10px;
 }
 
+.animal-card {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
 .find-animal {
     display: flex;
     gap: 10px;
@@ -95,13 +101,33 @@ body {
     border-radius: 8px;
 }
 
+.file-input {
+    background-color: white;
+    cursor: pointer;
+}
+
 .entity-card {
     margin-bottom: 14px;
 }
 
-    .entity-card h3 {
-        margin-top: 0;
-    }
+.entity-image {
+    flex-shrink: 0;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.entity-image img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+}
+
+.entity-card h3 {
+    margin-top: 0;
+}
 
 .empty-list-note {
     font-style: italic;

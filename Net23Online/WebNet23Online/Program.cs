@@ -99,8 +99,8 @@ builder.Services.AddScoped<IHabitStatisticsService, HabitStatisticsService>();
 
 
 //JapaneseDomesticMarker DI
-builder.Services.AddSingleton<IJapaneseDomesticMarketGenerator, JapaneseDomesticMarketGenerator>();
-builder.Services.AddSingleton<IJDMCatalogGenerator, JDMCatalogGenerator>();
+builder.Services.AddScoped<IJapaneseDomesticMarketGenerator, JapaneseDomesticMarketGenerator>();
+builder.Services.AddScoped<IJDMCatalogGenerator, JDMCatalogGenerator>();
 
 // Repositories
 builder.Services.AddScoped<IZooRepository, ZooRepository>();
@@ -127,6 +127,9 @@ builder.Services.AddScoped<IRockLegendsGenresRepository, RockLegendsGenresReposi
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
+
+builder.Services.AddScoped<IJdmRepository, JdmRepository>();
+builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

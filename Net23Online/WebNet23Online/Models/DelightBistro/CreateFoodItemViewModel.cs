@@ -12,13 +12,14 @@ namespace WebNet23Online.Models.DelightBistro
 
         //[Range(1, 150)]
         public int Price { get; set; }
-        public string ImgURL { get; set; }
+        public string? ImgURL { get; set; }
 
         //checkBoxId
         public List<int> SelectedIngredientsId { get; set; } = new();
         public List<CreateIngredientViewModel> Ingredients { get; set; } = new();
         public int? MenuId { get; set; }
         public List<SelectListItem> Menus { get; set; } = new();
+        public IFormFile? Image { get; set; }
 
     }
 }

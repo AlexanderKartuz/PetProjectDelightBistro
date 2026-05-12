@@ -20,7 +20,7 @@
         </div>
     }
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="input-box">
             <div>Название блюда</div>
             @Html.TextBoxFor(x => x.Name, new { type = "text", required = "required", placeholder = "Имя блюда" })
@@ -60,6 +60,9 @@
         </div>
         
         <div class="input-box url-box">
+            <div class="input-box url-box">
+                <input type="file" name="Image" />
+            </div>
             @Html.TextBoxFor(x => x.ImgURL, new { type = "string", placeholder = "Добавьте URL изображения" })
             @Html.ValidationMessageFor(x => x.ImgURL)
         </div>

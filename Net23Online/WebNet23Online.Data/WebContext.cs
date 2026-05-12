@@ -36,6 +36,9 @@ namespace WebNet23Online.Data
         public DbSet<PublisherData> Publishers { get; set; }
         public DbSet<GameGenreData> GameGenres { get; set; }
 
+        public DbSet<JdmCarsData> JdmCars { get; set; }
+        public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
+
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -167,6 +170,11 @@ namespace WebNet23Online.Data
             modelBuilder.Entity<GenreOfRockBandsData>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
+
+            modelBuilder.Entity<JdmCarsData>()
+                .HasOne(x => x.JdmManufacturerData)
+                .WithMany(x => x.JdmCarsDatas)
+                .HasForeignKey(x => x.JdmManufacturerDataId);
 
             base.OnModelCreating(modelBuilder);
         }

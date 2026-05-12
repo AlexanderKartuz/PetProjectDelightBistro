@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.FileProviders;
 using System.ComponentModel.DataAnnotations;
 using WebNet23Online.Models.CustomValidatioAttributes.AnimalWorld;
 
@@ -9,6 +10,10 @@ namespace WebNet23Online.Models.AnimalWorld
         [Required]
         [AnimalSpeciesUniqueName]
         public string AnimalSpeciesName { get; set; }
+
+        public IFormFile AnimalSpeciesImage { get; set; }
+
+        public string? Url { get; set; }
 
         [Required]
         public int AnimalFamilyId { get; set; }

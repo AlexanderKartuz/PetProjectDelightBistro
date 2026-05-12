@@ -457,6 +457,15 @@ namespace WebNet23Online.Localizations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload image.
+        /// </summary>
+        public static string UploadImage {
+            get {
+                return ResourceManager.GetString("UploadImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The visit is booked..
         /// </summary>
         public static string VisitBooked {

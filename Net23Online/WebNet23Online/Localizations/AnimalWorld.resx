@@ -249,6 +249,9 @@
   <data name="SpeciesName" xml:space="preserve">
     <value>Species name</value>
   </data>
+  <data name="UploadImage" xml:space="preserve">
+    <value>Upload image</value>
+  </data>
   <data name="VisitBooked" xml:space="preserve">
     <value>The visit is booked.</value>
   </data>

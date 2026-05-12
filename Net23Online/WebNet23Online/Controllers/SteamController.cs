@@ -68,6 +68,12 @@ namespace WebNet23Online.Controllers
         [IsModerator]
         public IActionResult AddGame(AddGameViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                viewModel.AllGenres = _catalogService.GetListItemsWithGameGenres();
+                viewModel.Publishers = _catalogService.GetListItemsWithPublishers();
+                return View(viewModel);
+            }
             _catalogService.AddGame(viewModel);
            
             return RedirectToAction(nameof(Catalog));
@@ -132,6 +138,13 @@ namespace WebNet23Online.Controllers
         [EditForCreatorWithRequiredRole]
         public IActionResult EditGame(EditGameViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                viewModel.AllGenres = _catalogService.GetListItemsWithGameGenres();
+                viewModel.Publishers = _catalogService.GetListItemsWithPublishers();
+                return View(viewModel);
+            }
+
             _catalogService.UpdateGame(viewModel);
 
             return RedirectToAction(nameof(GameDetails), new { id = viewModel.Id });

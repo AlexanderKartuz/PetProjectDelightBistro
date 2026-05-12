@@ -45,11 +45,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Home.resx</DependentUpon>
     </Compile>
-    <Compile Update="Localizations\DelightBistro.De.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>DelightBistro.De.resx</DependentUpon>
-    </Compile>
     <Compile Update="Localizations\Steam\AddGamePage.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -90,6 +85,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RockBand.resx</DependentUpon>
     </Compile>
+    <Compile Update="Localizations\RockLegendsPortal.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RockLegendsPortal.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -109,8 +109,7 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\Home.De.resx">
-      <LastGenOutput>Home.De.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\Home.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -121,8 +120,7 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\DelightBistro.De.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>DelightBistro.De.Designer.cs</LastGenOutput>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\Steam\AddGamePage.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -155,6 +153,10 @@
     <EmbeddedResource Update="Localizations\RockBand.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>RockBand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localizations\RockLegendsPortal.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RockLegendsPortal.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

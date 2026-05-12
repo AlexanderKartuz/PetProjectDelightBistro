@@ -34,6 +34,7 @@ namespace WebNet23Online.Services
             var animalSpecies = animalSpeciesData.Select(animalSpecies => new AnimalSpeciesViewModel
             {
                 AnimalSpeciesName = animalSpecies.AnimalSpeciesName,
+                Url = animalSpecies.AnimalSpeciesUrl,
                 NativeRange = animalSpecies.NativeRange,
                 Description = animalSpecies.Description,
             });
