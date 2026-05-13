@@ -81,6 +81,7 @@ namespace WebNet23Online.Services.LittleLemon
                 ReservationDateOnly = reservationDataById.ReservationDateOnly,
                 Occasion = reservationDataById.Occasion,
                 UserComments = reservationDataById.UserComments,
+                CakePhotoUrl = reservationDataById.CakePhotoUrl,
             };
         }
 
@@ -126,11 +127,23 @@ namespace WebNet23Online.Services.LittleLemon
                             ReservationDateOnly = reservationData.ReservationDateOnly,
                             Occasion = reservationData.Occasion,
                             UserComments = reservationData.UserComments,
+                            CakePhotoUrl = reservationData.CakePhotoUrl,
                         }
                     };
                 })
          .ToList();
             return reservationHistory;
+        }
+        public void SetReservationCakePhotoUrl(int reservationId, string CakePhotoUrl)
+        {
+            var reservation = _reservationDataRepository.Get(reservationId);
+            if (reservation == null)
+            {
+                return;
+            }
+            reservation.CakePhotoUrl = CakePhotoUrl;
+            _reservationDataRepository.Update(reservation);
+
         }
 
     }

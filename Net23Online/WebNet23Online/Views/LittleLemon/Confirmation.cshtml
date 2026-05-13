@@ -15,6 +15,10 @@
 		<li>Seating: @Model.Reservation.SeatingPreference</li>
 		<li>Occasion: @Model.Reservation.Occasion</li>
 		<li>Notes: @Model.Reservation.UserComments</li>
+	@if (Model.Reservation.CakePhotoUrl != null)
+	{
+		<li>Cake Photo: <img src="@Model.Reservation.CakePhotoUrl" alt="Cake Photo" /></li>
+	}
 	</ul>
 	@if (Model.CanSeeHistory)
 	{

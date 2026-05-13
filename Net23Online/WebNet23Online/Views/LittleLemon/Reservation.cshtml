@@ -8,9 +8,9 @@
 @Html.Partial("_LittleLemonHeroSection", Model.Hero!)
 <section class="booking-section">
 	<h2>@LittleLemon.Reservation_Header</h2>
-	
-	
-	<form class="booking-form" method="post" asp-controller="LittleLemon" asp-action="Reservation">
+
+
+	<form class="booking-form" method="post" enctype="multipart/form-data" asp-controller="LittleLemon" asp-action="Reservation">
 		<div asp-validation-summary="All" class="booking-validation-summary"></div>
 		<div>
 			<label for="guest-name">@LittleLemon.Reservation_GuestName</label>
@@ -18,7 +18,7 @@
 			<span asp-validation-for="Reservation.GuestName" class="field-validation-error"></span>
 		</div>
 		<div>
-			
+
 			<label for="reserve-date">@LittleLemon.Reservation_ChooseDate</label>
 			<input type="date" id="reserve-date" asp-for="Reservation.ReservationDateOnly" required />
 			<span asp-validation-for="Reservation.ReservationDateOnly" class="field-validation-error"></span>
@@ -38,10 +38,9 @@
 		<div>
 			<label for="guests">@LittleLemon.Reservation_NumberOfGuests</label>
 			<input type="number"
-				   placeholder="1"
-				   min="1"
-				   max="10"
-				   id="guests"
+				   min="1" 
+				   max="10" 
+				   id="guests" 
 				   asp-for="Reservation.NumberOfGuests"
 				   required />
 			<span asp-validation-for="Reservation.NumberOfGuests" class="field-validation-error"></span>
@@ -71,9 +70,14 @@
 		</div>
 		<div>
 			<label for="text-area"> @LittleLemon.Reservation_ExtraLabel </label>
-			<textarea asp-for="Reservation.UserComments" id="text-area" cols="2" rows="3" placeholder="@LittleLemon.Reservation_CommentsPlaceholder"
-					  required></textarea>
+			<textarea asp-for="Reservation.UserComments" id="text-area" cols="2" rows="3"
+					  placeholder="@LittleLemon.Reservation_CommentsPlaceholder" required></textarea>
 			<span asp-validation-for="Reservation.UserComments" class="field-validation-error"></span>
+		</div>
+		<div>
+			<label asp-for="DessertReferencePhoto">@LittleLemon.Reservation_DessertPhoto</label>
+			<input type="file" asp-for="DessertReferencePhoto" accept="image/jpeg,image/png,image/webp" />
+			<span asp-validation-for="DessertReferencePhoto" class="field-validation-error"></span>
 		</div>
 		<input type="submit" value="@LittleLemon.Reservation_Submit" class="btn" />
 	</form>

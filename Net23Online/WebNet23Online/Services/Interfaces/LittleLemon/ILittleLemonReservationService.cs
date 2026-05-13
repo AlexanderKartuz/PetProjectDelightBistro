@@ -9,5 +9,6 @@ namespace WebNet23Online.Services.Interfaces.LittleLemon
         LittleLemonReservationViewModel GetReservationViewModelById(int id);
         bool LinkReservationToGuest(int reservationId, int guestId);
         List<LittleLemonReservationHistoryItemViewModel> GetReservationHistoryForCurrentUser();
+        void SetReservationCakePhotoUrl(int reservationId, string CakePhotoUrl);
     }
 }

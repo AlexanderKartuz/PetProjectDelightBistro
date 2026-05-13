@@ -24,5 +24,6 @@ namespace WebNet23Online.Models.LittleLemon
         [Required(ErrorMessage = "Comments are required.")]
         [StringLength(500, MinimumLength = 3, ErrorMessage = "Comments Must be 3-500 characters.")]
         public string? UserComments { get; set; }
+        public string? CakePhotoUrl { get; set; }
     }
 }

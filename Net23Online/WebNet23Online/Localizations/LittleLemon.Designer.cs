@@ -8,10 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebNet23Online.Localizations {
+namespace WebNet23Online.Localizations
+{
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,30 +23,33 @@ namespace WebNet23Online.Localizations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LittleLemon {
-        
+    public class LittleLemon
+    {
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal LittleLemon() {
+        internal LittleLemon()
+        {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebNet23Online.Localizations.LittleLemon", typeof(LittleLemon).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +63,7 @@ namespace WebNet23Online.Localizations {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
@@ -68,7 +72,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_About", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Contact.
         /// </summary>
@@ -77,7 +81,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Contact", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
@@ -86,7 +90,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Home", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
@@ -95,7 +99,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Login", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Logout.
         /// </summary>
@@ -104,7 +108,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Logout", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Menu.
         /// </summary>
@@ -113,7 +117,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Menu", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Order Online.
         /// </summary>
@@ -122,7 +126,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_OrderOnline", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reservation.
         /// </summary>
@@ -131,7 +135,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Reservation", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Type your E-mail.
         /// </summary>
@@ -140,7 +144,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Subscribe_EmailPlaceholder", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Subscribe!.
         /// </summary>
@@ -149,7 +153,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Subscribe_Label", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to submit.
         /// </summary>
@@ -158,7 +162,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Subscribe_Submit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Little Lemon restaurant.
         /// </summary>
@@ -167,7 +171,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Layout_Title", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Date:.
         /// </summary>
@@ -176,7 +180,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_ChooseDate", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Time:.
         /// </summary>
@@ -185,7 +189,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_ChooseTime", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Remember, be nice!.
         /// </summary>
@@ -194,7 +198,16 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_CommentsPlaceholder", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Dessert Photo.
+        /// </summary>
+        public static string Reservation_DessertPhoto {
+            get {
+                return ResourceManager.GetString("Reservation_DessertPhoto", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Do You want to add anything else?.
         /// </summary>
@@ -203,7 +216,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_ExtraLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Guest name:.
         /// </summary>
@@ -212,7 +225,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_GuestName", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Choose Your Loving Place!.
         /// </summary>
@@ -221,7 +234,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Header", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Indoor dining room.
         /// </summary>
@@ -230,7 +243,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Indoor", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No preference.
         /// </summary>
@@ -239,7 +252,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_NoPreference", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Number of Guests:.
         /// </summary>
@@ -248,7 +261,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_NumberOfGuests", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Occasion:.
         /// </summary>
@@ -257,7 +270,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Occasion", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Anniversary.
         /// </summary>
@@ -266,7 +279,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Occasion_Anniversary", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Birthday.
         /// </summary>
@@ -275,7 +288,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Occasion_Birthday", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
@@ -284,7 +297,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Occasion_None", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Other.
         /// </summary>
@@ -293,7 +306,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Occasion_Other", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Reservation.
         /// </summary>
@@ -302,7 +315,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_PageTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Patio / outdoor.
         /// </summary>
@@ -311,7 +324,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Patio", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Seating preference:.
         /// </summary>
@@ -320,7 +333,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_SeatingPreference", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Make your reservation.
         /// </summary>
@@ -329,7 +342,7 @@ namespace WebNet23Online.Localizations {
                 return ResourceManager.GetString("Reservation_Submit", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Window table (if available).
         /// </summary>

@@ -210,4 +210,7 @@
   <data name="Reservation_Occasion_Other" xml:space="preserve">
     <value>Другое</value>
   </data>
+  <data name="Reservation_DessertPhoto" xml:space="preserve">
+    <value>Фотографии десертов </value>
+  </data>
 </root>

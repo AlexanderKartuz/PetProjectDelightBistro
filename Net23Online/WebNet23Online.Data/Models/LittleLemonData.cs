@@ -18,5 +18,6 @@ namespace WebNet23Online.Data.Models
         public virtual UserData? CreatedByUser { get; set; }
         public int GuestId { get; set; }
         public virtual LittleLemonGuestData Guest { get; set; }
+        public string? CakePhotoUrl { get; set; }
     }
 }

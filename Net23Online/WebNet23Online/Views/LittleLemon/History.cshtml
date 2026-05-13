@@ -9,6 +9,12 @@
 
 <section class="booking-form confirmation-list">
 	<h2>Your reservation history</h2>
+	@if (Model.Reservations != null )
+	{
+		<p>
+			<a class="btn" asp-controller="LittleLemon" asp-action="HistoryPrint">Print</a>
+		</p>
+	}
 
 	@if (Model.Reservations == null || !Model.Reservations.Any())
 	{
@@ -24,7 +30,12 @@
 					@item.Reservation.ReservationDateOnly @item.Reservation.AvailableTimesOnly,
 					Guests: @item.Reservation.NumberOfGuests,
 					Seating: @item.Reservation.SeatingPreference,
-					Name: @item.Reservation.GuestName
+					Name: @item.Reservation.GuestName,
+					@if (!string.IsNullOrEmpty(item.Reservation.CakePhotoUrl))
+					{
+						<text>Cake photo: </text>
+						<img src="@item.Reservation.CakePhotoUrl" alt="Cake or dessert reference" />
+					}
 				</li>
 			}
 		</ul>
