@@ -15,13 +15,18 @@ namespace WebNet23Online.Services.DelightBistro
         private IIngredientsRepository _ingredientsRepository;
         private IIngredientGenerator _ingredientGenerator;
         private IAuthService _authService;
-        public FoodItemGenerator(IFoodItemRepository foodItemRepository, IMenuRepository menuRepository, IIngredientsRepository ingredientsRepository, IIngredientGenerator ingredientGenerator, IAuthService authService)
+        private IWebHostEnvironment _webHostEnvironment;
+
+        public FoodItemGenerator(IFoodItemRepository foodItemRepository, IMenuRepository menuRepository,
+            IIngredientsRepository ingredientsRepository, IIngredientGenerator ingredientGenerator,
+            IAuthService authService, IWebHostEnvironment webHostEnvironment)
         {
             _foodItemRepository = foodItemRepository;
             _menuRepository = menuRepository;
             _ingredientsRepository = ingredientsRepository;
             _ingredientGenerator = ingredientGenerator;
             _authService = authService;
+            _webHostEnvironment = webHostEnvironment;
         }
         public void FeelDataBase()
         {
@@ -55,7 +60,11 @@ namespace WebNet23Online.Services.DelightBistro
                 IngredientsList = selectedIngredients,
                 Creator = _authService.GetUser()
             };
+
             _foodItemRepository.Add(newFoodItemData);
+
+            GetImgFile(viewModel, newFoodItemData);
+
         }
 
         public void ChangeFoodItemData(CreateFoodItemViewModel viewModel)
@@ -72,6 +81,8 @@ namespace WebNet23Online.Services.DelightBistro
             changedFoodItemData.IngredientsList = selectedIngredients;
 
             _foodItemRepository.Update(changedFoodItemData);
+            GetImgFile(viewModel, changedFoodItemData);
+
         }
 
         public FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData)
@@ -193,6 +204,69 @@ namespace WebNet23Online.Services.DelightBistro
 
 
             return viewModel;
+        }
+
+        private void GetImgFile(CreateFoodItemViewModel viewModel, FoodItemData foodItemData)
+        {
+            if (viewModel.Image != null)
+            {
+                var pathToWwwRotFolder = _webHostEnvironment.WebRootPath;
+                var pathToFolder = "images\\delight-bistro\\";
+                var fileName = $"fooditem-{foodItemData.Id}.jpg";
+                var path = Path.Combine(pathToWwwRotFolder, pathToFolder, fileName);
+
+                using (var foodItemImgFile = new FileStream(path, FileMode.Create))
+                {
+                    viewModel.Image.CopyTo(foodItemImgFile);
+                }
+
+                foodItemData.ImgURL = $"/images/delight-bistro/{fileName}";
+                _foodItemRepository.Update(foodItemData);
+            }
+        }
+
+        public FileStream GenerateTable()
+        {
+            var path = Path.GetTempFileName();
+
+            using (var file = File.CreateText(path))
+            {
+                file.WriteLine($"Id,Name,Price,ImgUrl,MenyType,Ingredients");
+
+                var foodDatas = _foodItemRepository.GetAllIncludeMenuAndIngredients();
+
+                foreach (var foodItem in foodDatas)
+                {
+                    var foodName = ReplaceSeparateSymbols(foodItem.Name);
+                    var foodItemName = string.Join(";",
+                        (foodItem.IngredientsList
+                        .Select(x => x.Name)));
+
+                    file.WriteLine($"{foodItem.Id},"
+                        + $"{foodName},{foodItem.Price},"
+                        + $"{foodItem.ImgURL ?? ""},"
+                        + $"{foodItem.MenuData?.Name ?? ""},"
+                        + $"{foodItemName}");
+                }
+            }
+            var fileStream = new FileStream(path, FileMode.Open);
+
+            return fileStream;
+        }
+
+        private string ReplaceSeparateSymbols(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return "";
+            }
+
+            if (name.Contains(","))
+            {
+                var newName = name.Replace(",", ";");
+                return newName;
+            }
+            return name;
         }
     }
 }

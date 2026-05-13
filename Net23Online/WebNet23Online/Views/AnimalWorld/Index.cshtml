@@ -1,21 +1,22 @@
+@using WebNet23Online.Localizations
 @model WebNet23Online.Models.AnimalWorld.StartPageAnimalWorldInfoViewModel
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Мир животных</title>
+<title>@AnimalWorld.AnimalWorldTitle</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>О нашей планете</h2>
+        <h2>@AnimalWorld.AboutPlanet</h2>
     </div>
     <hr class="green-line">
-    <p>Земля населена миллионами удивительных существ. От крошечных насекомых до гигантских синих китов.</p>
+    <p>@AnimalWorld.IndexDescription</p>
     <div class="image-container">
         <img src="~/images/animal-world/animals.jpg" />
     </div>
     <div class="green-title">
-        <h2>Зоопарки</h2>
+        <h2>@AnimalWorld.Zoos</h2>
     </div>
     <hr class="green-line">
     @if (Model.Zoos.Any())
@@ -24,25 +25,22 @@
         {
             <div class="animal entity-card">
                 <h3>@zoo.ZooName</h3>
-                <p><strong>Адрес:</strong> @zoo.Address</p>
+                <p><strong>@AnimalWorld.Address:</strong> @zoo.Address</p>
                 <p>@zoo.Description</p>
                 @if (zoo.AnimalSpecies.Any())
                 {
-                    <p><strong>Виды животных:</strong></p>
-                    @foreach (var animalSpecies in zoo.AnimalSpecies)
-                    {
-                        <p>@animalSpecies.AnimalSpeciesName</p>
-                    }
+                    <p><strong>@AnimalWorld.AnimalFamilies:</strong></p>
+                    @string.Join(", ", zoo.AnimalFamilies.Select(a => a.AnimalFamilyName))
                 }
             </div>
         }
     }
     else
     {
-        <p class="empty-list-note">Пока нет данных о зоопарках.</p>
+        <p class="empty-list-note">@AnimalWorld.NoZoos.</p>
     }
     <div class="green-title">
-        <h2>Животные</h2>
+        <h2>@AnimalWorld.AnimalFamilies</h2>
     </div>
     <hr class="green-line">
     @if (Model.AnimalFamilies.Any())
@@ -57,26 +55,31 @@
     }
     else
     {
-        <p class="empty-list-note">Пока нет данных о животных.</p>
+        <p class="empty-list-note">@AnimalWorld.NoAnimalFamilies</p>
     }
 
     <div class="green-title">
-        <h2>Виды животных</h2>
+        <h2>@AnimalWorld.AnimalSpecies</h2>
     </div>
     <hr class="green-line">
     @if (Model.AnimalSpecies.Any())
     {
         @foreach (var species in Model.AnimalSpecies)
         {
-            <div class="animal entity-card">
-                <h3>@species.AnimalSpeciesName</h3>
-                <p><strong>Ареал:</strong> @species.NativeRange</p>
-                <p>@species.Description</p>
+            <div class="animal animal-card entity-card">
+                <div class="entity-image">
+                    <img src="@species.Url" />
+                </div>
+                <div>
+                    <h3>@species.AnimalSpeciesName</h3>
+                    <p><strong>@AnimalWorld.Habitat:</strong> @species.NativeRange</p>
+                    <p>@species.Description</p>
+                </div>
             </div>
         }
     }
     else
     {
-        <p class="empty-list-note">Пока нет данных о видах животных.</p>
+        <p class="empty-list-note">@AnimalWorld.NoAnimalSpecies</p>
     }
 </div>

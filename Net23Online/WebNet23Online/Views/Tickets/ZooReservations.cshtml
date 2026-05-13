@@ -1,19 +1,20 @@
-﻿@{
+﻿@using WebNet23Online.Localizations
+@{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Посещение забронировано</title>
+<title>@AnimalWorld.VisitBooked</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Забронировано</h2>
+        <h2>@AnimalWorld.Booked</h2>
     </div>
     <hr class="green-line">
 
     <div class="animal entity-card">
-        <p>Посещение зоопарка забронировано. При покупке билета используйте Имя, фамилию и номер телефона из вашей учётной записи.</p>
+        <p>@AnimalWorld.VisitBookedCompleteMessage</p>
         <div class="button-group">
-            <a class="find-animal-button" href="/AnimalWorld/Zoos">Вернуться к списку зоопарков</a>
+            <a href="/AnimalWorld/Zoos">@AnimalWorld.BackToZoos</a>
         </div>
     </div>
 </div>

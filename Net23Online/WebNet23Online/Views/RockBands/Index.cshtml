@@ -1,14 +1,15 @@
-﻿@using WebNet23Online.Models.RockBands
+﻿@using WebNet23Online.Models.RockBands 
+@using WebNet23Online.Localizations
 @model RockBandsIndexViewModel
 @{
     Layout = "_LayoutRockBands";
 }
-<title>Любимые группы</title>
+<title>@RockBand.Index_Title</title>
 <link rel="stylesheet" href="/css/rock-bands/style-band.css">
 <header>
-    <h1>Мои любимые группы</h1>
-    <p>Музыка, которая вдохновляет</p>
-    <a href="/">Home</a>
+    <h1>@RockBand.Index_Header</h1>
+    <p>@RockBand.Index_Header_Description</p>
+    <a href="/">@RockBand.Index_Header_Home</a>
 </header>
 
 <main>
@@ -16,7 +17,7 @@
     <div class="rock-bands-page">
         <section class="genre-filter">
             <div class="preferences-music-title">
-                <h2>Выбери то, что предпочитаешь ты:</h2>
+                <h2>@RockBand.Index_ChooseGenres</h2>
             </div>
 
             <form method="get" asp-controller="RockBands" asp-action="Index">
@@ -35,8 +36,8 @@
                 </div>
 
                 <div class="genre-filter-actions">
-                    <button type="submit" class="add-band-submit">Показать</button>
-                    <a class="add-band-submit" asp-controller="RockBands" asp-action="Index">Сбросить</a>
+                    <button type="submit" class="add-band-submit">@RockBand.Index_Show_Button</button>
+                    <a class="add-band-submit" asp-controller="RockBands" asp-action="Index">@RockBand.Index_Reset_button</a>
                 </div>
             </form>
         </section>
@@ -59,12 +60,12 @@
                     <p>@band.Description</p>
                     @if (!string.IsNullOrWhiteSpace(band.CreatedByUserName))
                     {
-                        <p><strong>Создано пользователем:</strong> @band.CreatedByUserName</p>
+                        <p><strong>@RockBand.Index_Add_By_User</strong> @band.CreatedByUserName</p>
                     }
 
                     @if (band.Genres != null && band.Genres.Count > 0)
                     {
-                        <p><strong>Жанры:</strong> @string.Join(", ", band.Genres)</p>
+                        <p><strong>@RockBand.Index_ChooseGenres</strong> @string.Join(", ", band.Genres)</p>
                     }
                 </div>
             </div>
@@ -74,8 +75,8 @@
         {
             <section class="preferences-music edit-band-genres-form">
                 <div class="preferences-music-title">
-                    <h2>Редактировать жанры существующих групп</h2>
-                    <p class="add-band-form-hint">Выбери группу, затем отметь жанры и нажми “Сохранить”.</p>
+                    <h2>@RockBand.Index_Edit_Genres</h2>
+                    <p class="add-band-form-hint">@RockBand.Index_Edit_Instruction</p>
                 </div>
                 <div class="preferences-music-items edit-band-genres-panel">
                     <form method="get" asp-controller="RockBands" asp-action="Index" class="edit-band-genres-toolbar">
@@ -86,14 +87,14 @@
                         <div class="edit-band-genres-field">
 
                             <select id="select_band" class="edit-band-genres-select" name="editBandId">
-                                <option value="">Выберите группу</option>
+                                <option value="">@RockBand.Index_Edit_Choose</option>
                                 @foreach (var b in Model.Bands)
                                 {
                                     <option value="@b.Id" selected="@(Model.EditBandId == b.Id)">@b.Name</option>
                                 }
                             </select>
                         </div>
-                        <button type="submit" class="add-band-submit">Открыть</button>
+                        <button type="submit" class="add-band-submit">@RockBand.Index_Edit_Button</button>
                     </form>
 
                     @{
@@ -124,7 +125,7 @@
                                 }
                             </div>
                             <div class="edit-band-genres-actions">
-                                <button type="submit" class="add-band-submit">Сохранить</button>
+                                <button type="submit" class="add-band-submit">@RockBand.Index_Edit_Save_Button</button>
                             </div>
                         </form>
                     }
@@ -135,8 +136,8 @@
         {
             <section class="preferences-music edit-band-genres-form">
                 <div class="preferences-music-title">
-                    <h2>Редактировать жанры существующих групп</h2>
-                    <p class="add-band-form-hint">Редактирование жанров доступно только пользователям с ролью владельца раздела групп.</p>
+                    <h2>@RockBand.Index_Edit_Genres</h2>
+                    <p class="add-band-form-hint">@RockBand.Index_Edit_Error</p>
                 </div>
             </section>
         }
@@ -144,12 +145,12 @@
         {
             <section class="preferences-music edit-band-genres-form">
                 <div class="preferences-music-title">
-                    <h2>Редактировать жанры существующих групп</h2>
+                    <h2>@RockBand.Index_Edit_Genres</h2>
                     <p class="add-band-form-hint">
-                        Чтобы редактировать жанры, нужно
-                        <a asp-controller="Auth" asp-action="Login">войти</a>
-                        или
-                        <a asp-controller="Auth" asp-action="Registration">зарегистрироваться</a>.
+                        @RockBand.Index_Edit_Needed
+                        <a asp-controller="Auth" asp-action="Login">@RockBand.Index_Edit_Log_In</a>
+                        @RockBand.Index_Edit_Or
+                        <a asp-controller="Auth" asp-action="Registration">@RockBand.Index_Edit_Register</a>.
                     </p>
                 </div>
             </section>
@@ -159,29 +160,29 @@
         {
             <section class="preferences-music add-band-form">
                 <div class="preferences-music-title">
-                    <h2>Добавить группу</h2>
-                    <p class="add-band-form-hint">Новая карточка появится в списке в том же формате, что и остальные.</p>
+                    <h2>@RockBand.Index_Add_Header</h2>
+                    <p class="add-band-form-hint">@RockBand.Index_Add_Description</p>
                 </div>
                 <div class="preferences-music-items add-band-form-panel">
                     <form method="post" class="add-band-form-fields">
                         <div class="add-band-field">
-                            <label for="band-name">Название</label>
-                            <input id="band-name" type="text" asp-for="BandBlock.Name" placeholder="Например, Arctic Monkeys" autocomplete="off" />
+                            <label for="band-name">@RockBand.Index_Add_Name</label>
+                            <input id="band-name" type="text" asp-for="BandBlock.Name" placeholder=@RockBand.Index_Add_Name_Example autocomplete="off" />
                             @Html.ValidationMessageFor(m => m.BandBlock.Name)
                         </div>
                         <div class="add-band-field">
-                            <label for="band-description">Описание</label>
-                            <textarea id="band-description" asp-for="BandBlock.Description" placeholder="Коротко о группе и звучании" rows="4"></textarea>
+                            <label for="band-description">@RockBand.Index_Add_Card_Description</label>
+                            <textarea id="band-description" asp-for="BandBlock.Description" placeholder=@RockBand.Index_Add_Description_Example rows="4"></textarea>
                             @Html.ValidationMessageFor(m => m.BandBlock.Description)
                         </div>
                         <div class="add-band-field">
-                            <label for="band-image">Ссылка на фото в интернете</label>
-                            <input id="band-image" type="text" inputmode="url" asp-for="BandBlock.ImageUrl" placeholder="https://site.com/path/to/photo.jpg" spellcheck="false" autocomplete="off" />
-                            <span class="add-band-field-help">Вставьте прямой URL картинки. Поле можно оставить пустым.</span>
+                            <label for="band-image">@RockBand.Index_Add_Image</label>
+                            <input id="band-image" type="text" inputmode="url" asp-for="BandBlock.ImageUrl" placeholder=@RockBand.Index_Add_Image_Example spellcheck="false" autocomplete="off" />
+                            <span class="add-band-field-help">@RockBand.Index_Add_Image_Description</span>
                             @Html.ValidationMessageFor(m => m.BandBlock.ImageUrl)
                         </div>
                         <div class="add-band-field">
-                            <label>Жанры</label>
+                            <label>@RockBand.Index_Add_Genres</label>
                             <div class="genre-filter-list genre-filter-list-compact">
                                 @foreach (var g in Model.Genres)
                                 {
@@ -195,7 +196,7 @@
                                 }
                             </div>
                         </div>
-                        <button type="submit" class="add-band-submit">Добавить в список</button>
+                        <button type="submit" class="add-band-submit">@RockBand.Index_Add_Button</button>
                     </form>
                 </div>
             </section>
@@ -204,12 +205,12 @@
         {
             <section class="preferences-music add-band-form">
                 <div class="preferences-music-title">
-                    <h2>Добавить группу</h2>
+                    <h2>@RockBand.Index_Add_Header</h2>
                     <p class="add-band-form-hint">
-                        Чтобы добавлять группы, нужно
-                        <a asp-controller="Auth" asp-action="Login">войти</a>
-                        или
-                        <a asp-controller="Auth" asp-action="Registration">зарегистрироваться</a>.
+                        @RockBand.Index_Add_Needed
+                        <a asp-controller="Auth" asp-action="Login">@RockBand.Index_Edit_Log_In</a>
+                        @RockBand.Index_Edit_Or
+                        <a asp-controller="Auth" asp-action="Registration">@RockBand.Index_Edit_Register</a>.
                     </p>
                 </div>
             </section>

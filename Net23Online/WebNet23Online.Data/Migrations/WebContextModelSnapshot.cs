@@ -138,6 +138,10 @@ namespace WebNet23Online.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AnimalSpeciesUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -399,6 +403,60 @@ namespace WebNet23Online.Data.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Ingredients");
+                });
+
+            modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("JdmManufacturerDataId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ManufacturerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Marka")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JdmManufacturerDataId");
+
+                    b.ToTable("JdmCars");
+                });
+
+            modelBuilder.Entity("WebNet23Online.Data.Models.JdmManufacturerData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ManufacturerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JdmManufacturer");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.LittleLemonData", b =>
@@ -713,6 +771,9 @@ namespace WebNet23Online.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -956,6 +1017,15 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsData", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.JdmManufacturerData", "JdmManufacturerData")
+                        .WithMany("JdmCarsDatas")
+                        .HasForeignKey("JdmManufacturerDataId");
+
+                    b.Navigation("JdmManufacturerData");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.LittleLemonData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
@@ -1069,6 +1139,11 @@ namespace WebNet23Online.Data.Migrations
             modelBuilder.Entity("WebNet23Online.Data.Models.HabitData", b =>
                 {
                     b.Navigation("CompletedDates");
+                });
+
+            modelBuilder.Entity("WebNet23Online.Data.Models.JdmManufacturerData", b =>
+                {
+                    b.Navigation("JdmCarsDatas");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.LittleLemonGuestData", b =>

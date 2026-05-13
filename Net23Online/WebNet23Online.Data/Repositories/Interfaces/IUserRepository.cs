@@ -10,5 +10,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         bool IsNameUniq(string login);
         void Registration(UserData user);
         void UpdateLanguage(int userId, Language language);
+        void UpdateProfile(UserData userData);
     }
 }

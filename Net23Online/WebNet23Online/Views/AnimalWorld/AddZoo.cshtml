@@ -1,39 +1,40 @@
+@using WebNet23Online.Localizations
 @model WebNet23Online.Models.AnimalWorld.ZooViewModel
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Добавление зоопарка</title>
+<title>@AnimalWorld.AddZoo</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Добавление зоопарка</h2>
+        <h2>@AnimalWorld.AddZoo</h2>
     </div>
     <hr class="green-line">
     <form method="post">
         <div class="form-group">
             <div class="green-title">
-                <h6>Название зоопарка</h6>
+                <h6>@AnimalWorld.ZooName</h6>
             </div>
-            @Html.TextBoxFor(zoo => zoo.ZooName, new { @class = "form-input", type = "text", placeholder = "Например: Сингапурский зоопарк" })
+            @Html.TextBoxFor(zoo => zoo.ZooName, new { @class = "form-input", type = "text", placeholder = AnimalWorld.ZooExample })
             @Html.ValidationMessageFor(zoo => zoo.ZooName)
         </div>
         <div class="form-group">
             <div class="green-title">
-                <h6>Адрес</h6>
+                <h6>@AnimalWorld.Address</h6>
             </div>
-            @Html.TextBoxFor(zoo => zoo.Address, new { @class = "form-input", type = "text", placeholder = "Город, улица, дом" })
+            @Html.TextBoxFor(zoo => zoo.Address, new { @class = "form-input", type = "text", placeholder = AnimalWorld.AddressExample })
             @Html.ValidationMessageFor(zoo => zoo.Address)
         </div>
         <div class="form-group">
             <div class="green-title">
                 <h6>Описание</h6>
             </div>
-            @Html.TextAreaFor(zoo => zoo.Description, new { @class = "form-input", placeholder = "Кратко о зоопарке..." })
+            @Html.TextAreaFor(zoo => zoo.Description, new { @class = "form-input", placeholder = AnimalWorld.ZooSummary })
             @Html.ValidationMessageFor(zoo => zoo.Description)
         </div>
         <div class="button-group">
-            <button class="find-animal-button" type="submit">Добавить</button>
+            <button class="find-animal-button" type="submit">@AnimalWorld.Add</button>
         </div>
     </form>
 </div>

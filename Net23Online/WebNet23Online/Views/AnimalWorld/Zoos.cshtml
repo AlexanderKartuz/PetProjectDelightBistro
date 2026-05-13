@@ -1,14 +1,15 @@
+@using WebNet23Online.Localizations
 @using WebNet23Online.Models.AnimalWorld
 @model List<ZooViewModel>
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Зоопарки</title>
+<title>@AnimalWorld.Zoos</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Список зоопарков</h2>
+        <h2>@AnimalWorld.ZoosList</h2>
     </div>
     <hr class="green-line">
 
@@ -18,12 +19,12 @@
         {
             <div class="animal entity-card">
                 <h3>@zoo.ZooName</h3>
-                <p><strong>Адрес:</strong> @zoo.Address</p>
+                <p><strong>@AnimalWorld.Address:</strong> @zoo.Address</p>
                 <p>@zoo.Description</p>
 
                 @if (zoo.AnimalSpecies.Any())
                 {
-                    <p><strong>Виды животных:</strong></p>
+                    <p><strong>@AnimalWorld.AnimalSpecies:</strong></p>
                     @foreach (var animalSpecies in zoo.AnimalSpecies)
                     {
                         <p>@animalSpecies.AnimalSpeciesName</p>
@@ -33,7 +34,7 @@
                 <div class="button-group">
                     <form action="/Tickets/ZooReservations">
                         <input type="hidden" name="zooName" value="@zoo.ZooName" />
-                        <button class="find-animal-button" type="submit">Забронировать</button>
+                        <button class="find-animal-button" type="submit">@AnimalWorld.BookNow</button>
                     </form>
                 </div>
             </div>
@@ -41,6 +42,6 @@
     }
     else
     {
-        <p class="empty-list-note">Пока нет данных о зоопарках.</p>
+        <p class="empty-list-note">@AnimalWorld.NoZoos.</p>
     }
 </div>

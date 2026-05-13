@@ -1,3 +1,4 @@
+@using WebNet23Online.Localizations
 @using WebNet23Online.Services.Interfaces
 @inject IAuthService authService
 <!DOCTYPE html>
@@ -13,19 +14,19 @@
 </head>
 <body>
     <div class="header-body">
-        <h1>Удивительный мир животных</h1>
+        <h1>@AnimalWorld.AmazingAnimalWorld</h1>
         <div class="header-links">
-            <a class="header-link" href="/">На главную</a>
-            <a class="header-link" href="/AnimalWorld/Index">Мир животных</a>
+            <a class="header-link" href="/">@AnimalWorld.OnIndex</a>
+            <a class="header-link" href="/AnimalWorld/Index">@AnimalWorld.AnimalWorldTitle</a>
             @if (authService.IsAuthenticated())
             {
-                <a class="header-link" href="/AnimalWorld/Zoos">Бронирование</a>
+                <a class="header-link" href="/AnimalWorld/Zoos">@AnimalWorld.Reservation</a>
             }
             @if (authService.AtLeastModerator())
             {
-                <a class="header-link" href="/AnimalWorld/Add">Добавить данные</a>
+                <a class="header-link" href="/AnimalWorld/Add">@AnimalWorld.AddData</a>
             }
-            <a class="header-link" href="">Интересные факты</a>
+            <a class="header-link" href="">@AnimalWorld.Interesting</a>
         </div>
     </div>
     <div class="container">
@@ -35,8 +36,8 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            <p>&copy; 2026 Мир Животных. Берегите природу!</p>
+        <div class="container footer-body">
+            <p>@AnimalWorld.FooterText</p>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

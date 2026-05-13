@@ -153,5 +153,11 @@ namespace WebNet23Online.Controllers
             return RedirectToAction(nameof(AllFoodItems));
         }
 
+        public IActionResult GenerateTable()
+        {
+            var fileStream = _foodItemGenerator.GenerateTable();
+
+            return File(fileStream, "text/csv");
+        }
     }
 }

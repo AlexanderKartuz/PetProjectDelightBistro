@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -17,16 +18,19 @@ namespace WebNet23Online.Controllers
         private IAnimeGirlRepository _animeGirlRepository;
         private IAnimeRepository _animeRepository;
         private IAuthService _authService;
+        private IWebHostEnvironment _webHostEnvironment;
 
         public AnimeGirlController(IAnimeGirlService animeGirlGenerator,
             IAnimeGirlRepository animeGirlRepository,
             IAnimeRepository animeRepository,
-            IAuthService authService)
+            IAuthService authService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _animeGirlService = animeGirlGenerator;
             _animeGirlRepository = animeGirlRepository;
             _animeRepository = animeRepository;
             _authService = authService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         //    /AnimeGirl/Index
@@ -74,7 +78,7 @@ namespace WebNet23Online.Controllers
             {
                 Description = viewModel.Description,
                 Name = viewModel.Name,
-                Url = viewModel.Url,
+                Url = viewModel.Url ?? "/images/anime-girl/default.jpg",
             };
 
             if (!_animeGirlRepository.IsNameFree(viewModel.Name))
@@ -90,6 +94,21 @@ namespace WebNet23Online.Controllers
             }
 
             _animeGirlRepository.Add(animeGirlData);
+
+            if (viewModel.Image != null)
+            {
+                var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
+                var pathToFolder = "images\\anime-girl";
+                var fileName = $"girl-{animeGirlData.Id}.jpg";
+                var path = Path.Combine(pathToWwwRootFolder, pathToFolder, fileName);
+                using (var animeGirlFile = new FileStream(path, FileMode.Create))
+                {
+                    viewModel.Image.CopyTo(animeGirlFile);
+                }
+
+                animeGirlData.Url = $"/images/anime-girl/{fileName}";
+                _animeGirlRepository.Update(animeGirlData);
+            }
 
             return RedirectToAction(nameof(Index));
         }

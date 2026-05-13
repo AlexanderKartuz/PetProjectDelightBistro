@@ -17,5 +17,6 @@ namespace WebNet23Online.Services.Interfaces
         List<CreateIngredientViewModel> ChekBoxIngredients(FoodItemData foodItemData = null);
         AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel);
         void DeleteFoodItem(int id);
+        FileStream GenerateTable();
     }
 }

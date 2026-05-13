@@ -12,6 +12,7 @@ namespace WebNet23Online.Services
             {
                 ZooName = zoo.ZooName,
                 Address = zoo.Address,
+                AnimalFamilies = FromAnimalFamilyDataToAnimalFamilyViewModel(zoo.AnimalSpecies.Select(s => s.AnimalFamily).DistinctBy(s => s.AnimalFamilyName).ToList()),
                 AnimalSpecies = FromAnimalSpeciesDataToAnimalSpeciesViewModel(zoo.AnimalSpecies),
                 Description = zoo.Description,
             });
@@ -33,6 +34,7 @@ namespace WebNet23Online.Services
             var animalSpecies = animalSpeciesData.Select(animalSpecies => new AnimalSpeciesViewModel
             {
                 AnimalSpeciesName = animalSpecies.AnimalSpeciesName,
+                Url = animalSpecies.AnimalSpeciesUrl,
                 NativeRange = animalSpecies.NativeRange,
                 Description = animalSpecies.Description,
             });

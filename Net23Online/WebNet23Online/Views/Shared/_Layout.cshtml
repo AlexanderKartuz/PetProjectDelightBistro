@@ -28,6 +28,12 @@
                         </li>
                         @if (authService.IsAuthenticated())
                         {
+                            if (authService.IsCurrentUserAtLeastEmployee())
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Profile">@Home.Index_Profile</a>
                             </li>
