@@ -15,9 +15,9 @@ namespace WebNet23Online.Models.DelightBistro
         public string? ImgURL { get; set; }
 
         //checkBoxId
-        public List<int> SelectedIngredientsId { get; set; } = new();
-        public List<CreateIngredientViewModel> Ingredients { get; set; } = new();
-        public Dictionary<int, int> IngredientQuantities { get; set; } = new(); // ?
+        //public List<int> /*SelectedIngredientsId*/ { get; set; } = new(); // delete?
+        public List<CreateIngredientViewModel> IngredientsList { get; set; } = new();
+        //public Dictionary<int, int> IngredientQuantities { get; set; } = new(); // ?
         public int? MenuId { get; set; }
         public List<SelectListItem> Menus { get; set; } = new();
         public IFormFile? Image { get; set; }

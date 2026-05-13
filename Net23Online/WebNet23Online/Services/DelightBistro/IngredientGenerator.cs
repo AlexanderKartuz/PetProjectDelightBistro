@@ -66,5 +66,35 @@ namespace WebNet23Online.Services.DelightBistro
             _ingredientsRepository.Add(ingredientData);
         }
 
+        public List<CreateIngredientViewModel> GenerateIngredientsForFoodItem(FoodItemData foodItemData = null)
+        {
+            var ingredientsData = _ingredientsRepository.GetAll();
+
+            var ingredientsViewModel = ingredientsData.Select(x => new CreateIngredientViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsSelected = foodItemData != null && foodItemData.IngredientsList.Any(i => i.Id == x.Id),
+                Quantity = foodItemData?.FoodItemIngredientDatas
+                .FirstOrDefault(fi => fi.IngredientDataId == x.Id)?
+                .QuantityOfIngredients ?? 10
+            }).ToList();
+
+            return ingredientsViewModel;
+        }
+        public List<CreateIngredientViewModel> GetAllCreateIngredientViewModel()
+        {
+            var allIngredientViewModel = _ingredientsRepository
+                .GetAll()
+                .Select(x => new CreateIngredientViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Quantity = 10,
+                    IsSelected = false
+                })
+                .ToList();
+            return allIngredientViewModel;
+        }
     }
 }

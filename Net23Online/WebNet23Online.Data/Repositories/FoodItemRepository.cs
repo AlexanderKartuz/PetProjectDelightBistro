@@ -29,6 +29,16 @@ namespace WebNet23Online.Data.Repositories
                 .Include(fi => fi.FoodItemIngredientDatas) // Links
                 .FirstOrDefault(x => x.Id == id);
             return foodItemInclude;
-        }  
+        }
+
+        public FoodItemData? GetByIdFoodItemIncludeIngredients(int id)
+        {
+            var foodItemData = _dbSet
+                .Include(f => f.FoodItemIngredientDatas)
+                .ThenInclude(fi => fi.IngredientData)
+                .FirstOrDefault(f => f.Id == id);
+
+            return foodItemData;
+        }
     }
 }

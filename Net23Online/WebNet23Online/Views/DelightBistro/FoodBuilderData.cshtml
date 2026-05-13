@@ -47,7 +47,7 @@
                 <div>
                     Выберите ингредиенты
                 </div>
-                @foreach (var inredient in Model.Ingredients)
+                @* @foreach (var inredient in Model.IngredientsList)
                 {
                     <div>
                         <input type="checkbox" name="SelectedIngredientsId"
@@ -56,8 +56,26 @@
 
                         <input type="number" name="IngredientQuantities[@inredient.Id]" value="@(inredient.Quantity > 0 ? inredient.Quantity : 10)" />
                     </div>
+                } *@
+                @for (var i = 0; i < Model.IngredientsList.Count; i++)
+                {
+                    <div>
+                        @Html.HiddenFor(x => x.Id)
+                        @Html.HiddenFor(x => x.Name)
+                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected)
+                        <label>@Model.IngredientsList[i].Name</label>
+                        @Html.TextBoxFor(x => x.IngredientsList[i].Quantity, new { type = "number", Value = Model.IngredientsList[i].Quantity > 0 
+                        ? Model.IngredientsList[i].Quantity : 10 })
+                        @*  <input type="hidden" name="IngredientsList[@i].Id" value="@Model.IngredientsList[i].Id" />
+                        <input type="checkbox" name="IngredientsList[@i].IsSelected"
+                               value="true" @(Model.IngredientsList[i].IsSelected ? "checked" : "") />
+                        
+                               <label>@Model.IngredientsList[i].Name</label>
+
+                        <input type="number" name="IngredientsList[@i].Quantity" value="@(Model.IngredientsList[i].Quantity > 0 ? Model.IngredientsList[i].Quantity : 10)" /> *@
+                    </div>
                 }
-                
+
             </div>
         </div>
         

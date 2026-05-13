@@ -117,7 +117,7 @@ namespace WebNet23Online.Controllers
             if (!ModelState.IsValid)
             {
                 viewModel.Menus = _foodItemGenerator.SelectMenuList();
-                viewModel.Ingredients = _foodItemGenerator.ChekBoxIngredients();
+                viewModel.IngredientsList = _foodItemGenerator.ChekBoxIngredients();
                 return View(viewModel);
             }
 

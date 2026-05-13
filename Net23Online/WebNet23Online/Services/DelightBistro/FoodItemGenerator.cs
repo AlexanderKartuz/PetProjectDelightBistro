@@ -51,13 +51,13 @@ namespace WebNet23Online.Services.DelightBistro
             //var selectedIngredients = GetSelectedIngredients(viewModel); // delete?
             var selectedMenu = GetSelectedMenu(viewModel);
 
-            var links = viewModel.SelectedIngredientsId.Select(id =>
-            new FoodItemIngredientData
-            {
-                IngredientDataId = id,
-                QuantityOfIngredients = viewModel.IngredientQuantities
-                .TryGetValue(id, out var q) ? q : 10
-            }).ToList();
+            var links = viewModel.IngredientsList
+                .Where(x => x.IsSelected)
+                .Select(x => new FoodItemIngredientData
+                {
+                    IngredientDataId = x.Id,
+                    QuantityOfIngredients = x.Quantity > 0 ? x.Quantity : 10
+                }).ToList();
 
             var newFoodItemData = new FoodItemData()
             {
@@ -67,6 +67,7 @@ namespace WebNet23Online.Services.DelightBistro
 
                 MenuData = selectedMenu,
                 //IngredientsList = selectedIngredients, // delete?
+                //IngredientsList = GetSelectedIngredients(viewModel),
                 FoodItemIngredientDatas = links,
                 Creator = _authService.GetUser()
             };
@@ -79,16 +80,39 @@ namespace WebNet23Online.Services.DelightBistro
 
         public void ChangeFoodItemData(CreateFoodItemViewModel viewModel)
         {
+            var allCreateIngredientsViewModel = _ingredientGenerator.GetAllCreateIngredientViewModel();
+
+            if (viewModel.Id > 0)
+            {
+                var foodItemData = _foodItemRepository.GetByIdFoodItemIncludeIngredients(viewModel.Id);
+
+                var selectedIngredients = allCreateIngredientsViewModel.Select(createIngredientViewModel =>
+                {
+                    var link = foodItemData.FoodItemIngredientDatas
+                    .FirstOrDefault(fi => fi.IngredientDataId == createIngredientViewModel.Id);
+
+                    if (link != null)
+                    {
+                        createIngredientViewModel.IsSelected = true;
+                        createIngredientViewModel.Quantity = link.QuantityOfIngredients;
+                    }
+                    return createIngredientViewModel;
+                }).ToList();
+
+            }
+            //var allCreateIngredientViewModel = _ingredientGenerator.GetAllCreateIngredientViewModel();
+
+
             //var selectedIngredients = GetSelectedIngredients(viewModel); // delete?
             var selectedMenu = GetSelectedMenu(viewModel);
 
-            var links = viewModel.SelectedIngredientsId.Select(id =>
-            new FoodItemIngredientData
-            {
-                IngredientDataId = id,
-                QuantityOfIngredients = viewModel.IngredientQuantities
-                .TryGetValue(id, out var q) ? q : 10
-            }).ToList();
+            var links = viewModel.IngredientsList
+                .Where(x => x.IsSelected)
+                .Select(x => new FoodItemIngredientData
+                {
+                    IngredientDataId = x.Id,
+                    QuantityOfIngredients = x.Quantity > 0 ? x.Quantity : 10
+                }).ToList();
 
             var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredients(viewModel.Id);
 
@@ -97,6 +121,7 @@ namespace WebNet23Online.Services.DelightBistro
             changedFoodItemData.ImgURL = viewModel.ImgURL;
             changedFoodItemData.MenuData = selectedMenu;
             //changedFoodItemData.IngredientsList = selectedIngredients;
+            //changedFoodItemData.IngredientsList= selectedIngredients;
             changedFoodItemData.FoodItemIngredientDatas = links;
 
 
@@ -107,17 +132,21 @@ namespace WebNet23Online.Services.DelightBistro
 
         public FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData)
         {
-            List<string> ingredientList; // name - grams
-            if (foodItemData.FoodItemIngredientDatas?.Any() == true/* is { Count: > 0 }*/)
-            {
-                ingredientList = foodItemData.FoodItemIngredientDatas
-                    .Select(x => $"{x.IngredientData.Name} - {x.QuantityOfIngredients}")
-                    .ToList();
-            }
-            else
-            {
-                ingredientList = foodItemData.IngredientsList.Select(x => x.Name).ToList();
-            }
+            //List<string> ingredientList; // name - grams
+            //if (foodItemData.FoodItemIngredientDatas?.Any() == true/* is { Count: > 0 }*/)
+            //{
+            //    ingredientList = foodItemData.FoodItemIngredientDatas
+            //        .Select(x => $"{x.IngredientData.Name} - {x.QuantityOfIngredients}")
+            //        .ToList();
+            //}
+            //else
+            //{
+            //    ingredientList = foodItemData.IngredientsList.Select(x => x.Name).ToList();
+            //}
+
+            var allIngredients = _ingredientsRepository.GetAll();
+            var allIngredientsVM = _ingredientGenerator.GenerateIngredients(allIngredients, foodItemData);
+            var ingredientsList = allIngredientsVM.Where(x => x.IsSelected).ToList();
 
             var foodItemViewModel = new FoodItemViewModel
             {
@@ -126,9 +155,10 @@ namespace WebNet23Online.Services.DelightBistro
                 Price = foodItemData.Price,
                 ImgURL = foodItemData.ImgURL,
                 MenuType = foodItemData.MenuData?.Name ?? "Общее меню",
-                //Ingredients = foodItemData.IngredientsList // delete?
+                //IngredientsList = foodItemData.IngredientsList // delete?
                 //.Select(fi => fi.Name).ToList(),           // delete?
-                Ingredients = ingredientList,
+                //IngredientsList = ingredientList,
+                IngredientsList = ingredientsList,
                 Creator = foodItemData.Creator?.Name,
                 CreatorId = foodItemData.CreatorId,
             };
@@ -143,11 +173,15 @@ namespace WebNet23Online.Services.DelightBistro
                 var createFoodItemVM = new CreateFoodItemViewModel()
                 {
                     Menus = SelectMenuList(),
-                    Ingredients = ChekBoxIngredients()
+                    IngredientsList = ChekBoxIngredients()
                 };
 
                 return createFoodItemVM;
             }
+
+            var allIngredients = _ingredientsRepository.GetAll();
+            var allIngredientsVM = _ingredientGenerator.GenerateIngredients(allIngredients, foodItemData);
+            var ingredientsList = allIngredientsVM.Where(x => x.IsSelected).ToList();
 
             var viewModel = new CreateFoodItemViewModel
             {
@@ -157,10 +191,8 @@ namespace WebNet23Online.Services.DelightBistro
                 ImgURL = foodItemData.ImgURL,
 
                 MenuId = foodItemData.MenuData?.Id,
-                SelectedIngredientsId = foodItemData.IngredientsList
-                .Select(x => x.Id).ToList(),
 
-                Ingredients = ChekBoxIngredients(foodItemData),
+                IngredientsList = ChekBoxIngredients(foodItemData),
                 Menus = SelectMenuList()
             };
 
@@ -190,11 +222,21 @@ namespace WebNet23Online.Services.DelightBistro
         private List<IngredientData> GetSelectedIngredients(CreateFoodItemViewModel viewModel)
         {
             var selectedIngredients = new List<IngredientData>();
-            if (!viewModel.SelectedIngredientsId.IsNullOrEmpty())
+
+            var ingredientsIds = viewModel.IngredientsList // ids selected ingredients
+                .Where(x => x.IsSelected)
+                .Select(x => x.Id)
+                .ToList();
+
+            if (!viewModel.IngredientsList.IsNullOrEmpty())
             {
-                selectedIngredients = _ingredientsRepository.GetAll()
-                    .Where(x => viewModel.SelectedIngredientsId.Contains(x.Id)).ToList();
+                selectedIngredients = _ingredientsRepository
+                    .GetAll()
+                    .Where(x => ingredientsIds.Contains(x.Id))
+                    .ToList();
             }
+
+
 
             return selectedIngredients;
         }
@@ -264,7 +306,7 @@ namespace WebNet23Online.Services.DelightBistro
 
             using (var file = File.CreateText(path))
             {
-                file.WriteLine($"Id,Name,Price,ImgUrl,MenyType,Ingredients");
+                file.WriteLine($"Id,Name,Price,ImgUrl,MenyType,IngredientsList");
 
                 var foodDatas = _foodItemRepository.GetAllIncludeMenuAndIngredients();
 
