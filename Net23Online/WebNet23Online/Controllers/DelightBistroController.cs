@@ -98,7 +98,7 @@ namespace WebNet23Online.Controllers
         {
             if (id > 0)
             {
-                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredients(id);
+                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(id);
 
                 var viewModel = _foodItemGenerator.ConvertToCreateFoodItemVM(changedFoodItemData);
                 return View(viewModel);
@@ -114,12 +114,12 @@ namespace WebNet23Online.Controllers
         [IsModerator]
         public IActionResult FoodBuilderData(CreateFoodItemViewModel viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    viewModel.Menus = _foodItemGenerator.SelectMenuList();
-            //    viewModel.IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItem();
-            //    return View(viewModel);
-            //}
+            if (!ModelState.IsValid)
+            {
+                viewModel.Menus = _foodItemGenerator.SelectMenuList();
+                viewModel.IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData();
+                return View(viewModel);
+            }
 
             if (viewModel.Id == 0)
             {

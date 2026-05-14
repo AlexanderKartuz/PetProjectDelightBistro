@@ -10,7 +10,8 @@ namespace WebNet23Online.Data.Repositories
 
         public List<FoodItemData> GetAllIncludeMenuAndIngredients()
         {
-            var allFoods = _dbSet.Include(x => x.MenuData)
+            var allFoods = _dbSet
+                .Include(x => x.MenuData)
                 .Include(x => x.IngredientsList);
 
             return allFoods.ToList();
@@ -21,7 +22,7 @@ namespace WebNet23Online.Data.Repositories
             return !_dbSet.Any(x => x.Name == name);
         }
 
-        public FoodItemData? GetByIdIncludeMenuAndIngredients(int id)
+        public FoodItemData? GetByIdIncludeMenuAndIngredientsLinks(int id)
         {
             var foodItemInclude = _dbSet
                 .Include(x => x.MenuData)
@@ -29,16 +30,6 @@ namespace WebNet23Online.Data.Repositories
                 .Include(fi => fi.FoodItemIngredientDatas) // Links
                 .FirstOrDefault(x => x.Id == id);
             return foodItemInclude;
-        }
-
-        public FoodItemData? GetByIdFoodItemIncludeIngredients(int id)
-        {
-            var foodItemData = _dbSet
-                .Include(f => f.FoodItemIngredientDatas)
-                .ThenInclude(fi => fi.IngredientData)
-                .FirstOrDefault(f => f.Id == id);
-
-            return foodItemData;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace WebNet23Online.Models.DelightBistro
         [IsUniqueFoodItem]
         public string Name { get; set; }
 
-        //[Range(1, 150)]
+        [Range(1, 150)]
         public int Price { get; set; }
         public string? ImgURL { get; set; }
 
