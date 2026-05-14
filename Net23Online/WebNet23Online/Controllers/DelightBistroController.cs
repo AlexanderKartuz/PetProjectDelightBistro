@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using WebNet23Online.Controllers.CustomAuthAttribute;
-using WebNet23Online.Data;
-using WebNet23Online.Data.Models;
-using WebNet23Online.Data.Repositories;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Models.DelightBistro;
-using WebNet23Online.Services;
-using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 
 

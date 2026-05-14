@@ -105,21 +105,22 @@ namespace WebNet23Online.Data
                 .HasMany(x => x.FoodItems)
                 .WithOne(x => x.MenuData);
 
+            // used Links
             //modelBuilder.Entity<FoodItemData>()
             //    .HasMany(x => x.IngredientsList)
             //    .WithMany(x => x.FoodItems);
 
-            modelBuilder.Entity<MenuData>() //User relation
+            modelBuilder.Entity<MenuData>()
                 .HasOne(x => x.Creator)
                 .WithMany(x => x.CreatedMenus)
                 .HasForeignKey(x => x.CreatorId);
 
-            modelBuilder.Entity<FoodItemData>() //User relation
+            modelBuilder.Entity<FoodItemData>()
                .HasOne(x => x.Creator)
                .WithMany(x => x.CreatedFoodItems)
                .HasForeignKey(x => x.CreatorId);
 
-            modelBuilder.Entity<IngredientData>() //User relation
+            modelBuilder.Entity<IngredientData>()
                .HasOne(x => x.Creator)
                .WithMany(x => x.CreatedIngredients)
                .HasForeignKey(x => x.CreatorId);
@@ -141,8 +142,6 @@ namespace WebNet23Online.Data
                     j.HasKey(t => new { t.FoodItemDataId, t.IngredientDataId });
                     j.ToTable("FoodItemIngredientDatas");
                 });
-
-
 
             modelBuilder.Entity<RockLegendsData>()
                 .HasOne(x => x.Genres)

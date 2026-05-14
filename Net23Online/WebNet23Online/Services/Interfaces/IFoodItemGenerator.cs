@@ -12,7 +12,7 @@ namespace WebNet23Online.Services.Interfaces
 
         FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData);
         void FeelDataBase();
-        CreateFoodItemViewModel ConvertToCreateFoodItemVM(FoodItemData foodItemData = null);
+        CreateFoodItemViewModel ConvertToCreateFoodItemVM(FoodItemData? foodItemData = null);
         List<SelectListItem> SelectMenuList();
         AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel);
         void DeleteFoodItem(int id);
