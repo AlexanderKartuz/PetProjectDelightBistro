@@ -727,3 +727,82 @@ select.form-control {
         color: #ffffff;
         text-decoration: underline;
     }
+
+/* Pagination */
+.catalog-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+    .catalog-pagination .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        height: 36px;
+        padding: 0 8px;
+        background: #1a2533;
+        border: 1px solid #2a475e;
+        color: #c7d5e0;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+        .catalog-pagination .btn:hover:not(.disabled):not(.active) {
+            background-color: #2a475e;
+            border-color: #66c0f4;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .catalog-pagination .btn.active {
+            background: linear-gradient(135deg, #2a6f8f, #1e4a6b);
+            border-color: #66c0f4;
+            color: white;
+            cursor: default;
+            font-weight: bold;
+        }
+
+        .catalog-pagination .btn.disabled {
+            background: #0f1620;
+            border-color: #2a475e;
+            color: #5c7e9e;
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .catalog-pagination .btn:first-child,
+        .catalog-pagination .btn:last-child {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+
+        .catalog-pagination .btn.disabled {
+            background: transparent;
+            border: none;
+            cursor: default;
+            min-width: auto;
+            padding: 0 4px;
+        }
+
+.catalog-pagination-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    background: #2a475e;
+    border-radius: 4px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+}

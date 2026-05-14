@@ -21,7 +21,8 @@
 
     <section class="section">
         <h2 class="section-title">@CatalogPage.Section_Title_Filter</h2>
-        <form method="post">
+        <form method="get" asp-controller="Steam" asp-action="Catalog">
+            <input type="hidden" name="page" value="1" />
             <div class="form-group">
                 <label>Genre</label>
                 <select name="GenreId" class="form-control">
@@ -49,7 +50,7 @@
     </section>
 
     <section class="section">
-        <h2 class="section-title">@CatalogPage.Section_Title_All_Games (@Model.Games.Count)</h2>
+        <h2 class="section-title">@CatalogPage.Section_Title_All_Games (@Model.Metadata.TotalCount)</h2>
 
         <div class="cards">
             @foreach (var game in Model.Games)
@@ -77,5 +78,86 @@
                 </article>
             }
         </div>
+        @if (Model.Metadata.TotalPages > 1)
+        {
+            <nav class="catalog-pagination" aria-label="Catalog pages">
+                @if (Model.Metadata.HasPreviousPage)
+                {
+                    <a class="btn"
+                       asp-controller="Steam"
+                       asp-action="Catalog"
+                       asp-route-page="@(Model.Metadata.CurrentPage - 1)"
+                       asp-route-pageSize="@Model.Filter.PageSize"
+                       asp-route-genreId="@Model.Filter.GenreId"
+                       asp-route-maxPrice="@Model.Filter.MaxPrice">←</a>
+                }
+
+                @{
+                    var startPageToShow = Math.Max(1, Model.Metadata.CurrentPage - 2);
+                    var endPageToShow = Math.Min(Model.Metadata.TotalPages, startPageToShow + 4);
+
+                    if (startPageToShow > 1)
+                    {
+                        <a class="btn"
+                           asp-controller="Steam"
+                           asp-action="Catalog"
+                           asp-route-page="1"
+                           asp-route-pageSize="@Model.Filter.PageSize"
+                           asp-route-genreId="@Model.Filter.GenreId"
+                           asp-route-maxPrice="@Model.Filter.MaxPrice">1</a>
+
+                        if (startPageToShow > 2)
+                        {
+                            <span class="btn disabled">...</span>
+                        }
+                    }
+
+                    for (int i = startPageToShow; i <= endPageToShow; i++)
+                    {
+                        if (i == Model.Metadata.CurrentPage)
+                        {
+                            <span class="btn btn-primary active">@i</span>
+                        }
+                        else
+                        {
+                            <a class="btn"
+                               asp-controller="Steam"
+                               asp-action="Catalog"
+                               asp-route-page="@i"
+                               asp-route-pageSize="@Model.Filter.PageSize"
+                               asp-route-genreId="@Model.Filter.GenreId"
+                               asp-route-maxPrice="@Model.Filter.MaxPrice">@i</a>
+                        }
+                    }
+
+                    if (endPageToShow < Model.Metadata.TotalPages)
+                    {
+                        if (endPageToShow < Model.Metadata.TotalPages - 1)
+                        {
+                            <span class="btn disabled">...</span>
+                        }
+
+                        <a class="btn"
+                           asp-controller="Steam"
+                           asp-action="Catalog"
+                           asp-route-page="@Model.Metadata.TotalPages"
+                           asp-route-pageSize="@Model.Filter.PageSize"
+                           asp-route-genreId="@Model.Filter.GenreId"
+                           asp-route-maxPrice="@Model.Filter.MaxPrice">@Model.Metadata.TotalPages</a>
+                    }
+                }
+
+                @if (Model.Metadata.HasNextPage)
+                {
+                    <a class="btn"
+                       asp-controller="Steam"
+                       asp-action="Catalog"
+                       asp-route-page="@(Model.Metadata.CurrentPage + 1)"
+                       asp-route-pageSize="@Model.Filter.PageSize"
+                       asp-route-genreId="@Model.Filter.GenreId"
+                       asp-route-maxPrice="@Model.Filter.MaxPrice">→</a>
+                }
+            </nav>
+        }
     </section>
 </main>
