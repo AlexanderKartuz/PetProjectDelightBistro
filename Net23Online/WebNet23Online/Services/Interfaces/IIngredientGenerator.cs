@@ -10,5 +10,6 @@ namespace WebNet23Online.Services.Interfaces
         void CreateIngredientData(CreateIngredientViewModel ingredient);
         void FeelDataBase();
         List<CreateIngredientViewModel> GetAllCreateIngredientViewModel();
+        List<CreateIngredientViewModel> GenerateIngredientsViewModelFromFoodItem(FoodItemData foodItemData = null);
     }
 }

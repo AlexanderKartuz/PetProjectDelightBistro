@@ -114,12 +114,12 @@ namespace WebNet23Online.Controllers
         [IsModerator]
         public IActionResult FoodBuilderData(CreateFoodItemViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                viewModel.Menus = _foodItemGenerator.SelectMenuList();
-                viewModel.IngredientsList = _foodItemGenerator.ChekBoxIngredients();
-                return View(viewModel);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    viewModel.Menus = _foodItemGenerator.SelectMenuList();
+            //    viewModel.IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItem();
+            //    return View(viewModel);
+            //}
 
             if (viewModel.Id == 0)
             {

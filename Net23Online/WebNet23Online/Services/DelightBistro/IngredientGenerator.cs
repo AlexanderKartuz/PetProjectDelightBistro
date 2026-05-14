@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
@@ -48,8 +49,8 @@ namespace WebNet23Online.Services.DelightBistro
                 Name = x.Name,
                 IsSelected = foodItemData != null && foodItemData.IngredientsList.Any(i => i.Id == x.Id),
                 Quantity = foodItemData?.FoodItemIngredientDatas
-                .FirstOrDefault(fi => fi.IngredientDataId == x.Id)?
-                .QuantityOfIngredients ?? 10
+                    .FirstOrDefault(fi => fi.IngredientDataId == x.Id)?
+                    .QuantityOfIngredients ?? 10
             }).ToList();
 
             return ingredientsViewModel;
@@ -66,7 +67,7 @@ namespace WebNet23Online.Services.DelightBistro
             _ingredientsRepository.Add(ingredientData);
         }
 
-        public List<CreateIngredientViewModel> GenerateIngredientsForFoodItem(FoodItemData foodItemData = null)
+        public List<CreateIngredientViewModel> GenerateIngredientsViewModelFromFoodItem(FoodItemData foodItemData = null)
         {
             var ingredientsData = _ingredientsRepository.GetAll();
 
@@ -82,7 +83,7 @@ namespace WebNet23Online.Services.DelightBistro
 
             return ingredientsViewModel;
         }
-        public List<CreateIngredientViewModel> GetAllCreateIngredientViewModel()
+        public List<CreateIngredientViewModel> GetAllCreateIngredientViewModel() // delete?
         {
             var allIngredientViewModel = _ingredientsRepository
                 .GetAll()
@@ -95,6 +96,26 @@ namespace WebNet23Online.Services.DelightBistro
                 })
                 .ToList();
             return allIngredientViewModel;
+        }
+
+        private List<IngredientData> GetSelectedIngredientsDataFromFoodItemVM(CreateFoodItemViewModel viewModel)
+        {
+            var selectedIngredients = new List<IngredientData>();
+
+            var ingredientsIds = viewModel.IngredientsList // ids selected ingredients
+                .Where(x => x.IsSelected)
+                .Select(x => x.Id)
+                .ToList();
+
+            if (!viewModel.IngredientsList.IsNullOrEmpty())
+            {
+                selectedIngredients = _ingredientsRepository
+                    .GetAll()
+                    .Where(x => ingredientsIds.Contains(x.Id))
+                    .ToList();
+            }
+
+            return selectedIngredients;
         }
     }
 }
