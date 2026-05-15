@@ -10,7 +10,7 @@ namespace WebNet23Online.Data.DataModels
         public int IngredientDataId { get; set; }
         public IngredientData? IngredientData { get; set; }
 
-        public int QuantityOfIngredients { get; set; }
+        public decimal QuantityOfIngredients { get; set; }
 
     }
 }

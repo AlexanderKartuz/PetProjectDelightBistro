@@ -38,11 +38,19 @@ namespace WebNet23Online.Services.DelightBistro
             var foodItemData = new FoodItemData
             {
                 Name = "Вода",
-                Price = 5,
+                Price = 5m,
                 ImgURL = "https://png.klev.club/uploads/posts/2024-03/png-klev-club-p-stakan-vodi-png-9.png",
 
             };
             _foodItemRepository.Add(foodItemData);
+
+            var cesarSalad = new FoodItemData
+            {
+                Name = "Цезарь",
+                Price = 15m,
+                ImgURL = "/images/delight-bistro/CesarSalad.jpg",
+            };
+            _foodItemRepository.Add(cesarSalad);
         }
 
         public void CreateFoodItemData(CreateFoodItemViewModel viewModel)

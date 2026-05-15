@@ -22,10 +22,10 @@ namespace WebNet23Online.Services.DelightBistro
             {
                 return;
             }
-            _ingredientsRepository.Add(new IngredientData { Name = "Креветки" });
-            _ingredientsRepository.Add(new IngredientData { Name = "Шампиньоны" });
-            _ingredientsRepository.Add(new IngredientData { Name = "Лайм" });
-            _ingredientsRepository.Add(new IngredientData { Name = "Паста" });
+            _ingredientsRepository.Add(new IngredientData { Name = "Креветки", Price = 40 });
+            _ingredientsRepository.Add(new IngredientData { Name = "Шампиньоны", Price = 12 });
+            _ingredientsRepository.Add(new IngredientData { Name = "Лайм", Price = 9 });
+            _ingredientsRepository.Add(new IngredientData { Name = "Паста", Price = 8 });
         }
 
 

@@ -5,7 +5,7 @@ namespace WebNet23Online.Data.Models
     public class FoodItemData : BaseModel
     {
         public string Name { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public string? ImgURL { get; set; }
 
         public virtual MenuData? MenuData { get; set; }
