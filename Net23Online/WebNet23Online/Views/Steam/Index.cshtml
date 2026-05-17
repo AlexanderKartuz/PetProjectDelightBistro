@@ -4,6 +4,7 @@
 @{
     Layout = "_LayoutSteam";
 }
+
 <main class="page">
     <section class="section">
         <h1 class="page-title">@Mainpage.Page_Title</h1>
@@ -11,56 +12,65 @@
 
     <section class="section">
         <h2 class="section-title">@Mainpage.Section_Title_Featured</h2>
-        @foreach (var game in Model.Featured)
-        {
-            <article class="feature-card">
-                <div class="feature-media" aria-hidden="true">
-                    <img src=@game.ImageUrl alt="@Mainpage.Feature_Game_Title_Cover" />
-                </div>
 
-                <div class="feature-content">
-                    <h3 class="feature-title">@game.Title</h3>
-                    @if (game.Genres != null && game.Genres.Any())
+        <div class="carousel-container">
+            <div class="carousel-wrapper" id="featuredCarousel">
+                <div class="carousel-track" id="featuredTrack">
+                    @foreach (var game in Model.Featured)
                     {
-                        <div class="feature-genres">
-                            @foreach (var genre in game.Genres)
-                            {
-                                <span class="game-genre">@genre</span>
-                            }
-                        </div>
+                        <article class="feature-card">
+                            <div class="feature-media">
+                                <img src="@game.ImageUrl" alt="@game.Title" />
+                            </div>
+                            <div class="feature-content">
+                                <h3 class="feature-title">@game.Title</h3>
+                                @if (game.Genres != null && game.Genres.Any())
+                                {
+                                    <div class="feature-genres">
+                                        @foreach (var genre in game.Genres.Take(3))
+                                        {
+                                            <span class="game-genre">@genre</span>
+                                        }
+                                    </div>
+                                }
+                                <p class="feature-text">@game.Description</p>
+                                <div class="feature-footer">
+                                    <span class="price">$@game.Price.ToString("0.00")</span>
+                                    <div class="feature-buttons">
+                                        <a class="btn" href="/Steam/GameDetails/@game.Id">@Mainpage.View_Button</a>
+                                        <button class="btn-cart" type="button" data-id="@game.Id">@Mainpage.Add_To_Cart_Button</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
                     }
-                    <p class="feature-text">
-                        @game.Description
-                    </p>
-
-                    <div class="feature-footer">
-                        <span class="price">$@game.Price.ToString("0.00")</span>
-                        <div class="feature-buttons">
-                            <a class="btn" href="/Steam/GameDetails/@game.Id">@Mainpage.View_Button</a>
-                            <button class="btn-cart" type="button">@Mainpage.Add_To_Cart_Button</button>
-                        </div>
-                    </div>
                 </div>
-            </article>
-        }
+            </div>
+
+            <div class="carousel-dots" id="featuredDots">
+                @for (int i = 0; i < Model.Featured.Count(); i++)
+                {
+                    <button class="dot @(i == 0 ? "active" : "")" data-slide="@i" type="button"></button>
+                }
+            </div>
+        </div>
     </section>
 
     <section class="section">
         <h2 class="section-title">@Mainpage.Section_Title_Special_Offers</h2>
-
         <div class="cards">
             @foreach (var game in Model.SpecialOffers)
             {
                 <article class="card">
                     <div class="card-media">
-                        <img src=@game.ImageUrl />
+                        <img src="@game.ImageUrl" alt="@game.Title" />
                     </div>
                     <div class="card-body">
                         <h3 class="card-title">@game.Title</h3>
                         @if (game.Genres != null && game.Genres.Any())
                         {
                             <div class="feature-genres">
-                                @foreach (var genre in game.Genres)
+                                @foreach (var genre in game.Genres.Take(2))
                                 {
                                     <span class="game-genre">@genre</span>
                                 }
@@ -70,7 +80,7 @@
                             <span class="price">$@game.Price.ToString("0.00")</span>
                             <div class="card-buttons">
                                 <a class="btn btn--small" href="/Steam/GameDetails/@game.Id">@Mainpage.View_Button</a>
-                                <button class="btn-cart btn--small" type="button">@Mainpage.Add_To_Cart_Button</button>
+                                <button class="btn-cart btn--small" type="button" data-id="@game.Id">@Mainpage.Add_To_Cart_Button</button>
                             </div>
                         </div>
                     </div>
@@ -78,9 +88,14 @@
             }
         </div>
     </section>
+
     <section class="section">
-        <div>
+        <div class="catalog-wrapper">
             <a class="btn catalog-button" href="/Steam/Catalog">@Mainpage.Catalog_Button</a>
         </div>
     </section>
 </main>
+
+@section Scripts {
+    <script src="~/js/steam/main-carousel.js" asp-append-version="true"></script>
+}

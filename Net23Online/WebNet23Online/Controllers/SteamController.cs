@@ -61,26 +61,6 @@ namespace WebNet23Online.Controllers
             return View(model);
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public IActionResult Catalog()
-        //{
-        //    var model = _catalogService.GetCatalog();
-        //    model.IsUserAtLeastModerator = _authService.AtLeastModerator();
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public IActionResult Catalog(CatalogFilterViewModel filter)
-        //{
-        //    var model = _catalogService.GetCatalog(filter);
-        //    model.IsUserAtLeastModerator = _authService.AtLeastModerator();
-
-        //    return View(model);
-        //}
-
         [HttpGet]
         [IsModerator]
         public IActionResult AddGame()
