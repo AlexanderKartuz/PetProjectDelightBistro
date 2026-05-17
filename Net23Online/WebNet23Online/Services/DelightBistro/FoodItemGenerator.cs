@@ -270,5 +270,21 @@ namespace WebNet23Online.Services.DelightBistro
             }
             return name;
         }
+
+        public List<FoodItemStatsViewModel> GetFoodItemStatsViewModels()
+        {
+            var allFoodItemStatsDataModel = _foodItemRepository.GetFoodItemStats();
+
+            var allFoodItemStatsViewModel = allFoodItemStatsDataModel.Select(x => new FoodItemStatsViewModel
+            {
+                FoodItemName = x.FoodItemName,
+                IngredientCount = x.IngredientCount,
+                FoodItemPrice = x.FoodItemPrice,
+                TotalPriceIngredient = x.TotalPriceIngredient,
+                Profit = x.Profit,
+            }).ToList();
+
+            return allFoodItemStatsViewModel;
+        }
     }
 }

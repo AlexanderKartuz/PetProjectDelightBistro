@@ -153,5 +153,12 @@ namespace WebNet23Online.Controllers
 
             return File(fileStream, "text/csv");
         }
+        public IActionResult Stats()
+        {
+            var viewModels = _foodItemGenerator.GetFoodItemStatsViewModels();
+
+            return View(viewModels);
+        }
+
     }
 }

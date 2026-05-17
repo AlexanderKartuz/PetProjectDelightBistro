@@ -17,5 +17,6 @@ namespace WebNet23Online.Services.Interfaces
         AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel);
         void DeleteFoodItem(int id);
         FileStream GenerateTable();
+        List<FoodItemStatsViewModel> GetFoodItemStatsViewModels();
     }
 }
