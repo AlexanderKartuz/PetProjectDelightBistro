@@ -31,6 +31,7 @@ namespace WebNet23Online.Data
         public DbSet<RockLegendsGenres> RockLegendsGenres { get; set; }
 
         public DbSet<SlayTheSpire2HeroesData> SlayTheSpire2Heroes { get; set; }
+        public DbSet<SlayTheSpire2HeroesCards> SlayTheSpire2HeroesCards { get; set; }
 
         public DbSet<GameData> Games { get; set; }
         public DbSet<PublisherData> Publishers { get; set; }
@@ -175,6 +176,12 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.JdmManufacturerData)
                 .WithMany(x => x.JdmCarsDatas)
                 .HasForeignKey(x => x.JdmManufacturerDataId);
+            
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.Hero)
+                .WithMany(x => x.Cards)
+                .HasForeignKey(x =>x.HeroId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
         }

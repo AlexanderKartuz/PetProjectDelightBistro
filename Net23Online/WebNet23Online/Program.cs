@@ -84,6 +84,7 @@ builder.Services.AddScoped<IRockBandsService, RockBandsService>();
 builder.Services.AddSingleton<IRockLegendsPick, RockLegendsPick>();
 
 builder.Services.AddSingleton<ISlayTheSpire2RewardImageService, SlayTheSpire2RewardImageService>();
+builder.Services.AddSingleton<ISlayTheSpire2CardOptionsService, SlayTheSpire2CardOptionsService>();
 
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 
@@ -113,6 +114,7 @@ builder.Services.AddScoped<IHabitRepository, HabitRepository>();
 builder.Services.AddScoped<IHabitDoneDatesRepository, HabitDoneDatesRepository>();
 builder.Services.AddScoped<IHabitDiaryRepository, HabitDiaryRepository>();
 builder.Services.AddScoped<ISlayTheSpire2HeroesRepository, SlayTheSpire2HeroesRepository>();
+builder.Services.AddScoped<ISlayTheSpire2HeroesCardsRepository, SlayTheSpire2HeroesCardsRepository>();
 builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
 builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();

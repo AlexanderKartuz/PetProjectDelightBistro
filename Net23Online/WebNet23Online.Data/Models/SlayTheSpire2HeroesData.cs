@@ -10,5 +10,6 @@ namespace WebNet23Online.Data.Models
     {
         public string Name { get; set; }
         public string Color { get; set; }
+        public virtual List<SlayTheSpire2HeroesCards> Cards { get; set; } = new();
     }
 }
