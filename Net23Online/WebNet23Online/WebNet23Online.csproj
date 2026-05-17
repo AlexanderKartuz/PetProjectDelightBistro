@@ -45,6 +45,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Home.resx</DependentUpon>
     </Compile>
+    <Compile Update="Localizations\SlayTheSpire2Index.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SlayTheSpire2Index.resx</DependentUpon>
+    </Compile>
     <Compile Update="Localizations\Steam\AddGamePage.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -115,12 +120,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Home.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Localizations\Resource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Localizations\DelightBistro.De.resx">
       <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localizations\SlayTheSpire2Index.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SlayTheSpire2Index.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\Steam\AddGamePage.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
