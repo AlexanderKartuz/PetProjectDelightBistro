@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using WebNet23Online.Controllers.CustomAuthAttribute;
+using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Models.SlayTheSpire2;
@@ -11,17 +14,20 @@ namespace WebNet23Online.Controllers
     {
         private readonly ISlayTheSpire2RewardImageService _rewardImageService;
         private readonly ISlayTheSpire2CardOptionsService _cardOptionsService;
+        private readonly IAuthService _authService;
         private readonly ISlayTheSpire2HeroesRepository _heroesRepository;
         private readonly ISlayTheSpire2HeroesCardsRepository _heroesCardsRepository;
 
         public SlayTheSpire2Controller(
             ISlayTheSpire2RewardImageService rewardImageService,
             ISlayTheSpire2CardOptionsService cardOptionsService,
+            IAuthService authService,
             ISlayTheSpire2HeroesRepository heroesRepository,
             ISlayTheSpire2HeroesCardsRepository heroesCardsRepository)
         {
             _rewardImageService = rewardImageService;
             _cardOptionsService = cardOptionsService;
+            _authService = authService;
             _heroesRepository = heroesRepository;
             _heroesCardsRepository = heroesCardsRepository;
         }
@@ -38,6 +44,7 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult AddCard([Bind(Prefix = "AddCardForm")] AddHeroCardFormViewModel form)
         {
             var hero = _heroesRepository.GetById(form.HeroId);
@@ -51,6 +58,8 @@ namespace WebNet23Online.Controllers
                 return View("Heroes", BuildHeroesViewModel(form.HeroId, form));
             }
 
+            var userId = _authService.GetUserId();
+
             _heroesCardsRepository.Add(new SlayTheSpire2HeroesCards
             {
                 HeroId = form.HeroId,
@@ -60,13 +69,18 @@ namespace WebNet23Online.Controllers
                 ManaCost = form.ManaCost,
                 TypeOfCard = form.TypeOfCard.Trim(),
                 Upgraded = form.Upgraded,
-                ImageUrl = string.IsNullOrWhiteSpace(form.ImageUrl) ? string.Empty : form.ImageUrl.Trim()
+                ImageUrl = string.IsNullOrWhiteSpace(form.ImageUrl) ? string.Empty : form.ImageUrl.Trim(),
+                CreatedByUserId = userId,
+                ModifiedByUserId = userId,
+                ModifiedAt = DateTime.UtcNow
             });
 
             return RedirectToAction(nameof(Heroes), new { id = form.HeroId });
         }
 
         [HttpGet]
+        [Authorize]
+        [IsSlayTheSpire2CreatorOrAdmin]
         public IActionResult EditCard(int id)
         {
             var card = _heroesCardsRepository.Get(id);
@@ -79,6 +93,8 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [IsSlayTheSpire2CreatorOrAdmin]
         public IActionResult EditCard(EditHeroCardFormViewModel form)
         {
             if (_heroesRepository.GetById(form.HeroId) == null)
@@ -105,6 +121,10 @@ namespace WebNet23Online.Controllers
             card.TypeOfCard = form.TypeOfCard.Trim();
             card.Upgraded = form.Upgraded;
             card.ImageUrl = string.IsNullOrWhiteSpace(form.ImageUrl) ? string.Empty : form.ImageUrl.Trim();
+
+            var userId = _authService.GetUserId();
+            card.ModifiedByUserId = userId;
+            card.ModifiedAt = DateTime.UtcNow;
 
             _heroesCardsRepository.Update(card);
 
@@ -141,6 +161,10 @@ namespace WebNet23Online.Controllers
         private HeroesViewModel BuildHeroesViewModel(int heroId, AddHeroCardFormViewModel? addCardForm = null)
         {
             var hero = _heroesRepository.GetById(heroId);
+            var currentUserId = _authService.GetUserId();
+            var isAuthenticated = _authService.IsAuthenticated();
+            var isAdmin = isAuthenticated && _authService.GetRole() == UserRole.Admin;
+
             var cards = hero != null
                 ? _heroesCardsRepository.GetByHeroId(heroId)
                     .Select(c => new HeroCardViewModel
@@ -152,7 +176,8 @@ namespace WebNet23Online.Controllers
                         ManaCost = c.ManaCost,
                         TypeOfCard = c.TypeOfCard,
                         Upgraded = c.Upgraded,
-                        ImageUrl = c.ImageUrl
+                        ImageUrl = c.ImageUrl,
+                        CanEdit = isAdmin || (isAuthenticated && c.CreatedByUserId == currentUserId)
                     })
                     .ToList()
                 : new List<HeroCardViewModel>();

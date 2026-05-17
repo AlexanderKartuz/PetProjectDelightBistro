@@ -66,15 +66,20 @@
                                     <dt>Улучшение</dt>
                                     <dd>@(card.Upgraded ? "Да" : "Нет")</dd>
                                 </dl>
-                                <p class="spire-hero-card-actions">
-                                    <a asp-controller="SlayTheSpire2" asp-action="EditCard" asp-route-id="@card.Id" class="spire-hero-card-edit">Редактировать</a>
-                                </p>
+                                @if (card.CanEdit)
+                                {
+                                    <p class="spire-hero-card-actions">
+                                        <a asp-controller="SlayTheSpire2" asp-action="EditCard" asp-route-id="@card.Id" class="spire-hero-card-edit">Редактировать</a>
+                                    </p>
+                                }
                             </div>
                         </li>
                     }
                 </ul>
             }
 
+            @if (User.Identity?.IsAuthenticated == true)
+            {
             <section class="spire-hero-add-card" aria-labelledby="hero-add-card-heading">
                 <h2 id="hero-add-card-heading" class="spire-hero-cards-title">Добавить карту</h2>
 
@@ -130,6 +135,7 @@
                     <button type="submit" class="spire-hero-add-card-submit">Сохранить карту</button>
                 </form>
             </section>
+            }
         </section>
     }
     else

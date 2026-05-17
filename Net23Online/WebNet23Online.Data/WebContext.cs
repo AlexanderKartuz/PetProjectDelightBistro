@@ -183,6 +183,18 @@ namespace WebNet23Online.Data
                 .HasForeignKey(x =>x.HeroId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.ModifiedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.ModifiedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             base.OnModelCreating(modelBuilder);
         }
     }

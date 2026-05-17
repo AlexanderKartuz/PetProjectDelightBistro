@@ -11,5 +11,10 @@
         public string ImageUrl { get; set;}
         public int HeroId { get; set;}
         public virtual SlayTheSpire2HeroesData Hero {  get; set;}
+        public int CreatedByUserId { get; set; }
+        public virtual UserData? CreatedByUser { get; set; }
+        public int? ModifiedByUserId { get; set; }
+        public DateTime? ModifiedAt { get; set; }
+        public virtual UserData? ModifiedByUser { get; set; }
     }
 }

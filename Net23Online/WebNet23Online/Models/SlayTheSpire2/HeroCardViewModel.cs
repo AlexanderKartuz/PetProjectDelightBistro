@@ -17,5 +17,7 @@ namespace WebNet23Online.Models.SlayTheSpire2
         public bool Upgraded { get; set; }
 
         public string? ImageUrl { get; set; }
+
+        public bool CanEdit { get; set; }
     }
 }
