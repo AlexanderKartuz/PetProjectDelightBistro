@@ -18,7 +18,5 @@ namespace WebNet23Online.Models.AnimalWorld
         public string Description { get; set; }
 
         public List<string> AnimalFamilies { get; set; }
-        //public List<AnimalFamilyViewModel> AnimalFamilies { get; set; } = new ();
-        //public List<AnimalSpeciesViewModel> AnimalSpecies { get; set; } = new ();
     }
 }

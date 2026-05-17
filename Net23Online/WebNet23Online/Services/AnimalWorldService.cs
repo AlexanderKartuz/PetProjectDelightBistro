@@ -29,12 +29,11 @@ namespace WebNet23Online.Services
 
         public StartPageAnimalWorldInfoViewModel GetStartInfo()
         {
-            //var zoos = _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetRandomElements());
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
             foreach (var animal in animalSpecies)
             {
-                if (string.IsNullOrEmpty(animal.Url))
+                if (string.IsNullOrEmpty(animal.Url) || !File.Exists(animal.Url))
                 {
                     animal.Url = DEFAULT_URL;
                 }
@@ -42,7 +41,6 @@ namespace WebNet23Online.Services
 
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
-                //Zoos = zoos,
                 AnimalFamilies = animalFamilies,
                 AnimalSpecies = animalSpecies,
             };
@@ -150,8 +148,6 @@ namespace WebNet23Online.Services
                 Creator = user
             };
             _animalSpeciesRepository.Add(animalSpeciesData);
-            //animalSpeciesData = _animalSpeciesRepository.GetElementByName(viewModel.AnimalSpeciesName);
-            //animalFamily.Species.Add(animalSpeciesData);
             return true;
         }
 
