@@ -33,10 +33,18 @@ namespace WebNet23Online.Data.Repositories.AnimalWorld
 
         public List<string> GetZooAnimalFamilies(int id)
         {
-            var sql = @$"SELECT DISTINCT [AF].AnimalFamilyName
-                        FROM Zoos [Z] join BindZooAndAnimalSpecies [BZAAS] on [Z].Id = [BZAAS].ZooDataId join AnimalSpecies [AS] on [AS].Id=[BZAAS].AnimalSpeciesId
-                        join AnimalFamilies [AF] on [AF].Id = [AS].AnimalFamilyId
-                        WHERE [Z].Id = {id}";
+            var sql = @$"SELECT DISTINCT 
+                [AF].AnimalFamilyName
+            FROM 
+                Zoos [Z] 
+            JOIN 
+                BindZooAndAnimalSpecies [BZAAS] ON [Z].Id = [BZAAS].ZooDataId 
+            JOIN 
+                AnimalSpecies [AS] ON [AS].Id = [BZAAS].AnimalSpeciesId
+            JOIN 
+                AnimalFamilies [AF] ON [AF].Id = [AS].AnimalFamilyId
+            WHERE 
+                [Z].Id = {id}";
             return _context.Database.SqlQueryRaw<string>(sql).ToList();
         }
     }
