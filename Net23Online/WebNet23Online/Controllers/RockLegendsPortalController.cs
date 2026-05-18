@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
 using WebNet23Online.Controllers.CustomAuthAttribute;
+using WebNet23Online.Data.DataModels;
 using WebNet23Online.Data.Enums;
-using System.Globalization;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Models.RockLegendsPortal;
@@ -16,18 +18,21 @@ namespace WebNet23Online.Controllers
         private readonly IRockLegendsPick _rockService;
         private readonly IRockLegendsRepository _rockLegendsRepository;
         private readonly IRockLegendsGenresRepository _genreRepository;
-        private readonly IAuthService _authService; 
+        private readonly IAuthService _authService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public RockLegendsPortalController(
             IRockLegendsPick rockService,
             IRockLegendsRepository rockLegendsRepository,
             IRockLegendsGenresRepository genreRepository,
-            IAuthService authService) 
+            IAuthService authService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _rockService = rockService;
             _rockLegendsRepository = rockLegendsRepository;
             _genreRepository = genreRepository;
             _authService = authService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -36,15 +41,16 @@ namespace WebNet23Online.Controllers
         {
             var genresDb = _genreRepository.GetAllWithGroups();
             var bandsDb = _rockLegendsRepository.GetAll();
-            var currentUser = _authService.GetUser();
+
+            bool isRockModerator = _authService.AtLeastModerator();
 
             var viewModel = new SortByGenreViewModel
             {
-                // Передаем только нужные данные (модельки, а не Data)
                 Genres = genresDb.Select(g => new RockLegendsGenreItemViewModel
                 {
                     Id = g.Id,
                     Name = g.Name,
+                    CoverUrl = g.CoverUrl ?? "/images/rock-legends-portal/default.jpg",
                     BandNames = g.Groups.Select(b => b.GroupNames).ToList()
                 }).ToList(),
 
@@ -54,7 +60,11 @@ namespace WebNet23Online.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                IsCurrentUserAdmin = currentUser != null && currentUser.Role == UserRole.Admin
+                IsCurrentUserAdmin = isRockModerator,
+
+                AdminSqlStats = isRockModerator
+                    ? _genreRepository.GetGenreStatsSql()
+                    : new List<RockLegendsGenreStatsDataModel>()
             };
 
             return View(viewModel);
@@ -74,10 +84,12 @@ namespace WebNet23Online.Controllers
             return RedirectToAction("SortByGenre");
         }
 
-
         [HttpGet]
         [Authorize]
-        public IActionResult AddGenre() => View();
+        public IActionResult AddGenre()
+        {
+            return View();
+        }
 
         [HttpPost]
         [Authorize]
@@ -85,8 +97,36 @@ namespace WebNet23Online.Controllers
         {
             if (!ModelState.IsValid) return View(viewModel);
 
-            var genre = new RockLegendsGenres { Name = viewModel.Name, CoverUrl = viewModel.CoverUrl };
+            var genre = new RockLegendsGenres
+            {
+                Name = viewModel.Name,
+                CoverUrl = viewModel.CoverUrl ?? "/images/rock-legends-portal/default.jpg"
+            };
+
             _genreRepository.Add(genre);
+
+            if (viewModel.Image != null)
+            {
+                var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
+                var pathToFolder = Path.Combine("images", "rock-legends-portal");
+                var fileName = $"genre-{genre.Id}.jpg";
+
+                var absoluteFolderPath = Path.Combine(pathToWwwRootFolder, pathToFolder);
+                if (!Directory.Exists(absoluteFolderPath))
+                {
+                    Directory.CreateDirectory(absoluteFolderPath);
+                }
+                var fullPath = Path.Combine(absoluteFolderPath, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    viewModel.Image.CopyTo(stream);
+                }
+
+                genre.CoverUrl = $"/images/rock-legends-portal/{fileName}";
+                _genreRepository.Update(genre);
+            }
+
             return RedirectToAction("SortByGenre");
         }
 
