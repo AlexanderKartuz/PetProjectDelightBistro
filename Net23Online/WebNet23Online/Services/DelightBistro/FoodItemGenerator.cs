@@ -93,7 +93,7 @@ namespace WebNet23Online.Services.DelightBistro
                 changedFoodItemData.Name = viewModel.Name;
                 changedFoodItemData.Price = viewModel.Price;
                 changedFoodItemData.ImgURL = viewModel.ImgURL;
-                changedFoodItemData.MenuData = /*selectedMenu;*/ GetSelectedMenu(viewModel);
+                changedFoodItemData.MenuData = GetSelectedMenu(viewModel);
 
                 changedFoodItemData.FoodItemIngredientDatas = links;
 
