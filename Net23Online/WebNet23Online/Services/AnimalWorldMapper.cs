@@ -10,10 +10,9 @@ namespace WebNet23Online.Services
         {
             var zoos = zoosData.Select(zoo => new ZooViewModel
             {
+                Id = zoo.Id,
                 ZooName = zoo.ZooName,
                 Address = zoo.Address,
-                AnimalFamilies = FromAnimalFamilyDataToAnimalFamilyViewModel(zoo.AnimalSpecies.Select(s => s.AnimalFamily).DistinctBy(s => s.AnimalFamilyName).ToList()),
-                AnimalSpecies = FromAnimalSpeciesDataToAnimalSpeciesViewModel(zoo.AnimalSpecies),
                 Description = zoo.Description,
             });
             return zoos.ToList();
@@ -37,6 +36,7 @@ namespace WebNet23Online.Services
                 Url = animalSpecies.AnimalSpeciesUrl,
                 NativeRange = animalSpecies.NativeRange,
                 Description = animalSpecies.Description,
+                Zoos = animalSpecies.ZooData.Select(s => s.ZooName).ToList()
             });
             return animalSpecies.ToList();
         }

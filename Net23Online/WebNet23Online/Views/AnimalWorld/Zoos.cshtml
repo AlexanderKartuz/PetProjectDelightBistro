@@ -21,14 +21,9 @@
                 <h3>@zoo.ZooName</h3>
                 <p><strong>@AnimalWorld.Address:</strong> @zoo.Address</p>
                 <p>@zoo.Description</p>
-
-                @if (zoo.AnimalSpecies.Any())
+                @if (zoo.AnimalFamilies.Any())
                 {
-                    <p><strong>@AnimalWorld.AnimalSpecies:</strong></p>
-                    @foreach (var animalSpecies in zoo.AnimalSpecies)
-                    {
-                        <p>@animalSpecies.AnimalSpeciesName</p>
-                    }
+                    <p><strong>@AnimalWorld.AnimalFamilies: </strong>@string.Join(", ", zoo.AnimalFamilies)</p>
                 }
 
                 <div class="button-group">
