@@ -48,5 +48,15 @@ namespace WebNet23Online.Data.Repositories
             _dbSet.Update(model);
             _context.SaveChanges();
         }
+
+        public virtual void Delete(int id)
+        {
+            var user = _dbSet.FirstOrDefault(x => x.Id == id);
+            if (user != null)
+            {
+                _dbSet.Remove(user);
+                _context.SaveChanges();
+            }
+        }
     }
 }

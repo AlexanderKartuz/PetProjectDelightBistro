@@ -164,7 +164,7 @@
                     <p class="add-band-form-hint">@RockBand.Index_Add_Description</p>
                 </div>
                 <div class="preferences-music-items add-band-form-panel">
-                    <form method="post" class="add-band-form-fields">
+                    <form method="post" enctype="multipart/form-data" class="add-band-form-fields">
                         <div class="add-band-field">
                             <label for="band-name">@RockBand.Index_Add_Name</label>
                             <input id="band-name" type="text" asp-for="BandBlock.Name" placeholder=@RockBand.Index_Add_Name_Example autocomplete="off" />
@@ -177,6 +177,8 @@
                         </div>
                         <div class="add-band-field">
                             <label for="band-image">@RockBand.Index_Add_Image</label>
+                            <input id="band-image-file" type="file" name="Image" />
+                            <span class="add-band-field-help">или</span>
                             <input id="band-image" type="text" inputmode="url" asp-for="BandBlock.ImageUrl" placeholder=@RockBand.Index_Add_Image_Example spellcheck="false" autocomplete="off" />
                             <span class="add-band-field-help">@RockBand.Index_Add_Image_Description</span>
                             @Html.ValidationMessageFor(m => m.BandBlock.ImageUrl)

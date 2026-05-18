@@ -124,7 +124,7 @@ namespace WebNet23Online.Localizations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Link to the photo on the Internet.
+        ///   Looks up a localized string similar to Insert a band photo or a link from the Internet.
         /// </summary>
         public static string Index_Add_Image {
             get {

@@ -1,0 +1,118 @@
+﻿@using WebNet23Online.Localizations.Steam
+@using WebNet23Online.Models.Steam
+@model SteamUserProfileViewModel
+@{
+    Layout = "_LayoutSteam";
+}
+<main class="page">
+    <section class="section">
+        <h1 class="page-title">@ProfilePage.Page_Title</h1>
+        <div class="catalog-header">
+            <p><a class="btn" href="/Steam/Catalog">← @ProfilePage.Back_To_Catalog_Button</a></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="avatar-section">
+            <div class="avatar-preview">
+                @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+                {
+                    <img src="@Model.AvatarUrl" alt="@Model.UserName" class="avatar-image" />
+                }
+                else
+                {
+                    <div class="avatar-placeholder">
+                        <span>@ProfilePage.No_Avatar_Text</span>
+                    </div>
+                }
+            </div>
+
+            <form action="/User/UpdateSteamAvatar" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+                <div class="avatar-upload">
+                    <input type="file" name="avatar" accept="image/jpeg,image/png,image/gif" />
+                    <button type="submit" class="btn btn--secondary">@ProfilePage.Change_Avatar_Button</button>
+                    <small class="form-text text-muted">@ProfilePage.Avatar_Hint_Text</small>
+                </div>
+            </form>
+        </div>
+
+        <div class="language-section">
+            <form action="/User/ChangeLanguageInSteam" method="post">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+                <div class="form-group">
+                    <label>@ProfilePage.Label_Language</label>
+                    <div>
+                        <span>@Model.Language.ToString()</span>
+                        <select name="language" class="form-control">
+                            @foreach (var language in Model.Languages)
+                            {
+                                if (Model.Language.ToString() == language.Value)
+                                {
+                                    <option value="@language.Value" selected>@language.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@language.Value">@language.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn--primary">Update language</button>
+                    <small class="form-text text-muted">@ProfilePage.Language_Hint_Text</small>
+                </div>
+            </form>
+        </div>
+
+        <div class="profile-section">
+            <form action="/User/UpdateSteamProfile" method="post">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+
+                <div class="form-group">
+                    <label for="UserName">@ProfilePage.Label_Username</label>
+                    <div>@Model.UserName</div>
+                    @Html.ValidationMessage("UserName")
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="FirstName">@ProfilePage.Label_FirstName</label>
+                        @Html.ValidationMessage("FirstName")
+                        <input type="text" id="FirstName" name="FirstName" class="form-control"
+                               value="@Model.FirstName"
+                               placeholder="@ProfilePage.FirstName_Placeholder" />
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="LastName">@ProfilePage.Label_LastName</label>
+                        @Html.ValidationMessage("LastName")
+                        <input type="text" id="LastName" name="LastName" class="form-control"
+                               value="@Model.LastName"
+                               placeholder="@ProfilePage.LastName_Placeholder" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Mobilephone">@ProfilePage.Label_Mobilephone</label>
+                    @Html.ValidationMessage("Mobilephone")
+                    <input type="tel" id="Mobilephone" name="Mobilephone" class="form-control"
+                           value="@Model.Mobilephone"
+                           placeholder="@ProfilePage.Mobilephone_Placeholder" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn--primary">@ProfilePage.Save_Profile_Button</button>
+                    <a href="/Steam/Catalog" class="btn">@ProfilePage.Cancel_Button</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="delete-section">
+            <form action="/User/DeleteAccount" method="post"
+                  onsubmit="return confirm('@ProfilePage.Delete_Confirmation_Message');">
+                <input type="hidden" name="userId" value="@Model.UserId" />
+                <button type="submit" class="btn btn--danger">@ProfilePage.Delete_Account_Button</button>
+            </form>
+        </div>
+    </section>
+</main>

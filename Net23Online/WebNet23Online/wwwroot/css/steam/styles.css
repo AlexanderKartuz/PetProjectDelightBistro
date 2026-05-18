@@ -652,3 +652,78 @@ select.form-control {
         content: "🛒";
         font-size: 14px;
     }
+/* Profile styles */
+.avatar-section {
+    margin-bottom: 20px;
+}
+
+.avatar-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.avatar-upload {
+    margin: 10px 0;
+}
+
+.language-section, .profile-section, .delete-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #1a2533;
+    border-radius: 5px;
+}
+
+.form-group.half {
+    display: inline-block;
+    width: 48%;
+}
+
+    .form-group.half:first-child {
+        margin-right: 2%;
+    }
+
+.form-actions {
+    margin-top: 20px;
+}
+
+.field-validation-error {
+    color: red;
+    font-size: 12px;
+}
+
+/* User avatar  */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 15px;
+}
+
+.user-avatar-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #66c0f4;
+}
+
+.user-avatar-placeholder-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #66c0f4 0%, #2a6f8f 100%);
+    border: 2px solid #66c0f4;
+}
+
+.username-link {
+    color: #66c0f4;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+    .username-link:hover {
+        color: #ffffff;
+        text-decoration: underline;
+    }

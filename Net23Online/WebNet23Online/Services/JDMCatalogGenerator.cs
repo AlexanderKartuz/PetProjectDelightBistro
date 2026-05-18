@@ -1,4 +1,5 @@
-﻿using WebNet23Online.Models.JapaneseDomesticMarket;
+﻿using WebNet23Online.Data.Models;
+using WebNet23Online.Models.JapaneseDomesticMarket;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Services
@@ -52,6 +53,14 @@ namespace WebNet23Online.Services
                 return allCarsJDMTypes;
             }
             return OneJDMCarsType;
+        }
+        public List<JDMCatalogViewModels> GetManufacturerType(List<JdmManufacturerData> manufactureTypes)
+        {
+            return manufactureTypes.Select(x => new JDMCatalogViewModels
+            {
+                Id = x.Id,
+                ManufacturerType = x.ManufacturerType,
+            }).ToList();
         }
     }
 }

@@ -10,13 +10,16 @@ namespace WebNet23Online.Services
     {
         private IRockBandsRepository _rockBandsRepository;
         private IGenreOfRockBandsRepository _genreOfRockBandsRepository;
+        private IWebHostEnvironment _webHostEnvironment;
 
         public RockBandsService(
             IRockBandsRepository rockBandsRepository,
-            IGenreOfRockBandsRepository genreOfRockBandsRepository)
+            IGenreOfRockBandsRepository genreOfRockBandsRepository,
+            IWebHostEnvironment webHostEnvironment)
         {
             _rockBandsRepository = rockBandsRepository;
             _genreOfRockBandsRepository = genreOfRockBandsRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public List<BandBlockViewModel> GetBands(int[]? genreIds = null)
@@ -69,6 +72,19 @@ namespace WebNet23Online.Services
                 .Distinct()
                 .ToArray();
 
+            if (viewModel.PhotoOfTheBand != null)
+            {
+                var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
+                var pathToFolder = "images\\rock-bands";
+                var fileName = $"band-{viewModel.Name.Trim()}.jpg";
+                var path = Path.Combine(pathToWwwRootFolder, pathToFolder, fileName);
+                using (var rockBandPhotoFile = new FileStream(path, FileMode.Create))
+                {
+                    viewModel.PhotoOfTheBand.CopyTo(rockBandPhotoFile);
+                }
+                viewModel.ImageUrl = $"/images/rock-bands/{fileName}";
+            }
+            
             var newBand = new RockBandsData
             {
                 Name = viewModel.Name.Trim(),
