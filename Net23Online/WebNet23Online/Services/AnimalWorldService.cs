@@ -9,6 +9,7 @@ namespace WebNet23Online.Services
 {
     public class AnimalWorldService : IAnimalWorldService
     {
+        public const string DEFAULT_URL = "/images/animal-world/default.jpg";
         private IZooRepository _zooRepository;
         private IAnimalFamilyRepository _animalFamilyRepository;
         private IAnimalSpeciesRepository _animalSpeciesRepository;
@@ -28,20 +29,18 @@ namespace WebNet23Online.Services
 
         public StartPageAnimalWorldInfoViewModel GetStartInfo()
         {
-            var zoos = _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetRandomElements());
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
             foreach (var animal in animalSpecies)
             {
-                if (string.IsNullOrEmpty(animal.Url))
+                if (string.IsNullOrEmpty(animal.Url) || !File.Exists(animal.Url))
                 {
-                    animal.Url = "/images/animal-world/default.jpg";
+                    animal.Url = DEFAULT_URL;
                 }
             }
 
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
-                Zoos = zoos,
                 AnimalFamilies = animalFamilies,
                 AnimalSpecies = animalSpecies,
             };
@@ -125,7 +124,7 @@ namespace WebNet23Online.Services
         {
             var user = _authService.GetUser();
             var animalFamily = _animalFamilyRepository.Get(viewModel.AnimalFamilyId);
-            var url = "/images/animal-world/default.jpg";
+            var url = DEFAULT_URL;
             if (viewModel.AnimalSpeciesImage != null)
             {
                 var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
@@ -149,8 +148,6 @@ namespace WebNet23Online.Services
                 Creator = user
             };
             _animalSpeciesRepository.Add(animalSpeciesData);
-            //animalSpeciesData = _animalSpeciesRepository.GetElementByName(viewModel.AnimalSpeciesName);
-            //animalFamily.Species.Add(animalSpeciesData);
             return true;
         }
 
@@ -162,7 +159,13 @@ namespace WebNet23Online.Services
 
         public List<ZooViewModel> GetAllZoos()
         {
-            return _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetAllWithAnimalSpecies());
+            var zoos = _animalWorldMapper.FromZooDataToZooViewModel(_zooRepository.GetAll());
+            foreach (var zoo in zoos)
+            {
+                zoo.AnimalFamilies = _zooRepository.GetZooAnimalFamilies(zoo.Id);
+            }
+
+            return zoos;
         }
     }
 }

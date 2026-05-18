@@ -26,5 +26,7 @@ namespace WebNet23Online.Models.AnimalWorld
         [Required]
         [StringLength(2000)]
         public string Description { get; set; }
+
+        public List<string> Zoos { get; set; }
     }
 }

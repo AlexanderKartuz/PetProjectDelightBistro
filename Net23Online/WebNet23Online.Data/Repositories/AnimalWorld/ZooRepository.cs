@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebNet23Online.Data.DataModels;
 using WebNet23Online.Data.Models.AnimalWorld;
 using WebNet23Online.Data.Repositories.Interfaces.AnimalWorld;
 
@@ -14,7 +15,7 @@ namespace WebNet23Online.Data.Repositories.AnimalWorld
 
         public List<ZooData> GetRandomElements()
         {
-            return _dbSet.Include(zoo => zoo.AnimalSpecies).ThenInclude(species => species.AnimalFamily).OrderBy(r => Guid.NewGuid()).Take(START_PAGE_COUNT_ANIMAL_SPECIES).ToList();
+            return _dbSet.OrderBy(r => Guid.NewGuid()).Take(START_PAGE_COUNT_ANIMAL_SPECIES).ToList();
         }
 
         public ZooData GetElementByName(string name)
@@ -30,9 +31,13 @@ namespace WebNet23Online.Data.Repositories.AnimalWorld
             _context.SaveChanges();
         }
 
-        public List<ZooData> GetAllWithAnimalSpecies()
+        public List<string> GetZooAnimalFamilies(int id)
         {
-            return _dbSet.Include(zoo => zoo.AnimalSpecies).ThenInclude(species => species.AnimalFamily).ToList();
+            var sql = @$"SELECT DISTINCT [AF].AnimalFamilyName
+                        FROM Zoos [Z] join BindZooAndAnimalSpecies [BZAAS] on [Z].Id = [BZAAS].ZooDataId join AnimalSpecies [AS] on [AS].Id=[BZAAS].AnimalSpeciesId
+                        join AnimalFamilies [AF] on [AF].Id = [AS].AnimalFamilyId
+                        WHERE [Z].Id = {id}";
+            return _context.Database.SqlQueryRaw<string>(sql).ToList();
         }
     }
 }
