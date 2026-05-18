@@ -10,6 +10,6 @@ namespace WebNet23Online.Models.Steam
         public List<SteamGameViewModel> Games { get; set; } = new();
         public List<SelectListItem> GameGenres { get; set; } = new();
 
-        public PaginationMetadata Metadata { get; set; } = new();
+        public PaginationMetadataViewModel PaginationMetadata { get; set; } = new();
     }
-}
+}   

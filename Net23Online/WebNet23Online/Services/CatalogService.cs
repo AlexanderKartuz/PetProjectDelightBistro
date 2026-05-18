@@ -91,7 +91,7 @@ namespace WebNet23Online.Services
                     })
                     .ToList(),
                 GameGenres = GetListItemsWithGameGenres(),
-                Metadata = new PaginationMetadata
+                PaginationMetadata = new PaginationMetadataViewModel
                 {
                     CurrentPage= games.PageIndex,
                     TotalPages= games.TotalPages,

@@ -1,7 +1,7 @@
 ﻿
 namespace WebNet23Online.Data.HelperModels.SteamPagination
 {
-    public class PaginationMetadata
+    public class PaginationMetadataViewModel
     {
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
