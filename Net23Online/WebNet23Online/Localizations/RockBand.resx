@@ -139,7 +139,7 @@
     <value>Add a band</value>
   </data>
   <data name="Index_Add_Image" xml:space="preserve">
-    <value>Link to the photo on the Internet</value>
+    <value>Insert a band photo or a link from the Internet</value>
   </data>
   <data name="Index_Add_Image_Description" xml:space="preserve">
     <value>Paste the image's direct URL. This field can be left blank.</value>

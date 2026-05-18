@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Controllers.CustomAuthAttribute.Steam;
 using WebNet23Online.Data.Enums;
@@ -12,12 +13,16 @@ namespace WebNet23Online.Controllers
     [Authorize]
     public class SteamController : Controller
     {
+        private const int CatalogDefaultPageSize = 12;
+        private const int CatalogMaxPageSize = 48;
+
         private readonly ICatalogService _catalogService;
         private readonly IAuthService _authService;
 
-
-        public SteamController(ICatalogService catalogService,
-            IAuthService authService)
+        public SteamController(
+            ICatalogService catalogService,
+            IAuthService authService
+        )
         {
             _catalogService = catalogService;
             _authService = authService;
@@ -33,18 +38,23 @@ namespace WebNet23Online.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Catalog()
+        public IActionResult Catalog([FromQuery] CatalogFilterViewModel filter)
         {
-            var model = _catalogService.GetCatalog();
-            model.IsUserAtLeastModerator = _authService.AtLeastModerator();
+            filter ??= new CatalogFilterViewModel();
+            if (filter.Page < 1)
+            {
+                filter.Page = 1;
+            }
 
-            return View(model);
-        }
+            if (filter.PageSize < 1)
+            {
+                filter.PageSize = CatalogDefaultPageSize;
+            }
+            else if (filter.PageSize > CatalogMaxPageSize)
+            {
+                filter.PageSize = CatalogMaxPageSize;
+            }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Catalog(CatalogFilterViewModel filter)
-        {
             var model = _catalogService.GetCatalog(filter);
             model.IsUserAtLeastModerator = _authService.AtLeastModerator();
 
@@ -54,7 +64,7 @@ namespace WebNet23Online.Controllers
         [HttpGet]
         [IsModerator]
         public IActionResult AddGame()
-        {    
+        {
             var viewModel = new AddGameViewModel
             {
                 AllGenres = _catalogService.GetListItemsWithGameGenres(),
@@ -75,7 +85,7 @@ namespace WebNet23Online.Controllers
                 return View(viewModel);
             }
             _catalogService.AddGame(viewModel);
-           
+
             return RedirectToAction(nameof(Catalog));
         }
 
@@ -102,7 +112,7 @@ namespace WebNet23Online.Controllers
                     .ToList(),
                 PublisherName = gameData.Publisher?.Name ?? "Unknown",
                 PublisherId = gameData.PublisherId,
-                IsUserAtLeastModerator =_authService.AtLeastModerator()
+                IsUserAtLeastModerator = _authService.AtLeastModerator()
             };
 
             return View(viewModel);

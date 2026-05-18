@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebNet23Online.Data;
 
@@ -11,9 +12,11 @@ using WebNet23Online.Data;
 namespace WebNet23Online.Data.Migrations
 {
     [DbContext(typeof(WebContext))]
-    partial class WebContextModelSnapshot : ModelSnapshot
+    [Migration("20260511182649_AddFoodItemIngredientLinks")]
+    partial class AddFoodItemIngredientLinks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,10 +93,10 @@ namespace WebNet23Online.Data.Migrations
                     b.Property<int>("IngredientDataId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("QuantityOfIngredients")
+                    b.Property<int>("QuantityOfIngredients")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(18,2)")
-                        .HasDefaultValue(10m);
+                        .HasColumnType("int")
+                        .HasDefaultValue(10);
 
                     b.HasKey("FoodItemDataId", "IngredientDataId");
 
@@ -285,8 +288,8 @@ namespace WebNet23Online.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -403,68 +406,14 @@ namespace WebNet23Online.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Ingredients");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("JdmManufacturerDataId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ManufacturerType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Marka")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JdmManufacturerDataId");
-
-                    b.ToTable("JdmCars");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.JdmManufacturerData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ManufacturerType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("JdmManufacturer");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.LittleLemonData", b =>
@@ -1024,15 +973,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsData", b =>
-                {
-                    b.HasOne("WebNet23Online.Data.Models.JdmManufacturerData", "JdmManufacturerData")
-                        .WithMany("JdmCarsDatas")
-                        .HasForeignKey("JdmManufacturerDataId");
-
-                    b.Navigation("JdmManufacturerData");
-                });
-
             modelBuilder.Entity("WebNet23Online.Data.Models.LittleLemonData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.LittleLemonGuestData", "Guest")
@@ -1146,9 +1086,9 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("CompletedDates");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.JdmManufacturerData", b =>
+            modelBuilder.Entity("WebNet23Online.Data.Models.IngredientData", b =>
                 {
-                    b.Navigation("JdmCarsDatas");
+                    b.Navigation("FoodItemIngredientDatas");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.LittleLemonGuestData", b =>

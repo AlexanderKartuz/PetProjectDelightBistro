@@ -59,11 +59,11 @@
                             </div>
                             <div class="recept">
                                 <ul>
-                                    @if (foodItem.Ingredients is not null)
+                                    @if (foodItem.IngredientsList is not null)
                                     {
-                                        @foreach (var ingredient in foodItem.Ingredients)
+                                        @foreach (var ingredient in foodItem.IngredientsList)
                                         {
-                                            <li>@ingredient</li>
+                                            <li>@ingredient.Name @ingredient.Quantity gr.</li>
                                         }
                                     }
                                 </ul>
@@ -110,8 +110,7 @@
         <li><a href="\DelightBistro\FoodBuilderData">@DelightBistro.Index_Create_dish</a> </li>
         <br>
         <li><a href="\DelightBistro\AllFoodItems">@DelightBistro.Index_All_dish</a> </li>
-
-
+        <li><a href="\DelightBistro\Stats">Stats</a> </li>
 
     </ul>
 </aside>
