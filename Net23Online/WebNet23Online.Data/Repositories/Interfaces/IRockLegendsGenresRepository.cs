@@ -1,4 +1,5 @@
-﻿using WebNet23Online.Data.Models;
+﻿using WebNet23Online.Data.DataModels;
+using WebNet23Online.Data.Models;
 
 namespace WebNet23Online.Data.Repositories.Interfaces
 {
@@ -6,5 +7,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
     {
         bool IsNameFree(string name);
         List<RockLegendsGenres> GetAllWithGroups();
+        List<RockLegendsGenreStatsDataModel> GetGenreStatsSql();
     }
 }

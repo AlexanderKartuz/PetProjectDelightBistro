@@ -45,22 +45,57 @@
                 </div>
     
                 <div id="genre-@genre.Id" class="genre-content-box">
-                    @if (genre.BandNames.Any())
-                    {
-                        foreach (var bandName in genre.BandNames)
-                        {
-                            <div class="band-name-item">🎸 @bandName</div>
-                        }
-                    }
-                    else
-                    {
-                        <div class="empty-genre-msg">В этом жанре пока нет групп.</div>
-                    }
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+        
+                        <div class="genre-cover-wrapper">
+                            <img src="@genre.CoverUrl" alt="@genre.Name" class="genre-cover-img" />
+                        </div>
+
+                        <div style="flex-grow: 1;">
+                            @if (genre.BandNames.Any())
+                            {
+                                foreach (var bandName in genre.BandNames)
+                                {
+                                    <div class="band-name-item">🎸 @bandName</div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="empty-genre-msg">В этом жанре пока нет групп.</div>
+                            }
+                        </div>
+                    </div>
                 </div>
             }
         </div>
     </div>
 </div>
+@if (Model.IsCurrentUserAdmin && Model.AdminSqlStats.Any())
+{
+    <div class="poll-container" style="margin-top: 50px; border: 2px dashed #ffcc00; background: #222; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto;">
+        <h3 style="color: #ffcc00; margin-top: 0;"> Панель администратора (Данные из репозитория SQL)</h3>
+        
+        <table style="width: 100%; border-collapse: collapse; text-align: left; color: #fff;">
+            <thead>
+                <tr style="border-bottom: 2px solid #444; color: #ffcc00;">
+                    <th style="padding: 10px;">ID Жанра</th>
+                    <th style="padding: 10px;">Название жанра</th>
+                    <th style="padding: 10px;">Количество групп</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stat in Model.AdminSqlStats)
+                {
+                    <tr style="border-bottom: 1px solid #333;">
+                        <td style="padding: 10px; color: #888;">@stat.Id</td>
+                        <td style="padding: 10px; font-weight: bold;">@stat.Name</td>
+                        <td style="padding: 10px; color: #00ffcc;">🎸 @stat.BandsCount шт.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
 
 <script>
     function toggleGenre(id) {
