@@ -59,11 +59,11 @@
                         </div>
                         <div class="recept">
                             <ul>
-                                @if (food.Ingredients is not null)
+                                @if (food.IngredientsList is not null)
                                 {
-                                    @foreach (var ingredient in food.Ingredients)
+                                    @foreach (var ingredient in food.IngredientsList)
                                     {
-                                        <li>@ingredient</li>
+                                        <li>@ingredient.Name @ingredient.Quantity gr.</li>
                                     }
                                 }
                             </ul>
