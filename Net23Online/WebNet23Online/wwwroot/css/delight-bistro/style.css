@@ -242,6 +242,7 @@ body,
 .url-box input {
     width: 400px;
 }
+
 .ingredients-box input {
     width: 400px;
 }
@@ -278,3 +279,6 @@ body,
         object-fit: cover;
     }
 
+div.food-item.active {
+    border: 3px red solid;
+}
