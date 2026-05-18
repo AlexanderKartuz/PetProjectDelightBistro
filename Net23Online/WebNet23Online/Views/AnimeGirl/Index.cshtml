@@ -5,15 +5,17 @@
     Layout = "_LayoutAnime";
 }
 
+@section Scripts {
+    <script src="/js/anime-girl/index.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&amp;family=Sniglet:wght@400;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/anime-girl/style-nice.css">
+}
+
 <title>Мои увлечения — аниме, игры, книги</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&amp;family=Sniglet:wght@400;800&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/anime-girl/style-nice.css">
-
-
 <div class="bg-blobs" aria-hidden="true"></div>
-
 <header class="site-header">
     <p class="tagline">@AnimeGirl.Index_Header_TagLine</p>
     <h1>@AnimeGirl.Index_Header</h1>
@@ -46,8 +48,8 @@
                         @foreach (var girl in Model.AnimeGirls)
                         {
                             var optLabel = string.IsNullOrEmpty(girl.ConnectedAnimeTitles)
-                                ? girl.Title
-                                : $"{girl.Title} — {girl.ConnectedAnimeTitles}";
+                            ? girl.Title
+                            : $"{girl.Title} — {girl.ConnectedAnimeTitles}";
                             <option value="@girl.Id" title="@optLabel">@optLabel</option>
                         }
                     </select>
@@ -78,6 +80,8 @@
     <section class="section section-heroes" id="heroes" aria-labelledby="heroes-title">
         <h2 class="section-title" id="heroes-title">Персонажи</h2>
         <p class="section-intro">Иллюстрации и аниме, где персонаж числится в списке героев.</p>
+        <p class="section-intro"><button class="remove-image" disabled>remove</button></p>
+
         <div class="card-grid">
             @foreach (var girl in Model.AnimeGirls)
             {
@@ -121,4 +125,3 @@
 <footer class="site-footer">
     <p>Сделано с теплом · 2026</p>
 </footer>
-
