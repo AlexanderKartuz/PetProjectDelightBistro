@@ -25,7 +25,7 @@
     <hr class="green-line">
     @if (Model.AnimalFamilies.Any())
     {
-        <button id="delete-selected-btn" class="btn btn-danger mb-3">Удалить выбранные</button>
+        <button id="delete-selected-btn" class="btn btn-danger mb-3">@AnimalWorld.DeleteSelected</button>
         <div class="entity-grid" data-empty-text="@AnimalWorld.NoAnimalFamilies">
             @foreach (var family in Model.AnimalFamilies)
             {
