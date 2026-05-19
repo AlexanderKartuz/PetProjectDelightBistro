@@ -33,12 +33,12 @@
     <div class="plate">
                 
         <div class="type-of-food">
+            <p class="add-button">
+                <button class="remove-food-item" disabled title="Удалить">Delete dishes</button>
+            </p>
             <div class="type-name center">Все блюда</div>
             <div class="menu">
-                <div class="add-button">
-                    <button class="remove-food-item" disabled title="Удалить">Delete dishes</button>
-                </div>
-
+              
                 @foreach (var food in Model.FoodItems)
                 {
                     <div class="food-item" item-id="@food.Id">

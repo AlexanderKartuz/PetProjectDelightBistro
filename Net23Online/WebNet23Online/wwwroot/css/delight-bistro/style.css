@@ -283,3 +283,11 @@ input {
 div.food-item.active {
   border: 3px red solid;
 }
+
+
+.preview.food-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid;
+}
