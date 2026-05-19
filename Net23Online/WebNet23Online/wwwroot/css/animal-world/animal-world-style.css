@@ -185,3 +185,41 @@ body {
     background-color: #f8d7da !important;
     transform: scale(0.98);
 }
+
+#image-preview {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    object-fit: cover;
+}
+
+.image-preview-box {
+    padding: 10px;
+    border: 2px dashed #a3cfbb;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    display: inline-block;
+}
+
+.form-two-columns {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.form-fields-left {
+    flex-shrink: 0;
+}
+
+.form-preview-right {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    padding-top: 28px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}

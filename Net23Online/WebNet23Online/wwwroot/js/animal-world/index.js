@@ -23,7 +23,8 @@
             toggleDeleteButton();
 
             if ($('.js-family-card').length === 0) {
-                $('.entity-grid').replaceWith('<p class="empty-list-note">There is no data on animals yet.</p>');
+                const emptyText = $('.entity-grid').data('empty-text');
+                $('.entity-grid').replaceWith(`<p class="empty-list-note">${emptyText}</p>`);
             }
         });
     });

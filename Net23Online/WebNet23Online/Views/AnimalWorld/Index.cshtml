@@ -26,7 +26,7 @@
     @if (Model.AnimalFamilies.Any())
     {
         <button id="delete-selected-btn" class="btn btn-danger mb-3">Удалить выбранные</button>
-        <div class="entity-grid">
+        <div class="entity-grid" data-empty-text="@AnimalWorld.NoAnimalFamilies">
             @foreach (var family in Model.AnimalFamilies)
             {
                 <div class="animal entity-card js-family-card">
