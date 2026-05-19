@@ -42,9 +42,14 @@
             </form>
         </section>
 
-        @foreach (var band in Model.Bands)
-        {
-            <div class="band">
+        <section class="band-list">
+            <div class="band-list-actions">
+                <button type="button" class="add-band-submit remove-band" disabled>@RockBand.Index_Remove_Button</button>
+            </div>
+
+            @foreach (var band in Model.Bands)
+            {
+            <article class="band">
                 <div class="band-thumb">
                     @if (!string.IsNullOrWhiteSpace(band.ImageUrl))
                     {
@@ -68,8 +73,9 @@
                         <p><strong>@RockBand.Index_ChooseGenres</strong> @string.Join(", ", band.Genres)</p>
                     }
                 </div>
-            </div>
-        }
+            </article>
+            }
+        </section>
 
         @if (Model.CanEditRockBandGenres)
         {
@@ -163,7 +169,8 @@
                     <h2>@RockBand.Index_Add_Header</h2>
                     <p class="add-band-form-hint">@RockBand.Index_Add_Description</p>
                 </div>
-                <div class="preferences-music-items add-band-form-panel">
+                <div class="preferences-music-items add-band-form-panel create-rockband">
+                    <div class="data">
                     <form method="post" enctype="multipart/form-data" class="add-band-form-fields">
                         <div class="add-band-field">
                             <label for="band-name">@RockBand.Index_Add_Name</label>
@@ -200,6 +207,18 @@
                         </div>
                         <button type="submit" class="add-band-submit">@RockBand.Index_Add_Button</button>
                     </form>
+                    </div>
+                    <div class="preview">
+                        <article class="band">
+                            <div class="band-thumb">
+                                <img src="" alt="" width="640" height="360" loading="lazy">
+                            </div>
+                            <div class="band-body">
+                                <h2>***</h2>
+                                <p class="band-preview-genres">***</p>
+                            </div>
+                        </article>
+                    </div>
                 </div>
             </section>
         }
@@ -219,3 +238,8 @@
         }
     </div>
 </main>
+
+@section Scripts {
+    <script src="/js/rock-band/index.js" asp-append-version="true"></script>
+    <script src="/js/rock-band/create-rockband.js" asp-append-version="true"></script>
+}
