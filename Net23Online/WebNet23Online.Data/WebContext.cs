@@ -169,8 +169,14 @@ namespace WebNet23Online.Data
 
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.Guest)
-                .WithMany(x => x.Reservations)
+                .WithMany(x => x.GuestLittleLemonReservations)
                 .HasForeignKey(x => x.GuestId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<LittleLemonData>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany(x => x.UserAccountLittleLemonReservations)
+                .HasForeignKey(x => x.CreatedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<RockBandGenreData>()

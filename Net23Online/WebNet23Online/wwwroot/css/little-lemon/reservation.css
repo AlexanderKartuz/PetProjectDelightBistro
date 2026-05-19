@@ -8,6 +8,19 @@
   text-align: center;
   color: var(--clr-grey-1);
 }
+.booking-validation-summary ul {
+  margin: 0 0 1rem 0.5rem;
+  padding-left: 1.25rem;
+  color: #b91c1c;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.booking-form .field-validation-error {
+  display: block;
+  margin: -1rem 0 0.75rem 0.5rem;
+  color: #b91c1c;
+  font-size: 1rem;
+}
 .booking-form {
   display: grid;
   column-gap: 2rem;
