@@ -44,9 +44,9 @@ body {
     text-align: center;
 }
 
-.image-container img {
-    max-width: 100%;
-}
+    .image-container img {
+        max-width: 100%;
+    }
 
 .input-text {
     width: 400px;
@@ -129,12 +129,12 @@ body {
     margin-right: 20px;
 }
 
-.entity-image img {
-    width: 200px;
-    height: auto;
-    border-radius: 10px;
-    display: block;
-}
+    .entity-image img {
+        width: 200px;
+        height: auto;
+        border-radius: 10px;
+        display: block;
+    }
 
 .entity-card h3 {
     margin-top: 0;
@@ -174,4 +174,14 @@ body {
 
 .multi-select-input {
     min-height: 140px;
+}
+
+#delete-selected-btn {
+    display: none;
+}
+
+.js-family-card.selected {
+    border: 2px solid #dc3545 !important;
+    background-color: #f8d7da !important;
+    transform: scale(0.98);
 }
