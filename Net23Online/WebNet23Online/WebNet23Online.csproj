@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\images\japanese-domestic-market\history-inspection\" />
     <Folder Include="wwwroot\temp\" />
   </ItemGroup>
 
@@ -43,6 +44,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Home.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Localizations\JapaneseDomesticMarket.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>JapaneseDomesticMarket.resx</DependentUpon>
     </Compile>
     <Compile Update="Localizations\Steam\AddGamePage.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -113,6 +119,10 @@
     <EmbeddedResource Update="Localizations\Home.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Home.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localizations\JapaneseDomesticMarket.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>JapaneseDomesticMarket.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
