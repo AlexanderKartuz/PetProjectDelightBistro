@@ -9,12 +9,21 @@
 	<h2>Reservations from our guest: @Model.Reservation.GuestName</h2>
 	<ul>
 		<li>Name: @Model.Reservation.GuestName</li>
-		<li>Guest link: #@Model.Reservation.GuestId</li>
 		<li>Date: @Model.Reservation.ReservationDateOnly</li>
 		<li>Time: @Model.Reservation.AvailableTimesOnly</li>
 		<li>Guests: @Model.Reservation.NumberOfGuests</li>
 		<li>Seating: @Model.Reservation.SeatingPreference</li>
 		<li>Occasion: @Model.Reservation.Occasion</li>
 		<li>Notes: @Model.Reservation.UserComments</li>
+	@if (Model.Reservation.CakePhotoUrl != null)
+	{
+		<li>Cake Photo: <img src="@Model.Reservation.CakePhotoUrl" alt="Cake Photo" /></li>
+	}
 	</ul>
+	@if (Model.CanSeeHistory)
+	{
+		<div>
+			<a class="btn" asp-controller="LittleLemon" asp-action="History">History</a>
+		</div>
+	}
 </section>

@@ -4,7 +4,7 @@ using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.MiddlewareServices;
 
-public class MyLocalizationMiddleware 
+public class MyLocalizationMiddleware
 {
     private readonly RequestDelegate _next;
 
@@ -24,6 +24,7 @@ public class MyLocalizationMiddleware
             {
                 Data.Enums.Language.Russian => new CultureInfo("ru-RU"),
                 Data.Enums.Language.English => new CultureInfo("en-US"),
+                Data.Enums.Language.Deutsch => new CultureInfo("de-DE"),
                 _ => throw new NotImplementedException()
             };
         }

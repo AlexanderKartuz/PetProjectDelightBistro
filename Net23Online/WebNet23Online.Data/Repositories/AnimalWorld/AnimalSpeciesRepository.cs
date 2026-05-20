@@ -1,4 +1,5 @@
-﻿using WebNet23Online.Data.Models.AnimalWorld;
+﻿using Microsoft.EntityFrameworkCore;
+using WebNet23Online.Data.Models.AnimalWorld;
 using WebNet23Online.Data.Repositories.Interfaces.AnimalWorld;
 
 namespace WebNet23Online.Data.Repositories.AnimalWorld
@@ -13,7 +14,7 @@ namespace WebNet23Online.Data.Repositories.AnimalWorld
 
         public List<AnimalSpeciesData> GetRandomElements()
         {
-            return _dbSet.OrderBy(r => Guid.NewGuid()).Take(START_PAGE_COUNT_ANIMAL_SPECIES).ToList();
+            return _dbSet.Include(s => s.ZooData).OrderBy(r => Guid.NewGuid()).Take(START_PAGE_COUNT_ANIMAL_SPECIES).ToList();
         }
 
         public AnimalSpeciesData GetElementByName(string name)

@@ -1,4 +1,5 @@
-﻿@using WebNet23Online.Models.Steam
+﻿@using WebNet23Online.Localizations.Steam
+@using WebNet23Online.Models.Steam
 @model GameDetailsViewModel
 @{
     Layout = "_LayoutSteam";
@@ -7,11 +8,11 @@
 <main class="page">
     <section class="section">
         <div class="game-header">
-            <a class="btn" href="/Steam/Catalog">← Back to Catalog</a>
+            <a class="btn" href="/Steam/Catalog">← @GameDetailsPage.Back_To_Catalog_Button</a>
             @if (Model.IsUserAtLeastModerator)
             {
-                <a class="btn btn--edit" href="/Steam/EditGame/@Model.Id">✎ Edit Game</a>
-                <a class="btn btn--edit" href="/Steam/DeleteGame/@Model.Id">Delete Game</a>
+                <a class="btn btn--edit" href="/Steam/EditGame/@Model.Id">✎ @GameDetailsPage.Edit_Game_Button</a>
+                <a class="btn btn--edit" href="/Steam/DeleteGame/@Model.Id">@GameDetailsPage.Delete_Game_Button</a>
             }
         </div>
     </section>
@@ -45,18 +46,18 @@
                     }
                     else
                     {
-                        <span class="free">Free</span>
+                        <span class="free">@GameDetailsPage.Free_Text</span>
                     }
                 </div>
 
                 <div class="game-description">
-                    <h3>About this game</h3>
+                    <h3>@GameDetailsPage.About_This_Game_Text</h3>
                     <p>@Model.Description</p>
                 </div>
 
                 <div class="game-actions">
-                    <button class="btn btn--primary">Add to Cart</button>
-                    <button class="btn">Add to Wishlist</button>
+                    <button class="btn btn--primary">@GameDetailsPage.Add_To_Cart_Button</button>
+                    <button class="btn">@GameDetailsPage.Add_To_Wishlist_Button</button>
                 </div>
             </div>
         </div>

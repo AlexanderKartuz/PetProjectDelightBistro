@@ -1,6 +1,9 @@
 ﻿@using WebNet23Online.Models.User
 @model UserIndexViewModel
 
+<div>
+    <a href="/User/GenerateReport">Download report</a>
+</div>
 @foreach (var user in Model.Users)
 {
     <div>

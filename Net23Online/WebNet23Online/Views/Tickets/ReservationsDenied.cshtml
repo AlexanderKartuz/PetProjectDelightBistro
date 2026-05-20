@@ -1,20 +1,20 @@
+@using WebNet23Online.Localizations
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Бронирование недоступно</title>
+<title>@AnimalWorld.NoBooked</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Бронирование недоступно</h2>
+        <h2>@AnimalWorld.NoBooked</h2>
     </div>
     <hr class="green-line">
 
     <div class="animal entity-card">
-        <p>Не удалось продолжить бронирование. Для бронирования необходимо заполнить профиль: имя, фамилию и номер телефона.</p>
-        <p>После обновления данных профиля попробуйте снова.</p>
+        <p>@AnimalWorld.VisitBookedDenyMessage</p>
         <div class="button-group">
-            <a class="find-animal-button" href="/AnimalWorld/Zoos">Вернуться к списку зоопарков</a>
+            <a href="/AnimalWorld/Zoos">@AnimalWorld.BackToZoos</a>
         </div>
     </div>
 </div>

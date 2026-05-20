@@ -4,4 +4,5 @@ public enum Language
 {
     English = 1,
     Russian = 2,
+    Deutsch = 3
 }

@@ -13,7 +13,9 @@
             @Html.TextBoxFor(x => x.Name, new { type = "text", required = "required", placeholder = "Name" })
             @Html.ValidationMessageFor(x => x.Name)
         </div>
-
+        <div>
+            @Html.TextBoxFor(x => x.Price, new { type = "number", required = "required", placeholder = "Price for kg" })
+        </div>
         <div class="food-create-button">
             <button type="submit">Save</button>
         </div>

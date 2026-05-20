@@ -1,19 +1,28 @@
+@using WebNet23Online.Localizations
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Добавление данных</title>
+<title>@AnimalWorld.AddingData</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Добавление данных о животных</h2>
+        <h2>@AnimalWorld.AddingAnimalData</h2>
     </div>
     <hr class="green-line">
-    <p>Выберите, какую информацию хотите добавить:</p>
+    <p>@AnimalWorld.SelectInformationType:</p>
     <div class="add-links-grid">
-        <a class="find-animal-button add-link-button" href="/AnimalWorld/AddZoo">Добавить зоопарк</a>
-        <a class="find-animal-button add-link-button" href="/AnimalWorld/AddFamily">Добавить род животных</a>
-        <a class="find-animal-button add-link-button" href="/AnimalWorld/AddSpecies">Добавить вид животных</a>
-        <a class="find-animal-button add-link-button" href="/AnimalWorld/BindZooAndAnimalSpecies">Настроить связи между зоопарками и видами животных</a>
+        <div>
+            <a class="find-animal-button add-link-button" href="/AnimalWorld/AddZoo">@AnimalWorld.AddZoo</a>
+        </div>
+        <div>
+            <a class="find-animal-button add-link-button" href="/AnimalWorld/AddFamily">@AnimalWorld.AddAnimalFamily</a>
+        </div>
+        <div>
+            <a class="find-animal-button add-link-button" href="/AnimalWorld/AddSpecies">@AnimalWorld.AddAnimalSpecies</a>
+        </div>
+        <div>
+            <a class="find-animal-button add-link-button" href="/AnimalWorld/BindZooAndAnimalSpecies">@AnimalWorld.AnimalSpeciesZoosLinksSetup</a>
+        </div>
     </div>
 </div>

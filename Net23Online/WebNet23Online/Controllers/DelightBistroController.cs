@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using WebNet23Online.Controllers.CustomAuthAttribute;
-using WebNet23Online.Data;
-using WebNet23Online.Data.Models;
-using WebNet23Online.Data.Repositories;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Models.DelightBistro;
-using WebNet23Online.Services;
-using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 
 
@@ -98,7 +92,7 @@ namespace WebNet23Online.Controllers
         {
             if (id > 0)
             {
-                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredients(id);
+                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(id);
 
                 var viewModel = _foodItemGenerator.ConvertToCreateFoodItemVM(changedFoodItemData);
                 return View(viewModel);
@@ -116,8 +110,8 @@ namespace WebNet23Online.Controllers
         {
             if (!ModelState.IsValid)
             {
-                viewModel.Menus = _foodItemGenerator.SelectMenu();
-                viewModel.Ingredients = _foodItemGenerator.ChekBoxIngredients();
+                viewModel.Menus = _foodItemGenerator.SelectMenuList();
+                viewModel.IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData();
                 return View(viewModel);
             }
 
@@ -151,6 +145,19 @@ namespace WebNet23Online.Controllers
             _foodItemGenerator.DeleteFoodItem(id);
 
             return RedirectToAction(nameof(AllFoodItems));
+        }
+
+        public IActionResult GenerateTable()
+        {
+            var fileStream = _foodItemGenerator.GenerateTable();
+
+            return File(fileStream, "text/csv");
+        }
+        public IActionResult Stats()
+        {
+            var viewModels = _foodItemGenerator.GetFoodItemStatsViewModels();
+
+            return View(viewModels);
         }
 
     }

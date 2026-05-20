@@ -1,4 +1,6 @@
 ﻿@using WebNet23Online.Models.DelightBistro;
+@using WebNet23Online.Localizations;
+
 
 @{
     Layout = "_LayoutDelightBistro";
@@ -20,7 +22,7 @@
     </div>
 </header>
 
-<h1 class="center">Кухня</h1>
+<h1 class="center">@DelightBistro.Index_Cuisine</h1>
 
 <div class="layout">
     <div class="plate">
@@ -57,11 +59,11 @@
                             </div>
                             <div class="recept">
                                 <ul>
-                                    @if (foodItem.Ingredients is not null)
+                                    @if (foodItem.IngredientsList is not null)
                                     {
-                                        @foreach (var ingredient in foodItem.Ingredients)
+                                        @foreach (var ingredient in foodItem.IngredientsList)
                                         {
-                                            <li>@ingredient</li>
+                                            <li>@ingredient.Name @ingredient.Quantity gr.</li>
                                         }
                                     }
                                 </ul>
@@ -93,7 +95,7 @@
     </div>
 
     <ul class="navigation">
-        <li><a href="\DelightBistro\Index">Все меню</a> </li>
+        <li><a href="\DelightBistro\Index">@DelightBistro.Index_All_menu</a> </li>
 
         @foreach (var menu in Model)
         {
@@ -103,13 +105,12 @@
         <br>
             
         <br>
-        <li><a href="\DelightBistro\CreateMenu">Создать меню</a> </li>
-        <li><a href="\DelightBistro\CreateIngredient">Создать ингредиенты</a> </li>
-        <li><a href="\DelightBistro\FoodBuilderData">Создать Блюдо</a> </li>
+        <li><a href="\DelightBistro\CreateMenu">@DelightBistro.Index_Create_menu</a> </li>
+        <li><a href="\DelightBistro\CreateIngredient">@DelightBistro.Index_Create_ingredient</a> </li>
+        <li><a href="\DelightBistro\FoodBuilderData">@DelightBistro.Index_Create_dish</a> </li>
         <br>
-        <li><a href="\DelightBistro\AllFoodItems">Все блюда</a> </li>
-
-
+        <li><a href="\DelightBistro\AllFoodItems">@DelightBistro.Index_All_dish</a> </li>
+        <li><a href="\DelightBistro\Stats">Stats</a> </li>
 
     </ul>
 </aside>

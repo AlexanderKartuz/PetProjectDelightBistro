@@ -1,34 +1,35 @@
+@using WebNet23Online.Localizations
 @model WebNet23Online.Models.AnimalWorld.BindZooWithAnimalSpeciesViewModel
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Связи между зоопарками и видами животных</title>
+<title>@AnimalWorld.AnimalSpeciesZoosLinks</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Настрока связи между зоопарками и видами животных</h2>
+        <h2>@AnimalWorld.AnimalSpeciesZoosLinksSetup</h2>
     </div>
     <hr class="green-line">
-    <p>Сначала выберите зоопарк, затем вид животного.</p>
+    <p>@AnimalWorld.SelectZooThenAnimalSpecies</p>
     <form method="post">
         <div class="form-group">
             <div class="green-title">
-                <h6>Зоопарк</h6>
+                <h6>@AnimalWorld.Zoo</h6>
             </div>
-            @Html.DropDownListFor(zoo => zoo.ZooId, Model.Zoos, "Выберите зоопарк", new { @class = "form-input" })
+            @Html.DropDownListFor(zoo => zoo.ZooId, Model.Zoos, AnimalWorld.ChooseZoo, new { @class = "form-input" })
             @Html.ValidationMessageFor(zoo => zoo.ZooId)
         </div>
         <div class="form-group">
             <div class="green-title">
-                <h6>Виды животных</h6>
+                <h6>@AnimalWorld.AnimalSpecies</h6>
             </div>
-            @Html.DropDownListFor(animalSpecies => animalSpecies.AnimalSpeciesId, Model.AnimalSpecies, "Выберите вид животного", new { @class = "form-input" })
+            @Html.DropDownListFor(animalSpecies => animalSpecies.AnimalSpeciesId, Model.AnimalSpecies, AnimalWorld.ChooseAnimalSpecies, new { @class = "form-input" })
             @Html.ValidationMessageFor(animalSpecies => animalSpecies.AnimalSpeciesId)
         </div>
         <br />
         <div class="button-group">
-            <button class="find-animal-button" type="submit">Сохранить связь</button>
+            <button class="find-animal-button" type="submit">@AnimalWorld.SaveLink</button>
         </div>
     </form>
 </div>

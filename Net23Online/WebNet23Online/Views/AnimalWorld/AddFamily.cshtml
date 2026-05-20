@@ -1,32 +1,33 @@
+@using WebNet23Online.Localizations
 @model WebNet23Online.Models.AnimalWorld.AnimalFamilyViewModel
 @{
     Layout = "_LayoutAnimalWorld";
 }
 
-<title>Добавление рода животных</title>
+<title>@AnimalWorld.AddAnimalFamily</title>
 
 <div class="main-place">
     <div class="green-title">
-        <h2>Добавление рода животных</h2>
+        <h2>@AnimalWorld.AddAnimalFamily</h2>
     </div>
     <hr class="green-line">
     <form method="post">
         <div class="form-group">
             <div class="green-title">
-                <h6>Название рода</h6>
+                <h6>@AnimalWorld.FamilyName</h6>
             </div>
-            @Html.TextBoxFor(family => family.AnimalFamilyName, new { @class = "form-input", type = "text", placeholder = "Например: Кошки" })
+            @Html.TextBoxFor(family => family.AnimalFamilyName, new { @class = "form-input", type = "text", placeholder = AnimalWorld.AnimalFamilyExample })
             @Html.ValidationMessageFor(family => family.AnimalFamilyName)
         </div>
         <div class="form-group">
             <div class="green-title">
-                <h6>Описание</h6>
+                <h6>@AnimalWorld.Description</h6>
             </div>
-            @Html.TextAreaFor(family => family.Description, new { @class = "form-input", placeholder = "Ключевые особенности рода..." })
+            @Html.TextAreaFor(family => family.Description, new { @class = "form-input", placeholder = AnimalWorld.AnimalFamilySummary })
             @Html.ValidationMessageFor(family => family.Description)
         </div>
         <div class="button-group">
-            <button class="find-animal-button" type="submit">Добавить</button>
+            <button class="find-animal-button" type="submit">@AnimalWorld.Add</button>
         </div>
     </form>
 </div>

@@ -5,6 +5,7 @@ namespace WebNet23Online.Models.AnimalWorld
 {
     public class ZooViewModel
     {
+        public int Id { get; set; }
         [Required]
         [ZooUniqueName]
         public string ZooName { get; set; }
@@ -16,6 +17,6 @@ namespace WebNet23Online.Models.AnimalWorld
         [StringLength(2000)]
         public string Description { get; set; }
 
-        public List<AnimalSpeciesViewModel> AnimalSpecies { get; set; } = new ();
+        public List<string> AnimalFamilies { get; set; }
     }
 }

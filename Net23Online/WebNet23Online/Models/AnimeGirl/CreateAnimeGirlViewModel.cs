@@ -15,8 +15,8 @@ namespace WebNet23Online.Models.AnimeGirl
 
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Girl with out image is sad")]
-        public string Url { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? Url { get; set; }
 
         [MinMaxCheck(1, 5)]
         public int Size { get; set; }

@@ -1,4 +1,5 @@
-﻿@using WebNet23Online.Services.Interfaces
+﻿@using WebNet23Online.Localizations
+@using WebNet23Online.Services.Interfaces
 @inject IAuthService authService
 
 <!DOCTYPE html>
@@ -23,7 +24,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Home.Index_Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="/DelightBistro/Index">Delight Bistro</a>
@@ -31,19 +32,19 @@
                         @if (authService.IsAuthenticated())
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">@Home.Index_Logout</a>
                             </li>
                             <li class="nav-item">
-                                <span class="text-dark">Hello, @authService.GetUser().Name</span>
+                                <span class="text-dark">Hello, @authService.GetUser().Name (@authService.GetRole())</span>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">@Home.Index_Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Registration">Registration</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Registration">@Home.Index_Registration</a>
                             </li>
                         }
                     </ul>

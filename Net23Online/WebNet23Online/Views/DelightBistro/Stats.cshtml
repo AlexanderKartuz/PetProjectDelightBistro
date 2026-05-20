@@ -1,0 +1,31 @@
+﻿@using WebNet23Online.Models.DelightBistro;
+
+@{
+    Layout = "_LayoutimagesDelightBistro";
+}
+@model List<FoodItemStatsViewModel>
+
+<link rel="stylesheet" href="\css\delight-bistro\style.css" />
+<div class="form-title">Прибыль каждого блюда</div>
+
+<div class="container-fluid">
+    <div class="row text-white p-3 fw-bold">
+        <div class="col-4">Блюдо</div>
+        <div class="col-2">Количество ингредиентов</div>
+        <div class="col-2">Цена блюда</div>
+        <div class="col-2">Себестоимость</div>
+        <div class="col-2">Прибыль</div>
+    </div>
+    
+    @foreach (var item in Model)
+    {
+        <div class="row text-white p-3 border-bottom">
+
+            <div class="col-4">@item.FoodItemName</div>
+            <div class="col-2">@item.IngredientCount</div>
+            <div class="col-2">@item.FoodItemPrice.ToString("F2")</div>
+            <div class="col-2">@item.TotalPriceIngredient.ToString("F2")</div>
+            <div class="col-2">@item.Profit.ToString("F2")</div>
+        </div>
+    }
+</div>

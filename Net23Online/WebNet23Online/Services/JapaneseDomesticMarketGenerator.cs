@@ -1,4 +1,4 @@
-﻿using WebNet23Online.Models.DelightBistro;
+﻿using WebNet23Online.Data.Models;
 using WebNet23Online.Models.JapaneseDomesticMarket;
 using WebNet23Online.Services.Interfaces;
 
@@ -72,5 +72,19 @@ namespace WebNet23Online.Services
         {
             return _jdmItems;
         }
+        public List<JapaneseDomesticMarketViewModels> GenerateJDMCarsItems(List<JdmCarsData> japaneseDomesticMarketCarsData)
+        {
+            var _jdmItems = japaneseDomesticMarketCarsData.Select(x => new JapaneseDomesticMarketViewModels
+            {
+                ManufacturerType = x.ManufacturerType,
+                Marka = x.Marka,
+                Model = x.Model,
+                Price = x.Price,
+                Url = x.Url,
+                // ConnectedJdmTitles = string.Join(",", x.JdmManufacturerData.JapaneseDomesticMarketCarsDatas.Select(a => a.ManufacturerType!))
+            });
+            return _jdmItems.ToList();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Models.LittleLemon;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
@@ -11,16 +12,19 @@ namespace WebNet23Online.Controllers
         private ILittleLemonTestimonialService _littleLemonTestimonialService;
         private ILittleLemonSubscribeService _littleLemonSubscribeService;
         private ILittleLemonReservationService _littleLemonReservationService;
+        private IWebHostEnvironment _webHostEnvironment;
 
         public LittleLemonController(ILittleLemonMenuService littleLemonMenuService,
                                      ILittleLemonTestimonialService littleLemonTestimonialService,
                                      ILittleLemonSubscribeService littleLemonSubscribeService,
-                                     ILittleLemonReservationService littleLemonReservationService)
+                                     ILittleLemonReservationService littleLemonReservationService,
+                                     IWebHostEnvironment webHostEnvironment)
         {
             _littleLemonMenuService = littleLemonMenuService;
             _littleLemonTestimonialService = littleLemonTestimonialService;
             _littleLemonSubscribeService = littleLemonSubscribeService;
             _littleLemonReservationService = littleLemonReservationService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index(string category)
@@ -45,7 +49,7 @@ namespace WebNet23Online.Controllers
             return View(pageModel);
         }
 
-        
+
         [HttpGet]
         public IActionResult Subscribe()
         {
@@ -63,7 +67,8 @@ namespace WebNet23Online.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Reservation(int guestId)
+        [CanAccessLittleLemonReservation]
+        public IActionResult Reservation()
         {
             var hero = new LittleLemonHeroSectionViewModel
             {
@@ -74,7 +79,7 @@ namespace WebNet23Online.Controllers
             };
             var reservation = new LittleLemonReservationViewModel
             {
-                GuestId = guestId 
+                GuestName = string.Empty
             };
             var pageModel = new LittleLemonReservationPageViewModel
             {
@@ -85,23 +90,60 @@ namespace WebNet23Online.Controllers
             return View(pageModel);
         }
         [HttpPost]
-        public IActionResult Reservation(LittleLemonReservationViewModel viewModel )
+        [CanAccessLittleLemonReservation]
+        public IActionResult Reservation(LittleLemonReservationPageViewModel viewModel)
         {
-            var reservationId = _littleLemonReservationService.CreateReservation(viewModel);
-            return RedirectToAction(nameof(Confirmation), new { reservationId });
+            if (!ModelState.IsValid)
+            {
+                var hero = new LittleLemonHeroSectionViewModel
+                {
+                    CallToActionHref = (Url.Action("Index", "LittleLemon") + "#menu") ?? "/LittleLemon/Index#menu",
+                    CallToActionText = "Order For Delivery",
+                    HeroImageUrl = "/images/little-lemon/images/restauranfood.jpg",
+                    HeroImageAlt = "Signature Mediterranean platter at Little Lemon"
+                };
+                var pageModel = new LittleLemonReservationPageViewModel
+                {
+                    Hero = hero,
+                    Reservation = viewModel.Reservation ?? new LittleLemonReservationViewModel()
+                };
 
+                return View(pageModel);
+            }
+            var reservationId = _littleLemonReservationService.CreateReservation(viewModel.Reservation!);
+            if (viewModel.DessertReferencePhoto != null && viewModel.DessertReferencePhoto.Length > 0)
+            {
+                var pathToFolder = Path.Combine("images", "little-lemon", "reservation-desserts");
+                var fullPath = Path.Combine(_webHostEnvironment.WebRootPath, pathToFolder);
+                if (!Directory.Exists(fullPath))
+                {
+                    Directory.CreateDirectory(fullPath);
+                }
+                var fileName = $"cake-{reservationId}.jpg";
+                var path = Path.Combine(fullPath, fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    viewModel.DessertReferencePhoto.CopyTo(fileStream);
+                }
+                var cakePhotoUrl = $"/{pathToFolder.Replace("\\", "/")}/{fileName}";
+                _littleLemonReservationService.SetReservationCakePhotoUrl(reservationId, cakePhotoUrl);
+            }
+
+
+            return RedirectToAction(nameof(Confirmation), new { reservationId });
         }
 
         [HttpPost]
         public IActionResult CreateGuest(string guestName)
         {
-                var guestId = _littleLemonReservationService.CreateGuest(guestName);
-                
-                return RedirectToAction(nameof(Reservation), new { guestId });
-            
+            var guestId = _littleLemonReservationService.CreateGuest(guestName);
+
+            return RedirectToAction(nameof(Reservation));
+
         }
 
         [HttpPost]
+        [CanAccessLittleLemonReservation]
         public IActionResult LinkReservationToGuest(int reservationId, int guestId)
         {
             var isLinked = _littleLemonReservationService.LinkReservationToGuest(reservationId, guestId);
@@ -112,7 +154,7 @@ namespace WebNet23Online.Controllers
 
             return RedirectToAction(nameof(Confirmation), new { reservationId });
         }
-
+        [CanAccessLittleLemonReservation]
         public IActionResult Confirmation(int reservationId)
         {
             var reservation = _littleLemonReservationService.GetReservationViewModelById(reservationId);
@@ -120,6 +162,7 @@ namespace WebNet23Online.Controllers
             {
                 return RedirectToAction(nameof(Reservation));
             }
+
             var hero = new LittleLemonHeroSectionViewModel
             {
                 CallToActionHref = (Url.Action("Index", "LittleLemon") + "#menu") ?? "/LittleLemon/Index#menu",
@@ -131,8 +174,48 @@ namespace WebNet23Online.Controllers
             {
                 Hero = hero,
                 Reservation = reservation,
+                CanSeeHistory = true
             };
             return View(pageModel);
         }
+        [CanAccessLittleLemonReservation]
+        public IActionResult History()
+        {
+            var hero = new LittleLemonHeroSectionViewModel
+            {
+                CallToActionHref = (Url.Action("Index", "LittleLemon") + "#menu") ?? "/LittleLemon/Index#menu",
+                CallToActionText = "Order For Delivery",
+                HeroImageUrl = "/images/little-lemon/images/restauranfood.jpg",
+                HeroImageAlt = "Signature Mediterranean platter at Little Lemon"
+            };
+            var reservations = _littleLemonReservationService.GetReservationHistoryForCurrentUser();
+            var pageModel = new LittleLemonHistoryPageViewModel
+            {
+                Hero = hero,
+                Reservations = reservations,
+            };
+            return View(pageModel);
+        }
+
+
+        public IActionResult HistoryPrint()
+        {
+            var path = Path.GetTempFileName();
+            var reservations = _littleLemonReservationService.GetReservationHistoryForCurrentUser();
+            using (var file = System.IO.File.CreateText(path))
+            {
+                file.WriteLine("Id,Date,Time,Guests,Seating,Name,Occasion,Notes,CakePhotoUrl");
+                foreach (var item in reservations)
+                {
+                    var reservation = item.Reservation!;
+                    file.WriteLine(
+                        $"{item.ReservationId},{reservation.ReservationDateOnly},{reservation.AvailableTimesOnly},{reservation.NumberOfGuests},{reservation.SeatingPreference},{reservation.GuestName},{reservation.Occasion},{reservation.UserComments},{reservation.CakePhotoUrl}");
+                }
+            }
+
+            var fileStream = new FileStream(path, FileMode.Open);
+            return File(fileStream, "text/csv");
+        }
+
     }
 }

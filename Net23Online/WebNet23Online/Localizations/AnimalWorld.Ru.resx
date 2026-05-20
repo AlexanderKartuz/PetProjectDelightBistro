@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutPlanet" xml:space="preserve">
+    <value>О нашей планете</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="AddAnimalFamily" xml:space="preserve">
+    <value>Добавление рода животных</value>
+  </data>
+  <data name="AddAnimalSpecies" xml:space="preserve">
+    <value>Добавление вида животного</value>
+  </data>
+  <data name="AddData" xml:space="preserve">
+    <value>Добавить данные</value>
+  </data>
+  <data name="AddingAnimalData" xml:space="preserve">
+    <value>Добавление данных о животных</value>
+  </data>
+  <data name="AddingData" xml:space="preserve">
+    <value>Добавление данных</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="AddressExample" xml:space="preserve">
+    <value>Город, улица, дом</value>
+  </data>
+  <data name="AddZoo" xml:space="preserve">
+    <value>Добавление зоопарка</value>
+  </data>
+  <data name="AmazingAnimalWorld" xml:space="preserve">
+    <value>Удивительный мир животных</value>
+  </data>
+  <data name="AnimalFamilies" xml:space="preserve">
+    <value>Животные</value>
+  </data>
+  <data name="AnimalFamily" xml:space="preserve">
+    <value>Род</value>
+  </data>
+  <data name="AnimalFamilyExample" xml:space="preserve">
+    <value>Например: Кошки</value>
+  </data>
+  <data name="AnimalFamilySummary" xml:space="preserve">
+    <value>Ключевые особенности рода...</value>
+  </data>
+  <data name="AnimalSpecies" xml:space="preserve">
+    <value>Виды животных</value>
+  </data>
+  <data name="AnimalSpeciesExample" xml:space="preserve">
+    <value>Например: Лесной кот</value>
+  </data>
+  <data name="AnimalSpeciesSummary" xml:space="preserve">
+    <value>Описание вида</value>
+  </data>
+  <data name="AnimalSpeciesZoosLinks" xml:space="preserve">
+    <value>Связи между зоопарками и видами животных</value>
+  </data>
+  <data name="AnimalSpeciesZoosLinksSetup" xml:space="preserve">
+    <value>Настройка связи между парками и видами животных</value>
+  </data>
+  <data name="AnimalWorldTitle" xml:space="preserve">
+    <value>Мир животных</value>
+  </data>
+  <data name="BackToZoos" xml:space="preserve">
+    <value>Вернуться к списку зоопарков</value>
+  </data>
+  <data name="Booked" xml:space="preserve">
+    <value>Забронировано</value>
+  </data>
+  <data name="BookNow" xml:space="preserve">
+    <value>Забронировать</value>
+  </data>
+  <data name="ChooseAnimalFamily" xml:space="preserve">
+    <value>Выберите род животного</value>
+  </data>
+  <data name="ChooseAnimalSpecies" xml:space="preserve">
+    <value>Выберите вид животного</value>
+  </data>
+  <data name="ChooseZoo" xml:space="preserve">
+    <value>Выберите зоопарк</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="FamilyName" xml:space="preserve">
+    <value>Название рода</value>
+  </data>
+  <data name="FooterText" xml:space="preserve">
+    <value>&amp;copy; 2026 Мир Животных. Берегите природу!</value>
+  </data>
+  <data name="Habitat" xml:space="preserve">
+    <value>Ареал</value>
+  </data>
+  <data name="HabitatExample" xml:space="preserve">
+    <value>Например: территория Европы и Малой Азии</value>
+  </data>
+  <data name="IndexDescription" xml:space="preserve">
+    <value>Земля населена миллионами удивительных существ. От крошечных насекомых до гигантских синих китов.</value>
+  </data>
+  <data name="Interesting" xml:space="preserve">
+    <value>Интересные факты</value>
+  </data>
+  <data name="NoAnimalFamilies" xml:space="preserve">
+    <value>Пока нет данных о животных.</value>
+  </data>
+  <data name="NoAnimalSpecies" xml:space="preserve">
+    <value>Пока нет данных о видах животных.</value>
+  </data>
+  <data name="NoBooked" xml:space="preserve">
+    <value>Бронирование недоступно</value>
+  </data>
+  <data name="NoZoos" xml:space="preserve">
+    <value>Пока нет данных о зоопарках</value>
+  </data>
+  <data name="OnIndex" xml:space="preserve">
+    <value>На главную</value>
+  </data>
+  <data name="Reservation" xml:space="preserve">
+    <value>Бронирование</value>
+  </data>
+  <data name="SaveLink" xml:space="preserve">
+    <value>Сохранить связь</value>
+  </data>
+  <data name="SelectInformationType" xml:space="preserve">
+    <value>Выберите, какую информацию хотите добавить</value>
+  </data>
+  <data name="SelectZooThenAnimalSpecies" xml:space="preserve">
+    <value>Сначала выберите зоопарк, затем вид животного.</value>
+  </data>
+  <data name="SpeciesName" xml:space="preserve">
+    <value>Название вида</value>
+  </data>
+  <data name="UploadImage" xml:space="preserve">
+    <value>Загрузить изображение</value>
+  </data>
+  <data name="VisitBooked" xml:space="preserve">
+    <value>Посещение забронировано</value>
+  </data>
+  <data name="VisitBookedCompleteMessage" xml:space="preserve">
+    <value>Посещение зоопарка забронировано. При покупке билета используйте Имя, фамилию и номер телефона из вашей учётной записи.</value>
+  </data>
+  <data name="VisitBookedDenyMessage" xml:space="preserve">
+    <value>Не удалось продолжить бронирование. Для бронирования необходимо заполнить профиль: имя, фамилию и номер телефона. После обновления данных профиля попробуйте снова.</value>
+  </data>
+  <data name="Zoo" xml:space="preserve">
+    <value>Зоопарк</value>
+  </data>
+  <data name="ZooExample" xml:space="preserve">
+    <value>Например: Сингапурский зоопарк</value>
+  </data>
+  <data name="ZooName" xml:space="preserve">
+    <value>Название зоопарка</value>
+  </data>
+  <data name="Zoos" xml:space="preserve">
+    <value>Зоопарки</value>
+  </data>
+  <data name="ZoosList" xml:space="preserve">
+    <value>Список зоопарков</value>
+  </data>
+  <data name="ZooSummary" xml:space="preserve">
+    <value>Кратко о зоопарке...</value>
+  </data>
+</root>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
@@ -12,16 +11,22 @@ namespace WebNet23Online.Services.DelightBistro
     {
         private IFoodItemRepository _foodItemRepository;
         private IMenuRepository _menuRepository;
-        private IIngredientsRepository _ingredientsRepository;
         private IIngredientGenerator _ingredientGenerator;
         private IAuthService _authService;
-        public FoodItemGenerator(IFoodItemRepository foodItemRepository, IMenuRepository menuRepository, IIngredientsRepository ingredientsRepository, IIngredientGenerator ingredientGenerator, IAuthService authService)
+        private IWebHostEnvironment _webHostEnvironment;
+
+        public FoodItemGenerator(
+            IFoodItemRepository foodItemRepository
+            , IMenuRepository menuRepository
+            , IIngredientGenerator ingredientGenerator
+            , IAuthService authService
+            , IWebHostEnvironment webHostEnvironment)
         {
             _foodItemRepository = foodItemRepository;
             _menuRepository = menuRepository;
-            _ingredientsRepository = ingredientsRepository;
             _ingredientGenerator = ingredientGenerator;
             _authService = authService;
+            _webHostEnvironment = webHostEnvironment;
         }
         public void FeelDataBase()
         {
@@ -33,27 +38,26 @@ namespace WebNet23Online.Services.DelightBistro
             var foodItemData = new FoodItemData
             {
                 Name = "Вода",
-                Price = 5,
+                Price = 5m,
                 ImgURL = "https://png.klev.club/uploads/posts/2024-03/png-klev-club-p-stakan-vodi-png-9.png",
 
             };
             _foodItemRepository.Add(foodItemData);
+
+            var cesarSalad = new FoodItemData
+            {
+                Name = "Цезарь",
+                Price = 15m,
+                ImgURL = "/images/delight-bistro/CesarSalad.jpg",
+            };
+            _foodItemRepository.Add(cesarSalad);
         }
 
         public void CreateFoodItemData(CreateFoodItemViewModel viewModel)
         {
-            var selectedIngredients = new List<IngredientData>();
-            if (!viewModel.SelectedIngredientsId.IsNullOrEmpty())
-            {
-                selectedIngredients = _ingredientsRepository.GetAll()
-                    .Where(x => viewModel.SelectedIngredientsId.Contains(x.Id)).ToList();
-            }
+            var selectedMenu = GetSelectedMenu(viewModel);
 
-            MenuData menuData = null;
-            if (viewModel.MenuId != null)
-            {
-                menuData = _menuRepository.Get(viewModel.MenuId.Value);
-            }
+            var links = _ingredientGenerator.GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(viewModel);
 
             var newFoodItemData = new FoodItemData()
             {
@@ -61,41 +65,49 @@ namespace WebNet23Online.Services.DelightBistro
                 Price = viewModel.Price,
                 ImgURL = viewModel.ImgURL,
 
-                MenuData = menuData,
-                IngredientsList = selectedIngredients,
+                MenuData = selectedMenu,
+
+                FoodItemIngredientDatas = links,
                 Creator = _authService.GetUser()
             };
+
             _foodItemRepository.Add(newFoodItemData);
+
+            GetImgFile(viewModel, newFoodItemData);
+
         }
 
         public void ChangeFoodItemData(CreateFoodItemViewModel viewModel)
         {
 
-            var selectedIngredients = new List<IngredientData>();
-            if (!viewModel.SelectedIngredientsId.IsNullOrEmpty())
+            if (viewModel.Id > 0)
             {
-                selectedIngredients = _ingredientsRepository.GetAll()
-                    .Where(x => viewModel.SelectedIngredientsId.Contains(x.Id)).ToList();
+                var links = _ingredientGenerator.GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(viewModel);
+
+                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(viewModel.Id);
+                if (changedFoodItemData == null)
+                {
+                    throw new InvalidOperationException($"Блюдо с Id = {viewModel.Id} не найдено");
+                }
+
+                changedFoodItemData.Name = viewModel.Name;
+                changedFoodItemData.Price = viewModel.Price;
+                changedFoodItemData.ImgURL = viewModel.ImgURL;
+                changedFoodItemData.MenuData = GetSelectedMenu(viewModel);
+
+                changedFoodItemData.FoodItemIngredientDatas = links;
+
+
+                _foodItemRepository.Update(changedFoodItemData);
+                GetImgFile(viewModel, changedFoodItemData);
             }
-            MenuData menuData = null;
-            if (viewModel.MenuId != null)
-            {
-                menuData = _menuRepository.Get(viewModel.MenuId.Value);
-            }
-
-            var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredients(viewModel.Id);
-
-            changedFoodItemData.Name = viewModel.Name;
-            changedFoodItemData.Price = viewModel.Price;
-            changedFoodItemData.ImgURL = viewModel.ImgURL;
-            changedFoodItemData.MenuData = menuData;
-            changedFoodItemData.IngredientsList = selectedIngredients;
-
-            _foodItemRepository.Update(changedFoodItemData);
         }
 
         public FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData)
         {
+            var allIngredientsVM = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodItemData);
+            var selectedIngredientsViewModel = _ingredientGenerator.GetSelectedCreateIngredientViewModelFromIngredientsList(allIngredientsVM);
+
             var foodItemViewModel = new FoodItemViewModel
             {
                 Id = foodItemData.Id,
@@ -103,8 +115,9 @@ namespace WebNet23Online.Services.DelightBistro
                 Price = foodItemData.Price,
                 ImgURL = foodItemData.ImgURL,
                 MenuType = foodItemData.MenuData?.Name ?? "Общее меню",
-                Ingredients = foodItemData.IngredientsList
-                .Select(fi => fi.Name).ToList(),
+
+                IngredientsList = selectedIngredientsViewModel,
+
                 Creator = foodItemData.Creator?.Name,
                 CreatorId = foodItemData.CreatorId,
             };
@@ -112,18 +125,20 @@ namespace WebNet23Online.Services.DelightBistro
             return foodItemViewModel;
         }
 
-        public CreateFoodItemViewModel ConvertToCreateFoodItemVM(FoodItemData foodItemData = null)
+        public CreateFoodItemViewModel ConvertToCreateFoodItemVM(FoodItemData? foodItemData = null)
         {
             if (foodItemData == null)
             {
                 var createFoodItemVM = new CreateFoodItemViewModel()
                 {
-                    Menus = SelectMenu(),
-                    Ingredients = ChekBoxIngredients()
+                    Menus = SelectMenuList(),
+                    IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodItemData)
                 };
 
                 return createFoodItemVM;
             }
+
+            var allIngredientsVM = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodItemData);
 
             var viewModel = new CreateFoodItemViewModel
             {
@@ -133,17 +148,15 @@ namespace WebNet23Online.Services.DelightBistro
                 ImgURL = foodItemData.ImgURL,
 
                 MenuId = foodItemData.MenuData?.Id,
-                SelectedIngredientsId = foodItemData.IngredientsList
-                .Select(x => x.Id).ToList(),
 
-                Ingredients = ChekBoxIngredients(foodItemData),
-                Menus = SelectMenu()
+                IngredientsList = allIngredientsVM,
+                Menus = SelectMenuList()
             };
 
             return viewModel;
         }
 
-        public List<SelectListItem> SelectMenu()
+        public List<SelectListItem> SelectMenuList()
         {
             var allMenuData = _menuRepository.GetAll();
             var menuListItems = new List<SelectListItem>();
@@ -155,12 +168,14 @@ namespace WebNet23Online.Services.DelightBistro
             return menuListItems;
         }
 
-        public List<CreateIngredientViewModel> ChekBoxIngredients(FoodItemData foodItemData = null)
+        private MenuData? GetSelectedMenu(CreateFoodItemViewModel viewModel)
         {
-            var allIngredientsDatas = _ingredientsRepository.GetAll();
-            var allIngredientVM = _ingredientGenerator.GenerateIngredients(allIngredientsDatas, foodItemData);
-
-            return allIngredientVM;
+            MenuData? menuData = null;
+            if (viewModel.MenuId != null)
+            {
+                menuData = _menuRepository.Get(viewModel.MenuId.Value);
+            }
+            return menuData;
         }
 
         public void DeleteFoodItem(int id)
@@ -191,6 +206,85 @@ namespace WebNet23Online.Services.DelightBistro
 
 
             return viewModel;
+        }
+
+        private void GetImgFile(CreateFoodItemViewModel viewModel, FoodItemData foodItemData)
+        {
+            if (viewModel.Image != null)
+            {
+                var pathToWwwRotFolder = _webHostEnvironment.WebRootPath;
+                var pathToFolder = "images\\delight-bistro\\";
+                var fileName = $"fooditem-{foodItemData.Id}.jpg";
+                var path = Path.Combine(pathToWwwRotFolder, pathToFolder, fileName);
+
+                using (var foodItemImgFile = new FileStream(path, FileMode.Create))
+                {
+                    viewModel.Image.CopyTo(foodItemImgFile);
+                }
+
+                foodItemData.ImgURL = $"/images/delight-bistro/{fileName}";
+                _foodItemRepository.Update(foodItemData);
+            }
+        }
+
+        public FileStream GenerateTable()
+        {
+            var path = Path.GetTempFileName();
+
+            using (var file = File.CreateText(path))
+            {
+                file.WriteLine($"Id,Name,Price,ImgUrl,MenyType,IngredientsList");
+
+                var foodDatas = _foodItemRepository.GetAllIncludeMenuAndIngredients();
+
+                foreach (var foodItem in foodDatas)
+                {
+                    var foodName = ReplaceSeparateSymbols(foodItem.Name);
+                    var foodItemName = string.Join(";",
+                        (foodItem.IngredientsList
+                        .Select(x => x.Name)));
+
+                    file.WriteLine($"{foodItem.Id},"
+                        + $"{foodName},{foodItem.Price},"
+                        + $"{foodItem.ImgURL ?? ""},"
+                        + $"{foodItem.MenuData?.Name ?? ""},"
+                        + $"{foodItemName}");
+                }
+            }
+            var fileStream = new FileStream(path, FileMode.Open);
+
+            return fileStream;
+        }
+
+        private string ReplaceSeparateSymbols(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return "";
+            }
+
+            if (name.Contains(","))
+            {
+                var newName = name.Replace(",", ";");
+                return newName;
+            }
+            return name;
+        }
+
+        public List<FoodItemStatsViewModel> GetFoodItemStatsViewModels()
+        {
+            var allFoodItemStatsDataModel = _foodItemRepository.GetFoodItemStats();
+
+            var allFoodItemStatsViewModel = allFoodItemStatsDataModel.Select(x => new FoodItemStatsViewModel
+            {
+                FoodItemName = x.FoodItemName,
+                IngredientCount = x.IngredientCount,
+                FoodItemPrice = x.FoodItemPrice,
+                TotalPriceIngredient = x.TotalPriceIngredient,
+                Profit = x.Profit,
+            }).ToList();
+
+            return allFoodItemStatsViewModel;
         }
     }
 }

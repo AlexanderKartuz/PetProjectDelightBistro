@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Security.Claims;
 using WebNet23Online.Data.HelperModels;
+using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models.Steam;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Models.Steam;
 
 using WebNet23Online.Services.Interfaces;
+using WebNet23Online.Services.Interfaces.Steam;
 
 namespace WebNet23Online.Services
 {
@@ -66,20 +67,19 @@ namespace WebNet23Online.Services
         {
             filter ??= new CatalogFilterViewModel();
 
-            var genres = _gameGenreRepository.GetAll();
-
             var repositoryFilter = new GameFilter
             {
                 GenreId = filter.GenreId,
-                MaxPrice = filter.MaxPrice
+                MaxPrice = filter.MaxPrice,
             };
 
-            var games = _gameRepository.GetFilteredWithGenres(repositoryFilter);
+            var games = _gameRepository.GetGames(repositoryFilter, filter.Page, filter.PageSize);
+            filter.Page = games.PageIndex;
 
             return new CatalogViewModel
             {
                 Filter = filter,
-                Games = games
+                Games = games.Items
                     .Select(g => new SteamGameViewModel
                     {
                         Id = g.Id,
@@ -90,7 +90,15 @@ namespace WebNet23Online.Services
                         Genres = g.GameGenres.Select(gg => gg.Name).ToList(),
                     })
                     .ToList(),
-                GameGenres = GetListItemsWithGameGenres()
+                GameGenres = GetListItemsWithGameGenres(),
+                PaginationMetadata = new PaginationMetadataViewModel
+                {
+                    CurrentPage= games.PageIndex,
+                    TotalPages= games.TotalPages,
+                    TotalCount = games.TotalCount,
+                    HasPreviousPage = games.HasPreviousPage,
+                    HasNextPage = games.HasNextPage,
+                },
             };
         }
 

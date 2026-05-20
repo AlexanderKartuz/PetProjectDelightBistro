@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.avatar {
+    max-width: 500px;
+    max-height: 500px;
+}
+
