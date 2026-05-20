@@ -82,7 +82,7 @@
                         @Html.HiddenFor(x => x.IngredientsList[i].Id)
                         @Html.HiddenFor(x => x.IngredientsList[i].Name)
                         <label>@Model.IngredientsList[i].Name</label>
-                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected)
+                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected, new { data_ingredient_name = Model.IngredientsList[i].Name })
                         @Html.TextBoxFor(x => x.IngredientsList[i].Quantity
                             , new
                             {

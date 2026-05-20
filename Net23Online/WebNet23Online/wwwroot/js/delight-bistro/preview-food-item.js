@@ -26,11 +26,8 @@ $(document).ready(function () {
         previewSelectedList.empty();
 
         $('input[type="checkbox"][name*="IsSelected"]:checked').each(function () {
-            const selectedIngredient = $(this);
-            const nameIsSelected = selectedIngredient.attr('name');
-            const name = nameIsSelected.replace('.IsSelected', '');
-            const ingredientName = $('input[type=hidden][name="' + name + '.Name"]').val();
-
+            
+            const ingredientName = $(this).data('ingredient-name');
             previewSelectedList.append(`<li> ${ingredientName}</li>`)
         });
     };
