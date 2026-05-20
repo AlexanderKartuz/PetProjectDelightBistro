@@ -1,5 +1,5 @@
-﻿@using WebNet23Online.Models.HabitTracker
-
+@using WebNet23Online.Models.HabitTracker
+@using WebNet23Online.Localizations.HabitTracker
 @{
     Layout = "_LayoutHabitTracker";
 }
@@ -13,15 +13,14 @@
         <div class="hero-content">
             <div class="hero-left">
                 <h1 class="hero-title">
-                    Привычки,<br>которые остаются
+                    @HabitTracker.Index_hero_title
                 </h1>
                 <p class="hero-subtitle">
-                    Красивый и простой трекер привычек,<br>
-                    созданный с любовью к эстетике и дисциплине
+                    @HabitTracker.Index_hero_subtitle
                 </p>
                 <div class="hero-buttons">
-                    <a href="@Url.Action("HabitTracker", "HabitTracker")" class="btn-primary">Начать отслеживать</a>
-                    <a href="#features" class="btn-secondary">Узнать возможности</a>
+                    <a href="@Url.Action("HabitTracker", "HabitTracker")" class="btn-primary">@HabitTracker.Index_btn_primary</a>
+                    <a href="#features" class="btn-secondary">@HabitTracker.Index_btn_secondary</a>
                 </div>
             </div>
 
@@ -36,46 +35,46 @@
     <!-- Особенности -->
     <section id="features" class="features-section">
         <div class="section-header">
-            <h2>Возможности Habit Tracker</h2>
-            <p>Всё, что нужно для формирования устойчивых привычек</p>
+            <h2>@HabitTracker.Index_features_title</h2>
+            <p>@HabitTracker.Index_features_subtitle</p>
         </div>
 
         <div class="features-grid">
 
             <div class="feature-card">
                 <div class="feature-icon">📅</div>
-                <h3>Недельный трекер</h3>
-                <p>Удобная таблица на неделю с цветными точками. Один клик — и привычка отмечена.</p>
+                <h3>@HabitTracker.Index_feature1_title</h3>
+                <p>@HabitTracker.Index_feature1_desc</p>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
-                <h3>Месячная статистика</h3>
-                <p>Прогресс-бары и точный процент выполнения цели за текущий месяц.</p>
+                <h3>@HabitTracker.Index_feature2_title</h3>
+                <p>@HabitTracker.Index_feature2_desc</p>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon">📖</div>
-                <h3>Дневник привычек</h3>
-                <p>Красивый календарь. Нажимай на любой день и оставляй заметки о своём дне.</p>
+                <h3>@HabitTracker.Index_feature3_title</h3>
+                <p>@HabitTracker.Index_feature3_desc</p>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon">✨</div>
-                <h3>Создание и редактирование</h3>
-                <p>Добавляй новые привычки, задавай цель (дней в месяц) и легко редактируй.</p>
+                <h3>@HabitTracker.Index_feature4_title</h3>
+                <p>@HabitTracker.Index_feature4_desc</p>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon">🗑️</div>
-                <h3>Удаление привычек</h3>
-                <p>Если привычка больше не актуальна — удали её в два клика.</p>
+                <h3>@HabitTracker.Index_feature5_title</h3>
+                <p>@HabitTracker.Index_feature5_desc</p>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon">🎨</div>
-                <h3>Нежный дизайн</h3>
-                <p>Мягкие розовые тона, плавные анимации и внимание к каждой детали.</p>
+                <h3>@HabitTracker.Index_feature6_title</h3>
+                <p>@HabitTracker.Index_feature6_desc</p>
             </div>
 
         </div>
@@ -84,29 +83,29 @@
     <!-- Как это работает -->
     <section class="how-it-works">
         <div class="section-header">
-            <h2>Как это работает?</h2>
+            <h2>@HabitTracker.Index_how_title</h2>
         </div>
 
         <div class="steps">
             <div class="step">
                 <div class="step-number">01</div>
                 <div class="step-content">
-                    <h3>Добавь привычку</h3>
-                    <p>Придумай название и укажи, сколько дней в месяц хочешь её выполнять.</p>
+                    <h3>@HabitTracker.Index_step1_title</h3>
+                    <p>@HabitTracker.Index_step1_desc</p>
                 </div>
             </div>
             <div class="step">
                 <div class="step-number">02</div>
                 <div class="step-content">
-                    <h3>Отмечай ежедневно</h3>
-                    <p>Кликай по цветным точкам в недельном трекере.</p>
+                    <h3>@HabitTracker.Index_step2_title</h3>
+                    <p>@HabitTracker.Index_step2_desc</p>
                 </div>
             </div>
             <div class="step">
                 <div class="step-number">03</div>
                 <div class="step-content">
-                    <h3>Следи за прогрессом</h3>
-                    <p>Смотри статистику и веди дневник настроения и мыслей.</p>
+                    <h3>@HabitTracker.Index_step3_title</h3>
+                    <p>@HabitTracker.Index_step3_desc</p>
                 </div>
             </div>
         </div>
@@ -115,9 +114,9 @@
     <!-- Призыв к действию -->
     <section class="cta-section">
         <div class="cta-content">
-            <h2>Готова начать менять свою жизнь?</h2>
-            <p>Присоединяйся к тысячам девушек, которые уже формируют прекрасные привычки</p>
-            <a href="@Url.Action("HabitTracker", "HabitTracker")" class="btn-primary large">Открыть мой трекер →</a>
+            <h2>@HabitTracker.Index_cta_title</h2>
+            <p>@HabitTracker.Index_cta_subtitle</p>
+            <a href="@Url.Action("HabitTracker", "HabitTracker")" class="btn-primary large">@HabitTracker.Index_cta_btn</a>
         </div>
     </section>
 

@@ -89,6 +89,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RockLegendsPortal.resx</DependentUpon>
     </Compile>
+    <Compile Update="Localizations\HabitTracker\HabitTracker.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HabitTracker.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -156,6 +161,10 @@
     <EmbeddedResource Update="Localizations\RockLegendsPortal.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>RockLegendsPortal.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localizations\HabitTracker\HabitTracker.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HabitTracker.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
