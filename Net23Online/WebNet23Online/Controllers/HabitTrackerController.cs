@@ -177,5 +177,28 @@ public class HabitTrackerController : Controller
         _habitDoneDatesRepository.ChangeDayPointStatus(habit.Id, dayOfWeek);
         return RedirectToAction(nameof(HabitTracker));
     }
+
+    [HttpPost]
+    public IActionResult GenerateReport()
+    {
+        var userId = _authService.GetUserId();
+        var path = System.IO.Path.GetTempFileName();
+        using (var file = new StreamWriter(path, false, new System.Text.UTF8Encoding(true)))
+        {
+            file.WriteLine($"Habit;Date");
+
+            var habitsWithDates = _habitRepository.GetHabitsWithDaysByUserId(userId);
+            foreach (var habit in habitsWithDates)
+            {
+                foreach (var date in habit.CompletedDates)
+                {
+                    file.WriteLine($"\"{habit.Title}\";{date:yyyy-MM-dd}");
+                }
+            }
+        }
+
+        var fileStream = new FileStream(path, FileMode.Open);
+        return File(fileStream, "text/csv", "habits_report.csv");
+    }
     
 }

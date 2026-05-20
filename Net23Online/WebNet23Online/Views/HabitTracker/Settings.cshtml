@@ -36,5 +36,12 @@
             </div>
             <a asp-action="EditHabit" class="s-btn edit">@HabitTracker.Settings_edit_btn</a>
         </div>
+        
+        <div class="s-card">
+            <div class="s-icon report">#</div>
+            <form method="post" asp-controller="HabitTracker" asp-action="GenerateReport">
+                <button class="s-label">Сохранить отчет выполнения привычек</button>
+            </form>
+        </div>
     </div>
 </div>
