@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,97 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Index_Add_Button" xml:space="preserve">
-    <value>Add to list</value>
+  <data name="Layout_Title" xml:space="preserve">
+    <value>Little Lemon restaurant</value>
   </data>
-  <data name="Index_Add_By_User" xml:space="preserve">
-    <value>Created by user:</value>
-  </data>
-  <data name="Index_Add_Card_Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="Index_Add_Description" xml:space="preserve">
-    <value>The new card will appear in the list in the same format as the others.</value>
-  </data>
-  <data name="Index_Add_Description_Example" xml:space="preserve">
-    <value>Briefly about the band and its sound</value>
-  </data>
-  <data name="Index_Add_Genres" xml:space="preserve">
-    <value>Genres</value>
-  </data>
-  <data name="Index_Add_Header" xml:space="preserve">
-    <value>Add a band</value>
-  </data>
-  <data name="Index_Add_Image" xml:space="preserve">
-    <value>Insert a band photo or a link from the Internet</value>
-  </data>
-  <data name="Index_Add_Image_Description" xml:space="preserve">
-    <value>Paste the image's direct URL. This field can be left blank.</value>
-  </data>
-  <data name="Index_Add_Image_Example" xml:space="preserve">
-    <value>https://site.com/path/to/photo.jpg</value>
-  </data>
-  <data name="Index_Add_Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Index_Add_Name_Example" xml:space="preserve">
-    <value>For example, Arctic Monkeys</value>
-  </data>
-  <data name="Index_Add_Needed" xml:space="preserve">
-    <value>To add groups you need to</value>
-  </data>
-  <data name="Index_ChooseGenres" xml:space="preserve">
-    <value>Choose what you prefer:</value>
-  </data>
-  <data name="Index_Edit_Button" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="Index_Edit_Choose" xml:space="preserve">
-    <value>Select a band</value>
-  </data>
-  <data name="Index_Edit_Error" xml:space="preserve">
-    <value>Editing genres is only available to users with the band owner role.</value>
-  </data>
-  <data name="Index_Edit_Genres" xml:space="preserve">
-    <value>Edit genres of existing bands</value>
-  </data>
-  <data name="Index_Edit_Instruction" xml:space="preserve">
-    <value>Select a band, then select genres and click “Save”.</value>
-  </data>
-  <data name="Index_Edit_Log_In" xml:space="preserve">
-    <value>log in</value>
-  </data>
-  <data name="Index_Edit_Needed" xml:space="preserve">
-    <value>To edit genres you need to</value>
-  </data>
-  <data name="Index_Edit_Or" xml:space="preserve">
-    <value>or</value>
-  </data>
-  <data name="Index_Edit_Register" xml:space="preserve">
-    <value>register</value>
-  </data>
-  <data name="Index_Edit_Save_Button" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="Index_Header" xml:space="preserve">
-    <value>My favorite bands</value>
-  </data>
-  <data name="Index_Header_Description" xml:space="preserve">
-    <value>Music that inspires</value>
-  </data>
-  <data name="Index_Header_Home" xml:space="preserve">
+  <data name="Layout_Home" xml:space="preserve">
     <value>Home</value>
   </data>
-  <data name="Index_Remove_Button" xml:space="preserve">
-    <value>Remove selected</value>
+  <data name="Layout_Menu" xml:space="preserve">
+    <value>Menu</value>
   </data>
-  <data name="Index_Reset_button" xml:space="preserve">
-    <value>Reset</value>
+  <data name="Layout_About" xml:space="preserve">
+    <value>About</value>
   </data>
-  <data name="Index_Show_Button" xml:space="preserve">
-    <value>Show</value>
+  <data name="Layout_Reservation" xml:space="preserve">
+    <value>Reservation</value>
   </data>
-  <data name="Index_Title" xml:space="preserve">
-    <value>Favorite rock bands</value>
+  <data name="Layout_OrderOnline" xml:space="preserve">
+    <value>Order Online</value>
+  </data>
+  <data name="Layout_Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Layout_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Layout_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Layout_Subscribe_Label" xml:space="preserve">
+    <value>Subscribe!</value>
+  </data>
+  <data name="Layout_Subscribe_EmailPlaceholder" xml:space="preserve">
+    <value>Type your E-mail</value>
+  </data>
+  <data name="Layout_Subscribe_Submit" xml:space="preserve">
+    <value>submit</value>
+  </data>
+  <data name="Reservation_PageTitle" xml:space="preserve">
+    <value>Reservation</value>
+  </data>
+  <data name="Reservation_Header" xml:space="preserve">
+    <value>Choose Your Loving Place!</value>
+  </data>
+  <data name="Reservation_GuestName" xml:space="preserve">
+    <value>Guest name:</value>
+  </data>
+  <data name="Reservation_ChooseDate" xml:space="preserve">
+    <value>Choose Date:</value>
+  </data>
+  <data name="Reservation_ChooseTime" xml:space="preserve">
+    <value>Choose Time:</value>
+  </data>
+  <data name="Reservation_NumberOfGuests" xml:space="preserve">
+    <value>Number of Guests:</value>
+  </data>
+  <data name="Reservation_SeatingPreference" xml:space="preserve">
+    <value>Seating preference:</value>
+  </data>
+  <data name="Reservation_Occasion" xml:space="preserve">
+    <value>Occasion:</value>
+  </data>
+  <data name="Reservation_ExtraLabel" xml:space="preserve">
+    <value>Do You want to add anything else?</value>
+  </data>
+  <data name="Reservation_CommentsPlaceholder" xml:space="preserve">
+    <value>Remember, be nice!</value>
+  </data>
+  <data name="Reservation_Submit" xml:space="preserve">
+    <value>Make your reservation</value>
+  </data>
+  <data name="Reservation_NoPreference" xml:space="preserve">
+    <value>No preference</value>
+  </data>
+  <data name="Reservation_Indoor" xml:space="preserve">
+    <value>Indoor dining room</value>
+  </data>
+  <data name="Reservation_Patio" xml:space="preserve">
+    <value>Patio / outdoor</value>
+  </data>
+  <data name="Reservation_Window" xml:space="preserve">
+    <value>Window table (if available)</value>
+  </data>
+  <data name="Reservation_Occasion_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Reservation_Occasion_Birthday" xml:space="preserve">
+    <value>Birthday</value>
+  </data>
+  <data name="Reservation_Occasion_Anniversary" xml:space="preserve">
+    <value>Anniversary</value>
+  </data>
+  <data name="Reservation_Occasion_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Reservation_DessertPhoto" xml:space="preserve">
+    <value>Dessert Photo</value>
   </data>
 </root>

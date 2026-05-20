@@ -306,6 +306,15 @@ namespace WebNet23Online.Localizations {
         /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
+        public static string Index_Remove_Button {
+            get {
+                return ResourceManager.GetString("Index_Remove_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
         public static string Index_Reset_button {
             get {
                 return ResourceManager.GetString("Index_Reset_button", resourceCulture);

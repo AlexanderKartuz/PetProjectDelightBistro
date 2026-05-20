@@ -3,24 +3,29 @@ using WebNet23Online.Services.Interfaces.LittleLemon;
 using WebNet23Online.Models.LittleLemon;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Data.Models;
+using WebNet23Online.Services.Interfaces;
+using WebNet23Online.Data.Enums;
 namespace WebNet23Online.Services.LittleLemon
 {
-    public class LittleLemonReservationService: ILittleLemonReservationService
+    public class LittleLemonReservationService : ILittleLemonReservationService
     {
-        private ILittleLemonReservationRepository _reservationDataRepo;
-        private ILittleLemonGuestRepository _guestDataRepo;
+        private ILittleLemonReservationRepository _reservationDataRepository;
+        private ILittleLemonGuestRepository _guestDataRepository;
+        private IAuthService _authService;
 
         public LittleLemonReservationService(
-            ILittleLemonReservationRepository reservationDataRepo,
-            ILittleLemonGuestRepository guestDataRepo)
+            ILittleLemonReservationRepository reservationDataRepository,
+            ILittleLemonGuestRepository guestDataRepository,
+            IAuthService authService)
         {
-            _reservationDataRepo = reservationDataRepo;
-            _guestDataRepo = guestDataRepo;
+            _reservationDataRepository = reservationDataRepository;
+            _guestDataRepository = guestDataRepository;
+            _authService = authService;
         }
 
         public int CreateGuest(string guestName)
         {
-            var existingGuest = _guestDataRepo.GetAll()
+            var existingGuest = _guestDataRepository.GetAll()
                 .FirstOrDefault(x => string.Equals(x.Name, guestName));
 
             if (existingGuest != null)
@@ -33,53 +38,57 @@ namespace WebNet23Online.Services.LittleLemon
                 Name = guestName
             };
 
-            _guestDataRepo.Add(newGuest);
+            _guestDataRepository.Add(newGuest);
             return newGuest.Id;
         }
 
         public int CreateReservation(LittleLemonReservationViewModel viewModel)
         {
 
-
-            var guest = _guestDataRepo.Get(viewModel.GuestId);
-            
-
+            var guestId = CreateGuest(viewModel.GuestName!);
+            var guest = _guestDataRepository.Get(guestId);
+            var role = _authService.GetRole();
+            var isAdmin = role == UserRole.Admin;
+            var isUser = role == UserRole.User;
             var reservationData = new LittleLemonData
             {
-                GuestId = guest.Id,
+                GuestId = guest!.Id,
                 NumberOfGuests = viewModel.NumberOfGuests,
-                SeatingPreference = viewModel.SeatingPreference,
+                SeatingPreference = isAdmin || isUser
+                    ? viewModel.SeatingPreference
+                    : "no-preference",
                 AvailableTimesOnly = viewModel.AvailableTimesOnly,
                 ReservationDateOnly = viewModel.ReservationDateOnly,
                 Occasion = viewModel.Occasion,
                 UserComments = viewModel.UserComments,
+                CreatedByUserId = isAdmin || isUser ? _authService.GetUserId() : null,
             };
-            _reservationDataRepo.Add(reservationData);
+            _reservationDataRepository.Add(reservationData);
             return reservationData.Id;
         }
 
         public LittleLemonReservationViewModel GetReservationViewModelById(int id)
         {
-            var reservationDataById = _reservationDataRepo.Get(id);
-            var guest = _guestDataRepo.Get(reservationDataById.GuestId);
+            var reservationDataById = _reservationDataRepository.Get(id);
+            var guest = _guestDataRepository.Get(reservationDataById!.GuestId);
 
             return new LittleLemonReservationViewModel
             {
-                GuestId = reservationDataById.GuestId,
-                GuestName = guest.Name,
+                GuestName = guest!.Name,
                 NumberOfGuests = reservationDataById.NumberOfGuests,
                 SeatingPreference = reservationDataById.SeatingPreference,
                 AvailableTimesOnly = reservationDataById.AvailableTimesOnly,
                 ReservationDateOnly = reservationDataById.ReservationDateOnly,
                 Occasion = reservationDataById.Occasion,
                 UserComments = reservationDataById.UserComments,
+                CakePhotoUrl = reservationDataById.CakePhotoUrl,
             };
         }
 
         public bool LinkReservationToGuest(int reservationId, int guestId)
         {
-            var reservation = _reservationDataRepo.Get(reservationId);
-            var guest = _guestDataRepo.Get(guestId);
+            var reservation = _reservationDataRepository.Get(reservationId);
+            var guest = _guestDataRepository.Get(guestId);
 
             if (reservation == null || guest == null)
             {
@@ -87,8 +96,56 @@ namespace WebNet23Online.Services.LittleLemon
             }
 
             reservation.GuestId = guestId;
-            _reservationDataRepo.Update(reservation);
+            _reservationDataRepository.Update(reservation);
             return true;
         }
+        public List<LittleLemonReservationHistoryItemViewModel> GetReservationHistoryForCurrentUser()
+        {
+            var userId = _authService.GetUserId();
+            var role = _authService.GetRole();
+            var reservations = _reservationDataRepository.GetAll();
+            if (role == UserRole.User)
+            {
+                reservations = reservations
+                    .Where(reservationData => reservationData.CreatedByUserId == userId)
+                    .ToList();
+            }
+            var reservationHistory = reservations
+                .OrderByDescending(reservationData => reservationData.Id)
+                .Select(reservationData =>
+                {
+                    var guest = _guestDataRepository.Get(reservationData.GuestId);
+                    return new LittleLemonReservationHistoryItemViewModel
+                    {
+                        ReservationId = reservationData.Id,
+                        Reservation = new LittleLemonReservationViewModel
+                        {
+                            GuestName = guest!.Name,
+                            NumberOfGuests = reservationData.NumberOfGuests,
+                            SeatingPreference = reservationData.SeatingPreference,
+                            AvailableTimesOnly = reservationData.AvailableTimesOnly,
+                            ReservationDateOnly = reservationData.ReservationDateOnly,
+                            Occasion = reservationData.Occasion,
+                            UserComments = reservationData.UserComments,
+                            CakePhotoUrl = reservationData.CakePhotoUrl,
+                        }
+                    };
+                })
+         .ToList();
+            return reservationHistory;
+        }
+        public void SetReservationCakePhotoUrl(int reservationId, string CakePhotoUrl)
+        {
+            var reservation = _reservationDataRepository.Get(reservationId);
+            if (reservation == null)
+            {
+                return;
+            }
+            reservation.CakePhotoUrl = CakePhotoUrl;
+            _reservationDataRepository.Update(reservation);
+
+        }
+
     }
 }
+

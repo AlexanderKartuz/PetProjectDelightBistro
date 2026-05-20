@@ -2,7 +2,8 @@
 {
     public class LittleLemonConfirmationViewModel
     {
-        public LittleLemonHeroSectionViewModel Hero { get; set; } 
-        public LittleLemonReservationViewModel Reservation { get; set; } 
+        public LittleLemonHeroSectionViewModel Hero { get; set; }
+        public LittleLemonReservationViewModel Reservation { get; set; }
+        public bool CanSeeHistory { get; set; }
     }
 }

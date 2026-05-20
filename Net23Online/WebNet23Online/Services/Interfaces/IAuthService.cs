@@ -13,6 +13,8 @@ public interface IAuthService
     bool IsAuthenticated();
     bool AtLeastModerator();
     bool IsCurrentUserAtLeastEmployee();
+    bool IsUser();
     Language GetLanguage();
     void SignIn(UserData user);
+    bool IsBlockedInTracker();
 }

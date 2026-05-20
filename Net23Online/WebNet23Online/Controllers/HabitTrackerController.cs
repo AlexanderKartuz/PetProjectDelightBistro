@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Data;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
@@ -12,6 +13,8 @@ using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers;
 
+[Authorize]
+[IsNotBlockedInTracker]
 public class HabitTrackerController : Controller
 {
     private IHabitService _habitService;
@@ -39,7 +42,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpGet]
-    [Authorize]
     public IActionResult HabitTracker()
     {
         var userId = _authService.GetUserId();
@@ -59,7 +61,6 @@ public class HabitTrackerController : Controller
     } 
     
     [HttpGet]
-    [Authorize]
     public IActionResult Statistics()
     {
         var userId = _authService.GetUserId();
@@ -70,7 +71,6 @@ public class HabitTrackerController : Controller
     } 
     
     [HttpGet]
-    [Authorize]
     public IActionResult Diary(int month, int year)
     {
         //
@@ -86,14 +86,12 @@ public class HabitTrackerController : Controller
     } 
     
     [HttpGet]
-    [Authorize]
     public IActionResult Settings()
     {
         return View();
     }
     
     [HttpGet]
-    [Authorize]
     public IActionResult CreateHabit()
     {
         var userId = _authService.GetUserId();
@@ -105,7 +103,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpPost]
-    [Authorize]
     public IActionResult CreateHabit(HabitViewModel  habit)
     {
         if (!ModelState.IsValid)
@@ -119,7 +116,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpGet]
-    [Authorize]
     public IActionResult DeleteHabit()
     {
         var userId = _authService.GetUserId();
@@ -130,7 +126,6 @@ public class HabitTrackerController : Controller
     }
 
     [HttpPost]
-    [Authorize]
     public IActionResult DeleteHabit(int habitId)
     {
         if (habitId == 0)
@@ -149,7 +144,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpGet]
-    [Authorize]
     public IActionResult EditHabit()
     {
         var userId = _authService.GetUserId();
@@ -159,7 +153,6 @@ public class HabitTrackerController : Controller
     }
 
     [HttpPost]
-    [Authorize]
     public IActionResult EditHabit(HabitTrackerViewModel habitTracker)
     {
         var updateHabit = habitTracker.EditHabit;
@@ -173,7 +166,6 @@ public class HabitTrackerController : Controller
     }
 
     [HttpPost]
-    [Authorize]
     public IActionResult TogglePoint(int habitId, int dayOfWeek)
     {
         var habit = _habitRepository.Get(habitId);
@@ -185,4 +177,5 @@ public class HabitTrackerController : Controller
         _habitDoneDatesRepository.ChangeDayPointStatus(habit.Id, dayOfWeek);
         return RedirectToAction(nameof(HabitTracker));
     }
+    
 }

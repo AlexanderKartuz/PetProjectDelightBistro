@@ -1,4 +1,7 @@
 ﻿@using WebNet23Online.Models.LittleLemon
+@using WebNet23Online.Services.Interfaces
+@using WebNet23Online.Localizations
+@inject IAuthService authService
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +14,7 @@
 <body>
 	<header class="header">
 		<div class="header-container">
-			<h1 class="header-title">Little Lemon restaurant</h1>
+			<h1 class="header-title">@LittleLemon.Layout_Title</h1>
 			<a href="/LittleLemon/Index">
 				<img src="/images/little-lemon/icons/logo.png"
 					 alt="Little Lemon logo"
@@ -21,13 +24,20 @@
 			</a>
 			<nav class="header-navbar">
 				<ul class="navbar">
-					<li><a href="/LittleLemon/Index">Home</a></li>
-					<li><a href="#menu">Menu</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="/LittleLemon/Reservation">Reservation</a></li>
-					<li><a href="#">Order Online</a></li>
-					<li><a href="#footer">Contact</a></li>
-					<li><a href="#">Login</a></li>
+					<li><a href="/LittleLemon/Index">@LittleLemon.Layout_Home</a></li>
+					<li><a href="#menu">@LittleLemon.Layout_Menu</a></li>
+					<li><a href="#about">@LittleLemon.Layout_About</a></li>
+					<li><a href="/LittleLemon/Reservation">@LittleLemon.Layout_Reservation</a></li>
+					<li><a href="#">@LittleLemon.Layout_OrderOnline</a></li>
+					<li><a href="#footer">@LittleLemon.Layout_Contact</a></li>
+					@if (authService.IsAuthenticated())
+					{
+						<li><a asp-controller="Auth" asp-action="Logout">@LittleLemon.Layout_Logout</a></li>
+					}
+					else
+					{
+						<li><a asp-controller="Auth" asp-action="Login">@LittleLemon.Layout_Login</a></li>
+					}
 				</ul>
 			</nav>
 		</div>
@@ -77,29 +87,36 @@
 			<div class="footer-content-middle">
 				<nav class="footer-navigation">
 					<ul class="navbar">
-						<li><a href="/LittleLemon/Index">home</a></li>
-						<li><a href="#about">about</a></li>
-						<li><a href="#menu">Menu</a></li>
+						<li><a href="/LittleLemon/Index">@LittleLemon.Layout_Home</a></li>
+						<li><a href="#about">@LittleLemon.Layout_About</a></li>
+						<li><a href="#menu">@LittleLemon.Layout_Menu</a></li>
 						<li>
-							<a href="/LittleLemon/Reservation">reservations</a>
+							<a href="/LittleLemon/Reservation">@LittleLemon.Layout_Reservation</a>
 						</li>
-						<li><a href="#menu">order online</a></li>
-						<li><a href="#">login</a></li>
+						<li><a href="#menu">@LittleLemon.Layout_Menu</a></li>
+						@if (authService.IsAuthenticated())
+						{
+							<li><a asp-controller="Auth" asp-action="Logout">@LittleLemon.Layout_Logout</a></li>
+						}
+						else
+						{
+							<li><a asp-controller="Auth" asp-action="Login">@LittleLemon.Layout_Login</a></li>
+						}
 					</ul>
 				</nav>
 			</div>
 			<div class="footer-content-right">
 				<form asp-controller="LittleLemon" asp-action="Subscribe" method="post" class="form">
-					<label for="subscribe">Subscribe!</label>
+					<label for="subscribe">@LittleLemon.Layout_Subscribe_Label</label>
 					<div>
 						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
 						<input type="email"
 							   name="Email"
 							   id="subscribe"
-							   placeholder="Type your E-mail"
+							   placeholder="@LittleLemon.Layout_Subscribe_EmailPlaceholder"
 							   required
 							   autocomplete="email" />
-						<input type="submit" value="submit" />
+						<input type="submit" value="@LittleLemon.Layout_Subscribe_Submit" />
 					</div>
 				</form>
 				@{

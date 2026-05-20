@@ -13,6 +13,7 @@ namespace WebNet23Online.Data
         public DbSet<AnimeStudioData> AnimeStudios { get; set; }
         public DbSet<UserData> Users { get; set; }
         public DbSet<MazeData> Mazes { get; set; }
+        public DbSet<HabitTrackerProfileData> HabitTrackerProfile { get; set; }
         public DbSet<HabitData> Habits { get; set; }
         public DbSet<HabitDoneDatesData> HabitDoneDates { get; set; }
         public DbSet<HabitTrackerDiaryData> DiaryEntries { get; set; }
@@ -100,6 +101,10 @@ namespace WebNet23Online.Data
                 .WithOne(x => x.User);
 
             modelBuilder.Entity<UserData>()
+                .HasOne(x => x.HabitTrackerProfile)
+                .WithOne(x => x.User);
+            
+            modelBuilder.Entity<UserData>()
                 .HasMany(x => x.Habits)
                 .WithOne(x => x.User);
 
@@ -169,8 +174,14 @@ namespace WebNet23Online.Data
 
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.Guest)
-                .WithMany(x => x.Reservations)
+                .WithMany(x => x.GuestLittleLemonReservations)
                 .HasForeignKey(x => x.GuestId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<LittleLemonData>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany(x => x.UserAccountLittleLemonReservations)
+                .HasForeignKey(x => x.CreatedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<RockBandGenreData>()
