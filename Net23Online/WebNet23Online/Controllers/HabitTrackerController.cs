@@ -13,6 +13,8 @@ using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers;
 
+[Authorize]
+[IsNotBlockedInTracker]
 public class HabitTrackerController : Controller
 {
     private IHabitService _habitService;
@@ -22,12 +24,9 @@ public class HabitTrackerController : Controller
     private IHabitRepository _habitRepository;
     private IHabitDoneDatesRepository _habitDoneDatesRepository;
     private IHabitDiaryRepository _diaryRepository;
-    private IHabitTrackerProfileRepository _habitTrackerProfileRepository;
-    private IUserRepository _userRepository;
     public HabitTrackerController(IHabitService habitService, IHabitStatisticsService statisticsService,
         IHabitRepository habitRepository, IHabitDiaryRepository diaryRepository,
-        IHabitDoneDatesRepository habitDoneDatesRepository, IAuthService authService,
-        IHabitTrackerProfileRepository habitTrackerProfileRepository, IUserRepository userRepository)
+        IHabitDoneDatesRepository habitDoneDatesRepository, IAuthService authService)
     {
         _habitService = habitService;
         _statisticsService = statisticsService;
@@ -35,8 +34,6 @@ public class HabitTrackerController : Controller
         _diaryRepository = diaryRepository;
         _habitDoneDatesRepository = habitDoneDatesRepository;
         _authService = authService;
-        _habitTrackerProfileRepository = habitTrackerProfileRepository;
-        _userRepository = userRepository;
     }
 
     public IActionResult Index()
@@ -45,8 +42,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpGet]
-    [Authorize]
-    [IsNotBlockedInTracker]
     public IActionResult HabitTracker()
     {
         var userId = _authService.GetUserId();
@@ -66,7 +61,6 @@ public class HabitTrackerController : Controller
     } 
     
     [HttpGet]
-    [IsNotBlockedInTracker]
     public IActionResult Statistics()
     {
         var userId = _authService.GetUserId();
@@ -77,7 +71,6 @@ public class HabitTrackerController : Controller
     } 
     
     [HttpGet]
-    [IsNotBlockedInTracker]
     public IActionResult Diary(int month, int year)
     {
         //
@@ -93,14 +86,12 @@ public class HabitTrackerController : Controller
     } 
     
     [HttpGet]
-    [IsNotBlockedInTracker]
     public IActionResult Settings()
     {
         return View();
     }
     
     [HttpGet]
-    [IsNotBlockedInTracker]
     public IActionResult CreateHabit()
     {
         var userId = _authService.GetUserId();
@@ -112,7 +103,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpPost]
-    [IsNotBlockedInTracker]
     public IActionResult CreateHabit(HabitViewModel  habit)
     {
         if (!ModelState.IsValid)
@@ -126,7 +116,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpGet]
-    [IsNotBlockedInTracker]
     public IActionResult DeleteHabit()
     {
         var userId = _authService.GetUserId();
@@ -137,7 +126,6 @@ public class HabitTrackerController : Controller
     }
 
     [HttpPost]
-    [IsNotBlockedInTracker]
     public IActionResult DeleteHabit(int habitId)
     {
         if (habitId == 0)
@@ -156,7 +144,6 @@ public class HabitTrackerController : Controller
     }
     
     [HttpGet]
-    [IsNotBlockedInTracker]
     public IActionResult EditHabit()
     {
         var userId = _authService.GetUserId();
@@ -166,7 +153,6 @@ public class HabitTrackerController : Controller
     }
 
     [HttpPost]
-    [IsNotBlockedInTracker]
     public IActionResult EditHabit(HabitTrackerViewModel habitTracker)
     {
         var updateHabit = habitTracker.EditHabit;
@@ -180,7 +166,6 @@ public class HabitTrackerController : Controller
     }
 
     [HttpPost]
-    [IsNotBlockedInTracker]
     public IActionResult TogglePoint(int habitId, int dayOfWeek)
     {
         var habit = _habitRepository.Get(habitId);
@@ -191,63 +176,6 @@ public class HabitTrackerController : Controller
         
         _habitDoneDatesRepository.ChangeDayPointStatus(habit.Id, dayOfWeek);
         return RedirectToAction(nameof(HabitTracker));
-    }
-
-    [HttpGet]
-    [IsModerator]
-    public IActionResult AdminPanel()
-    {
-        //переделаю, можно не смотреть:)
-        var habits = _habitRepository.GetAll();
-    
-        var model = new HabitAdminStatisticViewModel
-        {
-            AverageHabitsCount = habits.Any() 
-                ? (int)habits.GroupBy(h => h.UserId).Average(g => g.Count()) 
-                : 0,
-            AveragePercentOfSuccess = 0, // пока заглушка
-            TrendingHabits = habits
-                .GroupBy(h => h.Title)
-                .OrderByDescending(g => g.Count())
-                .Take(5)
-                .Select(g => g.Key)
-                .ToList()
-        };
-    
-        return View(model);
-    }
-    
-    [HttpGet]
-    [IsModerator]
-    public IActionResult UserList()
-    {
-        //переделаю, можно не смотреть:)
-        var users = _userRepository.GetAll();
-        var profiles = _habitTrackerProfileRepository.GetAll();
-    
-        var model = users.Select(u => new AdminUserViewModel
-        {
-            Id = u.Id,
-            Name = u.Name,
-            Role = u.Role,
-            HabitsCount = u.Habits?.Count ?? 0,
-            IsBlocked = profiles.FirstOrDefault(p => p.UserId == u.Id)?.IsBlocked ?? false
-        }).ToList();
-    
-        return View(model);
-    }
-    
-    [HttpPost]
-    [IsModerator]
-    public IActionResult ToggleBlock(int userId)
-    {
-        var profile = _habitTrackerProfileRepository.GetByUserId(userId);
-        if (profile == null || !profile.IsBlocked)
-            _habitTrackerProfileRepository.BlockUser(userId);
-        else
-            _habitTrackerProfileRepository.UnblockUser(userId);
-        
-        return RedirectToAction(nameof(UserList));
     }
     
 }

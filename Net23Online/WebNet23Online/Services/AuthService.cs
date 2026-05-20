@@ -3,6 +3,7 @@ using System.Security.Claims;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
+using WebNet23Online.Data.Repositories.Interfaces.HabitTracker;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Services
@@ -17,14 +18,14 @@ namespace WebNet23Online.Services
 
         private IHttpContextAccessor _httpContextAccessor;
         private readonly IUserRepository _userRepository;
-        private readonly IHabitTrackerProfileRepository _habitTrackerProfileRepository;
+        private readonly IHabitTrackerAdminRepository _habitTrackerAdminRepository;
 
         public AuthService(IHttpContextAccessor httpContextAccessor,
-            IUserRepository userRepository, IHabitTrackerProfileRepository  habitTrackerProfileRepository)
+            IUserRepository userRepository, IHabitTrackerAdminRepository  habitTrackerAdminRepository)
         {
             _httpContextAccessor = httpContextAccessor;
             _userRepository = userRepository;
-            _habitTrackerProfileRepository =  habitTrackerProfileRepository;
+            _habitTrackerAdminRepository =  habitTrackerAdminRepository;
         }
 
         public int GetUserId()
@@ -156,7 +157,7 @@ namespace WebNet23Online.Services
         {
             var userId = GetUserId();
     
-            var profile = _habitTrackerProfileRepository.GetByUserId(userId);
+            var profile = _habitTrackerAdminRepository.GetByUserId(userId);
             return profile?.IsBlocked ?? false;
         }
     }

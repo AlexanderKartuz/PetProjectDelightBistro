@@ -17,7 +17,7 @@
                     <span class="stat-value">Привычек: @user.HabitsCount</span>
                 </div>
                 <form method="post" asp-action="ToggleBlock">
-                    <input type="hidden" name="userId" value="@user.Id" />
+                    <input type="hidden" name="userId" value="@user.Id"/>
                     <button type="submit" class="btn-action @(user.IsBlocked ? "btn-add" : "btn-delete")">
                         @(user.IsBlocked ? "Разблокировать" : "Заблокировать")
                     </button>
