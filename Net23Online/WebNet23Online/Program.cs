@@ -131,6 +131,7 @@ builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
 
 builder.Services.AddScoped<IJdmRepository, JdmRepository>();
 builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
+builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
 
 builder.Services.AddHttpContextAccessor();
 

@@ -14,6 +14,11 @@ namespace WebNet23Online.Data.Models
         public string Model { get; set; } = string.Empty;
         public int Price { get; set; }
         public string Url { get; set; } = "";
-        public virtual JdmManufacturerData JdmManufacturerData { get; set; } = new();
+        public virtual JdmManufacturerData JdmManufacturerData { get; set; }
+
+        public int? CreatorId { get; set; }
+        public virtual UserData? Creator { get; set; }
+        public string? VehicleInspectionHistoryUrl { get; set; }
+
     }
 }
