@@ -13,6 +13,7 @@ namespace WebNet23Online.Data
         public DbSet<AnimeStudioData> AnimeStudios { get; set; }
         public DbSet<UserData> Users { get; set; }
         public DbSet<MazeData> Mazes { get; set; }
+        public DbSet<HabitTrackerProfileData> HabitTrackerProfile { get; set; }
         public DbSet<HabitData> Habits { get; set; }
         public DbSet<HabitDoneDatesData> HabitDoneDates { get; set; }
         public DbSet<HabitTrackerDiaryData> DiaryEntries { get; set; }
@@ -99,6 +100,10 @@ namespace WebNet23Online.Data
                 .HasMany(x => x.DiaryEntries)
                 .WithOne(x => x.User);
 
+            modelBuilder.Entity<UserData>()
+                .HasOne(x => x.HabitTrackerProfile)
+                .WithOne(x => x.User);
+            
             modelBuilder.Entity<UserData>()
                 .HasMany(x => x.Habits)
                 .WithOne(x => x.User);

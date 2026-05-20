@@ -26,10 +26,10 @@ namespace WebNet23Online.Data.Models
         public virtual List<ZooData> CreatedByMeZoos { get; set; }
         public virtual List<AnimalFamilyData> CreatedByMeAnimalFamilies { get; set; }
         public virtual List<AnimalSpeciesData> CreatedByMeAnimalSpecies { get; set; }
-
-
-
+        
         public virtual List<RockBandsData>? RockBand { get; set; }
+        
+        public virtual HabitTrackerProfileData? HabitTrackerProfile { get; set; }
         public virtual List<HabitData> Habits { get; set; }
         public virtual List<HabitTrackerDiaryData> DiaryEntries { get; set; }
 
