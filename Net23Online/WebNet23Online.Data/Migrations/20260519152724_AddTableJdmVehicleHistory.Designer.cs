@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebNet23Online.Data;
 
@@ -11,9 +12,11 @@ using WebNet23Online.Data;
 namespace WebNet23Online.Data.Migrations
 {
     [DbContext(typeof(WebContext))]
-    partial class WebContextModelSnapshot : ModelSnapshot
+    [Migration("20260519152724_AddTableJdmVehicleHistory")]
+    partial class AddTableJdmVehicleHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -386,28 +389,6 @@ namespace WebNet23Online.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("DiaryEntries");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.HabitTrackerProfileData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsBlocked")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("HabitTrackerProfile");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.IngredientData", b =>
@@ -1081,17 +1062,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.HabitTrackerProfileData", b =>
-                {
-                    b.HasOne("WebNet23Online.Data.Models.UserData", "User")
-                        .WithOne("HabitTrackerProfile")
-                        .HasForeignKey("WebNet23Online.Data.Models.HabitTrackerProfileData", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WebNet23Online.Data.Models.IngredientData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "Creator")
@@ -1301,8 +1271,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("CreatedMenus");
 
                     b.Navigation("DiaryEntries");
-
-                    b.Navigation("HabitTrackerProfile");
 
                     b.Navigation("Habits");
 

@@ -40,6 +40,7 @@ namespace WebNet23Online.Data
 
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
+        public DbSet<JdmCarsBlogCommentsData> JdmCarsBlogComments { get; set; }
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -205,6 +206,16 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.JdmManufacturerData)
                 .WithMany(x => x.JdmCarsDatas)
                 .HasForeignKey(x => x.JdmManufacturerDataId);
+            
+            modelBuilder.Entity<JdmCarsData>()
+                 .HasOne(x => x.Creator)
+                 .WithMany(x => x.CreatedByCarsJdm)
+                 .HasForeignKey(x => x.CreatorId);
+
+            modelBuilder.Entity<JdmCarsBlogCommentsData>()
+                .HasOne(x => x.User)
+                .WithMany(u => u.JournalComments)
+                .HasForeignKey(x => x.UserId);
 
             base.OnModelCreating(modelBuilder);
         }

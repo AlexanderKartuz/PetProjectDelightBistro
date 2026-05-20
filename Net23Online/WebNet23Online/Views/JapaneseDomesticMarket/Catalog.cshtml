@@ -1,10 +1,12 @@
 ﻿@using WebNet23Online.Models.JapaneseDomesticMarket
-@model List<JDMCatalogViewModels>
+@using WebNet23Online.Localizations
+@model CatalogCarsPermissionViewModel
 @{
     Layout = "_LayoutJapaneseDomesticMarket";
 }
+
 <div class="container">
-    @foreach (var manufacture in Model)
+    @foreach (var manufacture in Model.CatalogAuto)
     {
         <div class="one-category-auto">
             <div class="auto-card-title">
@@ -23,10 +25,23 @@
                         <div class="auto-card-price">
                             @jdmItem.Price
                         </div>
-                        <div><button class="btn-watch ">Подробнее</button></div>
+                        <div><button class="btn-watch ">@JapaneseDomesticMarket.Catalog_Button_More_Details</button></div>
                     </div>
                 }
             </div>
         </div>
     }
 </div>
+
+@if (Model.CarsWithoutInspection.Any())
+{
+    <section class="container">
+        <h2>@JapaneseDomesticMarket.Catalog_Statistics_VehicalHistory</h2>
+        <ul>
+            @foreach (var row in Model.CarsWithoutInspection)
+            {
+                <li>@row.Manufacturer — @row.CountCars</li>
+            }
+        </ul>
+    </section>
+}

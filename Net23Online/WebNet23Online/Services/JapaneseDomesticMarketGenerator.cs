@@ -1,4 +1,6 @@
-﻿using WebNet23Online.Data.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using WebNet23Online.Data.Models;
+using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Models.JapaneseDomesticMarket;
 using WebNet23Online.Services.Interfaces;
 
@@ -7,8 +9,10 @@ namespace WebNet23Online.Services
     public class JapaneseDomesticMarketGenerator : IJapaneseDomesticMarketGenerator
     {
         private List<JapaneseDomesticMarketViewModels> _jdmItems;
-        public JapaneseDomesticMarketGenerator()
+        private IJdmManufacturerRepository _jdmManufacturerRepository;
+        public JapaneseDomesticMarketGenerator(IJdmManufacturerRepository jdmManufacturerRepository)
         {
+            _jdmManufacturerRepository = jdmManufacturerRepository;
             _jdmItems = new List<JapaneseDomesticMarketViewModels>
             {
                 new JapaneseDomesticMarketViewModels
@@ -85,6 +89,22 @@ namespace WebNet23Online.Services
             });
             return _jdmItems.ToList();
         }
+        public List<SelectListItem> GetListItemsJdmCars()
+        {
+            var manufactures = _jdmManufacturerRepository.GetAll();
+            var manufacturesListItems = new List<SelectListItem>();
 
+            manufacturesListItems.Add(new SelectListItem
+            {
+                Text = "Выбери производителя",
+                Value = ""
+            });
+            manufacturesListItems.AddRange(manufactures.Select(x => new SelectListItem
+            {
+                Text = x.ManufacturerType,
+                Value = x.Id.ToString()
+            }));
+            return manufacturesListItems;
+        }
     }
 }
