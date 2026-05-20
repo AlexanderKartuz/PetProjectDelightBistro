@@ -7,6 +7,7 @@ using WebNet23Online.Data.Repositories.AnimalWorld;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Data.Repositories.Interfaces.AnimalWorld;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
+using WebNet23Online.Data.Repositories.Interfaces.HabitTracker;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Data.Repositories.Steam;
 using WebNet23Online.MiddlewareServices;
@@ -97,7 +98,6 @@ builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
 builder.Services.AddScoped<IHabitService, HabitService>();
 builder.Services.AddScoped<IHabitStatisticsService, HabitStatisticsService>();
 
-
 //JapaneseDomesticMarker DI
 builder.Services.AddScoped<IJapaneseDomesticMarketGenerator, JapaneseDomesticMarketGenerator>();
 builder.Services.AddScoped<IJDMCatalogGenerator, JDMCatalogGenerator>();
@@ -112,6 +112,7 @@ builder.Services.AddScoped<IMazeRepository, MazeRepository>();
 builder.Services.AddScoped<IHabitRepository, HabitRepository>();
 builder.Services.AddScoped<IHabitDoneDatesRepository, HabitDoneDatesRepository>();
 builder.Services.AddScoped<IHabitDiaryRepository, HabitDiaryRepository>();
+builder.Services.AddScoped<IHabitTrackerAdminRepository, HabitTrackerAdminRepository>();
 builder.Services.AddScoped<ISlayTheSpire2HeroesRepository, SlayTheSpire2HeroesRepository>();
 builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
 builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();

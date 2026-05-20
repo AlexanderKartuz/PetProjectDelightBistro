@@ -28,20 +28,26 @@
 <div class="main-content">
     <nav>
         <ul>
-            @if (authService.IsAuthenticated())
+            @if (!authService.IsAuthenticated())
+            {
+                <li><a asp-area="" asp-controller="Auth" asp-action="Login">Войти</a></li>
+                <li><a asp-area="" asp-controller="Auth" asp-action="Registration">Зарегистрироваться</a></li>
+                <li><a asp-area="" asp-controller="HabitTracker" asp-action="Index">Информация</a></li>
+            }
+            else if (authService.IsUser())
             {
                 <li><a asp-controller="HabitTracker" asp-action="HabitTracker">Трекер задач</a></li>
                 <li><a asp-controller="HabitTracker" asp-action="Statistics">Статистика</a></li>
                 <li><a asp-controller="HabitTracker" asp-action="Diary">Дневник</a></li>
                 <li><a asp-controller="HabitTracker" asp-action="Settings">Настройки</a></li>
+                <li><a asp-area="" asp-controller="HabitTracker" asp-action="Index">Информация</a></li>
                 <li><a asp-area="" asp-controller="Auth" asp-action="Logout">Выйти из аккаунта</a></li>
             }
-            else
+            else if (authService.AtLeastModerator())
             {
-                <li><a asp-area="" asp-controller="Auth" asp-action="Login">Войти</a></li>
-                <li><a asp-area="" asp-controller="Auth" asp-action="Registration">Зарегистрироваться</a></li>
+                <li><a asp-controller="HabitTrackerAdmin" asp-action="AdminPanel">Общая статистика</a></li>
+                <li><a asp-controller="HabitTrackerAdmin" asp-action="UserList">Список пользователей</a></li>
             }
-            <li><a asp-area="" asp-controller="HabitTracker" asp-action="Index">Информация</a></li>
             <li><a asp-area="" asp-controller="Home" asp-action="Index">Дом</a></li>
         </ul>
     </nav>

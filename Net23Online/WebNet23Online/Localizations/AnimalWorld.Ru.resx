@@ -198,6 +198,9 @@
   <data name="ChooseZoo" xml:space="preserve">
     <value>Выберите зоопарк</value>
   </data>
+  <data name="DeleteSelected" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Описание</value>
   </data>

@@ -1,0 +1,42 @@
+@model WebNet23Online.Models.HabitTracker.HabitAdminStatisticViewModel
+@{
+    Layout = "_LayoutHabitTracker";
+}
+
+<link rel="stylesheet" href="/css/habit-tracker/statistics.css">
+
+<div class="tracker">
+    <div class="tracker-title">Админ панель</div>
+
+    <div class="table-tracker stats-container">
+        
+        <div class="stat-item">
+            <div class="stat-header">
+                <span class="stat-name">Среднее количество привычек на пользователя</span>
+                <span class="stat-value">@Model.AverageHabitsCount</span>
+            </div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-header">
+                <span class="stat-name">Средний процент выполнения</span>
+                <span class="stat-value">@Model.AveragePercentOfSuccess %</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill color-0" style="width: @Model.AveragePercentOfSuccess%"></div>
+            </div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-header">
+                <span class="stat-name">Топ привычек</span>
+            </div>
+            @foreach (var habit in Model.TrendingHabits)
+            {
+                <div>@habit</div>
+            }
+        </div>
+
+    </div>
+</div>
+

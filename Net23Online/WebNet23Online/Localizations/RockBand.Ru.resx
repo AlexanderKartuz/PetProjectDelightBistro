@@ -199,6 +199,9 @@
   <data name="Index_Header_Home" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Index_Remove_Button" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
   <data name="Index_Reset_button" xml:space="preserve">
     <value>Reset</value>
   </data>

@@ -4,6 +4,10 @@
     Layout = "_LayoutAnimalWorld";
 }
 
+@section Scripts {
+    <script src="~/js/animal-world/index.js"></script>
+}
+
 <title>@AnimalWorld.AnimalWorldTitle</title>
 
 <div class="main-place">
@@ -21,10 +25,11 @@
     <hr class="green-line">
     @if (Model.AnimalFamilies.Any())
     {
-        <div class="entity-grid">
+        <button id="delete-selected-btn" class="btn btn-danger mb-3">@AnimalWorld.DeleteSelected</button>
+        <div class="entity-grid" data-empty-text="@AnimalWorld.NoAnimalFamilies">
             @foreach (var family in Model.AnimalFamilies)
             {
-                <div class="animal entity-card">
+                <div class="animal entity-card js-family-card">
                     <h3>@family.AnimalFamilyName</h3>
                     <p>@family.Description</p>
                 </div>

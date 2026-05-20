@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\japanese-domestic-market\history-inspection\" />
+    <Folder Include="wwwroot\js\rock-band\" />
     <Folder Include="wwwroot\temp\" />
   </ItemGroup>
 

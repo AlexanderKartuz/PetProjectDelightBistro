@@ -198,6 +198,9 @@
   <data name="ChooseZoo" xml:space="preserve">
     <value>Select zoo</value>
   </data>
+  <data name="DeleteSelected" xml:space="preserve">
+    <value>Delete selected</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
