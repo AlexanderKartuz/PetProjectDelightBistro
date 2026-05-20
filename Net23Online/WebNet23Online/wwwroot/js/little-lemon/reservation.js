@@ -8,7 +8,7 @@ $(document).ready(function () {
         if (file) {
             imagePreviewContainer.removeClass("hide");
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function () {
                 imagePreview.attr("src",reader.result);
             };
             reader.readAsDataURL(file);
