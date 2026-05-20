@@ -198,6 +198,9 @@
   <data name="Index_Header_Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Index_Remove_Button" xml:space="preserve">
+    <value>Remove selected</value>
+  </data>
   <data name="Index_Reset_button" xml:space="preserve">
     <value>Reset</value>
   </data>
