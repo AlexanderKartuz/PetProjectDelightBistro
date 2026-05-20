@@ -9,7 +9,7 @@ $(document).ready(function () {
             imagePreviewContainer.removeClass("hide");
             const reader = new FileReader();
             reader.onload = function (e) {
-                imagePreview.attr("src", e.target.result);
+                imagePreview.attr("src",reader.result);
             };
             reader.readAsDataURL(file);
         }
