@@ -65,12 +65,13 @@
         <div class="anime-catalog-grid">
             @foreach (var anime in Model.Animes)
             {
-                <article class="anime-catalog-card">
+                <article class="anime-catalog-card" data-id="@anime.Id">
                     <div class="anime-catalog-card__cover">
                         <img src="@anime.Url" alt="Обложка: @anime.Name" width="480" height="720" loading="lazy" decoding="async">
                     </div>
                     <div class="anime-catalog-card__body">
-                        <h3 class="anime-catalog-card__title">@anime.Name</h3>
+                        <h3 class="mode-view anime-catalog-card__title">@anime.Name</h3>
+                        <input value="" class="new-anime-name-input mode-edit link-select">
                     </div>
                 </article>
             }
@@ -80,12 +81,12 @@
     <section class="section section-heroes" id="heroes" aria-labelledby="heroes-title">
         <h2 class="section-title" id="heroes-title">Персонажи</h2>
         <p class="section-intro">Иллюстрации и аниме, где персонаж числится в списке героев.</p>
-        <p class="section-intro"><button class="remove-image" disabled>remove</button></p>
+        <p class="section-intro"><button class="remove-image link-button" disabled>remove</button></p>
 
         <div class="card-grid">
             @foreach (var girl in Model.AnimeGirls)
             {
-                <article class="media-card">
+                <article class="media-card" data-id="@girl.Id">
                     <div class="media-card__img-wrap">
                         <img src="@girl.Url" alt="Персонаж @girl.Title" width="400" height="500" loading="lazy" decoding="async">
                     </div>

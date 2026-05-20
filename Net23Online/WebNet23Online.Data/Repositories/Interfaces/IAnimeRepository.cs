@@ -6,5 +6,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
     public interface IAnimeRepository : IBaseRepository<AnimeData>
     {
         List<GirlNameAndAnimeNameDataModel> GetPopularGirlAndAnime();
+        void Rename(int id, string name);
     }
 }
