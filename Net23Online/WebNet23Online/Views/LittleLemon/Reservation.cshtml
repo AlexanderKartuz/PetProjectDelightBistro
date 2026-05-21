@@ -4,13 +4,18 @@
 @{
 	Layout = "_LayoutLittleLemon";
 }
+@section Scripts {
+	<script src="/js/little-lemon/reservation.js"></script>
+}
 <title>@LittleLemon.Reservation_PageTitle</title>
 @Html.Partial("_LittleLemonHeroSection", Model.Hero!)
+
 <section class="booking-section">
 	<h2>@LittleLemon.Reservation_Header</h2>
 
 
-	<form class="booking-form" method="post" enctype="multipart/form-data" asp-controller="LittleLemon" asp-action="Reservation">
+	<form class="booking-form" method="post" enctype="multipart/form-data" asp-controller="LittleLemon"
+		  asp-action="Reservation">
 		<div asp-validation-summary="All" class="booking-validation-summary"></div>
 		<div>
 			<label for="guest-name">@LittleLemon.Reservation_GuestName</label>
@@ -37,12 +42,7 @@
 		</div>
 		<div>
 			<label for="guests">@LittleLemon.Reservation_NumberOfGuests</label>
-			<input type="number"
-				   min="1" 
-				   max="10" 
-				   id="guests" 
-				   asp-for="Reservation.NumberOfGuests"
-				   required />
+			<input type="number" min="1" max="10" id="guests" asp-for="Reservation.NumberOfGuests" required />
 			<span asp-validation-for="Reservation.NumberOfGuests" class="field-validation-error"></span>
 		</div>
 		<div>
@@ -79,6 +79,14 @@
 			<input type="file" asp-for="DessertReferencePhoto" accept="image/jpeg,image/png,image/webp" />
 			<span asp-validation-for="DessertReferencePhoto" class="field-validation-error"></span>
 		</div>
+		<div class="image-preview_container hide">
+			<div class="image-preview_image__wrapper">
+				<div class="image-preview_btn"><i>X</i></div>
+				<img src="" alt="Reservation Preview" class="image-preview_image" />
+			</div>
+
+		</div>
 		<input type="submit" value="@LittleLemon.Reservation_Submit" class="btn" />
 	</form>
+
 </section>
