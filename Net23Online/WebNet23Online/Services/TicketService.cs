@@ -20,7 +20,7 @@ namespace WebNet23Online.Services
             _zooRepository = zooRepository;
         }
 
-        public void BookZoo(string zooName, TicketType type)
+        public void BookZoo(string zooName, EntityType type)
         {
             var user = _authService.GetUser();
             var zoo = _zooRepository.GetElementByName(zooName);

@@ -8,7 +8,7 @@ namespace WebNet23Online.Data.Models
         public string UniqueKey { get; set; }
         public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
         public DateTime EventDate { get; set; }
-        public TicketType TicketType { get; set; }
+        public EntityType TicketType { get; set; }
         public bool IsUsed { get; set; } = false;
         public int UserId { get; set; }
         public int? ZooId { get; set; }

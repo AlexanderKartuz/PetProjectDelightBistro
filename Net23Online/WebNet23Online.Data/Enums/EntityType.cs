@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebNet23Online.Data.Enums
 {
-    public enum TicketType
+    public enum EntityType
     {
-        ZooVisit = 1
+        Zoo = 1
     }
 }

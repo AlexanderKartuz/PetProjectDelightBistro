@@ -1,0 +1,43 @@
+﻿@using WebNet23Online.Models.Comments
+@model AllCommentsViewModel
+
+@section Scripts {
+    <script src="~/js/comments/add-zoo-comment.js"></script>
+}
+
+<div>
+    <form>
+        <h3 class="green-title">Оставить комментарий</h3>
+        <input type="hidden" name="CommentsType" id="form-comments-type" value="@((int)Model.CommentsType)" />
+        <div class="form-group">
+            <label>Ваш отзыв:</label>
+            <textarea name="NewCommentText"
+                      id="form-comment-text"
+                      class="form-input"
+                      rows="4"
+                      placeholder="Поделитесь вашими впечатлениями..."
+                      required></textarea>
+        </div>
+        <div>
+            <button type="submit" class="find-animal-button">Отправить</button>
+        </div>
+    </form>
+</div>
+
+<h3 class="green-title">Что говорят посетители:</h3>
+
+<div id="comments-container">
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="animal comment-item-box">
+                <div>
+                    <strong>@comment.Author</strong>
+                    <span>@comment.CreatedAt.ToString("g")</span>
+                </div>
+                <p>@comment.Text</p>
+            </div>
+        }
+    }
+</div>

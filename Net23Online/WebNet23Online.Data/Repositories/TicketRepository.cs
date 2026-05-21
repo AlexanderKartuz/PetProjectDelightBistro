@@ -13,7 +13,7 @@ namespace WebNet23Online.Data.Repositories
 
         public List<TicketData> GetUserZooTickets(int userId)
         {
-            return _dbSet.Where(x => x.UserId == userId && x.TicketType == TicketType.ZooVisit).Include(x => x.Zoo).ToList();
+            return _dbSet.Where(x => x.UserId == userId && x.TicketType == EntityType.Zoo).Include(x => x.Zoo).ToList();
         }
     }
 }

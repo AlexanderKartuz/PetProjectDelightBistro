@@ -5,7 +5,7 @@ namespace WebNet23Online.Services.Interfaces
 {
     public interface ITicketService
     {
-        void BookZoo(string zooName, TicketType type);
+        void BookZoo(string zooName, EntityType type);
         List<ZooTicketsViewModel> GetUserZooTickets(int userId);
     }
 }

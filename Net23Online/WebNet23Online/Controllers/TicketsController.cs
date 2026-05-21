@@ -35,7 +35,7 @@ namespace WebNet23Online.Controllers
         [HttpPost]
         public IActionResult ZooReservations(string zooName)
         {
-            _ticketService.BookZoo(zooName, TicketType.ZooVisit);
+            _ticketService.BookZoo(zooName, EntityType.Zoo);
             return View();
         }
 
