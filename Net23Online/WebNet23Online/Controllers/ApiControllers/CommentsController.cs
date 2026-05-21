@@ -7,5 +7,15 @@ namespace WebNet23Online.Controllers.ApiControllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        public CommentsController()
+        {
+            
+        }
+
+        public bool AddComment()
+        {
+
+            return true;
+        }
     }
 }
