@@ -6,6 +6,7 @@
 @model AllFoodItemWithPermissionViewModel
 @section Scripts {
     <script src="/js/delight-bistro/all-foods.js"></script>
+    <script src="/js/delight-bistro/buy-button.js"></script>
 
     <link rel="stylesheet" href="/css/delight-bistro/style.css" />
 }
@@ -33,7 +34,7 @@
     <div class="plate">
                 
         <div class="type-of-food">
-            <p class="add-button">
+            <p class="button">
                 <button class="remove-food-item" disabled title="Удалить">Delete dishes</button>
             </p>
             <div class="type-name center">Все блюда</div>
@@ -59,7 +60,7 @@
                                 }
                             </div>
                             <div class="btnright">
-                                <button class="add-button colorbtn">+</button>
+                                <button data-food-item-id="@food.Id" class="buy-button colorbtn">+</button>
                             </div>
                         </div>
                         <div class="recept">

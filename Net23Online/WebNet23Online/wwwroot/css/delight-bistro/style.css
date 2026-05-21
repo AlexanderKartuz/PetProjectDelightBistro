@@ -1,6 +1,6 @@
 body {
   background-color: #423333;
-  font-family: "Courier New", Courier, monospace;
+  font-family: 'Courier New', Courier, monospace;
   color: rgb(219, 227, 235);
 }
 
@@ -34,7 +34,7 @@ body {
 }
 
 .logo-name {
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
   font-size: 20px;
   color: #ebae09;
   margin: 5px;
@@ -186,7 +186,7 @@ body {
   text-align: center;
 }
 
-.add-button {
+.buy-button {
   width: 30px;
   height: 30px;
   font-size: 24px;
@@ -284,10 +284,12 @@ div.food-item.active {
   border: 3px red solid;
 }
 
-
 .preview.food-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid;
+}
+.choose-to-buy {
+  border: 3px red solid;
 }
