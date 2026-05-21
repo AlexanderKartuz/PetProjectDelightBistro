@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers.ApiControllers
 {
@@ -7,15 +8,16 @@ namespace WebNet23Online.Controllers.ApiControllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        public CommentsController()
+        private ICommentsService _commentsService;
+
+        public CommentsController(ICommentsService commentsService)
         {
-            
+            _commentsService = commentsService;
         }
 
-        public bool AddComment()
+        public bool AddComment(int zooId, string text)
         {
-
-            return true;
+            return _commentsService.AddZooComment(zooId, text);
         }
     }
 }

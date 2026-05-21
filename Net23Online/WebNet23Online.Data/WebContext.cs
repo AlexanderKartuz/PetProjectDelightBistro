@@ -100,9 +100,9 @@ namespace WebNet23Online.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CommentData>()
-                .HasOne(x => x.User)
+                .HasOne(x => x.Author)
                 .WithMany(x => x.MyComments)
-                .HasForeignKey(x => x.UserId)
+                .HasForeignKey(x => x.AuthorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CommentData>()

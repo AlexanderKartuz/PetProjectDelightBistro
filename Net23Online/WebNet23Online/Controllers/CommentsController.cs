@@ -1,12 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers
 {
     public class CommentsController : Controller
     {
-        public IActionResult ZooCommentsIndex()
+        private ICommentsService _commentService;
+
+        public CommentsController(ICommentsService commentService)
         {
-            return View();
+            _commentService = commentService;
+        }
+
+        public IActionResult ZooCommentsIndex(int zooId)
+        {
+            return View(_commentService.GetZooComments(zooId));
         }
     }
 }

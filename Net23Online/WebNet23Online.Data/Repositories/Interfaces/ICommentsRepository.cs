@@ -2,7 +2,7 @@
 
 namespace WebNet23Online.Data.Repositories.Interfaces
 {
-    public interface ICommentsRepository
+    public interface ICommentsRepository : IBaseRepository<CommentData>
     {
         List<CommentData> GetZooComments(int zooId);
     }
