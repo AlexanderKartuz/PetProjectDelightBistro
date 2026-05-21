@@ -1,0 +1,63 @@
+﻿.tickets-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    max-width: 450px;
+    font-family: sans-serif;
+}
+
+.tickets-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+
+.ticket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+    .ticket-item:not(:last-child) {
+        border-bottom: 1px dashed #ccc;
+    }
+
+.ticket-info {
+    flex-grow: 1;
+    padding-right: 15px;
+}
+
+.ticket-zoo {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.ticket-date {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.ticket-key {
+    font-family: monospace;
+    font-size: 0.8em;
+    color: #7f8c8d;
+}
+
+.ticket-qrcode img {
+    max-width: 100px;
+    height: auto;
+    display: block;
+    border: 1px solid #eee;
+    padding: 3px;
+    background: #fff;
+    border-radius: 4px;
+}

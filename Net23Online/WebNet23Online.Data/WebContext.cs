@@ -42,6 +42,8 @@ namespace WebNet23Online.Data
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
         public DbSet<JdmCarsBlogCommentsData> JdmCarsBlogComments { get; set; }
 
+        public DbSet<TicketData> Tickets { get; set; }
+
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -82,6 +84,18 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.Creator)
                 .WithMany(x => x.CreatedByMeAnimalSpecies)
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TicketData>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.MyTickets)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TicketData>()
+                .HasOne(x => x.Zoo)
+                .WithMany(x => x.Tickets)
+                .HasForeignKey(x => x.ZooId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<UserData>()

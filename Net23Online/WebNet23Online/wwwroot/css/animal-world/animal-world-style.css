@@ -9,18 +9,44 @@ body {
     background-color: green;
     color: white;
     text-align: center;
-    padding: 3px;
+    padding: 3px 20px;
 }
 
 .header-links {
     display: flex;
-    justify-content: center;
+    align-items: center;
     font-size: 22px;
 }
 
 .header-link {
     color: white;
     padding: 0 20px 10px;
+    text-decoration: none;
+}
+
+.header-link:hover {
+    text-decoration: underline;
+}
+
+.header-zone-left,
+.header-zone-center,
+.header-zone-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.header-zone-left {
+    justify-content: flex-start;
+}
+
+.header-zone-center {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.header-zone-right {
+    justify-content: flex-end;
 }
 
 .main-place {
@@ -174,6 +200,15 @@ body {
 
 .multi-select-input {
     min-height: 140px;
+}
+
+.header-link-right {
+    padding-right: 0;
+}
+
+.header-links::before {
+    content: '';
+    margin-right: auto;
 }
 
 #delete-selected-btn {

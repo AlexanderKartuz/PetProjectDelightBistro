@@ -16,17 +16,26 @@
     <div class="header-body">
         <h1>@AnimalWorld.AmazingAnimalWorld</h1>
         <div class="header-links">
-            <a class="header-link" href="/">@AnimalWorld.OnIndex</a>
-            <a class="header-link" href="/AnimalWorld/Index">@AnimalWorld.AnimalWorldTitle</a>
-            @if (authService.IsAuthenticated())
-            {
-                <a class="header-link" href="/AnimalWorld/Zoos">@AnimalWorld.Reservation</a>
-            }
-            @if (authService.AtLeastModerator())
-            {
-                <a class="header-link" href="/AnimalWorld/Add">@AnimalWorld.AddData</a>
-            }
-            <a class="header-link" href="">@AnimalWorld.Interesting</a>
+            <div class="header-zone-left"></div>
+            <div class="header-zone-center">
+                <a class="header-link" href="/">@AnimalWorld.OnIndex</a>
+                <a class="header-link" href="/AnimalWorld/Index">@AnimalWorld.AnimalWorldTitle</a>
+                @if (authService.IsAuthenticated())
+                {
+                    <a class="header-link" href="/AnimalWorld/Zoos">@AnimalWorld.Reservation</a>
+                }
+                @if (authService.AtLeastModerator())
+                {
+                    <a class="header-link" href="/AnimalWorld/Add">@AnimalWorld.AddData</a>
+                }
+                <a class="header-link" href="">@AnimalWorld.Interesting</a>
+            </div>
+            <div class="header-zone-right">
+                @if (authService.IsAuthenticated())
+                {
+                    <a class="header-link header-link-right" href="/Tickets/AllMyTickets">Билеты</a>
+                }
+            </div>
         </div>
     </div>
     <div class="container">

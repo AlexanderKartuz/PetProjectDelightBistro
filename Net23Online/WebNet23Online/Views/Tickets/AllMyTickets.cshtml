@@ -1,0 +1,28 @@
+﻿@using WebNet23Online.Models.Tickets
+@model AllTicketsViewModel
+
+<title>Все билеты</title>
+
+<link rel="stylesheet" href="~/css/tickets/zoo-tickets.css" asp-append-version="true" />
+@section Scripts {
+    <script src="~/js/tickets/qrcode.js"></script>
+    <script src="~/js/tickets/all-my-tickets.js"></script>
+}
+
+@if (Model.CanShowZooTickets && Model.ZooTickets.Any())
+{
+    @foreach (var ticket in Model.ZooTickets)
+    {
+        <div class="animal ticket-card-layout">
+            <div class="animal-card ticket-card-flex">
+                <div class="ticket-info">
+                    <h3 class="green-title">@ticket.ZooName</h3>
+                    <p class="ticket-date-text"><strong>Дата:</strong> @ticket.EventDate.ToShortDateString()</p>
+                </div>
+                <div class="ticket-qrcode-wrapper">
+                    <div class="ticket-qrcode" data-qr-value="@ticket.UniqueKey"></div>
+                </div>
+            </div>
+        </div>
+    }
+}

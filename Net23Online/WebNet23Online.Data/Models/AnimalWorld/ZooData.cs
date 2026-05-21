@@ -12,6 +12,8 @@
 
         public virtual List<AnimalSpeciesData> AnimalSpecies { get; set; }
 
+        public virtual List<TicketData> Tickets { get; set; }
+
         public virtual UserData Creator { get; set; }
     }
 }
