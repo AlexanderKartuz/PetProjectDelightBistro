@@ -1,12 +1,13 @@
 ﻿@using WebNet23Online.Models.DelightBistro;
+@model AllFoodItemWithPermissionViewModel
 
 @{
     Layout = "_LayoutDelightBistro";
 }
-@model AllFoodItemWithPermissionViewModel
+
 @section Scripts {
     <script src="/js/delight-bistro/all-foods.js"></script>
-    <script src="/js/delight-bistro/buy-button.js"></script>
+    @* <script src="/js/delight-bistro/buy-button.js"></script> *@
 
     <link rel="stylesheet" href="/css/delight-bistro/style.css" />
 }
@@ -40,34 +41,34 @@
             <div class="type-name center">Все блюда</div>
             <div class="menu">
               
-                @foreach (var food in Model.FoodItems)
+                @foreach (var foodItem in Model.FoodItems)
                 {
-                    <div class="food-item" item-id="@food.Id">
+                    <div class="food-item" item-id="@foodItem.Id">
                         <div class="image-container">
-                            <a href="\DelightBistro\FoodBuilderData?id=@food.Id"><img src=@food.ImgURL alt=@food.Name /></a>
+                            <a href="\DelightBistro\FoodBuilderData?id=@foodItem.Id"><img src=@foodItem.ImgURL alt=@foodItem.Name /></a>
                         </div>
                         <div class="name-price-btn">
                             <div class="name-price">
-                                <div class="food-name">@food.Name</div>
-                                <div class="price">@food.Price р</div>
-                                @if (food.CanDelete)
+                                <div class="food-name">@foodItem.Name</div>
+                                <div class="price">@foodItem.Price р</div>
+                                @if (foodItem.CanDelete)
                                 {
                                     <form action="/DelightBistro/DeleteFoodItem" method="post">
-                                        <input type="hidden" name="id" value="@food.Id" />
+                                        <input type="hidden" name="id" value="@foodItem.Id" />
                                         <button type="submit" title="Удалить">Delete</button>
                                     </form>
 
                                 }
                             </div>
-                            <div class="btnright">
+                            @* <div class="btnright">
                                 <button data-food-item-id="@food.Id" class="buy-button colorbtn">+</button>
-                            </div>
+                            </div> *@
                         </div>
                         <div class="recept">
                             <ul>
-                                @if (food.IngredientsList is not null)
+                                @if (foodItem.IngredientsList is not null)
                                 {
-                                    @foreach (var ingredient in food.IngredientsList)
+                                    @foreach (var ingredient in foodItem.IngredientsList)
                                     {
                                         <li>@ingredient.Name @ingredient.Quantity gr.</li>
                                     }

@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   const buyButtons = document.querySelectorAll('.buy-button');
+  const counterDisplay = document.querySelector('.counter-display');
 
   buyButtons.forEach((button) => {
     button.addEventListener('click', function () {
@@ -7,7 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
       self.classList.toggle('choose-to-buy');
 
       const choosenFoodIds = getChosenIds();
+
       console.log('выбранные id:', choosenFoodIds);
+      counterDisplay.textContent = choosenFoodIds.length;
     });
   });
   // список всех кнопки которые выбраны

@@ -293,3 +293,15 @@ div.food-item.active {
 .choose-to-buy {
   border: 3px red solid;
 }
+.order-box {
+  /* display: none; */
+
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px;
+  padding: 10px;
+  background: #353232;
+  border-radius: 6px;
+}
+/* .counter-display {
+} */
