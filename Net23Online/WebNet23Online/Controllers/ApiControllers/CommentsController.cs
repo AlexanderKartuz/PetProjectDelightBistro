@@ -1,23 +1,41 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers.ApiControllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CommentsController : ControllerBase
     {
-        private ICommentsService _commentsService;
+        private readonly ICommentsService _commentsService;
 
         public CommentsController(ICommentsService commentsService)
         {
             _commentsService = commentsService;
         }
 
-        public bool AddComment(int zooId, string text)
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddComment([FromForm] int entityId, [FromForm] string newCommentText)
         {
-            return _commentsService.AddZooComment(zooId, text);
+            if (string.IsNullOrWhiteSpace(newCommentText))
+            {
+                return BadRequest();
+            }
+
+            var comment = _commentsService.AddZooComment(entityId, newCommentText.Trim());
+            if (comment == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new
+            {
+                author = comment.Author,
+                text = comment.Text,
+                createdAt = comment.CreatedAt.ToString("g"),
+            });
         }
     }
 }

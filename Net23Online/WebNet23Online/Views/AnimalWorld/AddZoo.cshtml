@@ -4,6 +4,10 @@
     Layout = "_LayoutAnimalWorld";
 }
 
+@section Scripts {
+    <script src="~/js/animal-world/add-zoo.js"></script>
+}
+
 <title>@AnimalWorld.AddZoo</title>
 
 <div class="main-place">
@@ -11,12 +15,13 @@
         <h2>@AnimalWorld.AddZoo</h2>
     </div>
     <hr class="green-line">
-    <form method="post">
+    <form method="post" class="js-add-zoo-form">
         <div class="form-group">
             <div class="green-title">
                 <h6>@AnimalWorld.ZooName</h6>
             </div>
-            @Html.TextBoxFor(zoo => zoo.ZooName, new { @class = "form-input", type = "text", placeholder = AnimalWorld.ZooExample })
+            @Html.TextBoxFor(zoo => zoo.ZooName, new { @class = "form-input", type = "text", placeholder = AnimalWorld.ZooExample, autocomplete = "off" })
+            <span id="zoo-name-feedback" class="zoo-name-feedback" aria-live="polite"></span>
             @Html.ValidationMessageFor(zoo => zoo.ZooName)
         </div>
         <div class="form-group">

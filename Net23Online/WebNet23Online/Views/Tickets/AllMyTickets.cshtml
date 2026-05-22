@@ -1,28 +1,71 @@
-﻿@using WebNet23Online.Models.Tickets
+﻿@using WebNet23Online.Localizations
+@using WebNet23Online.Models.Tickets
 @model AllTicketsViewModel
+@{
+    var hasZooTickets = Model.CanShowZooTickets && Model.ZooTickets != null && Model.ZooTickets.Any();
+}
 
-<title>Все билеты</title>
+@section Styles {
+    <link rel="stylesheet" href="~/css/tickets/my-tickets.css" asp-append-version="true" />
+}
 
-<link rel="stylesheet" href="~/css/tickets/zoo-tickets.css" asp-append-version="true" />
 @section Scripts {
     <script src="~/js/tickets/qrcode.js"></script>
     <script src="~/js/tickets/all-my-tickets.js"></script>
 }
 
-@if (Model.CanShowZooTickets && Model.ZooTickets.Any())
-{
-    @foreach (var ticket in Model.ZooTickets)
-    {
-        <div class="animal ticket-card-layout">
-            <div class="animal-card ticket-card-flex">
-                <div class="ticket-info">
-                    <h3 class="green-title">@ticket.ZooName</h3>
-                    <p class="ticket-date-text"><strong>Дата:</strong> @ticket.EventDate.ToShortDateString()</p>
-                </div>
-                <div class="ticket-qrcode-wrapper">
-                    <div class="ticket-qrcode" data-qr-value="@ticket.UniqueKey"></div>
-                </div>
-            </div>
+<div class="my-tickets-page">
+    <h1 class="my-tickets-title">Мои билеты</h1>
+    <p class="my-tickets-intro">Здесь собраны билеты из разных разделов сайта.</p>
+
+    <section class="tickets-zoo-section" aria-labelledby="zoo-tickets-heading">
+        <div class="tickets-zoo-section-header">
+            <h2 id="zoo-tickets-heading" class="tickets-zoo-section-title">Зоопарки — Мир животных</h2>
+            <span class="tickets-zoo-section-badge">Animal World</span>
         </div>
-    }
-}
+
+        @if (hasZooTickets)
+        {
+            <p class="tickets-zoo-hint">Предъявите QR-код на входе в зоопарк.</p>
+
+            <div class="tickets-zoo-list">
+                @foreach (var ticket in Model.ZooTickets)
+                {
+                    <article class="tickets-zoo-card @(ticket.IsUsed ? "tickets-zoo-card-used" : "")">
+                        <div class="tickets-zoo-card-inner">
+                            <div class="tickets-zoo-card-body">
+                                <h3 class="tickets-zoo-name">@ticket.ZooName</h3>
+                                <p class="tickets-zoo-meta">
+                                    <strong>Дата визита:</strong> @ticket.EventDate.ToString("dd.MM.yyyy")
+                                </p>
+                                <p class="tickets-zoo-key-row">
+                                    <strong>Код билета:</strong>
+                                    <span class="tickets-zoo-key">@ticket.UniqueKey</span>
+                                </p>
+                                @if (ticket.IsUsed)
+                                {
+                                    <span class="tickets-zoo-status tickets-zoo-status-used">Использован</span>
+                                }
+                                else
+                                {
+                                    <span class="tickets-zoo-status tickets-zoo-status-active">Активен</span>
+                                }
+                            </div>
+                            <div class="tickets-zoo-qrcode-panel">
+                                <p class="tickets-zoo-qrcode-caption">QR-код</p>
+                                <div class="ticket-qrcode" data-qr-value="@ticket.UniqueKey"></div>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="tickets-zoo-empty">
+                <p class="tickets-zoo-empty-text">Нет билетов в зоопарки.</p>
+                <a class="tickets-zoo-link" href="/AnimalWorld/Zoos">@AnimalWorld.BookNow</a>
+            </div>
+        }
+    </section>
+</div>

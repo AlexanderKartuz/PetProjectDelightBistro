@@ -22,27 +22,63 @@ namespace WebNet23Online.Services
             _zooRepository = zooRepository;
         }
 
-        public AllCommentsViewModel GetZooComments(int zooId)
+        public AllCommentsViewModel? GetZooComments(int zooId)
         {
-            var comments = _commentsMapper.FromCommentsDataToCommnetsViewModel(_commentsRepository.GetZooComments(zooId));
-            comments.DisplayName = _zooRepository.Get(zooId).ZooName;
+            var zoo = _zooRepository.Get(zooId);
+            if (zoo == null)
+            {
+                return null;
+            }
+
+            var comments = _commentsMapper.FromCommentsDataToCommnetsViewModel(
+                _commentsRepository.GetZooComments(zooId),
+                zooId);
+            comments.DisplayName = zoo.ZooName;
             return comments;
         }
 
-        public bool AddZooComment(int zooId, string text)
+        public OneCommentViewModel? AddZooComment(int zooId, string text)
         {
             var user = _authService.GetUser();
+            if (user == null || _zooRepository.Get(zooId) == null)
+            {
+                return null;
+            }
+
+            var authorName = GetAuthorDisplayName(user);
+            var createdAt = DateTime.UtcNow;
             var comment = new CommentData
             {
-                Author = user,
-                AuthorName = user.FirstName,
+                AuthorId = user.Id,
+                AuthorName = authorName,
                 CommentType = EntityType.Zoo,
                 Text = text,
-                CreatedAt = DateTime.UtcNow,
-                Zoo = _zooRepository.Get(zooId)
+                CreatedAt = createdAt,
+                ZooId = zooId,
             };
             _commentsRepository.Add(comment);
-            return true;
+
+            return new OneCommentViewModel
+            {
+                Author = authorName,
+                Text = text,
+                CreatedAt = createdAt,
+            };
+        }
+
+        private static string GetAuthorDisplayName(UserData user)
+        {
+            if (!string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName))
+            {
+                return $"{user.FirstName} {user.LastName}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(user.FirstName))
+            {
+                return user.FirstName;
+            }
+
+            return user.Name;
         }
     }
 }

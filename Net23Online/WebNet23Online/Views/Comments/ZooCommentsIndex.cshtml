@@ -1,43 +1,75 @@
 ﻿@using WebNet23Online.Models.Comments
+@using WebNet23Online.Services.Interfaces
+@inject IAuthService authService
 @model AllCommentsViewModel
-
-@section Scripts {
-    <script src="~/js/comments/add-zoo-comment.js"></script>
+@{
+    Layout = "_LayoutAnimalWorld";
+    var hasComments = Model.Comments != null && Model.Comments.Any();
 }
 
-<div>
-    <form>
-        <h3 class="green-title">Оставить комментарий</h3>
-        <input type="hidden" name="CommentsType" id="form-comments-type" value="@((int)Model.CommentsType)" />
-        <div class="form-group">
-            <label>Ваш отзыв:</label>
-            <textarea name="NewCommentText"
-                      id="form-comment-text"
-                      class="form-input"
-                      rows="4"
-                      placeholder="Поделитесь вашими впечатлениями..."
-                      required></textarea>
-        </div>
-        <div>
-            <button type="submit" class="find-animal-button">Отправить</button>
-        </div>
-    </form>
-</div>
-
-<h3 class="green-title">Что говорят посетители:</h3>
-
-<div id="comments-container">
-    @if (Model.Comments != null && Model.Comments.Any())
+@section Scripts {
+    @if (authService.IsAuthenticated())
     {
-        @foreach (var comment in Model.Comments)
-        {
-            <div class="animal comment-item-box">
-                <div>
-                    <strong>@comment.Author</strong>
-                    <span>@comment.CreatedAt.ToString("g")</span>
-                </div>
-                <p>@comment.Text</p>
-            </div>
-        }
+        <script src="~/js/comments/add-zoo-comment.js"></script>
     }
+}
+
+<title>Отзывы — @Model.DisplayName</title>
+
+<div class="main-place">
+    <div class="comments-page-back">
+        <a class="find-animal-button secondary-action" href="/AnimalWorld/Zoos">← К списку зоопарков</a>
+    </div>
+
+    <div class="green-title">
+        <h2>Отзывы: @Model.DisplayName</h2>
+    </div>
+    <hr class="green-line">
+
+    @if (authService.IsAuthenticated())
+    {
+        <section class="comments-form-section animal entity-card">
+            <form id="comment-form">
+                <h3 class="green-title">Оставить комментарий</h3>
+                <input type="hidden" name="CommentsType" id="form-comments-type" value="@((int)Model.CommentsType)" />
+                <input type="hidden" name="EntityId" id="form-entity-id" value="@Model.EntityId" />
+                <div class="form-group">
+                    <label for="form-comment-text">Ваш отзыв:</label>
+                    <textarea name="NewCommentText"
+                              id="form-comment-text"
+                              class="form-input comment-textarea"
+                              rows="4"
+                              placeholder="Поделитесь вашими впечатлениями..."
+                              required></textarea>
+                </div>
+                <button type="submit" class="find-animal-button">Отправить</button>
+            </form>
+        </section>
+    }
+    else
+    {
+        <p class="empty-list-note">Войдите в аккаунт, чтобы оставить отзыв.</p>
+    }
+
+    <h3 class="green-title">Что говорят посетители:</h3>
+
+    <p id="empty-note" class="empty-comments-note" style="@(hasComments ? "display: none;" : "")">
+        Пока нет отзывов. Будьте первым!
+    </p>
+
+    <div id="comments-container">
+        @if (hasComments)
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="animal comment-item-box">
+                    <div class="comment-item-header">
+                        <strong class="comment-author">@comment.Author</strong>
+                        <span class="comment-date">@comment.CreatedAt.ToString("g")</span>
+                    </div>
+                    <p class="comment-text">@comment.Text</p>
+                </div>
+            }
+        }
+    </div>
 </div>

@@ -5,7 +5,7 @@ namespace WebNet23Online.Controllers
 {
     public class CommentsController : Controller
     {
-        private ICommentsService _commentService;
+        private readonly ICommentsService _commentService;
 
         public CommentsController(ICommentsService commentService)
         {
@@ -14,7 +14,13 @@ namespace WebNet23Online.Controllers
 
         public IActionResult ZooCommentsIndex(int zooId)
         {
-            return View(_commentService.GetZooComments(zooId));
+            var viewModel = _commentService.GetZooComments(zooId);
+            if (viewModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(viewModel);
         }
     }
 }

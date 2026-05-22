@@ -12,7 +12,10 @@ namespace WebNet23Online.Data.Repositories
 
         public List<CommentData> GetZooComments(int zooId)
         {
-            return _dbSet.Where(x => x.ZooId == zooId && x.CommentType == EntityType.Zoo).ToList();
+            return _dbSet
+                .Where(x => x.ZooId == zooId && x.CommentType == EntityType.Zoo)
+                .OrderByDescending(x => x.CreatedAt)
+                .ToList();
         }
     }
 }
