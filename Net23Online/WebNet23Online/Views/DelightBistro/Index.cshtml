@@ -14,7 +14,6 @@
 }
 
 
-
 <link rel="stylesheet" href="\css\delight-bistro\style.css" />
  
 <header class="head-menu">
@@ -29,8 +28,14 @@
         <div class="head-menu-item">Head menu</div>
     </div>
 </header>
-<div class="order-box">Заказать блюда:
-    <div class="counter-display">0</div>
+<div class="order-box hidden">Заказать блюда:
+    <ul id="orderList">
+        <div>
+            Выбрано блюд:
+            <li class="counter-display">0</li>
+        </div>
+        <li class="order-food-name">Selected FoodItem Name</li>
+    </ul>
 </div>
 
 <h1 class="center">@DelightBistro.Index_Cuisine</h1>
