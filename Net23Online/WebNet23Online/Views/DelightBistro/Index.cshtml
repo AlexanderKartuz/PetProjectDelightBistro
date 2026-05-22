@@ -29,13 +29,14 @@
     </div>
 </header>
 <div class="order-box hidden">Заказать блюда:
+    <div>
+        Выбрано блюд:
+    </div>
+    <div class="counter-display">0</div>
     <ul id="orderList">
-        <div>
-            Выбрано блюд:
-            <li class="counter-display">0</li>
-        </div>
-        <li class="order-food-name">Selected FoodItem Name</li>
+        <li class="order-food-item">Selected FoodItem</li>
     </ul>
+    <div class="total-price">Общая цена</div>
 </div>
 
 <h1 class="center">@DelightBistro.Index_Cuisine</h1>
@@ -70,7 +71,9 @@
                                     <div class="price">@foodItem.Price р</div>
                                 </div>
                                 <div class="btnright">
-                                    <button data-food-item-id="@foodItem.Id" class="buy-button add-button colorbtn">+</button>
+                                    <button data-food-item-id="@foodItem.Id"
+                                    data-food-item-price="@foodItem.Price"
+                                     class="buy-button add-button colorbtn">+</button>
                                 </div>
                             </div>
                             <div class="recept">
