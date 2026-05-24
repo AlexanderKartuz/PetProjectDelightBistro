@@ -1,5 +1,35 @@
 $(document).ready(function () {
 
+    const $bandName = $('#band-name');
+    if ($bandName.length) {
+        const $nameBlock = $bandName.closest('.name-block');
+        const $submitBtn = $bandName.closest('form').find('button[type="submit"]');
+
+        $bandName.on('change', function () {
+            $nameBlock.find('.icon').hide();
+            $nameBlock.find('.icon.wait').show();
+
+            $bandName.removeClass('free used');
+            $submitBtn.removeAttr('disabled');
+
+            const bandName = $bandName.val();
+            const url = `/api/RockBands/IsBandNameFree?name=${encodeURIComponent(bandName)}`;
+
+            $.get(url)
+                .done(function (answer) {
+                    $nameBlock.find('.icon.wait').hide();
+                    if (answer) {
+                        $bandName.addClass('free');
+                        $nameBlock.find('.icon.ok').show();
+                    } else {
+                        $bandName.addClass('used');
+                        $nameBlock.find('.icon.deny').show();
+                        $submitBtn.attr('disabled', 'disabled');
+                    }
+                });
+        });
+    }
+
     $(".band-list .band").click(function () {
         const self = $(this);
         self.toggleClass("active");

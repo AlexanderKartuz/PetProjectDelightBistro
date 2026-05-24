@@ -37,6 +37,7 @@ namespace WebNet23Online.Services
                        Description = b.Description,
                        ImageUrl = string.IsNullOrWhiteSpace(b.Url) ? null : b.Url,
                        CreatedByUserName = b.CreatedByUser != null ? b.CreatedByUser.Name : null,
+                       LikesCount = b.Likes,
                        GenreIds = b.RockBandGenres.Select(bg => bg.GenreId).ToList(),
                        Genres = b.RockBandGenres
                             .Select(bg => bg.Genre.Name)
