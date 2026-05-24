@@ -83,15 +83,10 @@ document.addEventListener('DOMContentLoaded', function () {
     })
       .then((response) => {
         //Authorize
-        if (response.status === 401) {
-          alert('Авторизуйтесь для заказа.');
-          window.location.href = '/Auth/Login';
-          return;
-        }
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-        return response.json();
+        return response.json(); //Показать ответ
       })
       .then((data) => {
         console.log('Ответ сервера, заказ создан:', data);
@@ -105,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         updateOrderBox();
+        showOrderSuccess(data);
       })
       .catch((error) => {
         console.error('Ошибка при заказе', error);

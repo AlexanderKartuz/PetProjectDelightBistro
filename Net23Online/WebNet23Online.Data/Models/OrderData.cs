@@ -9,8 +9,10 @@ namespace WebNet23Online.Data.Models
     public class OrderData : BaseModel
     {
         public DateTime CreatedDateTime { get; set; }
-        public List<FoodItemData> FoodItems { get; set; }
         public decimal TotalPrice { get; set; }
-        public UserData User { get; set; }
+
+        public virtual List<FoodItemData> FoodItems { get; set; } = new();
+        public int UserId { get; set; }
+        public virtual UserData User { get; set; }
     }
 }

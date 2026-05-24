@@ -305,3 +305,15 @@ div.food-item.active {
 .order-box.hidden {
   display: none;
 }
+
+.order-success {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px;
+  padding: 10px;
+  background: #353232;
+  border-radius: 6px;
+}
+.order-success.hidden {
+  display: none;
+}
