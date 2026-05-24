@@ -33,11 +33,11 @@ namespace WebNet23Online.Controllers.ApiControllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateOrder([FromBody] CreateOrderDto createOrder) // принимать параметры List id?
+        public IActionResult CreateOrder([FromBody] CreateOrderDto createOrder) // принимать List id?
         {
             if (!_authService.IsAuthenticated())
             {
-                return BadRequest(new { message = "Заказ пустой" });
+                return BadRequest(new { message = "Авторизуйтесь для заказа" });
             }
 
             if (createOrder.foodItemIds.IsNullOrEmpty())
@@ -45,12 +45,21 @@ namespace WebNet23Online.Controllers.ApiControllers
                 return BadRequest(new { message = "Заказ пустой" });
             }
 
-            var selectedIds = createOrder.foodItemIds; // list ids
+            // list ids
+            var selectedIds = createOrder.foodItemIds;
             var selectedFoodItems = _foodItemRepository.GetByIds(selectedIds);
+
             if (selectedFoodItems.IsNullOrEmpty())
             {
                 return BadRequest(new { message = "Блюда не найдены" });
+
             }
+
+            if (selectedFoodItems.Count != selectedIds.Count)
+            {
+                return BadRequest(new { message = "Блюда не найдены" });
+            }
+
             var totalPrice = selectedFoodItems.Sum(fi => fi.Price);
 
             var orderData = new OrderData()

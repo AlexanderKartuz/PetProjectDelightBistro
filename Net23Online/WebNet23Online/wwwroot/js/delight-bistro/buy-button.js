@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const counterDisplay = document.querySelector('.counter-display');
   const orderBox = document.querySelector('.order-box');
   const orderList = document.querySelector('#orderList');
-  const totalPriceDiv = document.querySelector('.total-price');
+  const totalPriceBox = document.querySelector('.total-price');
   const postOrderButton = document.querySelector('#post-order-btn');
   const orderSuccessResponse = document.querySelector('#order-success');
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  function updateOrderBox() {
+    function updateOrderBox() {
     const chosenItems = getChosenItems();
     counterDisplay.textContent = chosenItems.length;
 
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const oldItems = orderList.querySelectorAll('.order-food-item');
     oldItems.forEach((item) => item.remove());
 
+    // Добавление в order-box
     chosenItems.forEach((item) => {
       const li = document.createElement('li');
       li.className = 'order-food-item';
@@ -33,8 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const totalPrice = chosenItems.reduce((summ, item) => summ + item.price, 0);
 
-    if (totalPriceDiv) {
-      totalPriceDiv.textContent = `Общая цена ${totalPrice} BYN`;
+    if (totalPriceBox) {
+      totalPriceBox.textContent = `Общая цена ${totalPrice} BYN`;
     }
 
     if (chosenItems.length > 0) {
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Выбранные элементы:', chosenItems);
   }
 
+  // выбор foodItems по кнопке
   function getChosenItems() {
     const chosenButtons = document.querySelectorAll(
       '.buy-button.choose-to-buy',
@@ -67,27 +69,28 @@ document.addEventListener('DOMContentLoaded', function () {
     return orderFoodItems;
   }
 
-  postOrderButton.addEventListener('click', function () {
+  // Отправка заказа
+   postOrderButton.addEventListener('click', function () {
     const chosenItems = getChosenItems();
 
-    // json key
+    // json key, list id
     const requestBody = {
       foodItemIds: chosenItems.map((item) => parseInt(item.id, 10)),
     };
 
     console.log('Отправка запроса', requestBody);
 
+    //Authorize only
     fetch('/api/DelightBistro/CreateOrder', {
       method: 'Post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     })
       .then((response) => {
-        //Authorize
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-        return response.json(); //Показать ответ
+        return response.json();
       })
       .then((data) => {
         console.log('Ответ сервера, заказ создан:', data);
@@ -96,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const chosenButtons = document.querySelectorAll(
           '.buy-button.choose-to-buy',
         );
+
         chosenButtons.forEach((button) => {
           button.classList.remove('choose-to-buy');
         });
@@ -108,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
+  // server response
   function showOrderSuccess(data) {
     document.querySelector('#order-success-message').textContent =
       `${data.message}`;
