@@ -1,9 +1,6 @@
 ﻿@using WebNet23Online.Localizations
 @using WebNet23Online.Models.Tickets
 @model AllTicketsViewModel
-@{
-    var hasZooTickets = Model.CanShowZooTickets && Model.ZooTickets != null && Model.ZooTickets.Any();
-}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/tickets/my-tickets.css" asp-append-version="true" />
@@ -24,7 +21,7 @@
             <span class="tickets-zoo-section-badge">Animal World</span>
         </div>
 
-        @if (hasZooTickets)
+        @if (Model.CanShowZooTickets)
         {
             <p class="tickets-zoo-hint">Предъявите QR-код на входе в зоопарк.</p>
 
@@ -40,7 +37,6 @@
                                 </p>
                                 <p class="tickets-zoo-key-row">
                                     <strong>Код билета:</strong>
-                                    <span class="tickets-zoo-key">@ticket.UniqueKey</span>
                                 </p>
                                 @if (ticket.IsUsed)
                                 {

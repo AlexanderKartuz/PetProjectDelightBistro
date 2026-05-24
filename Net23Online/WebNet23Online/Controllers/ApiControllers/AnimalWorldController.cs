@@ -17,12 +17,7 @@ namespace WebNet23Online.Controllers.ApiControllers
         [HttpGet]
         public bool IsZooNameFree([FromQuery] string zooName)
         {
-            if (string.IsNullOrWhiteSpace(zooName))
-            {
-                return false;
-            }
-
-            return _zooRepository.GetElementByName(zooName.Trim()) == null;
+            return _zooRepository.GetElementByName(zooName) == null;
         }
     }
 }

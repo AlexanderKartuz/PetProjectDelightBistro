@@ -1,14 +1,12 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const nameInput = document.getElementById('ZooName');
-    const feedback = document.getElementById('zoo-name-feedback');
-    const submitButton = document.querySelector('.js-add-zoo-form button[type="submit"]');
+$(document).ready(function () {
+    const $input = $('#ZooName'), $feedback = $('#zoo-name-feedback');
+    const $submit = $('.js-add-zoo-form button[type="submit"]');
 
-    if (!nameInput || !feedback || !submitButton) {
+    if (!$input.length || !$feedback.length || !$submit.length) {
         return;
     }
 
-    let debounceTimer = null;
-    let requestId = 0;
+    let debounceTimer = null, requestId = 0;
 
     const messages = {
         empty: '',
@@ -19,70 +17,40 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function setFeedback(state) {
-        feedback.textContent = messages[state] || '';
-        feedback.className = 'zoo-name-feedback';
-
-        nameInput.classList.remove('zoo-name-free', 'zoo-name-taken', 'zoo-name-checking');
-
+        $feedback.text(messages[state] || '').attr('class', 'zoo-name-feedback');
+        $input.removeClass('zoo-name-free zoo-name-taken zoo-name-checking');
+        $submit.prop('disabled', ['checking', 'taken'].includes(state));
         if (state === 'checking') {
-            feedback.classList.add('zoo-name-feedback-checking');
-            nameInput.classList.add('zoo-name-checking');
-            submitButton.disabled = true;
-            return;
+            $feedback.addClass('zoo-name-feedback-checking');
+            $input.addClass('zoo-name-checking');
+        } else if (state === 'free') {
+            $feedback.addClass('zoo-name-feedback-valid');
+            $input.addClass('zoo-name-free');
+        } else if (state === 'taken' || state === 'error') {
+            $feedback.addClass('zoo-name-feedback-invalid');
+            if (state === 'taken') $input.addClass('zoo-name-taken');
         }
-
-        if (state === 'free') {
-            feedback.classList.add('zoo-name-feedback-valid');
-            nameInput.classList.add('zoo-name-free');
-            submitButton.disabled = false;
-            return;
-        }
-
-        if (state === 'taken') {
-            feedback.classList.add('zoo-name-feedback-invalid');
-            nameInput.classList.add('zoo-name-taken');
-            submitButton.disabled = true;
-            return;
-        }
-
-        if (state === 'error') {
-            feedback.classList.add('zoo-name-feedback-invalid');
-            submitButton.disabled = false;
-            return;
-        }
-
-        submitButton.disabled = false;
     }
 
-    async function checkZooName(name) {
+    function checkZooName(name) {
         const currentRequest = ++requestId;
         setFeedback('checking');
-
-        try {
-            const url = `/api/AnimalWorld/IsZooNameFree?zooName=${encodeURIComponent(name)}`;
-            const response = await fetch(url);
-
-            if (currentRequest !== requestId) {
-                return;
-            }
-
-            if (!response.ok) {
-                setFeedback('error');
-                return;
-            }
-
-            const isFree = await response.json();
-            setFeedback(isFree ? 'free' : 'taken');
-        } catch {
-            if (currentRequest === requestId) {
-                setFeedback('error');
-            }
-        }
+        $.getJSON(`/api/AnimalWorld/IsZooNameFree`, { zooName: name })
+            .done(function (isFree) {
+                if (currentRequest === requestId) {
+                    setFeedback(isFree ? 'free' : 'taken');
+                }
+            })
+            // .fail(function () {
+            //     if (currentRequest === requestId) {
+            //         setFeedback('error');
+            //     }
+            // });
     }
 
-    nameInput.addEventListener('input', function () {
+    $input.on('input', function () {
         clearTimeout(debounceTimer);
-        const name = nameInput.value.trim();
+        const name = $.trim($input.val());
 
         if (!name) {
             requestId++;
@@ -90,12 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        debounceTimer = setTimeout(function () {
-            checkZooName(name);
-        }, 400);
+        debounceTimer = setTimeout(() => checkZooName(name), 400);
     });
 
-    if (nameInput.value.trim()) {
-        checkZooName(nameInput.value.trim());
-    }
+    const initialName = $.trim($input.val());
+    if (initialName) checkZooName(initialName);
 });

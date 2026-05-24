@@ -34,8 +34,10 @@
                         </form>
                     </div>
                     <div class="zoo-card-actions-right">
-                        <a class="find-animal-button zoo-comments-button"
-                           href="/Comments/ZooCommentsIndex?zooId=@zoo.Id">Отзывы</a>
+                        <form action="/Comments/ZooCommentsIndex" method="get">
+                            <input type="hidden" name="zooId" value="@zoo.Id" />
+                            <button class="find-animal-button zoo-comments-button" type="submit">Отзывы</button>
+                        </form>
                     </div>
                 </div>
             </div>

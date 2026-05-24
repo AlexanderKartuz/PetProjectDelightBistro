@@ -17,6 +17,6 @@ namespace WebNet23Online.Models.AnimalWorld
         [StringLength(2000)]
         public string Description { get; set; }
 
-        public List<string> AnimalFamilies { get; set; }
+        public List<string>? AnimalFamilies { get; set; }
     }
 }

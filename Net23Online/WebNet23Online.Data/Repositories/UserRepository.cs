@@ -62,12 +62,12 @@ namespace WebNet23Online.Data.Repositories
 
         public void UpdateProfile(UserData userData)
         {
-            //var user = _dbSet.First(x => x.Id == userData.Id);
+            var user = _dbSet.First(x => x.Id == userData.Id);
             //user.Language = userData.Language;
-            //user.FirstName = userData.FirstName;
-            //user.LastName = userData.LastName;
-            //user.Mobilephone = userData.Mobilephone;
-            Update(userData);
+            user.FirstName = userData.FirstName;
+            user.LastName = userData.LastName;
+            user.Mobilephone = userData.Mobilephone;
+            Update(user);
             //_dbSet.Update(user);
             //_context.SaveChanges();
         }

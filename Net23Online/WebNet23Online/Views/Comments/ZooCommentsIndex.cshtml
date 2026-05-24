@@ -4,47 +4,33 @@
 @model AllCommentsViewModel
 @{
     Layout = "_LayoutAnimalWorld";
-    var hasComments = Model.Comments != null && Model.Comments.Any();
 }
 
 @section Scripts {
-    @if (authService.IsAuthenticated())
-    {
-        <script src="~/js/comments/add-zoo-comment.js"></script>
-    }
+    <script src="~/js/comments/add-zoo-comment.js"></script>
 }
 
 <title>Отзывы — @Model.DisplayName</title>
 
 <div class="main-place">
-    <div class="comments-page-back">
-        <a class="find-animal-button secondary-action" href="/AnimalWorld/Zoos">← К списку зоопарков</a>
-    </div>
-
     <div class="green-title">
         <h2>Отзывы: @Model.DisplayName</h2>
     </div>
     <hr class="green-line">
-
     @if (authService.IsAuthenticated())
     {
-        <section class="comments-form-section animal entity-card">
+        <div class="comments-form-section animal entity-card">
             <form id="comment-form">
                 <h3 class="green-title">Оставить комментарий</h3>
                 <input type="hidden" name="CommentsType" id="form-comments-type" value="@((int)Model.CommentsType)" />
                 <input type="hidden" name="EntityId" id="form-entity-id" value="@Model.EntityId" />
                 <div class="form-group">
-                    <label for="form-comment-text">Ваш отзыв:</label>
-                    <textarea name="NewCommentText"
-                              id="form-comment-text"
-                              class="form-input comment-textarea"
-                              rows="4"
-                              placeholder="Поделитесь вашими впечатлениями..."
-                              required></textarea>
+                    <div for="form-comment-text">Ваш отзыв:</div>
+                    <textarea name="NewCommentText" id="form-comment-text" class="form-input comment-textarea" rows="4" placeholder="Поделитесь вашими впечатлениями..." required></textarea>
                 </div>
                 <button type="submit" class="find-animal-button">Отправить</button>
             </form>
-        </section>
+        </div>
     }
     else
     {
@@ -52,24 +38,25 @@
     }
 
     <h3 class="green-title">Что говорят посетители:</h3>
-
-    <p id="empty-note" class="empty-comments-note" style="@(hasComments ? "display: none;" : "")">
-        Пока нет отзывов. Будьте первым!
-    </p>
-
-    <div id="comments-container">
-        @if (hasComments)
-        {
+    @if (!Model.HasComments)
+    {
+        <p id="empty-note" class="empty-comments-note">
+            Пока нет отзывов. Будьте первым!
+        </p>
+    }
+    else
+    {
+        <div id="comments-container">
             @foreach (var comment in Model.Comments)
             {
                 <div class="animal comment-item-box">
                     <div class="comment-item-header">
                         <strong class="comment-author">@comment.Author</strong>
-                        <span class="comment-date">@comment.CreatedAt.ToString("g")</span>
+                        <div class="comment-date">@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
                     </div>
                     <p class="comment-text">@comment.Text</p>
                 </div>
             }
-        }
-    </div>
+        </div>
+    }
 </div>

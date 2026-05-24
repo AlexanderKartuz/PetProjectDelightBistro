@@ -4,8 +4,8 @@ namespace WebNet23Online.Services.Interfaces
 {
     public interface ICommentsService
     {
-        AllCommentsViewModel? GetZooComments(int zooId);
+        AllCommentsViewModel GetZooComments(int zooId);
 
-        OneCommentViewModel? AddZooComment(int zooId, string text);
+        OneCommentViewModel AddZooComment(int zooId, string text);
     }
 }

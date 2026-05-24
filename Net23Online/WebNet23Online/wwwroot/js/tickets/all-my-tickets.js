@@ -1,9 +1,9 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
-    const qrElements = document.querySelectorAll('.ticket-qrcode');
-    qrElements.forEach(element => {
-        const qrText = element.getAttribute('data-qr-value');
+﻿$(document).ready(function () {
+    $('.ticket-qrcode').each(function () {
+        const $element = $(this);
+        const qrText = $element.data('qr-value');
         if (qrText) {
-            new QRCode(element, {
+            new QRCode(this, {
                 text: qrText,
                 width: 90,
                 height: 90,

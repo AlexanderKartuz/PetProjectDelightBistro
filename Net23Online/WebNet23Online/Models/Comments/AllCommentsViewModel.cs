@@ -7,6 +7,7 @@ namespace WebNet23Online.Models.Comments
         public EntityType CommentsType { get; set; }
         public int EntityId { get; set; }
         public string DisplayName { get; set; }
+        public bool HasComments { get; set; }
         public List<OneCommentViewModel> Comments { get; set; }
     }
 }

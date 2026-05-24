@@ -15,11 +15,7 @@ namespace WebNet23Online.Controllers
         public IActionResult ZooCommentsIndex(int zooId)
         {
             var viewModel = _commentService.GetZooComments(zooId);
-            if (viewModel == null)
-            {
-                return NotFound();
-            }
-
+            viewModel.HasComments = viewModel.Comments.Any();
             return View(viewModel);
         }
     }

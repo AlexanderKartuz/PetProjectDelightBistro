@@ -17,24 +17,20 @@ namespace WebNet23Online.Controllers.ApiControllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult AddComment([FromForm] int entityId, [FromForm] string newCommentText)
+        public IActionResult AddComment([FromForm(Name = "EntityId")] int entityId, [FromForm(Name = "NewCommentText")] string commentText)
         {
-            if (string.IsNullOrWhiteSpace(newCommentText))
+            if (string.IsNullOrWhiteSpace(commentText))
             {
                 return BadRequest();
             }
 
-            var comment = _commentsService.AddZooComment(entityId, newCommentText.Trim());
-            if (comment == null)
-            {
-                return BadRequest();
-            }
+            var comment = _commentsService.AddZooComment(entityId, commentText);
 
             return Ok(new
             {
                 author = comment.Author,
                 text = comment.Text,
-                createdAt = comment.CreatedAt.ToString("g"),
+                createdAt = comment.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
             });
         }
     }

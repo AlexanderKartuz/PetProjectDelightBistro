@@ -22,29 +22,18 @@ namespace WebNet23Online.Services
             _zooRepository = zooRepository;
         }
 
-        public AllCommentsViewModel? GetZooComments(int zooId)
+        public AllCommentsViewModel GetZooComments(int zooId)
         {
             var zoo = _zooRepository.Get(zooId);
-            if (zoo == null)
-            {
-                return null;
-            }
-
-            var comments = _commentsMapper.FromCommentsDataToCommnetsViewModel(
-                _commentsRepository.GetZooComments(zooId),
-                zooId);
+            var comments = _commentsMapper.FromCommentsDataToCommnetsViewModel(_commentsRepository.GetZooComments(zooId));
+            comments.EntityId = zooId;
             comments.DisplayName = zoo.ZooName;
             return comments;
         }
 
-        public OneCommentViewModel? AddZooComment(int zooId, string text)
+        public OneCommentViewModel AddZooComment(int zooId, string text)
         {
             var user = _authService.GetUser();
-            if (user == null || _zooRepository.Get(zooId) == null)
-            {
-                return null;
-            }
-
             var authorName = GetAuthorDisplayName(user);
             var createdAt = DateTime.UtcNow;
             var comment = new CommentData
@@ -66,19 +55,14 @@ namespace WebNet23Online.Services
             };
         }
 
-        private static string GetAuthorDisplayName(UserData user)
+        private string GetAuthorDisplayName(UserData user)
         {
-            if (!string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName))
+            if (string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.LastName))
             {
-                return $"{user.FirstName} {user.LastName}";
+                return user.Name;
             }
 
-            if (!string.IsNullOrWhiteSpace(user.FirstName))
-            {
-                return user.FirstName;
-            }
-
-            return user.Name;
+            return $"{user.LastName} {user.FirstName}";
         }
     }
 }

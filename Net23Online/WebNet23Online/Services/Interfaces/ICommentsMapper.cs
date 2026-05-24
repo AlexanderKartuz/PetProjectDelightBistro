@@ -5,6 +5,6 @@ namespace WebNet23Online.Services.Interfaces
 {
     public interface ICommentsMapper
     {
-        AllCommentsViewModel FromCommentsDataToCommnetsViewModel(List<CommentData> comments, int zooId);
+        AllCommentsViewModel FromCommentsDataToCommnetsViewModel(List<CommentData> comments);
     }
 }

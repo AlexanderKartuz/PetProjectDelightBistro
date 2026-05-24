@@ -7,21 +7,16 @@ namespace WebNet23Online.Services
 {
     public class CommentMapper : ICommentsMapper
     {
-        public AllCommentsViewModel FromCommentsDataToCommnetsViewModel(List<CommentData> comments, int zooId)
+        public AllCommentsViewModel FromCommentsDataToCommnetsViewModel(List<CommentData> comments)
         {
             return new AllCommentsViewModel
             {
-                EntityId = zooId,
-                CommentsType = EntityType.Zoo,
-                Comments = comments
-                    .OrderByDescending(c => c.CreatedAt)
-                    .Select(comment => new OneCommentViewModel
-                    {
-                        Author = comment.AuthorName,
-                        CreatedAt = comment.CreatedAt,
-                        Text = comment.Text,
-                    })
-                    .ToList(),
+                Comments = comments.Select(comment => new OneCommentViewModel
+                {
+                    Author = comment.AuthorName,
+                    CreatedAt = comment.CreatedAt,
+                    Text = comment.Text,
+                }).ToList(),
             };
         }
     }
