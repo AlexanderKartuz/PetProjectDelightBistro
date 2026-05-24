@@ -18,7 +18,6 @@
     <section class="tickets-zoo-section" aria-labelledby="zoo-tickets-heading">
         <div class="tickets-zoo-section-header">
             <h2 id="zoo-tickets-heading" class="tickets-zoo-section-title">Зоопарки — Мир животных</h2>
-            <span class="tickets-zoo-section-badge">Animal World</span>
         </div>
 
         @if (Model.CanShowZooTickets)
@@ -33,7 +32,7 @@
                             <div class="tickets-zoo-card-body">
                                 <h3 class="tickets-zoo-name">@ticket.ZooName</h3>
                                 <p class="tickets-zoo-meta">
-                                    <strong>Дата визита:</strong> @ticket.EventDate.ToString("dd.MM.yyyy")
+                                    <strong>Дата визита: до</strong> @ticket.EventDate.ToString("dd.MM.yyyy")
                                 </p>
                                 <p class="tickets-zoo-key-row">
                                     <strong>Код билета:</strong>
