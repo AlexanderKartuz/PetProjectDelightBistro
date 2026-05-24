@@ -109,5 +109,15 @@ document.addEventListener('DOMContentLoaded', function () {
       .catch((error) => {
         console.error('Ошибка при заказе', error);
       });
+
+    function showOrderSuccess(data) {
+      document.querySelector('#order-success-message').textContent =
+        `${data.message}`;
+      document.querySelector('#order-success-time').textContent =
+        `Время создания заказа: ${data.createdTime}`;
+      document.querySelector('#order-success-price').textContent =
+        `Стоимость заказа: ${data.totalPrice} BYN`;
+      document.querySelector('#order-success').classList.remove('hidden');
+    }
   });
 });
