@@ -68,8 +68,14 @@
                         <p><strong>@RockBand.Index_Add_By_User</strong> @band.CreatedByUserName</p>
                     }
                     <p class="band-likes">
-                        <strong>Лайки:</strong>
+                        <strong>@RockBand.Index_Likes_Label</strong>
                         <span class="band-like-count">@band.LikesCount</span>
+                        <button type="button"
+                                class="band-like-btn @(band.IsLikedByCurrentUser ? "liked" : "")"
+                                data-band-id="@band.Id"
+                                @(Model.IsUserAuth && !band.IsLikedByCurrentUser ? null : "disabled")>
+                            @RockBand.Index_Like_Button
+                        </button>
                     </p>
                     @if (band.Genres != null && band.Genres.Count > 0)
                     {

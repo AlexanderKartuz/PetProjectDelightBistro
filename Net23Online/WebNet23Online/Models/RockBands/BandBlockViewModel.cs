@@ -20,5 +20,7 @@ namespace WebNet23Online.Models.RockBands
         public List<int> GenreIds { get; set; } = new();
 
         public int[] SelectedGenreIds { get; set; } = Array.Empty<int>();
+        public int LikesCount { get; set; }
+        public bool IsLikedByCurrentUser { get; set; }
     }
 }

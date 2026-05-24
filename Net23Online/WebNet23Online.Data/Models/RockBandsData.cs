@@ -9,5 +9,6 @@
         public int Likes { get; set; }
         public virtual UserData? CreatedByUser { get; set; }
         public virtual ICollection<RockBandGenreData> RockBandGenres { get; set; } = new List<RockBandGenreData>();
+        public virtual ICollection<RockBandLikeData> RockBandLikes { get; set; } = new List<RockBandLikeData>();
     }
 }

@@ -563,3 +563,31 @@ footer.footer {
     .add-band-field.name-block input.used {
         border-color: red;
     }
+    .band-likes {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+    }
+    
+    .band-like-btn {
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        cursor: pointer;
+    }
+    
+    .band-like-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .band-like-btn.liked,
+    .band-like-btn:disabled.liked {
+        background: rgba(220, 60, 100, 0.45);
+        border-color: rgba(255, 120, 150, 0.7);
+        opacity: 1;
+        cursor: default;
+    }

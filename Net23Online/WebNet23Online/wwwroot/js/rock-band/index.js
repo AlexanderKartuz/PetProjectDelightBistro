@@ -30,7 +30,11 @@ $(document).ready(function () {
         });
     }
 
-    $(".band-list .band").click(function () {
+    $(".band-list .band").click(function (e) {
+        if ($(e.target).closest(".band-likes").length) {
+            return;
+        }
+
         const self = $(this);
         self.toggleClass("active");
 
@@ -41,5 +45,24 @@ $(document).ready(function () {
     $(".band-list .remove-band").click(function () {
         $(".band-list .band.active").remove();
         $(this).prop("disabled", true);
+    });
+
+    $(".band-list").on("click", ".band-like-btn:not(:disabled)", function (e) {
+        e.stopPropagation();
+    
+        const $btn = $(this);
+        const bandId = $btn.data("band-id");
+        const $count = $btn.siblings(".band-like-count");
+    
+        $.post(`/api/RockBands/AddLike?bandId=${bandId}`)
+            .done(function (result) {
+                $count.text(result.likeCount);
+                if (result.liked) {
+                    $btn.addClass("liked").prop("disabled", true);
+                }
+            })
+            .fail(function () {
+                alert("Не удалось поставить лайк");
+            });
     });
 });
