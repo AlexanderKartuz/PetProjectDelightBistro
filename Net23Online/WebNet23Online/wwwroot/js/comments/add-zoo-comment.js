@@ -28,9 +28,5 @@
                 $('#empty-note').hide();
                 $('#form-comment-text').val('');
             })
-            // .fail(function (xhr) {
-            //     console.error('Ошибка AJAX:', xhr);
-            //     alert('Не удалось сохранить комментарий. Проверьте подключение.');
-            // });
     });
 });

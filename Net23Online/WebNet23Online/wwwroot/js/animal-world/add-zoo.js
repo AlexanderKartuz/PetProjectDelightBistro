@@ -41,11 +41,6 @@ $(document).ready(function () {
                     setFeedback(isFree ? 'free' : 'taken');
                 }
             })
-            // .fail(function () {
-            //     if (currentRequest === requestId) {
-            //         setFeedback('error');
-            //     }
-            // });
     }
 
     $input.on('input', function () {

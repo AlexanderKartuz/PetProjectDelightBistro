@@ -38,15 +38,12 @@
     }
 
     <h3 class="green-title">Что говорят посетители:</h3>
-    @if (!Model.HasComments)
-    {
-        <p id="empty-note" class="empty-comments-note">
-            Пока нет отзывов. Будьте первым!
-        </p>
-    }
-    else
-    {
-        <div id="comments-container">
+    <p id="empty-note" class="empty-comments-note @(Model.HasComments ? "d-none" : "")">
+        Пока нет отзывов. Будьте первым!
+    </p>
+    <div id="comments-container">
+        @if (Model.HasComments)
+        {
             @foreach (var comment in Model.Comments)
             {
                 <div class="animal comment-item-box">
@@ -57,6 +54,6 @@
                     <p class="comment-text">@comment.Text</p>
                 </div>
             }
-        </div>
-    }
+        }
+    </div>
 </div>
