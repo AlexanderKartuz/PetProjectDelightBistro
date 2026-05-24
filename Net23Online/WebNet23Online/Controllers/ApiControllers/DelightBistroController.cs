@@ -66,7 +66,8 @@ namespace WebNet23Online.Controllers.ApiControllers
             var responseDto = new
             {
                 Message = "Заказ успешно создан.",
-                CreatedTime=orderData.CreatedDateTime,
+                OrderId= orderData.Id,
+                CreatedTime =orderData.CreatedDateTime,
                 TotalPrice = totalPrice,
             };
 

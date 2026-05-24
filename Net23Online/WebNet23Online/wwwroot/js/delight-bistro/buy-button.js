@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const orderList = document.querySelector('#orderList');
   const totalPriceDiv = document.querySelector('.total-price');
   const postOrderButton = document.querySelector('#post-order-btn');
+  const orderSuccessResponse = document.querySelector('#order-success');
 
   buyButtons.forEach((button) => {
     button.addEventListener('click', function () {
@@ -105,15 +106,17 @@ document.addEventListener('DOMContentLoaded', function () {
       .catch((error) => {
         console.error('Ошибка при заказе', error);
       });
-
-    function showOrderSuccess(data) {
-      document.querySelector('#order-success-message').textContent =
-        `${data.message}`;
-      document.querySelector('#order-success-time').textContent =
-        `Время создания заказа: ${data.createdTime}`;
-      document.querySelector('#order-success-price').textContent =
-        `Стоимость заказа: ${data.totalPrice} BYN`;
-      document.querySelector('#order-success').classList.remove('hidden');
-    }
   });
+
+  function showOrderSuccess(data) {
+    document.querySelector('#order-success-message').textContent =
+      `${data.message}`;
+    document.querySelector('#order-success-order-id').textContent =
+      `Id заказа: ${data.orderId}`;
+    document.querySelector('#order-success-time').textContent =
+      `Время создания заказа: ${data.createdTime}`;
+    document.querySelector('#order-success-price').textContent =
+      `Стоимость заказа: ${data.totalPrice} BYN`;
+    orderSuccessResponse.classList.remove('hidden');
+  }
 });
