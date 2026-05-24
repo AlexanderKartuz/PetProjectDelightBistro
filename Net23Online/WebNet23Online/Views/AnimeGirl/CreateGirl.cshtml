@@ -4,32 +4,59 @@
     Layout = "_LayoutAnime";
 }
 
-<form method="post" enctype="multipart/form-data">
-    <div>
-        @Html.TextBoxFor(x => x.Name, new { placeholder = "Name" })
-        @Html.ValidationMessageFor(x => x.Name)
+@section Scripts{
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&amp;family=Sniglet:wght@400;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/anime-girl/style-nice.css">
+    <script src="~/js/anime-girl/create-girl.js"></script>
+}
+
+<div class="create-girl">
+    <div class="data">
+        <form method="post" enctype="multipart/form-data">
+            <div>
+                @Html.TextBoxFor(x => x.Name, new { placeholder = "Name" })
+                @Html.ValidationMessageFor(x => x.Name)
+            </div>
+            <div>
+                @Html.TextBoxFor(x => x.DoubleCheckName, new { placeholder = "Name again" })
+                @Html.ValidationMessageFor(x => x.DoubleCheckName)
+            </div>
+            <div>
+                @Html.TextBoxFor(x => x.Description, new { placeholder = "Description" })
+                @Html.ValidationMessageFor(x => x.Description)
+            </div>
+            <div>
+                <input type="file" name="Image" />
+                
+            </div>
+            <div>
+                или
+                @Html.TextBoxFor(x => x.Url, new { placeholder = "Url" })
+                @Html.ValidationMessageFor(x => x.Url)
+            </div>
+            <div>
+                @Html.TextBoxFor(x => x.Size, new { placeholder = "Szie", type = "number" })
+                @Html.ValidationMessageFor(x => x.Size)
+            </div>
+            <div>
+                @Html.DropDownListFor(x => x.AnimeId, Model.Animes)
+            </div>
+            <div>
+                <button type="submit">Save</button>
+            </div>
+        </form>
     </div>
-    <div>
-        @Html.TextBoxFor(x => x.DoubleCheckName, new { placeholder = "Name again" })
-        @Html.ValidationMessageFor(x => x.DoubleCheckName)
+    <div class="preview">
+        <article class="media-card">
+            <div class="media-card__img-wrap">
+                <img src="" alt="Персонаж " width="400" height="500" loading="lazy" decoding="async">
+            </div>
+            <div class="media-card__text">
+                <p class="media-card__name">***</p>
+                <p class="media-card__animes">***</p>
+            </div>
+        </article>
     </div>
-    <div>
-        @Html.TextBoxFor(x => x.Description, new { placeholder = "Description" })
-        @Html.ValidationMessageFor(x => x.Description)
-    </div>
-    <div>
-        <input type="file" name="Image"/> или 
-        @Html.TextBoxFor(x => x.Url, new { placeholder = "Url" })
-        @Html.ValidationMessageFor(x => x.Url)
-    </div>
-    <div>
-        @Html.TextBoxFor(x => x.Size, new { placeholder = "Szie", type = "number" })
-        @Html.ValidationMessageFor(x => x.Size)
-    </div>
-    <div>
-        @Html.DropDownListFor(x => x.AnimeId, Model.Animes)
-    </div>
-    <div>
-        <button type="submit">Save</button>
-    </div>
-</form>
+</div>

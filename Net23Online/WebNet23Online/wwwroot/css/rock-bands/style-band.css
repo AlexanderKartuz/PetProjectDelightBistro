@@ -257,15 +257,74 @@ footer.footer {
             color: #ffffff;
         }
 
+.band-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.band-list-actions {
+    display: flex;
+    justify-content: center;
+}
+
 .band {
+    position: relative;
     display: grid;
     gap: 16px;
     align-items: start;
     background: rgba(255, 255, 255, 0.05);
     padding: 20px;
     border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s, border-color 0.25s;
+    cursor: pointer;
+}
+
+.band.active {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 90, 60, 0.22) 0%,
+        rgba(255, 180, 80, 0.14) 50%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    border-color: #ff6b4a;
+    box-shadow:
+        0 0 0 3px rgba(255, 107, 74, 0.55),
+        0 0 28px rgba(255, 107, 74, 0.4),
+        0 14px 36px rgba(0, 0, 0, 0.5);
+    transform: translateY(-4px) scale(1.01);
+}
+
+.band.active::before {
+    content: "✓";
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ff6b4a;
+    color: #1a1010;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 4px 14px rgba(255, 107, 74, 0.55);
+    pointer-events: none;
+}
+
+.band.active::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 13px;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 200, 160, 0.35);
 }
 
 @media (min-width: 560px) {
@@ -292,9 +351,14 @@ footer.footer {
     margin-top: 0;
 }
 
-.band:hover {
+.band:hover:not(.active) {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.band.active:hover {
+    transform: translateY(-4px) scale(1.01);
 }
 
 .preferences-music-title {
@@ -338,6 +402,26 @@ footer.footer {
     justify-content: flex-start;
     gap: 0;
     padding: 18px 20px 20px;
+}
+
+.add-band-form-panel.create-rockband {
+    gap: 32px;
+}
+
+.create-rockband .preview {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.create-rockband .preview .band {
+    cursor: default;
+}
+
+.create-rockband .preview .band:hover:not(.active) {
+    transform: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .add-band-form-fields {
@@ -442,4 +526,14 @@ footer.footer {
 
     .add-band-submit:active {
         transform: translateY(-1px);
+    }
+
+    .add-band-submit:disabled,
+    .add-band-submit:disabled:hover {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.18);
     }

@@ -26,10 +26,10 @@ namespace WebNet23Online.Data.Models
         public virtual List<ZooData> CreatedByMeZoos { get; set; }
         public virtual List<AnimalFamilyData> CreatedByMeAnimalFamilies { get; set; }
         public virtual List<AnimalSpeciesData> CreatedByMeAnimalSpecies { get; set; }
-
-
-
+        
         public virtual List<RockBandsData>? RockBand { get; set; }
+        
+        public virtual HabitTrackerProfileData? HabitTrackerProfile { get; set; }
         public virtual List<HabitData> Habits { get; set; }
         public virtual List<HabitTrackerDiaryData> DiaryEntries { get; set; }
 
@@ -38,5 +38,8 @@ namespace WebNet23Online.Data.Models
 
         public virtual List<SlayTheSpire2HeroesCards>? CreatedSlayTheSpire2HeroesCards { get; set; }
         public virtual List<SlayTheSpire2HeroesCards>? ModifiedSlayTheSpire2HeroesCards { get; set; }
+        public virtual List<LittleLemonData> UserAccountLittleLemonReservations { get; set; }
+        public virtual List<JdmCarsData> CreatedByCarsJdm { get; set; }
+        public virtual List<JdmCarsBlogCommentsData> JournalComments { get; set; }
     }
 }

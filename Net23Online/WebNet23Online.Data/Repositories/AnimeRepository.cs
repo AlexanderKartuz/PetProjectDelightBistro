@@ -34,5 +34,12 @@ FROM (
             return results;
 
         }
+
+        public void Rename(int id, string name)
+        {
+            var anime = _dbSet.First(x => x.Id == id);
+            anime.Name = name;
+            _context.SaveChanges();
+        }
     }
 }

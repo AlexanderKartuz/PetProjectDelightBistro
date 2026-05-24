@@ -2,11 +2,19 @@
 
 @model LoginViewModel
 
+@section Scripts{
+    <link rel="stylesheet" href="/css/auth/style.css">
+    <script src="~/js/auth/registration.js"></script>
+}
+
 <div>
     <form method="post">
-        <div>
+        <div class="name-block">
             @Html.TextBoxFor(x => x.Login, new { placeholder = "Login" })
             @Html.ValidationMessageFor(x => x.Login)
+            <img class="icon wait" src="/icons/waiter.gif" />
+            <img class="icon ok" src="/icons/ok.png" />
+            <img class="icon deny" src="/icons/deny.jpg" />
         </div>
         <div>
             @Html.TextBoxFor(x => x.Password, new { placeholder = "Password" })

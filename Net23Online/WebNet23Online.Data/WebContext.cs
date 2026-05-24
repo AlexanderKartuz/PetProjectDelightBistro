@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebNet23Online.Data.DataModels;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Models.AnimalWorld;
 using WebNet23Online.Data.Models.Steam;
@@ -12,6 +13,7 @@ namespace WebNet23Online.Data
         public DbSet<AnimeStudioData> AnimeStudios { get; set; }
         public DbSet<UserData> Users { get; set; }
         public DbSet<MazeData> Mazes { get; set; }
+        public DbSet<HabitTrackerProfileData> HabitTrackerProfile { get; set; }
         public DbSet<HabitData> Habits { get; set; }
         public DbSet<HabitDoneDatesData> HabitDoneDates { get; set; }
         public DbSet<HabitTrackerDiaryData> DiaryEntries { get; set; }
@@ -39,6 +41,7 @@ namespace WebNet23Online.Data
 
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
+        public DbSet<JdmCarsBlogCommentsData> JdmCarsBlogComments { get; set; }
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -100,6 +103,10 @@ namespace WebNet23Online.Data
                 .WithOne(x => x.User);
 
             modelBuilder.Entity<UserData>()
+                .HasOne(x => x.HabitTrackerProfile)
+                .WithOne(x => x.User);
+            
+            modelBuilder.Entity<UserData>()
                 .HasMany(x => x.Habits)
                 .WithOne(x => x.User);
 
@@ -108,25 +115,43 @@ namespace WebNet23Online.Data
                 .HasMany(x => x.FoodItems)
                 .WithOne(x => x.MenuData);
 
-            modelBuilder.Entity<FoodItemData>()
-                .HasMany(x => x.IngredientsList)
-                .WithMany(x => x.FoodItems);
+            // used Links
+            //modelBuilder.Entity<FoodItemData>()
+            //    .HasMany(x => x.IngredientsList)
+            //    .WithMany(x => x.FoodItems);
 
-            modelBuilder.Entity<MenuData>() //User relation
+            modelBuilder.Entity<MenuData>()
                 .HasOne(x => x.Creator)
                 .WithMany(x => x.CreatedMenus)
                 .HasForeignKey(x => x.CreatorId);
 
-            modelBuilder.Entity<FoodItemData>() //User relation
+            modelBuilder.Entity<FoodItemData>()
                .HasOne(x => x.Creator)
                .WithMany(x => x.CreatedFoodItems)
                .HasForeignKey(x => x.CreatorId);
 
-            modelBuilder.Entity<IngredientData>() //User relation
+            modelBuilder.Entity<IngredientData>()
                .HasOne(x => x.Creator)
                .WithMany(x => x.CreatedIngredients)
                .HasForeignKey(x => x.CreatorId);
 
+            // new Links
+            modelBuilder.Entity<FoodItemData>()
+            .HasMany(fi => fi.IngredientsList)
+            .WithMany(i => i.FoodItems)
+            .UsingEntity<FoodItemIngredientData>(
+                j => j.HasOne(y => y.IngredientData)
+                    .WithMany(z => z.FoodItemIngredientDatas)
+                    .HasForeignKey(y => y.IngredientDataId),
+                j => j.HasOne(y => y.FoodItemData)
+                    .WithMany(t => t.FoodItemIngredientDatas)
+                    .HasForeignKey(y => y.FoodItemDataId),
+                j =>
+                {
+                    j.Property(y => y.QuantityOfIngredients).HasDefaultValue(10);
+                    j.HasKey(t => new { t.FoodItemDataId, t.IngredientDataId });
+                    j.ToTable("FoodItemIngredientDatas");
+                });
 
             modelBuilder.Entity<RockLegendsData>()
                 .HasOne(x => x.Genres)
@@ -151,8 +176,14 @@ namespace WebNet23Online.Data
 
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.Guest)
-                .WithMany(x => x.Reservations)
+                .WithMany(x => x.GuestLittleLemonReservations)
                 .HasForeignKey(x => x.GuestId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<LittleLemonData>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany(x => x.UserAccountLittleLemonReservations)
+                .HasForeignKey(x => x.CreatedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<RockBandGenreData>()
@@ -194,6 +225,17 @@ namespace WebNet23Online.Data
                 .WithMany(x => x.ModifiedSlayTheSpire2HeroesCards)
                 .HasForeignKey(x => x.ModifiedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            
+            modelBuilder.Entity<JdmCarsData>()
+                 .HasOne(x => x.Creator)
+                 .WithMany(x => x.CreatedByCarsJdm)
+                 .HasForeignKey(x => x.CreatorId);
+
+            modelBuilder.Entity<JdmCarsBlogCommentsData>()
+                .HasOne(x => x.User)
+                .WithMany(u => u.JournalComments)
+                .HasForeignKey(x => x.UserId);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -146,10 +146,10 @@ main {
     cursor: pointer;
 }
 
-.link-select:focus {
-    outline: 2px solid rgba(232, 141, 168, 0.55);
-    outline-offset: 2px;
-}
+    .link-select:focus {
+        outline: 2px solid rgba(232, 141, 168, 0.55);
+        outline-offset: 2px;
+    }
 
 .link-button {
     font: inherit;
@@ -165,13 +165,13 @@ main {
     white-space: nowrap;
 }
 
-.link-button:hover {
-    filter: brightness(1.03);
-}
+    .link-button:hover {
+        filter: brightness(1.03);
+    }
 
-.link-button:active {
-    transform: translateY(1px);
-}
+    .link-button:active {
+        transform: translateY(1px);
+    }
 
 .anime-catalog-grid {
     display: grid;
@@ -192,10 +192,10 @@ main {
     transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 
-.anime-catalog-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 44px rgba(180, 140, 160, 0.2);
-}
+    .anime-catalog-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 44px rgba(180, 140, 160, 0.2);
+    }
 
 .anime-catalog-card__cover {
     aspect-ratio: 2 / 3;
@@ -203,13 +203,13 @@ main {
     background: linear-gradient(160deg, var(--lavender), var(--mint));
 }
 
-.anime-catalog-card__cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.45s ease;
-}
+    .anime-catalog-card__cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.45s ease;
+    }
 
 .anime-catalog-card:hover .anime-catalog-card__cover img {
     transform: scale(1.03);
@@ -229,6 +229,10 @@ main {
     font-weight: 700;
     line-height: 1.35;
     color: var(--text);
+    height: 45px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 
 .card-grid {
@@ -346,11 +350,28 @@ main {
                 transform: none;
             }
 
-    .anime-catalog-card:hover {
-        transform: none;
-    }
-
-        .anime-catalog-card:hover .anime-catalog-card__cover img {
+        .anime-catalog-card:hover {
             transform: none;
         }
+
+            .anime-catalog-card:hover .anime-catalog-card__cover img {
+                transform: none;
+            }
+}
+
+
+article.media-card.active {
+    border: 3px red solid;
+}
+
+.create-girl {
+    display: flex;
+}
+
+.preview {
+    width: 500px;
+}
+
+.mode-edit {
+    display: none;
 }

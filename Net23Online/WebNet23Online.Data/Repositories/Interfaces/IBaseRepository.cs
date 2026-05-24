@@ -12,5 +12,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         public void Update(DataModel model);
         public void Delete(int id);
         public bool Any();
+        void Delete(List<int> ids);
     }
 }

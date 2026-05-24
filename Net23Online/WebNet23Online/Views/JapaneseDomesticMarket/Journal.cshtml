@@ -1,46 +1,53 @@
-﻿@{
+﻿@using WebNet23Online.Models.JapaneseDomesticMarket
+@using WebNet23Online.Localizations
+@model JournalPageViewModel
+@{
     Layout = "_LayoutJapaneseDomesticMarket";
 }
+@section Scripts{
+    <script src="~/js/japanese-domestic-market/journal.js"></script>
+}
 <div class="container-content">
-    <article class="content-news">
-        <div class="title-form">Давайте знакомиться!</div>
+    <article id="post-1" class="content-news">
+        <div class="title-form">@JapaneseDomesticMarket.Journal_Header</div>
         <p>
-            Мотивацией для создания данного интернет-портала стала моя любовь к JDM культуре и атмосфере, которая царит на авто сходках.
-            <br> Как-то давно, проходя тест, я могла распознать более 180 логотипов машин.
-            <br> <i>P.S. Это навык, который пока ни разу еще не пригождался в жизни.</i>
+            @JapaneseDomesticMarket.Journal_Welcome_Line
+            <br>@JapaneseDomesticMarket.Journal_Text_Test_Models
+            <br> <i>@JapaneseDomesticMarket.Journal_Text_Test_Models_h2</i>
             <div class="container-content">
                 <img src="~/images/japanese-domestic-market/dynamo-photo1.jpg" class="img-content" />
                 <img src="~/images/japanese-domestic-market/drift-photo1.jpg" class="img-content" />
                 <img src="~/images/japanese-domestic-market/dynamo-photo4.jpg" class="img-content" />
             </div>
         </p>
+        <div>
+            @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 1))
+        </div>
     </article>
 
-    <article class="content-news">
-        <div class="title-form">Открытие дрифт сезона 2026, Раубичи</div>
-        <p class="date">19 апреля 2026</p>
+    <article id="post-2" class="content-news">
+        <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_Raubichi</div>
+        <p class="date">@JapaneseDomesticMarket.Journal_Date_19_April</p>
         <p>
-            Это было шумно! Это было дымно! Это было круто! Сезон дрифта объявляю официально открытым! Не знаю, сколько комплектов  резины ребятам пришлось сменить за все заезды,
-            но то, что сегодня отлетали шины и колеса - факт!
-            <br>Отлетали и бампера, и капоты… Некоторые пилоты уж слишком близко познакомились со стенами и бетонными блоками.
+            @JapaneseDomesticMarket.Journal_Text_Raubichi_1
+            <br>@JapaneseDomesticMarket.Journal_Text_Raubichi_2
         </p>
         <p>
-            Фотографиями всего фурора не передать, можно только пытаться. Поэтому, делюсь своими самыми любимыми фотокарточками
+            @JapaneseDomesticMarket.Journal_Text_Raubichi_3
         </p>
         <div class="container-content">
             <img src="~/images/japanese-domestic-market/raubichi-1.JPG" class="img-content" />
             <img src="~/images/japanese-domestic-market/raubichi-2.JPG" class="img-content" />
         </div>
-       
+        @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 2))
     </article>
 
 
-    <article class="content-news">
-        <div class="title-form">Тачки Пикник в Лиде</div>
-        <p class="date">30 августа 2025</p>
+    <article id="post-3" class="content-news">
+        <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_2</div>
+        <p class="date">@JapaneseDomesticMarket.Journal_Date_30_August</p>
         <p>
-            Сотни участников и гостей собрались на территории Лидского замка, чтобы насладиться атмосферой праздника,
-            <br>увидеть уникальные автомобили и обменяться опытом.
+            @JapaneseDomesticMarket.Journal_Text_Lida_1
         </p>
     </article>
     <div class="container-content">
@@ -48,17 +55,9 @@
         <img src="~/images/japanese-domestic-market/lida-3.jpg" class="img-content" />
         <img src="~/images/japanese-domestic-market/lida-2.jpg" class="img-content" />
     </div>
-
+    @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 3))
+    <div class="pop-up">
+        <span>&times;</span>
+        <img src="" alt="" />
+    </div>
 </div>
-<script>
-    document.querySelectorAll('.container-content img').forEach(img =>{
-        img.onclick = () =>{
-            document.querySelector('.pop-up').style.display = 'block';
-            document.querySelector('.pop-up img').src = img.getAttribute('src')
-        }
-    });
-
-    document.querySelector('.pop-up span').onclick = () =>{
-        document.querySelector('.pop-up').style.display = 'none';
-    }
-</script>

@@ -155,5 +155,11 @@ namespace WebNet23Online.Controllers
 
             return View(viewModel);
         }
+
+        public IActionResult Delete(int id)
+        {
+            _animeGirlRepository.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

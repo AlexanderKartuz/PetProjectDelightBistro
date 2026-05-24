@@ -1,0 +1,71 @@
+﻿$(document).ready(function () {
+
+    $('article.media-card').click(function () {
+        const self = $(this);
+
+        // bad way to do it
+        // $(this).css('border', '3px red solid'); //inline style
+
+        // if (self.hasClass('active')) {
+        //     self.removeClass('active');
+        // } else {
+        //     self.addClass('active');
+        // }
+
+        self.toggleClass('active');
+
+        const atLeastOneItemForRemove = $('article.media-card.active').length > 0
+
+        if (atLeastOneItemForRemove) {
+            $('.section-heroes .remove-image').removeAttr('disabled');
+        } else {
+            $('.section-heroes .remove-image').attr('disabled', 'disabled');
+        }
+    });
+
+    $('.section-heroes .remove-image').click(function () {
+        const ids = [];
+
+        $('article.media-card.active').each((x, item) => {
+            const id = $(item).attr('data-id')
+            ids.push(id);
+        });
+
+        const idsStr = ids.join('&ids=');
+
+        $('article.media-card.active').remove();
+
+        const url = `/api/AnimeGirl/delete?ids=${idsStr}`;
+        $.get(url);
+    });
+
+    $('.mode-view').click(function () {
+        $(this).hide();
+        const editBlock = $(this).parent().find('.mode-edit');
+        const oldValue = $(this).text();
+        editBlock.val(oldValue);
+        editBlock.show();
+    });
+
+    $('.new-anime-name-input').on('keypress', function (e) {
+        // 13 == Enter
+        if (e.which == 13) {
+            const newName = $(this).val();
+            $(this).hide();
+            const viewBlock = $(this).parent().find('.mode-view');
+            viewBlock.show();
+
+            const animeId = $(this)
+                .closest('.anime-catalog-card')
+                .attr('data-id');
+            const url = `/api/anime/updateName?id=${animeId}&name=${newName}`;
+            $.get(url)
+                .done(function (answer) {
+                    if (answer) {
+                        viewBlock.text(newName);
+                    }
+                });
+        }
+    })
+
+});

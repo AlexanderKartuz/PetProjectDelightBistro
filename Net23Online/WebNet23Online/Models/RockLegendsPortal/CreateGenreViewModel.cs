@@ -8,6 +8,7 @@ namespace WebNet23Online.Models.RockLegendsPortal
         [IsUniqRockLegendsGenre]
         [Required(ErrorMessage = "Name can not be empty")]
         public string Name { get; set; }
+        public IFormFile? Image { get; set; }
         public string? CoverUrl { get; set; }
     }
 }

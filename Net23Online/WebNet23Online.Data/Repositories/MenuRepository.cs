@@ -11,12 +11,14 @@ namespace WebNet23Online.Data.Repositories
         public List<MenuData> GetAllIncludeFoodItemsWithIngredients(string filterMenuName)
         {
             var allMenus = _dbSet
-                .Include(x => x.Creator)
-                .Include(x => x.FoodItems)
-                    .ThenInclude(f => f.Creator)
-                .Include(x => x.FoodItems)
-                .ThenInclude(x => x.IngredientsList)
-                ;
+           .Include(x => x.Creator)
+           .Include(x => x.FoodItems)
+               .ThenInclude(f => f.Creator)
+           .Include(x => x.FoodItems) // delete?
+               .ThenInclude(x => x.IngredientsList) // delete?
+           .Include(x => x.FoodItems)
+               .ThenInclude(x => x.FoodItemIngredientDatas)
+                   .ThenInclude(x => x.IngredientData);
 
             if (!string.IsNullOrEmpty(filterMenuName))
             {

@@ -139,7 +139,7 @@
     <value>Добавить группу</value>
   </data>
   <data name="Index_Add_Image" xml:space="preserve">
-    <value>Ссылка на фото в интернете</value>
+    <value>Вставьте фото группы или ссылку на фото из Интернета</value>
   </data>
   <data name="Index_Add_Image_Description" xml:space="preserve">
     <value>Вставьте прямой URL картинки. Поле можно оставить пустым.</value>
@@ -198,6 +198,9 @@
   </data>
   <data name="Index_Header_Home" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
+  </data>
+  <data name="Index_Remove_Button" xml:space="preserve">
+    <value>Удалить выбранные</value>
   </data>
   <data name="Index_Reset_button" xml:space="preserve">
     <value>Reset</value>
