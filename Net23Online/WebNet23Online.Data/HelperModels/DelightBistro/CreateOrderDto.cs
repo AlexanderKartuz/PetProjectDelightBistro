@@ -8,6 +8,6 @@ namespace WebNet23Online.Data.HelperModels.DelightBistro
 {
     public class CreateOrderDto
     {
-        public List <int> FoodItemids {  get; set; }
+        public List <int> foodItemIds {  get; set; }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WebNet23Online.Data.HelperModels.DelightBistro;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
@@ -26,10 +28,26 @@ namespace WebNet23Online.Controllers.ApiControllers
             return true;
         }
 
-        public bool CreateOrder([FromBody] CreateOrderDto createOrder)
+        [HttpPost]
+        [Authorize]
+        public bool CreateOrder([FromBody] CreateOrderDto createOrder) // сделать вх параметры List id?
         {
-            var selectedIds = createOrder.FoodItemids; // list ids
+            if (!_authService.IsAuthenticated())
+            {
+                return false;
+            }
+
+            if (createOrder.foodItemIds.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+            var selectedIds = createOrder.foodItemIds; // list ids
             var selectedFoodItems = _foodItemRepository.GetByIds(selectedIds);
+            if (selectedFoodItems.IsNullOrEmpty())
+            {
+                return false;
+            }
             var totalPrice = selectedFoodItems.Sum(fi => fi.Price);
 
             var orederData = new OrderData()

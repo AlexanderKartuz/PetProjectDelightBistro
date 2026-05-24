@@ -1,72 +1,113 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const buyButtons = document.querySelectorAll('.buy-button');
-    const counterDisplay = document.querySelector('.counter-display');
-    const orderBox = document.querySelector('.order-box');
-    const orderList = document.querySelector('#orderList');
-    const totalPriceDiv = document.querySelector('.total-price');
-    const postOrderButton = document.querySelector('#post-order-btn');
+  const buyButtons = document.querySelectorAll('.buy-button');
+  const counterDisplay = document.querySelector('.counter-display');
+  const orderBox = document.querySelector('.order-box');
+  const orderList = document.querySelector('#orderList');
+  const totalPriceDiv = document.querySelector('.total-price');
+  const postOrderButton = document.querySelector('#post-order-btn');
 
-    buyButtons.forEach((button) => {
-        button.addEventListener('click', function () {
-            const self = this;
-            self.classList.toggle('choose-to-buy');
+  buyButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      const self = this;
+      self.classList.toggle('choose-to-buy');
 
-            updateOrderBox();
-        });
+      updateOrderBox();
+    });
+  });
+
+  function updateOrderBox() {
+    const chosenItems = getChosenItems();
+    counterDisplay.textContent = chosenItems.length;
+
+    // Очистка списка
+    const oldItems = orderList.querySelectorAll('.order-food-item');
+    oldItems.forEach((item) => item.remove());
+
+    chosenItems.forEach((item) => {
+      const li = document.createElement('li');
+      li.className = 'order-food-item';
+      li.textContent = `${item.name} - ${item.price}`;
+      orderList.appendChild(li);
     });
 
-    function updateOrderBox() {
-        const chossenItems = getChosenItems();
-        counterDisplay.textContent = chossenItems.length;
+    const totalPrice = chosenItems.reduce((summ, item) => summ + item.price, 0);
 
-        // Очистка списка
-        const oldItems = orderList.querySelectorAll('.order-food-item');
-        oldItems.forEach((item) => item.remove());
-
-        chossenItems.forEach((item) => {
-            const li = document.createElement('li');
-            li.className = 'order-food-item';
-            li.textContent = `${item.name} - ${item.price}`;
-            orderList.appendChild(li);
-        });
-
-        const totalPrice = chossenItems.reduce(
-            (summ, item) => summ + item.price,
-            0,
-        );
-
-        if (totalPriceDiv) {
-            totalPriceDiv.textContent = `Общая цена ${totalPrice} BYN`;
-        }
-
-        if (chossenItems.length > 0) {
-            orderBox.classList.remove('hidden');
-        } else {
-            orderBox.classList.add('hidden');
-        }
-        console.log(chossenItems);
+    if (totalPriceDiv) {
+      totalPriceDiv.textContent = `Общая цена ${totalPrice} BYN`;
     }
 
-    function getChosenItems() {
-        const choosenButtons = document.querySelectorAll(
-            '.buy-button.choose-to-buy',
+    if (chosenItems.length > 0) {
+      orderBox.classList.remove('hidden');
+    } else {
+      orderBox.classList.add('hidden');
+    }
+    console.log('Выбранные элементы:', chosenItems);
+  }
+
+  function getChosenItems() {
+    const chosenButtons = document.querySelectorAll(
+      '.buy-button.choose-to-buy',
+    );
+    const orderFoodItems = [];
+
+    chosenButtons.forEach((button) => {
+      // тип number для связи с бд, запарсить в число?
+      const id = button.dataset.foodItemId;
+      const foodItem = button.closest('.food-item');
+
+      const foodItemName = foodItem.querySelector('.food-name');
+      const name = foodItemName ? foodItemName.textContent.trim() : 'No name';
+
+      const price = parseInt(button.dataset.foodItemPrice, 10) || 0;
+
+      orderFoodItems.push({ id, name, price });
+    });
+
+    return orderFoodItems;
+  }
+
+  postOrderButton.addEventListener('click', function () {
+    const chosenItems = getChosenItems();
+
+    // json key
+    const requestBody = {
+      foodItemIds: chosenItems.map((item) => parseInt(item.id, 10)),
+    };
+
+    console.log('Отправка запроса', requestBody);
+
+    fetch('/api/DelightBistro/CreateOrder', {
+      method: 'Post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => {
+        //Authorize
+        if (response.status === 401) {
+          alert('Авторизуйтесь для заказа.');
+          window.location.href = '/Auth/Login';
+          return;
+        }
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Ответ сервера, заказ создан:', data);
+
+        // закрытие панели заказов
+        const chosenButtons = document.querySelectorAll(
+          '.buy-button.choose-to-buy',
         );
-        const orderFoodItems = [];
-
-        choosenButtons.forEach((button) => {
-            // тип number для связи с бд, запарсить в число?
-            const id = button.dataset.foodItemId;
-            const foodItem = button.closest('.food-item');
-
-            const foodItemName = foodItem.querySelector('.food-name');
-            const name = foodItemName ? foodItemName.textContent.trim() : 'No name';
-
-            // запарсить в число?
-            const price = parseInt(button.dataset.foodItemPrice, 10) || 0;
-
-            orderFoodItems.push({ id, name, price });
+        chosenButtons.forEach((button) => {
+          button.classList.remove('choose-to-buy');
         });
 
-        return orderFoodItems;
-    }
+        updateOrderBox();
+      })
+      .catch((error) => {
+        console.error('Ошибка при заказе', error);
+      });
+  });
 });
