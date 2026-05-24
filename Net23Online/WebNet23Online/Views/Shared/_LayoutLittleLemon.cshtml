@@ -10,6 +10,8 @@
 	<title>@ViewData["Title"] - WebNet23Online</title>
 	<link rel="stylesheet" href="/css/little-lemon/home-page-styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="/css/little-lemon/reservation.css" asp-append-version="true" />
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	@RenderSection("Scripts", required: false);
 </head>
 <body>
 	<header class="header">
@@ -120,13 +122,13 @@
 					</div>
 				</form>
 				@{
-                    var subscribeMessage = TempData
-						[LittleLemonSubscribeViewModel.MESSAGE_KEY]?.ToString();                         
-                }
-                @if (!string.IsNullOrEmpty(subscribeMessage))
-                {
-                    <p class="subscribe-feedback">@subscribeMessage</p>
-                }
+					var subscribeMessage = TempData
+						[LittleLemonSubscribeViewModel.MESSAGE_KEY]?.ToString();
+				}
+				@if (!string.IsNullOrEmpty(subscribeMessage))
+				{
+					<p class="subscribe-feedback">@subscribeMessage</p>
+				}
 				<div class="address">
 					<p>53, East Birchwood Ave. Brooklyn, New York 11201, USA.</p>
 					<p>contact@littlelemon.com</p>
