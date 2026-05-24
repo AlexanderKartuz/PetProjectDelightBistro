@@ -185,13 +185,13 @@ namespace WebNet23Online.Data
 
             modelBuilder.Entity<SlayTheSpire2HeroesCards>()
                 .HasOne(x => x.CreatedByUser)
-                .WithMany()
+                .WithMany(x => x.CreatedSlayTheSpire2HeroesCards)
                 .HasForeignKey(x => x.CreatedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<SlayTheSpire2HeroesCards>()
                 .HasOne(x => x.ModifiedByUser)
-                .WithMany()
+                .WithMany(x => x.ModifiedSlayTheSpire2HeroesCards)
                 .HasForeignKey(x => x.ModifiedByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 

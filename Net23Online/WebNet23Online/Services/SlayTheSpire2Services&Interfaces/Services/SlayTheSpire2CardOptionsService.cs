@@ -5,20 +5,20 @@ namespace WebNet23Online.Services
 {
     public class SlayTheSpire2CardOptionsService : ISlayTheSpire2CardOptionsService
     {
-        private static readonly string[] RaritiesSource = { "Basic", "Common", "Uncommon", "Rare", "Ancient" };
-        private static readonly string[] TypesSource = { "Attack", "Skill", "Power" };
+        private readonly IReadOnlyList<string> _raritiesSource = new[] { "Basic", "Common", "Uncommon", "Rare", "Ancient" };
+        private readonly IReadOnlyList<string> _typesSource = new[] { "Attack", "Skill", "Power" };
 
-        public IReadOnlyList<string> Rarities => RaritiesSource;
+        public IReadOnlyList<string> Rarities => _raritiesSource;
 
-        public IReadOnlyList<string> Types => TypesSource;
+        public IReadOnlyList<string> Types => _typesSource;
 
         public List<SelectListItem> BuildRaritySelectList(string? selectedRarity) =>
-            BuildSelectList(RaritiesSource, selectedRarity);
+            BuildSelectList(_raritiesSource, selectedRarity);
 
         public List<SelectListItem> BuildTypeOfCardSelectList(string? selectedType) =>
-            BuildSelectList(TypesSource, selectedType);
+            BuildSelectList(_typesSource, selectedType);
 
-        private static List<SelectListItem> BuildSelectList(string[] source, string? selectedValue)
+        private List<SelectListItem> BuildSelectList(IReadOnlyList<string> source, string? selectedValue)
         {
             var values = source.ToList();
             if (!string.IsNullOrWhiteSpace(selectedValue)
