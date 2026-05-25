@@ -4,102 +4,109 @@
 }
 <link rel="stylesheet" href="/css/rock-legends-portal/style.css">
 
+@section Scripts {
+    <script src="~/js/rock-legends-portal/sort-by-genre.js"></script>
+}
+
 <div class="main-container">
-    <div class="content-wrapper" style="flex-direction: column; align-items: center;">
-        
-        <div class="poll-container" style="margin-bottom: 50px; width: 100%; max-width: 600px;">
+    <div class="content-wrapper sort-content-wrapper">
+
+        <div class="poll-container link-genre-container">
             <p>Связать группу с жанром</p>
             <form asp-action="LinkGroupToGenre" method="post">
                 <div class="poll-controls">
                     @Html.DropDownListFor(x => x.SelectedBandId, Model.Bands, "Выберите группу", new { @class = "form-control" })
-                    
+
                     @Html.DropDownListFor(x => x.SelectedGenreId,
-                        Model.Genres.Select(g => new SelectListItem { Text = g.Name, Value = g.Id.ToString() }),
-                        "Выберите жанр",
-                        new { @class = "form-control" })
+                                            Model.Genres.Select(g => new SelectListItem { Text = g.Name, Value = g.Id.ToString() }),
+                                            "Выберите жанр",
+                                            new { @class = "form-control" })
 
                     <button type="submit" class="poll-button">Связать</button>
                 </div>
             </form>
         </div>
 
-        <div class="genres-list" style="width: 100%; max-width: 800px;">
+        <div class="genres-list sort-genres-list">
             @foreach (var genre in Model.Genres)
             {
-                <div class="genre-item" style="margin-bottom: 15px; display: flex; gap: 10px;">
-        
-                    <button class="poll-button genre-toggle-button" style="flex-grow: 1;"
-                            onclick="toggleGenre('@genre.Id')">
-                        @genre.Name (Групп: @genre.BandNames.Count)
-                    </button>
+                <div class="genre-group-wrapper">
 
-                    @if (Model.IsCurrentUserAdmin)
-                    {
-                        <form asp-action="DeleteGenre" asp-route-id="@genre.Id" method="post"
-                              onsubmit="return confirm('Удалить жанр и все связи?')">
-                            <button type="submit" class="poll-button delete-genre-btn">
-                                ❌
-                            </button>
-                        </form>
-                    }
-                </div>
-    
-                <div id="genre-@genre.Id" class="genre-content-box">
-                    <div style="display: flex; gap: 20px; align-items: flex-start;">
-        
-                        <div class="genre-cover-wrapper">
-                            <img src="@genre.CoverUrl" alt="@genre.Name" class="genre-cover-img" />
-                        </div>
+                    <div class="genre-item">
 
-                        <div style="flex-grow: 1;">
-                            @if (genre.BandNames.Any())
-                            {
-                                foreach (var bandName in genre.BandNames)
+                        <button type="button" class="poll-button genre-toggle-button js-genre-toggle-btn sort-toggle-btn"
+                                data-id="@genre.Id">
+                            @genre.Name (Групп: @genre.BandNames.Count)
+                        </button>
+
+                        <button type="button" class="poll-button js-visual-remove-btn" title="Временно скрыть с экрана">
+                            Скрыть
+                        </button>
+
+                        @if (Model.IsCurrentUserAdmin)
+                        {
+                            <form asp-action="DeleteGenre" asp-route-id="@genre.Id" method="post"
+                                  onsubmit="return confirm('Удалить жанр и все связи из базы данных?')">
+                                <button type="submit" class="poll-button delete-genre-btn">
+                                    ❌ Из базы
+                                </button>
+                            </form>
+                        }
+                    </div>
+
+                    <div id="genre-@genre.Id" class="genre-content-box">
+                        <div class="genre-content-flex">
+
+                            <div class="genre-cover-wrapper">
+                                <img src="@genre.CoverUrl" alt="@genre.Name" class="genre-cover-img" />
+                            </div>
+
+                            <div class="genre-bands-col">
+                                @if (genre.BandNames.Any())
                                 {
-                                    <div class="band-name-item">🎸 @bandName</div>
+                                    foreach (var bandName in genre.BandNames)
+                                    {
+                                        <div class="band-name-item">🎸 @bandName</div>
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                <div class="empty-genre-msg">В этом жанре пока нет групп.</div>
-                            }
+                                else
+                                {
+                                    <div class="empty-genre-msg">В этом жанре пока нет групп.</div>
+                                }
+                            </div>
                         </div>
                     </div>
+
                 </div>
             }
         </div>
+
+        @if (Model.IsCurrentUserAdmin && Model.AdminSqlStats.Any())
+        {
+            <div class="poll-container admin-stats-panel">
+                <h3 class="admin-stats-title">Панель администратора (Данные из репозитория SQL)</h3>
+
+                <table class="admin-stats-table">
+                    <thead>
+                        <tr class="admin-table-head-row">
+                            <th class="admin-table-cell">ID Жанра</th>
+                            <th class="admin-table-cell">Название жанра</th>
+                            <th class="admin-table-cell">Количество групп</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stat in Model.AdminSqlStats)
+                        {
+                            <tr class="admin-table-body-row">
+                                <td class="admin-table-cell admin-cell-id">@stat.Id</td>
+                                <td class="admin-table-cell admin-cell-name">@stat.Name</td>
+                                <td class="admin-table-cell admin-cell-count">🎸 @stat.BandsCount шт.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
     </div>
 </div>
-@if (Model.IsCurrentUserAdmin && Model.AdminSqlStats.Any())
-{
-    <div class="poll-container" style="margin-top: 50px; border: 2px dashed #ffcc00; background: #222; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto;">
-        <h3 style="color: #ffcc00; margin-top: 0;"> Панель администратора (Данные из репозитория SQL)</h3>
-        
-        <table style="width: 100%; border-collapse: collapse; text-align: left; color: #fff;">
-            <thead>
-                <tr style="border-bottom: 2px solid #444; color: #ffcc00;">
-                    <th style="padding: 10px;">ID Жанра</th>
-                    <th style="padding: 10px;">Название жанра</th>
-                    <th style="padding: 10px;">Количество групп</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var stat in Model.AdminSqlStats)
-                {
-                    <tr style="border-bottom: 1px solid #333;">
-                        <td style="padding: 10px; color: #888;">@stat.Id</td>
-                        <td style="padding: 10px; font-weight: bold;">@stat.Name</td>
-                        <td style="padding: 10px; color: #00ffcc;">🎸 @stat.BandsCount шт.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
-
-<script>
-    function toggleGenre(id) {
-        const element = document.getElementById('genre-' + id);
-        element.style.display = (element.style.display === "none") ? "block" : "none";
-    }
-</script>
