@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebNet23Online.Models.Comments;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers.ApiControllers
@@ -26,11 +27,11 @@ namespace WebNet23Online.Controllers.ApiControllers
 
             var comment = _commentsService.AddZooComment(entityId, commentText);
 
-            return Ok(new
+            return Ok(new TextOneCommentViewModel
             {
-                author = comment.Author,
-                text = comment.Text,
-                createdAt = comment.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
+                Author = comment.AuthorDisplayName,
+                Text = comment.Text,
+                CreatedAt = comment.CreatedAt.ToString("dd.MM.yyyy HH:mm"),
             });
         }
     }

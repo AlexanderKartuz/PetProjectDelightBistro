@@ -26,6 +26,10 @@ namespace WebNet23Online.Services
         {
             var zoo = _zooRepository.Get(zooId);
             var comments = _commentsMapper.FromCommentsDataToCommnetsViewModel(_commentsRepository.GetZooComments(zooId));
+            foreach (var comment in comments.Comments)
+            {
+                comment.AuthorDisplayName = GetAuthorDisplayName(comment.AuthorName, comment.AuthorFirstName, comment.AuthorLastName);
+            }
             comments.EntityId = zooId;
             comments.DisplayName = zoo.ZooName;
             return comments;
@@ -34,35 +38,36 @@ namespace WebNet23Online.Services
         public OneCommentViewModel AddZooComment(int zooId, string text)
         {
             var user = _authService.GetUser();
-            var authorName = GetAuthorDisplayName(user);
+            var authorName = GetAuthorDisplayName(user.Name, user.FirstName, user.LastName);
             var createdAt = DateTime.UtcNow;
             var comment = new CommentData
             {
                 AuthorId = user.Id,
-                AuthorName = authorName,
                 CommentType = EntityType.Zoo,
                 Text = text,
                 CreatedAt = createdAt,
                 ZooId = zooId,
+                Author = user,
+                Zoo = _zooRepository.Get(zooId),
             };
             _commentsRepository.Add(comment);
 
             return new OneCommentViewModel
             {
-                Author = authorName,
+                AuthorDisplayName = authorName,
                 Text = text,
                 CreatedAt = createdAt,
             };
         }
 
-        private string GetAuthorDisplayName(UserData user)
+        private string GetAuthorDisplayName(string name, string firstName, string lastName)
         {
-            if (string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.LastName))
+            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
             {
-                return user.Name;
+                return name;
             }
 
-            return $"{user.LastName} {user.FirstName}";
+            return $"{lastName} {firstName}";
         }
     }
 }

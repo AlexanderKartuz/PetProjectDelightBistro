@@ -1,4 +1,5 @@
-﻿using WebNet23Online.Data.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 
@@ -12,7 +13,7 @@ namespace WebNet23Online.Data.Repositories
 
         public List<CommentData> GetZooComments(int zooId)
         {
-            return _dbSet.Where(x => x.ZooId == zooId && x.CommentType == EntityType.Zoo).ToList();
+            return _dbSet.Include(x => x.Author).Where(x => x.ZooId == zooId && x.CommentType == EntityType.Zoo).ToList();
         }
     }
 }

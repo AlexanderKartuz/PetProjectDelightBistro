@@ -13,7 +13,9 @@ namespace WebNet23Online.Services
             {
                 Comments = comments.Select(comment => new OneCommentViewModel
                 {
-                    Author = comment.AuthorName,
+                    AuthorName = comment.Author.Name,
+                    AuthorFirstName = comment.Author.FirstName,
+                    AuthorLastName = comment.Author.LastName,
                     CreatedAt = comment.CreatedAt,
                     Text = comment.Text,
                 }).ToList(),
