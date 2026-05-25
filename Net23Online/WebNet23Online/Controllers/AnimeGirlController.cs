@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Globalization;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
+using WebNet23Online.Hubs;
 using WebNet23Online.Models.AnimeGirl;
 using WebNet23Online.Services.Interfaces;
 
@@ -19,18 +21,21 @@ namespace WebNet23Online.Controllers
         private IAnimeRepository _animeRepository;
         private IAuthService _authService;
         private IWebHostEnvironment _webHostEnvironment;
+        private IHubContext<AnimeHub, IAnimeHub> _animeHub;
 
         public AnimeGirlController(IAnimeGirlService animeGirlGenerator,
             IAnimeGirlRepository animeGirlRepository,
             IAnimeRepository animeRepository,
             IAuthService authService,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IHubContext<AnimeHub, IAnimeHub> animeHub)
         {
             _animeGirlService = animeGirlGenerator;
             _animeGirlRepository = animeGirlRepository;
             _animeRepository = animeRepository;
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
+            _animeHub = animeHub;
         }
 
         //    /AnimeGirl/Index
@@ -130,6 +135,9 @@ namespace WebNet23Online.Controllers
                 CoverUrl = viewModel.CoverUrl
             };
             _animeRepository.Add(anime);
+
+            _animeHub.Clients.All.NewAnimeCreated(viewModel.Name, viewModel.CoverUrl);
+
             return RedirectToAction(nameof(Index));
         }
 

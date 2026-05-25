@@ -1,0 +1,22 @@
+﻿.notifications {
+    width: 500px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    margin: 10px;
+}
+
+.notification {
+    background: aqua;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    .notification .preview {
+        max-width: 400px;
+        max-height: 300px;
+        width: auto;
+    }

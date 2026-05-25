@@ -10,6 +10,7 @@ using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Data.Repositories.Interfaces.HabitTracker;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Data.Repositories.Steam;
+using WebNet23Online.Hubs;
 using WebNet23Online.MiddlewareServices;
 using WebNet23Online.Services;
 using WebNet23Online.Services.DelightBistro;
@@ -19,6 +20,8 @@ using WebNet23Online.Services.Interfaces.Steam;
 using WebNet23Online.Services.LittleLemon;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Online;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<WebContext>(op => op.UseSqlServer(connectionString));
@@ -156,6 +159,8 @@ app.UseAuthentication();    // Who Am I?
 app.UseAuthorization();     // May I?
 
 app.UseMiddleware<MyLocalizationMiddleware>();
+
+app.MapHub<AnimeHub>("/my-hub/anime");
 
 app.MapControllerRoute(
     name: "default",
