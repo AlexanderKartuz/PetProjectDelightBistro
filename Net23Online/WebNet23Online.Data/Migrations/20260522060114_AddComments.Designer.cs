@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebNet23Online.Data;
 
@@ -11,9 +12,11 @@ using WebNet23Online.Data;
 namespace WebNet23Online.Data.Migrations
 {
     [DbContext(typeof(WebContext))]
-    partial class WebContextModelSnapshot : ModelSnapshot
+    [Migration("20260522060114_AddComments")]
+    partial class AddComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,21 +53,6 @@ namespace WebNet23Online.Data.Migrations
                     b.HasIndex("HeroesId");
 
                     b.ToTable("AnimeDataAnimeGirlData");
-                });
-
-            modelBuilder.Entity("FoodItemDataOrderData", b =>
-                {
-                    b.Property<int>("FoodItemsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FoodItemsId", "OrdersId");
-
-                    b.HasIndex("OrdersId");
-
-                    b.ToTable("FoodItemDataOrderData");
                 });
 
             modelBuilder.Entity("GameDataGameGenreData", b =>
@@ -289,6 +277,10 @@ namespace WebNet23Online.Data.Migrations
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CommentType")
                         .HasColumnType("int");
@@ -681,30 +673,6 @@ namespace WebNet23Online.Data.Migrations
                     b.ToTable("Menus");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.OrderData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("WebNet23Online.Data.Models.RockBandGenreData", b =>
                 {
                     b.Property<int>("RockBandId")
@@ -718,30 +686,6 @@ namespace WebNet23Online.Data.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("RockBandGenres");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.RockBandLikeData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RockBandId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RockBandId");
-
-                    b.HasIndex("UserId", "RockBandId")
-                        .IsUnique();
-
-                    b.ToTable("RockBandLikes");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.RockBandsData", b =>
@@ -758,9 +702,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -820,63 +761,6 @@ namespace WebNet23Online.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RockLegendsGenres");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesCards", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HeroId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ManaCost")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Rarity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TypeOfCard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Upgraded")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("HeroId");
-
-                    b.HasIndex("ModifiedByUserId");
-
-                    b.ToTable("SlayTheSpire2HeroesCards");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", b =>
@@ -1128,21 +1012,6 @@ namespace WebNet23Online.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FoodItemDataOrderData", b =>
-                {
-                    b.HasOne("WebNet23Online.Data.Models.FoodItemData", null)
-                        .WithMany()
-                        .HasForeignKey("FoodItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebNet23Online.Data.Models.OrderData", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("GameDataGameGenreData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.Steam.GameGenreData", null)
@@ -1382,17 +1251,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.OrderData", b =>
-                {
-                    b.HasOne("WebNet23Online.Data.Models.UserData", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WebNet23Online.Data.Models.RockBandGenreData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.GenreOfRockBandsData", "Genre")
@@ -1412,25 +1270,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("RockBand");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.RockBandLikeData", b =>
-                {
-                    b.HasOne("WebNet23Online.Data.Models.RockBandsData", "RockBand")
-                        .WithMany("RockBandLikes")
-                        .HasForeignKey("RockBandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebNet23Online.Data.Models.UserData", "User")
-                        .WithMany("RockBandLikes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RockBand");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WebNet23Online.Data.Models.RockBandsData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
@@ -1448,32 +1287,6 @@ namespace WebNet23Online.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Genres");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesCards", b =>
-                {
-                    b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", "Hero")
-                        .WithMany("Cards")
-                        .HasForeignKey("HeroId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("WebNet23Online.Data.Models.UserData", "ModifiedByUser")
-                        .WithMany()
-                        .HasForeignKey("ModifiedByUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("Hero");
-
-                    b.Navigation("ModifiedByUser");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameData", b =>
@@ -1579,18 +1392,11 @@ namespace WebNet23Online.Data.Migrations
             modelBuilder.Entity("WebNet23Online.Data.Models.RockBandsData", b =>
                 {
                     b.Navigation("RockBandGenres");
-
-                    b.Navigation("RockBandLikes");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.RockLegendsGenres", b =>
                 {
                     b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", b =>
-                {
-                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.PublisherData", b =>
@@ -1631,8 +1437,6 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("MyTickets");
 
                     b.Navigation("RockBand");
-
-                    b.Navigation("RockBandLikes");
 
                     b.Navigation("UserAccountLittleLemonReservations");
                 });

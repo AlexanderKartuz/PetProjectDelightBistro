@@ -11,7 +11,7 @@ namespace WebNet23Online.Models.AnimalWorld
         [AnimalSpeciesUniqueName]
         public string AnimalSpeciesName { get; set; }
 
-        public IFormFile AnimalSpeciesImage { get; set; }
+        public IFormFile? AnimalSpeciesImage { get; set; }
 
         public string? Url { get; set; }
 
@@ -27,6 +27,6 @@ namespace WebNet23Online.Models.AnimalWorld
         [StringLength(2000)]
         public string Description { get; set; }
 
-        public List<string> Zoos { get; set; }
+        public List<string>? Zoos { get; set; }
     }
 }

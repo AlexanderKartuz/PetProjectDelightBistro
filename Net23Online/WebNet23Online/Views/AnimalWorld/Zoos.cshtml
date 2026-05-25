@@ -26,11 +26,19 @@
                     <p><strong>@AnimalWorld.AnimalFamilies: </strong>@string.Join(", ", zoo.AnimalFamilies)</p>
                 }
 
-                <div class="button-group">
-                    <form action="/Tickets/ZooReservations">
-                        <input type="hidden" name="zooName" value="@zoo.ZooName" />
-                        <button class="find-animal-button" type="submit">@AnimalWorld.BookNow</button>
-                    </form>
+                <div class="zoo-card-actions">
+                    <div class="zoo-card-actions-left">
+                        <form action="/Tickets/ZooReservations" method="post">
+                            <input type="hidden" name="zooName" value="@zoo.ZooName" />
+                            <button class="find-animal-button" type="submit">@AnimalWorld.BookNow</button>
+                        </form>
+                    </div>
+                    <div class="zoo-card-actions-right">
+                        <form action="/Comments/ZooCommentsIndex" method="get">
+                            <input type="hidden" name="zooId" value="@zoo.Id" />
+                            <button class="find-animal-button zoo-comments-button" type="submit">Отзывы</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         }

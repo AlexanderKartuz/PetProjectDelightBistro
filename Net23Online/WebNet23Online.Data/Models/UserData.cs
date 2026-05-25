@@ -43,5 +43,8 @@ namespace WebNet23Online.Data.Models
         public virtual List<JdmCarsData> CreatedByCarsJdm { get; set; }
         public virtual List<JdmCarsBlogCommentsData> JournalComments { get; set; }
         public virtual List<RockBandLikeData> RockBandLikes { get; set; }
+
+        public virtual List<TicketData> MyTickets { get; set; }
+        public virtual List<CommentData> MyComments { get; set; }
     }
 }

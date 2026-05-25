@@ -137,6 +137,13 @@ builder.Services.AddScoped<IJdmRepository, JdmRepository>();
 builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
 builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
 
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
+
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
