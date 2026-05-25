@@ -27,6 +27,7 @@ namespace WebNet23Online.Data
         public DbSet<FoodItemData> FoodItems { get; set; }
         public DbSet<IngredientData> Ingredients { get; set; }
         public DbSet<MenuData> Menus { get; set; }
+        public DbSet<OrderData> Orders { get; set; }
         public DbSet<GenreOfRockBandsData> RockBandGenresDictionary { get; set; }
         public DbSet<RockBandGenreData> RockBandGenres { get; set; }
 
@@ -106,7 +107,7 @@ namespace WebNet23Online.Data
             modelBuilder.Entity<UserData>()
                 .HasOne(x => x.HabitTrackerProfile)
                 .WithOne(x => x.User);
-            
+
             modelBuilder.Entity<UserData>()
                 .HasMany(x => x.Habits)
                 .WithOne(x => x.User);
@@ -154,6 +155,16 @@ namespace WebNet23Online.Data
                     j.ToTable("FoodItemIngredientDatas");
                 });
 
+            modelBuilder.Entity<OrderData>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<OrderData>()
+                .HasMany(x => x.FoodItems)
+                .WithMany(x => x.Orders);
+
             modelBuilder.Entity<RockLegendsData>()
                 .HasOne(x => x.Genres)
                 .WithMany(x => x.Groups)
@@ -180,7 +191,7 @@ namespace WebNet23Online.Data
                 .WithMany(x => x.GuestLittleLemonReservations)
                 .HasForeignKey(x => x.GuestId)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.CreatedByUser)
                 .WithMany(x => x.UserAccountLittleLemonReservations)

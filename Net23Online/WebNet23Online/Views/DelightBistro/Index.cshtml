@@ -1,11 +1,18 @@
 ﻿@using WebNet23Online.Models.DelightBistro;
 @using WebNet23Online.Localizations;
-
+@model List<MenuTypeViewModel>
 
 @{
     Layout = "_LayoutDelightBistro";
 }
-@model List<MenuTypeViewModel>
+
+@section Scripts {
+    <script src="/js/delight-bistro/buy-button.js"></script>
+    @* <script src="/js/delight-bistro/all-foods.js"></script> *@
+
+    <link rel="stylesheet" href="/css/delight-bistro/style.css" />
+}
+
 
 <link rel="stylesheet" href="\css\delight-bistro\style.css" />
  
@@ -21,6 +28,24 @@
         <div class="head-menu-item">Head menu</div>
     </div>
 </header>
+<div class="order-box hidden">Заказать блюда:
+    <div>
+        Выбрано блюд:
+    </div>
+    <div class="counter-display">0</div>
+    <ul id="orderList">
+        <li class="order-food-item">Selected FoodItem</li>
+    </ul>
+    <div class="total-price">Общая цена</div>
+    @* //Добавить кнопку для оправки блюд *@
+    <button id="post-order-btn">Оформить заказ</button>
+</div>
+<div id="order-success" class="order-success hidden">
+    <div id="order-success-message"></div>
+    <div id="order-success-order-id"></div>
+    <div id="order-success-time"></div>
+    <div id="order-success-price"></div>
+</div>
 
 <h1 class="center">@DelightBistro.Index_Cuisine</h1>
 
@@ -54,7 +79,9 @@
                                     <div class="price">@foodItem.Price р</div>
                                 </div>
                                 <div class="btnright">
-                                    <button class="add-button colorbtn">+</button>
+                                    <button data-food-item-id="@foodItem.Id"
+                                    data-food-item-price="@foodItem.Price"
+                                     class="buy-button add-button colorbtn">+</button>
                                 </div>
                             </div>
                             <div class="recept">
