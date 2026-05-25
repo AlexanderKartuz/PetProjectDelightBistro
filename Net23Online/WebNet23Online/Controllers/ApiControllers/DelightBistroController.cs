@@ -33,19 +33,18 @@ namespace WebNet23Online.Controllers.ApiControllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateOrder([FromBody] CreateOrderDto createOrder) // принимать List id?
+        public IActionResult CreateOrder([FromBody] CreateOrderDto createOrder)
         {
-            if (!_authService.IsAuthenticated())
-            {
-                return BadRequest(new { message = "Авторизуйтесь для заказа" });
-            }
+            //if (!_authService.IsAuthenticated())
+            //{
+            //    return BadRequest(new { message = "Авторизуйтесь для заказа" });
+            //}
 
             if (createOrder.foodItemIds.IsNullOrEmpty())
             {
                 return BadRequest(new { message = "Заказ пустой" });
             }
 
-            // list ids
             var selectedIds = createOrder.foodItemIds;
             var selectedFoodItems = _foodItemRepository.GetByIds(selectedIds);
 
