@@ -29,11 +29,12 @@ namespace WebNet23Online.Controllers
             }
 
             var isAuth = _authService.IsAuthenticated();
+            var currentUserId = isAuth ? _authService.GetUserId() : (int?)null;
             var viewModel = new RockBandsIndexViewModel
             {
                 IsUserAuth = isAuth,
                 CanEditRockBandGenres = isAuth && _authService.GetRole() == UserRole.RockBandOwner,
-                Bands = _rockBandsService.GetBands(selectedGenreIds),
+                Bands = _rockBandsService.GetBands(selectedGenreIds, currentUserId),
                 Genres = genres,
                 SelectedGenreIds = selectedGenreIds,
                 EditBandId = editBandId,
@@ -54,11 +55,12 @@ namespace WebNet23Online.Controllers
             {
                 var genres = _rockBandsService.GetGenres();
                 var isAuth = _authService.IsAuthenticated();
+                var currentUserId = isAuth ? _authService.GetUserId() : (int?)null;
                 var startViewModel = new RockBandsIndexViewModel
                 {
                     IsUserAuth = isAuth,
                     CanEditRockBandGenres = isAuth && _authService.GetRole() == UserRole.RockBandOwner,
-                    Bands = _rockBandsService.GetBands(Array.Empty<int>()),
+                    Bands = _rockBandsService.GetBands(Array.Empty<int>(), currentUserId),
                     Genres = genres,
                     SelectedGenreIds = Array.Empty<int>(),
                     EditBandId = null,

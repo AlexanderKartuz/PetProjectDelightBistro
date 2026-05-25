@@ -67,7 +67,16 @@
                     {
                         <p><strong>@RockBand.Index_Add_By_User</strong> @band.CreatedByUserName</p>
                     }
-
+                    <p class="band-likes">
+                        <strong>@RockBand.Index_Likes_Label</strong>
+                        <span class="band-like-count">@band.LikesCount</span>
+                        <button type="button"
+                                class="band-like-btn @(band.IsLikedByCurrentUser ? "liked" : "")"
+                                data-band-id="@band.Id"
+                                @(Model.IsUserAuth && !band.IsLikedByCurrentUser ? null : "disabled")>
+                            @RockBand.Index_Like_Button
+                        </button>
+                    </p>
                     @if (band.Genres != null && band.Genres.Count > 0)
                     {
                         <p><strong>@RockBand.Index_ChooseGenres</strong> @string.Join(", ", band.Genres)</p>
@@ -172,10 +181,13 @@
                 <div class="preferences-music-items add-band-form-panel create-rockband">
                     <div class="data">
                     <form method="post" enctype="multipart/form-data" class="add-band-form-fields">
-                        <div class="add-band-field">
+                        <div class="add-band-field name-block">
                             <label for="band-name">@RockBand.Index_Add_Name</label>
                             <input id="band-name" type="text" asp-for="BandBlock.Name" placeholder=@RockBand.Index_Add_Name_Example autocomplete="off" />
                             @Html.ValidationMessageFor(m => m.BandBlock.Name)
+                            <img class="icon wait" src="/icons/waiter.gif" alt="" />
+                            <img class="icon ok" src="/icons/ok.png" alt="" />
+                            <img class="icon deny" src="/icons/deny.jpg" alt="" />
                         </div>
                         <div class="add-band-field">
                             <label for="band-description">@RockBand.Index_Add_Card_Description</label>

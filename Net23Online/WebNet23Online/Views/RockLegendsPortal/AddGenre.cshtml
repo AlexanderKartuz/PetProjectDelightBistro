@@ -4,25 +4,47 @@
 }
 <link rel="stylesheet" href="/css/rock-legends-portal/style.css">
 
+@section Scripts {
+    <script src="~/js/rock-legends-portal/create-genre.js"></script>
+}
+
 <div class="main-container">
-    <div class="content-wrapper" style="justify-content: center;">
-        <div class="poll-container" style="width: 100%; max-width: 500px;">
+    <div class="genre-creation-container">
+
+        <div class="poll-container genre-form-box">
             <h2>Добавить новый жанр</h2>
             <form asp-action="AddGenre" method="post" enctype="multipart/form-data">
-                <div class="poll-controls" style="flex-direction: column; gap: 15px;">
-                    <input asp-for="Name" class="form-control" placeholder="Название жанра (например, Heavy Metal)" required />
-                    <span asp-validation-for="Name" style="color: #ff4d4d; font-size: 0.9em; text-align: left;"></span>
-                    
-                    <div style="text-align: left; width: 100%;">
-                        <label style="color: #ccc; margin-bottom: 5px; display: block;">Обложка жанра:</label>
+                <div class="poll-controls genre-form-controls">
+                    <input asp-for="Name" class="form-control" placeholder="Название жанра" required />
+                    <span asp-validation-for="Name" class="validation-error-msg"></span>
+
+                    <div class="file-input-wrapper">
+                        <label>Обложка жанра:</label>
                         <input type="file" asp-for="Image" class="form-control" accept="image/*" />
                     </div>
 
                     <input asp-for="CoverUrl" class="form-control" placeholder="Или укажите URL обложки вручную" />
-                    
                     <button type="submit" class="poll-button">Сохранить жанр</button>
                 </div>
             </form>
         </div>
+
+        <div class="poll-container genre-preview-box">
+            <h3 class="genre-preview-title">Превью карточки:</h3>
+
+            <div class="genre-item">
+                <button class="poll-button genre-toggle-button preview-genre-title">
+                    Название жанра (Групп: 0)
+                </button>
+            </div>
+
+            <div class="genre-content-box visual-preview-active">
+                <div class="genre-cover-wrapper">
+                    <img src="/images/rock-legends-portal/default.jpg" class="genre-cover-img preview-genre-img" alt="Обложка" />
+                </div>
+                <div class="band-name-item genre-preview-muted-text">Тут будут группы...</div>
+            </div>
+        </div>
+
     </div>
 </div>

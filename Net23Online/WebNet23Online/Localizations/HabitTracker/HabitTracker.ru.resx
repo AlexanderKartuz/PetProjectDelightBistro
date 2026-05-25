@@ -1,0 +1,243 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+
+    <!-- Index -->
+    <data name="Index-hero-title" xml:space="preserve">
+        <value>Привычки, которые остаются</value>
+    </data>
+    <data name="Index-hero-subtitle" xml:space="preserve">
+        <value>Красивый и простой трекер привычек, созданный с любовью к эстетике и дисциплине</value>
+    </data>
+    <data name="Index-btn-primary" xml:space="preserve">
+        <value>Начать отслеживать</value>
+    </data>
+    <data name="Index-btn-secondary" xml:space="preserve">
+        <value>Узнать возможности</value>
+    </data>
+    <data name="Index-features-title" xml:space="preserve">
+        <value>Возможности Habit Tracker</value>
+    </data>
+    <data name="Index-features-subtitle" xml:space="preserve">
+        <value>Всё, что нужно для формирования устойчивых привычек</value>
+    </data>
+    <data name="Index-feature1-title" xml:space="preserve">
+        <value>Недельный трекер</value>
+    </data>
+    <data name="Index-feature1-desc" xml:space="preserve">
+        <value>Удобная таблица на неделю с цветными точками. Один клик — и привычка отмечена.</value>
+    </data>
+    <data name="Index-feature2-title" xml:space="preserve">
+        <value>Месячная статистика</value>
+    </data>
+    <data name="Index-feature2-desc" xml:space="preserve">
+        <value>Прогресс-бары и точный процент выполнения цели за текущий месяц.</value>
+    </data>
+    <data name="Index-feature3-title" xml:space="preserve">
+        <value>Дневник привычек</value>
+    </data>
+    <data name="Index-feature3-desc" xml:space="preserve">
+        <value>Красивый календарь. Нажимай на любой день и оставляй заметки о своём дне.</value>
+    </data>
+    <data name="Index-feature4-title" xml:space="preserve">
+        <value>Создание и редактирование</value>
+    </data>
+    <data name="Index-feature4-desc" xml:space="preserve">
+        <value>Добавляй новые привычки, задавай цель (дней в месяц) и легко редактируй.</value>
+    </data>
+    <data name="Index-feature5-title" xml:space="preserve">
+        <value>Удаление привычек</value>
+    </data>
+    <data name="Index-feature5-desc" xml:space="preserve">
+        <value>Если привычка больше не актуальна — удали её в два клика.</value>
+    </data>
+    <data name="Index-feature6-title" xml:space="preserve">
+        <value>Нежный дизайн</value>
+    </data>
+    <data name="Index-feature6-desc" xml:space="preserve">
+        <value>Мягкие розовые тона, плавные анимации и внимание к каждой детали.</value>
+    </data>
+    <data name="Index-how-title" xml:space="preserve">
+        <value>Как это работает?</value>
+    </data>
+    <data name="Index-step1-title" xml:space="preserve">
+        <value>Добавь привычку</value>
+    </data>
+    <data name="Index-step1-desc" xml:space="preserve">
+        <value>Придумай название и укажи, сколько дней в месяц хочешь её выполнять.</value>
+    </data>
+    <data name="Index-step2-title" xml:space="preserve">
+        <value>Отмечай ежедневно</value>
+    </data>
+    <data name="Index-step2-desc" xml:space="preserve">
+        <value>Кликай по цветным точкам в недельном трекере.</value>
+    </data>
+    <data name="Index-step3-title" xml:space="preserve">
+        <value>Следи за прогрессом</value>
+    </data>
+    <data name="Index-step3-desc" xml:space="preserve">
+        <value>Смотри статистику и веди дневник настроения и мыслей.</value>
+    </data>
+    <data name="Index-cta-title" xml:space="preserve">
+        <value>Готова начать менять свою жизнь?</value>
+    </data>
+    <data name="Index-cta-subtitle" xml:space="preserve">
+        <value>Присоединяйся к тысячам девушек, которые уже формируют прекрасные привычки</value>
+    </data>
+    <data name="Index-cta-btn" xml:space="preserve">
+        <value>Открыть мой трекер →</value>
+    </data>
+
+    <!-- HabitTracker -->
+    <data name="HabitTracker-tracker-title" xml:space="preserve">
+        <value>Трекер задач на неделю</value>
+    </data>
+    <data name="HabitTracker-tracker-date" xml:space="preserve">
+        <value>Сегодня - </value>
+    </data>
+    <data name="HabitTracker-day-mon" xml:space="preserve">
+        <value>Пн</value>
+    </data>
+    <data name="HabitTracker-day-tue" xml:space="preserve">
+        <value>Вт</value>
+    </data>
+    <data name="HabitTracker-day-wed" xml:space="preserve">
+        <value>Ср</value>
+    </data>
+    <data name="HabitTracker-day-thu" xml:space="preserve">
+        <value>Чт</value>
+    </data>
+    <data name="HabitTracker-day-fri" xml:space="preserve">
+        <value>Пт</value>
+    </data>
+    <data name="HabitTracker-day-sat" xml:space="preserve">
+        <value>Сб</value>
+    </data>
+    <data name="HabitTracker-day-sun" xml:space="preserve">
+        <value>Вс</value>
+    </data>
+
+    <!-- CreateHabit -->
+    <data name="CreateHabit-title" xml:space="preserve">
+        <value>Добавить привычку</value>
+    </data>
+    <data name="CreateHabit-card-title" xml:space="preserve">
+        <value>Добавить привычку</value>
+    </data>
+    <data name="CreateHabit-label-title" xml:space="preserve">
+        <value>Название</value>
+    </data>
+    <data name="CreateHabit-placeholder-title" xml:space="preserve">
+        <value>Например: Йога 15мин</value>
+    </data>
+    <data name="CreateHabit-label-goal" xml:space="preserve">
+        <value>Цель — дней в месяц</value>
+    </data>
+    <data name="CreateHabit-placeholder-goal" xml:space="preserve">
+        <value>От 1 до 31</value>
+    </data>
+    <data name="CreateHabit-btn-submit" xml:space="preserve">
+        <value>Создать</value>
+    </data>
+
+    <!-- EditHabit -->
+    <data name="EditHabit-title" xml:space="preserve">
+        <value>Редактирование привычки</value>
+    </data>
+    <data name="EditHabit-label-select" xml:space="preserve">
+        <value>Выберите привычку</value>
+    </data>
+    <data name="EditHabit-select-default" xml:space="preserve">
+        <value>— выберите —</value>
+    </data>
+    <data name="EditHabit-label-title" xml:space="preserve">
+        <value>Название</value>
+    </data>
+    <data name="EditHabit-label-goal" xml:space="preserve">
+        <value>Цель — дней в месяц</value>
+    </data>
+    <data name="EditHabit-btn-submit" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+
+    <!-- DeleteHabit -->
+    <data name="DeleteHabit-title" xml:space="preserve">
+        <value>Удалить привычку</value>
+    </data>
+    <data name="DeleteHabit-label-select" xml:space="preserve">
+        <value>Выберите привычку</value>
+    </data>
+    <data name="DeleteHabit-select-default" xml:space="preserve">
+        <value>— выберите —</value>
+    </data>
+    <data name="DeleteHabit-btn-submit" xml:space="preserve">
+        <value>Удалить</value>
+    </data>
+
+    <!-- Settings -->
+    <data name="Settings-title" xml:space="preserve">
+        <value>Настройки привычек</value>
+    </data>
+    <data name="Settings-subtitle" xml:space="preserve">
+        <value>Управляйте своими привычками</value>
+    </data>
+    <data name="Settings-add-label" xml:space="preserve">
+        <value>Добавить</value>
+    </data>
+    <data name="Settings-add-desc" xml:space="preserve">
+        <value>Создайте новую привычку и задайте цель на месяц</value>
+    </data>
+    <data name="Settings-add-btn" xml:space="preserve">
+        <value>Создать →</value>
+    </data>
+    <data name="Settings-del-label" xml:space="preserve">
+        <value>Удалить</value>
+    </data>
+    <data name="Settings-del-desc" xml:space="preserve">
+        <value>Удалите привычку, которую больше не отслеживаете</value>
+    </data>
+    <data name="Settings-del-btn" xml:space="preserve">
+        <value>Удалить →</value>
+    </data>
+    <data name="Settings-edit-label" xml:space="preserve">
+        <value>Редактировать</value>
+    </data>
+    <data name="Settings-edit-desc" xml:space="preserve">
+        <value>Измените название или цель существующей привычки</value>
+    </data>
+    <data name="Settings-edit-btn" xml:space="preserve">
+        <value>Изменить →</value>
+    </data>
+
+    <!-- Statistics -->
+    <data name="Statistics-title" xml:space="preserve">
+        <value>Статистика за месяц</value>
+    </data>
+
+    <!-- Diary -->
+    <data name="Diary-title" xml:space="preserve">
+        <value>Дневник</value>
+    </data>
+    <data name="Diary-subtitle" xml:space="preserve">
+        <value>Нажми на день чтобы добавить запись</value>
+    </data>
+    <data name="Diary-placeholder" xml:space="preserve">
+        <value>Напиши что-нибудь...</value>
+    </data>
+    <data name="Diary-btn-cancel" xml:space="preserve">
+        <value>Отмена</value>
+    </data>
+    <data name="Diary-btn-save" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+</root>
