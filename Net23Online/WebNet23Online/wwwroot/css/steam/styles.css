@@ -590,26 +590,129 @@ a {
     gap: 12px;
 }
 
+/* Game details page */
+.section {
+    margin-bottom: 24px;
+}
+
+.game-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn--primary {
+    background: linear-gradient(135deg, #2a6f8f, #1e4a6b);
+    color: #fff;
+}
+
+    .btn--primary:hover {
+        background: linear-gradient(135deg, #3a8faf, #2a6a8b);
+    }
+
+.btn--edit {
+    background: #1a2533;
+    border: 1px solid #2a475e;
+}
+
+    .btn--edit:hover {
+        background: #243447;
+        border-color: #66c0f4;
+    }
+
 .game-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
     background: #121a24;
     border-radius: 12px;
-    padding: 30px;
+    padding: 24px;
     border: 1px solid #2a475e;
 }
 
 .game-image img {
     width: 100%;
     border-radius: 8px;
+    display: block;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
 .game-title {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin: 0 0 16px;
     color: #ffffff;
+    line-height: 1.2;
+}
+
+.game-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.game-publisher {
+    font-size: 13px;
+    color: #8f98a0;
+    padding-left: 8px;
+    border-left: 1px solid #2a475e;
+}
+
+.game-price {
+    font-size: 26px;
+    font-weight: 700;
+    color: #67c1f5;
+    margin-bottom: 20px;
+}
+
+    .game-price .free {
+        color: #8bc34a;
+    }
+
+.game-description {
+    margin-bottom: 8px;
+}
+
+    .game-description h3 {
+        margin: 0 0 10px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #e5e5e5;
+    }
+
+    .game-description p {
+        margin: 0;
+        line-height: 1.6;
+        color: #a0b3c4;
+        font-size: 14px;
+    }
+
+.game-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        grid-template-columns: 1fr;
+    }
+
+    .game-publisher {
+        border-left: none;
+        padding-left: 0;
+        width: 100%;
+    }
 }
 
 .user-info {
@@ -651,4 +754,144 @@ a {
 
 article.card.active {
     border: 3px #66c0f4 solid;
+}
+
+/* Reviews */
+#reviews-panel {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.review-item {
+    background: #1e1e1e;
+    color: #fff;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+    .review-item b {
+        color: #4da3ff;
+        font-size: 14px;
+    }
+
+    .review-item div {
+        margin-top: 6px;
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+#show-review-form-btn {
+    margin: 20px 0 10px 0;
+    padding: 8px 16px;
+    background: #4da3ff;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+}
+
+    #show-review-form-btn:hover {
+        background: #2f8cff;
+    }
+
+.review-form-hidden {
+    display: none;
+}
+
+.review-form-visible {
+    display: block;
+}
+
+#review-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #151515;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #2a2a2a;
+}
+
+#review-text {
+    min-height: 80px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #0f0f0f;
+    color: #fff;
+    resize: vertical;
+}
+
+#review-rating {
+    width: 100px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #0f0f0f;
+    color: #fff;
+}
+
+#review-form button {
+    width: fit-content;
+    padding: 8px 14px;
+    background: #4da3ff;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+}
+
+    #review-form button:hover {
+        background: #2f8cff;
+    }
+
+#cancel-review-btn {
+    background: #444;
+    margin-left: 10px;
+}
+
+    #cancel-review-btn:hover {
+        background: #555;
+    }
+
+.section h2 {
+    margin-top: 30px;
+    color: #fff;
+}
+
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 5000;
+}
+
+.toast {
+    min-width: 250px;
+    margin-bottom: 10px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(0);
+    transition: all .25s ease;
+}
+
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+.toast--error {
+    background: #d9534f;
+}
+
+.toast--success{
+    background: #5cb85c;
 }

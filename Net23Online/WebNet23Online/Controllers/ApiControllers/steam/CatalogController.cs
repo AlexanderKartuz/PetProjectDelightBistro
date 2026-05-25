@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WebNet23Online.Controllers.CustomAuthAttribute;
+﻿using Microsoft.AspNetCore.Mvc;
+
+using WebNet23Online.Controllers.CustomAuthAttribute.Steam;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
-using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers.ApiControllers.steam
 {
@@ -11,12 +10,11 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
     public class CatalogController : ControllerBase
     {
         private readonly IGameRepository _gameRepository;
-        private readonly IAuthService _authService;
 
-        public CatalogController(IGameRepository gameRepository, IAuthService authService)
+        public CatalogController(IGameRepository gameRepository)
         {
             _gameRepository = gameRepository;
-            _authService = authService;
+
         }
 
         [IsAdminApi]

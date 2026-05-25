@@ -37,6 +37,7 @@ namespace WebNet23Online.Data
         public DbSet<GameData> Games { get; set; }
         public DbSet<PublisherData> Publishers { get; set; }
         public DbSet<GameGenreData> GameGenres { get; set; }
+        public DbSet<GameReviewData> GameReviews { get; set; }
 
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
@@ -104,7 +105,7 @@ namespace WebNet23Online.Data
             modelBuilder.Entity<UserData>()
                 .HasOne(x => x.HabitTrackerProfile)
                 .WithOne(x => x.User);
-            
+
             modelBuilder.Entity<UserData>()
                 .HasMany(x => x.Habits)
                 .WithOne(x => x.User);
@@ -173,12 +174,24 @@ namespace WebNet23Online.Data
                .WithMany(x => x.ModifiedGames)
                .HasForeignKey(x => x.ModifiedByUserId);
 
+            modelBuilder.Entity<GameReviewData>()
+                .HasOne(x => x.Author)
+                .WithMany(x => x.Reviews)
+                .HasForeignKey(x => x.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<GameReviewData>()
+                .HasOne(x => x.Game)
+                .WithMany(x => x.GameReviews)
+                .HasForeignKey(x => x.GameId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.Guest)
                 .WithMany(x => x.GuestLittleLemonReservations)
                 .HasForeignKey(x => x.GuestId)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.CreatedByUser)
                 .WithMany(x => x.UserAccountLittleLemonReservations)
@@ -206,7 +219,7 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.JdmManufacturerData)
                 .WithMany(x => x.JdmCarsDatas)
                 .HasForeignKey(x => x.JdmManufacturerDataId);
-            
+
             modelBuilder.Entity<JdmCarsData>()
                  .HasOne(x => x.Creator)
                  .WithMany(x => x.CreatedByCarsJdm)

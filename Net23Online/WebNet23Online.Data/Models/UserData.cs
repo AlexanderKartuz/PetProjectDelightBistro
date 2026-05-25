@@ -35,6 +35,7 @@ namespace WebNet23Online.Data.Models
 
         public virtual List<GameData> CreatedGames { get; set; }
         public virtual List<GameData> ModifiedGames { get; set; }
+        public virtual List<GameReviewData> Reviews { get; set; }
         public virtual List<LittleLemonData> UserAccountLittleLemonReservations { get; set; }
         public virtual List<JdmCarsData> CreatedByCarsJdm { get; set; }
         public virtual List<JdmCarsBlogCommentsData> JournalComments { get; set; }

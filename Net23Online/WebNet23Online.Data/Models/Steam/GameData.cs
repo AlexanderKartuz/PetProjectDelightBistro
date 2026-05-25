@@ -19,5 +19,6 @@ namespace WebNet23Online.Data.Models.Steam
         public virtual UserData ModifiedByUser { get; set; }
         public virtual PublisherData Publisher { get; set; } 
         public virtual List<GameGenreData> GameGenres { get; set; }
+        public virtual List<GameReviewData> GameReviews { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Services.Interfaces;
 
-namespace WebNet23Online.Controllers.CustomAuthAttribute
+namespace WebNet23Online.Controllers.CustomAuthAttribute.Steam
 {
     public class IsAdminApiAttribute : ActionFilterAttribute
     {

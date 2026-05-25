@@ -13,5 +13,7 @@ namespace WebNet23Online.Models.Steam
         public List<string> Genres {  get; set; }
         public string? PublisherName { get; set; }
         public int? PublisherId { get; set; }
+        public List<GameReviewViewModel> Reviews { get; set; }
+        public bool HasUserReviewed { get; set; }
     }
 }
