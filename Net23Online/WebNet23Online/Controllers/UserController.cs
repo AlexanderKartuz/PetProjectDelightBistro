@@ -110,18 +110,12 @@ namespace WebNet23Online.Controllers
         public IActionResult UpdateProfile(UserProfileViewModel viewModel)
         {
             var user = _authService.GetUser();
-            user.Id = viewModel.UserId;
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;
             user.Mobilephone = viewModel.Mobilephone;
-            user.Language = viewModel.Language;
             _userRepository.UpdateProfile(user);
-            //var user = _authService.GetUser();
-
             HttpContext.SignOutAsync().Wait();
-
             _authService.SignIn(user);
-
             return RedirectToAction(nameof(Profile));
         }
 

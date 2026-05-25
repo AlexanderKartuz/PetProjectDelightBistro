@@ -21,7 +21,6 @@
 </div>
 <div>
     <form action="/User/UpdateProfile" method="post">
-        @Html.HiddenFor(x => x.UserId)
         <p>
             First name:<br />
             @Html.TextBoxFor(m => m.FirstName, new { @class = "form-input", type = "text" })
