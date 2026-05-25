@@ -58,5 +58,15 @@ namespace WebNet23Online.Data.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public virtual void Delete(List<int> ids)
+        {
+            var models = _dbSet.Where(x => ids.Contains(x.Id));
+            if (models.Any())
+            {
+                _dbSet.RemoveRange(models);
+                _context.SaveChanges();
+            }
+        }
     }
 }

@@ -1,11 +1,14 @@
 ﻿@using WebNet23Online.Models.DelightBistro;
 
 @{
-    Layout = "_LayoutimagesDelightBistro";
+    Layout = "_LayoutDelightBistro";
 }
 @model AllFoodItemWithPermissionViewModel
+@section Scripts {
+    <script src="/js/delight-bistro/allfoods.js"></script>
 
-<link rel="stylesheet" href="\css\delight-bistro\style.css" />
+    <link rel="stylesheet" href="/css/delight-bistro/style.css" />
+}
  
 <header class="head-menu">
     <div class="logo-container">
@@ -30,9 +33,12 @@
     <div class="plate">
                 
         <div class="type-of-food">
+            <p class="add-button">
+                <button class="remove-food-item" disabled title="Удалить">Delete dishes</button>
+            </p>
             <div class="type-name center">Все блюда</div>
             <div class="menu">
-
+              
                 @foreach (var food in Model.FoodItems)
                 {
                     <div class="food-item" item-id="@food.Id">
@@ -50,7 +56,6 @@
                                         <button type="submit" title="Удалить">Delete</button>
                                     </form>
 
-                                    @* <a href="\DelightBistro\DeleteFoodItem?id=@food.Id" title="Удалить">Delete</a> *@
                                 }
                             </div>
                             <div class="btnright">

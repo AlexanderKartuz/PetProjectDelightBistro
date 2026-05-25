@@ -435,6 +435,34 @@ namespace WebNet23Online.Data.Migrations
                     b.ToTable("Ingredients");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsBlogCommentsData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("JdmCarsBlogComments");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsData", b =>
                 {
                     b.Property<int>("Id")
@@ -442,6 +470,9 @@ namespace WebNet23Online.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("JdmManufacturerDataId")
                         .HasColumnType("int");
@@ -465,7 +496,12 @@ namespace WebNet23Online.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("VehicleInspectionHistoryUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("JdmManufacturerDataId");
 
@@ -685,6 +721,63 @@ namespace WebNet23Online.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RockLegendsGenres");
+                });
+
+            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesCards", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HeroId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ManaCost")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rarity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeOfCard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Upgraded")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("HeroId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("SlayTheSpire2HeroesCards");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", b =>
@@ -1065,11 +1158,28 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsBlogCommentsData", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "User")
+                        .WithMany("JournalComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.JdmCarsData", b =>
                 {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "Creator")
+                        .WithMany("CreatedByCarsJdm")
+                        .HasForeignKey("CreatorId");
+
                     b.HasOne("WebNet23Online.Data.Models.JdmManufacturerData", "JdmManufacturerData")
                         .WithMany("JdmCarsDatas")
                         .HasForeignKey("JdmManufacturerDataId");
+
+                    b.Navigation("Creator");
 
                     b.Navigation("JdmManufacturerData");
                 });
@@ -1139,6 +1249,32 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Genres");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesCards", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", "Hero")
+                        .WithMany("Cards")
+                        .HasForeignKey("HeroId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Hero");
+
+                    b.Navigation("ModifiedByUser");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
@@ -1194,6 +1330,11 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("CompletedDates");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.IngredientData", b =>
+                {
+                    b.Navigation("FoodItemIngredientDatas");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.JdmManufacturerData", b =>
                 {
                     b.Navigation("JdmCarsDatas");
@@ -1219,6 +1360,11 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Groups");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.PublisherData", b =>
                 {
                     b.Navigation("Games");
@@ -1226,6 +1372,8 @@ namespace WebNet23Online.Data.Migrations
 
             modelBuilder.Entity("WebNet23Online.Data.Models.UserData", b =>
                 {
+                    b.Navigation("CreatedByCarsJdm");
+
                     b.Navigation("CreatedByMeAnimalFamilies");
 
                     b.Navigation("CreatedByMeAnimalSpecies");
@@ -1245,6 +1393,8 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("HabitTrackerProfile");
 
                     b.Navigation("Habits");
+
+                    b.Navigation("JournalComments");
 
                     b.Navigation("ModifiedGames");
 

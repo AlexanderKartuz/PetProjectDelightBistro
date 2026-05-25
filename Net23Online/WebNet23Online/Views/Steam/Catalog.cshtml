@@ -5,6 +5,11 @@
 @{
     Layout = "_LayoutSteam";
 }
+
+@section Scripts {
+    <script src="~/js/steam/catalog-delete-game.js"></script>
+}
+
 <main class="page">
     <section class="section">
         <div class="catalog-header">
@@ -45,6 +50,14 @@
             <div class="form-actions">
                 <button type="submit" class="btn btn--primary">@CatalogPage.Apply_Button</button>
                 <a href="/Steam/Catalog" class="btn">@CatalogPage.Reset_Button</a>
+                @if (Model.IsUserAtLeastModerator)
+                {
+                    <button type="button"
+                            class="remove-game-card btn"
+                            disabled>
+                        @GameDetailsPage.Delete_Game_Button
+                    </button>
+                }
             </div>
         </form>
     </section>

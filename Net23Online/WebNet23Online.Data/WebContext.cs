@@ -33,6 +33,7 @@ namespace WebNet23Online.Data
         public DbSet<RockLegendsGenres> RockLegendsGenres { get; set; }
 
         public DbSet<SlayTheSpire2HeroesData> SlayTheSpire2Heroes { get; set; }
+        public DbSet<SlayTheSpire2HeroesCards> SlayTheSpire2HeroesCards { get; set; }
 
         public DbSet<GameData> Games { get; set; }
         public DbSet<PublisherData> Publishers { get; set; }
@@ -40,6 +41,7 @@ namespace WebNet23Online.Data
 
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
+        public DbSet<JdmCarsBlogCommentsData> JdmCarsBlogComments { get; set; }
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -205,6 +207,35 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.JdmManufacturerData)
                 .WithMany(x => x.JdmCarsDatas)
                 .HasForeignKey(x => x.JdmManufacturerDataId);
+            
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.Hero)
+                .WithMany(x => x.Cards)
+                .HasForeignKey(x =>x.HeroId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany(x => x.CreatedSlayTheSpire2HeroesCards)
+                .HasForeignKey(x => x.CreatedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.ModifiedByUser)
+                .WithMany(x => x.ModifiedSlayTheSpire2HeroesCards)
+                .HasForeignKey(x => x.ModifiedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            
+            modelBuilder.Entity<JdmCarsData>()
+                 .HasOne(x => x.Creator)
+                 .WithMany(x => x.CreatedByCarsJdm)
+                 .HasForeignKey(x => x.CreatorId);
+
+            modelBuilder.Entity<JdmCarsBlogCommentsData>()
+                .HasOne(x => x.User)
+                .WithMany(u => u.JournalComments)
+                .HasForeignKey(x => x.UserId);
 
             base.OnModelCreating(modelBuilder);
         }

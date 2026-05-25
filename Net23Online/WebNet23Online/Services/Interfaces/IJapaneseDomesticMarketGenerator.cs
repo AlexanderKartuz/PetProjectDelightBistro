@@ -1,4 +1,5 @@
-﻿using WebNet23Online.Data.Models;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using WebNet23Online.Data.Models;
 using WebNet23Online.Models.JapaneseDomesticMarket;
 
 namespace WebNet23Online.Services.Interfaces
@@ -8,5 +9,6 @@ namespace WebNet23Online.Services.Interfaces
         List<JapaneseDomesticMarketViewModels> GenerateJDMCarsItems();
         List<JapaneseDomesticMarketViewModels> GenerateJDMCarsItems(List<JdmCarsData> jdmCarsData);
         void AddJDMItem(JapaneseDomesticMarketViewModels _jdmItems);
+        List<SelectListItem> GetListItemsJdmCars();
     }
 }

@@ -1,11 +1,16 @@
 ﻿@using WebNet23Online.Models.DelightBistro;
 
 @{
-    Layout = "_LayoutimagesDelightBistro";
+    Layout = "_LayoutDelightBistro";
 }
 @model CreateFoodItemViewModel
 
-<link rel="stylesheet" href="\css\delight-bistro\style.css" />
+@section Scripts {
+    <script src="/js/delight-bistro/preview-food-item.js"></script>
+
+    <link rel="stylesheet" href="/css/delight-bistro/style.css" />
+}
+
 
 <div class="create-food-box">
     <div class="form-title">
@@ -20,8 +25,32 @@
         </div>
     }
 
+    <div class="preview food-item">
+        <div> Preview</div>
+        <div class="preview-box">
+            <div>
+                <div class="preview-image-container">
+                    <img src="" alt="image" />
+                </div>
+                <div class="name-price">
+                    <div class="name-price">
+                        <div class="preview-menu-name">Menu</div>
+                        <div class="preview-food-name">Name</div>
+                        <div class="preview-price">Price</div>
+                    </div>
+                    <div class="preview-recept">
+                        <ul>
+                            <li>Ингредиенты и количество</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form method="post" enctype="multipart/form-data">
         <div class="input-box">
+           
             <div>Название блюда</div>
             @Html.TextBoxFor(x => x.Name, new { type = "text", required = "required", placeholder = "Имя блюда" })
             @Html.ValidationMessageFor(x => x.Name)
@@ -53,7 +82,7 @@
                         @Html.HiddenFor(x => x.IngredientsList[i].Id)
                         @Html.HiddenFor(x => x.IngredientsList[i].Name)
                         <label>@Model.IngredientsList[i].Name</label>
-                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected)
+                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected, new { data_ingredient_name = Model.IngredientsList[i].Name })
                         @Html.TextBoxFor(x => x.IngredientsList[i].Quantity
                             , new
                             {
