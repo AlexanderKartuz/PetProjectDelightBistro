@@ -68,5 +68,11 @@ namespace WebNet23Online.Data.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public virtual List<DataModel> GetByIds(List<int> ids)
+        {
+            var foodItems = _dbSet.Where(x => ids.Contains(x.Id)).ToList();
+            return foodItems;
+        }
     }
 }

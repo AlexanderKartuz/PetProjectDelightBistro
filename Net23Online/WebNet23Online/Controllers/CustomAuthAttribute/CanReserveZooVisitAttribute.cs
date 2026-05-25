@@ -15,7 +15,7 @@ namespace WebNet23Online.Controllers.CustomAuthAttribute
             var user = authService.GetUser();
             if (string.IsNullOrEmpty(user.FirstName) || string.IsNullOrEmpty(user.LastName) || string.IsNullOrEmpty(user.Mobilephone))
             {
-                context.Result = ((Controller)context.Controller).RedirectToAction("ReservationsDenied", "Tickets");
+                context.Result = ((Controller)context.Controller).RedirectToAction("ZooReservationsDenied", "Tickets");
                 return;
             }
 

@@ -484,7 +484,7 @@ namespace WebNet23Online.Localizations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your zoo visit is booked. Please use the first name, last name, and phone number from your account to purchase your ticket..
+        ///   Looks up a localized string similar to Your zoo visit is booked. Your ticket is valid for one month. Please use the first name, last name, and phone number from your account to purchase your ticket..
         /// </summary>
         public static string VisitBookedCompleteMessage {
             get {

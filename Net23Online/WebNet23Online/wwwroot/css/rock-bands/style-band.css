@@ -216,12 +216,12 @@ main.pb-3 {
     transition: transform 0.25s, box-shadow 0.25s, background 0.25s, border-color 0.25s;
 }
 
-.genre-filter-chip:hover {
-    background: rgba(255, 255, 255, 0.16);
-    border-color: rgba(255, 255, 255, 0.28);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-}
+    .genre-filter-chip:hover {
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.28);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+    }
 
 .genre-filter-checkbox:focus + .genre-filter-chip {
     outline: none;
@@ -282,50 +282,42 @@ footer.footer {
     cursor: pointer;
 }
 
-.band.active {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 90, 60, 0.22) 0%,
-        rgba(255, 180, 80, 0.14) 50%,
-        rgba(255, 255, 255, 0.08) 100%
-    );
-    border-color: #ff6b4a;
-    box-shadow:
-        0 0 0 3px rgba(255, 107, 74, 0.55),
-        0 0 28px rgba(255, 107, 74, 0.4),
-        0 14px 36px rgba(0, 0, 0, 0.5);
-    transform: translateY(-4px) scale(1.01);
-}
+    .band.active {
+        background: linear-gradient( 135deg, rgba(255, 90, 60, 0.22) 0%, rgba(255, 180, 80, 0.14) 50%, rgba(255, 255, 255, 0.08) 100% );
+        border-color: #ff6b4a;
+        box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.55), 0 0 28px rgba(255, 107, 74, 0.4), 0 14px 36px rgba(0, 0, 0, 0.5);
+        transform: translateY(-4px) scale(1.01);
+    }
 
-.band.active::before {
-    content: "✓";
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #ff6b4a;
-    color: #1a1010;
-    font-size: 1rem;
-    font-weight: 800;
-    line-height: 1;
-    box-shadow: 0 4px 14px rgba(255, 107, 74, 0.55);
-    pointer-events: none;
-}
+        .band.active::before {
+            content: "✓";
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ff6b4a;
+            color: #1a1010;
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1;
+            box-shadow: 0 4px 14px rgba(255, 107, 74, 0.55);
+            pointer-events: none;
+        }
 
-.band.active::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 13px;
-    pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(255, 200, 160, 0.35);
-}
+        .band.active::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 13px;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 1px rgba(255, 200, 160, 0.35);
+        }
 
 @media (min-width: 560px) {
     .band {
@@ -404,9 +396,9 @@ footer.footer {
     padding: 18px 20px 20px;
 }
 
-.add-band-form-panel.create-rockband {
-    gap: 32px;
-}
+    .add-band-form-panel.create-rockband {
+        gap: 32px;
+    }
 
 .create-rockband .preview {
     width: 100%;
@@ -414,15 +406,15 @@ footer.footer {
     margin: 0 auto;
 }
 
-.create-rockband .preview .band {
-    cursor: default;
-}
+    .create-rockband .preview .band {
+        cursor: default;
+    }
 
-.create-rockband .preview .band:hover:not(.active) {
-    transform: none;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.08);
-}
+        .create-rockband .preview .band:hover:not(.active) {
+            transform: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
 
 .add-band-form-fields {
     display: flex;
@@ -446,33 +438,33 @@ footer.footer {
         color: rgba(255, 255, 255, 0.88);
     }
 
-    .add-band-field-help {
-        display: block;
-        margin-top: 8px;
-        font-size: 0.8rem;
-        opacity: 0.55;
-        line-height: 1.35;
-    }
+.add-band-field-help {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    opacity: 0.55;
+    line-height: 1.35;
+}
 
-    .add-band-field input[type="text"],
-    .add-band-field textarea {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 12px 14px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(0, 0, 0, 0.28);
-        color: #ffffff;
-        font-family: inherit;
-        font-size: 1rem;
-        line-height: 1.45;
-        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-    }
+.add-band-field input[type="text"],
+.add-band-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.28);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.45;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
 
-    .add-band-field textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
+.add-band-field textarea {
+    min-height: 100px;
+    resize: vertical;
+}
 
     .add-band-field input::placeholder,
     .add-band-field textarea::placeholder {
@@ -536,4 +528,66 @@ footer.footer {
         box-shadow: none;
         background: rgba(255, 255, 255, 0.1);
         border-color: rgba(255, 255, 255, 0.18);
+    }
+
+.add-band-field.name-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+    .add-band-field.name-block label {
+        flex: 0 0 100%;
+    }
+
+    .add-band-field.name-block input[type="text"] {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .add-band-field.name-block .field-validation-error {
+        flex: 0 0 100%;
+    }
+
+    .add-band-field.name-block .icon {
+        display: none;
+        height: 27px;
+        flex-shrink: 0;
+    }
+
+    .add-band-field.name-block input.free {
+        border-color: green;
+    }
+
+    .add-band-field.name-block input.used {
+        border-color: red;
+    }
+    .band-likes {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 12px;
+    }
+    
+    .band-like-btn {
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        cursor: pointer;
+    }
+    
+    .band-like-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .band-like-btn.liked,
+    .band-like-btn:disabled.liked {
+        background: rgba(220, 60, 100, 0.45);
+        border-color: rgba(255, 120, 150, 0.7);
+        opacity: 1;
+        cursor: default;
     }

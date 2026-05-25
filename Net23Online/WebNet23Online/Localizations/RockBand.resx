@@ -189,6 +189,12 @@
   <data name="Index_Edit_Save_Button" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Index_Likes_Label" xml:space="preserve">
+    <value>Likes:</value>
+  </data>
+  <data name="Index_Like_Button" xml:space="preserve">
+    <value>Like</value>
+  </data>
   <data name="Index_Header" xml:space="preserve">
     <value>My favorite bands</value>
   </data>

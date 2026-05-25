@@ -145,29 +145,5 @@ namespace WebNet23Online.Controllers
 
         [HttpGet]
         public IActionResult Index() => View();
-        [HttpPost]
-        [Authorize]
-        public IActionResult Index(RockLegendsPortalViewModel viewModel)
-        {
-            if (viewModel.SelectedBandId != 0)
-            {
-                var targetBand = _rockLegendsRepository.GetById(viewModel.SelectedBandId);
-                if (targetBand != null)
-                {
-                    targetBand.Likes++;
-                    _rockLegendsRepository.Update(targetBand);
-                    return RedirectToAction("Details", new { id = targetBand.Id });
-                }
-            }
-            return View();
-        }
-
-        public IActionResult Details(int id)
-        {
-            var targetBand = _rockLegendsRepository.GetById(id);
-            if (targetBand == null) return NotFound();
-            var model = _rockService.GetBandDetails(id, targetBand);
-            return View(model);
-        }
     }
 }

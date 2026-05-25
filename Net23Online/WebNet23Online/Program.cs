@@ -123,7 +123,9 @@ builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
 builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IRockBandsRepository, RockBandsRepository>();
+builder.Services.AddScoped<IRockBandLikeRepository, RockBandLikeRepository>();
 builder.Services.AddScoped<IGenreOfRockBandsRepository, GenreOfRockBandsRepository>();
 builder.Services.AddScoped<ILittleLemonReservationRepository, LittleLemonReservationRepository>();
 builder.Services.AddScoped<ILittleLemonGuestRepository, LittleLemonGuestRepository>();
@@ -137,6 +139,13 @@ builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
 builder.Services.AddScoped<IJdmRepository, JdmRepository>();
 builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
 builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
+
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHttpContextAccessor();
 

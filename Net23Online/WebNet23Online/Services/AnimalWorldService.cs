@@ -31,13 +31,13 @@ namespace WebNet23Online.Services
         {
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
-            foreach (var animal in animalSpecies)
-            {
-                if (string.IsNullOrEmpty(animal.Url) || !File.Exists(animal.Url))
-                {
-                    animal.Url = DEFAULT_URL;
-                }
-            }
+            //foreach (var animal in animalSpecies)
+            //{
+            //    if (string.IsNullOrEmpty(animal.Url) || !File.Exists(animal.Url))
+            //    {
+            //        animal.Url = DEFAULT_URL;
+            //    }
+            //}
 
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
