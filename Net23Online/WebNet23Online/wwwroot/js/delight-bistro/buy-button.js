@@ -82,7 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Authorize only
     fetch('/api/DelightBistro/CreateOrder', {
-      method: 'Post',
+        method: 'Post',
+        // credentials: 'same-origin', // add?
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     })
