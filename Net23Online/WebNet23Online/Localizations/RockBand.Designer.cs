@@ -277,6 +277,24 @@ namespace WebNet23Online.Localizations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Likes:.
+        /// </summary>
+        public static string Index_Likes_Label {
+            get {
+                return ResourceManager.GetString("Index_Likes_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like.
+        /// </summary>
+        public static string Index_Like_Button {
+            get {
+                return ResourceManager.GetString("Index_Like_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My favorite bands.
         /// </summary>
         public static string Index_Header {

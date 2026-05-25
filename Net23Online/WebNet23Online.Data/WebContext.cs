@@ -23,6 +23,7 @@ namespace WebNet23Online.Data
         public DbSet<LittleLemonData> LittleLemon { get; set; }
         public DbSet<LittleLemonGuestData> LittleLemonGuests { get; set; }
         public DbSet<RockBandsData> RockBand { get; set; }
+        public DbSet<RockBandLikeData> RockBandLikes { get; set; }
         public DbSet<FoodItemData> FoodItems { get; set; }
         public DbSet<IngredientData> Ingredients { get; set; }
         public DbSet<MenuData> Menus { get; set; }
@@ -198,6 +199,22 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.Genre)
                 .WithMany(x => x.RockBandGenres)
                 .HasForeignKey(x => x.GenreId);
+
+            modelBuilder.Entity<RockBandLikeData>()
+                .HasIndex(x => new { x.UserId, x.RockBandId })
+                .IsUnique();
+
+            modelBuilder.Entity<RockBandLikeData>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.RockBandLikes)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RockBandLikeData>()
+                .HasOne(x => x.RockBand)
+                .WithMany(x => x.RockBandLikes)
+                .HasForeignKey(x => x.RockBandId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<GenreOfRockBandsData>()
                 .HasIndex(x => x.Name)
