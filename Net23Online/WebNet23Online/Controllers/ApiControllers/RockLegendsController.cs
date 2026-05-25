@@ -20,22 +20,30 @@ namespace WebNet23Online.Controllers.ApiControllers
         }
 
         [HttpPost("like/{id}")]
-        [Authorize] 
+        [Authorize]
         public IActionResult LikeBand(int id)
         {
-            var hasVoted = HttpContext.Session.GetString("HasVotedInRockPoll");
-            if (hasVoted == "true")
+            if (HttpContext.Request.Cookies.ContainsKey("HasVotedInRockPoll"))
             {
                 return BadRequest(new { success = false, message = "Вы уже отдавали свой голос! Рок-н-ролл за честные выборы 🤘" });
             }
 
             var targetBand = _rockLegendsRepository.GetById(id);
-            if (targetBand == null) return NotFound(new { message = "Группа не найдена" });
-
+            if (targetBand == null)
+            {
+                return NotFound(new { message = "Группа не найдена" });
+            } 
             targetBand.Likes++;
             _rockLegendsRepository.Update(targetBand);
 
-            HttpContext.Session.SetString("HasVotedInRockPoll", "true");
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(30),
+                HttpOnly = true,
+                Secure = true
+            };
+
+            HttpContext.Response.Cookies.Append("HasVotedInRockPoll", "true", cookieOptions);
 
             return Ok(new { success = true, newLikes = targetBand.Likes });
         }
@@ -43,10 +51,12 @@ namespace WebNet23Online.Controllers.ApiControllers
         [HttpGet("validate-genre")]
         public IActionResult ValidateGenreName(string name)
         {
-            if (string.IsNullOrEmpty(name)) return Ok(new { isValid = true });
-
+            if (string.IsNullOrEmpty(name))
+            {
+                return Ok(new { isValid = true });
+            }
             var allGenres = _genreRepository.GetAll();
-            bool exists = allGenres.Any(g => g.Name.Trim().ToLower() == name.Trim().ToLower());
+            var exists = allGenres.Any(g => g.Name.Trim().ToLower() == name.Trim().ToLower());
 
             if (exists)
             {

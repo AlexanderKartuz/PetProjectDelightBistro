@@ -30,7 +30,10 @@ $(document).ready(function () {
         const msgElement = $('#genre-name-validation-msg');
         const submitBtn = $('button[type="submit"]');
 
-        if (genreName.trim() === "") return;
+        if (genreName.trim() === "")
+        {
+            return;
+        }
 
         $.ajax({
             url: '/api/rock-legends/validate-genre',
