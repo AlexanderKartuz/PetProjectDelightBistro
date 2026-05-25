@@ -46,6 +46,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Home.resx</DependentUpon>
     </Compile>
+    <Compile Update="Localizations\SlayTheSpire2Index.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SlayTheSpire2Index.resx</DependentUpon>
+    </Compile>
     <Compile Update="Localizations\JapaneseDomesticMarket.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -96,6 +101,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RockLegendsPortal.resx</DependentUpon>
     </Compile>
+    <Compile Update="Localizations\HabitTracker\HabitTracker.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HabitTracker.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -131,6 +141,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\DelightBistro.De.resx">
       <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Localizations\SlayTheSpire2Index.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SlayTheSpire2Index.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Localizations\Steam\AddGamePage.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -168,6 +182,17 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>RockLegendsPortal.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Localizations\HabitTracker\HabitTracker.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HabitTracker.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.25">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

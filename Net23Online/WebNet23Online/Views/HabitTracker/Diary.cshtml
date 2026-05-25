@@ -1,12 +1,13 @@
-﻿@{
+@using WebNet23Online.Localizations.HabitTracker
+@{
     Layout = "_LayoutHabitTracker";
 }
 
 <link rel="stylesheet" href="/css/habit-tracker/diary.css">
 
 <div class="tracker">
-    <div class="tracker-title">Дневник</div>
-    <div class="tracker-date">Нажми на день чтобы добавить запись</div>
+    <div class="tracker-title">@HabitTracker.Diary_title</div>
+    <div class="tracker-date">@HabitTracker.Diary_subtitle</div>
 
     <div class="diary-wrapper">
         <div class="calendar-header">
@@ -22,10 +23,10 @@
 <div class="popup-overlay" id="popup-overlay">
     <div class="popup">
         <div class="popup-date" id="popup-date"></div>
-        <textarea id="popup-text" placeholder="Напиши что-нибудь..."></textarea>
+        <textarea id="popup-text" placeholder="@HabitTracker.Diary_placeholder"></textarea>
         <div class="popup-buttons">
-            <button class="btn-cancel" id="btn-cancel">Отмена</button>
-            <button class="btn-save" id="btn-save">Сохранить</button>
+            <button class="btn-cancel" id="btn-cancel">@HabitTracker.Diary_btn_cancel</button>
+            <button class="btn-save" id="btn-save">@HabitTracker.Diary_btn_save</button>
         </div>
     </div>
 </div>

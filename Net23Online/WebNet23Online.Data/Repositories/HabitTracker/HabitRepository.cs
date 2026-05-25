@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebNet23Online.Data.Enums;
+using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.Models;
 
 namespace WebNet23Online.Data.Repositories.Interfaces;
@@ -99,5 +100,20 @@ public class HabitRepository : BaseRepository<HabitData>, IHabitRepository
     {
         return _dbSet
             .Count(x => x.UserId == userId);
+    }
+
+    public List<HabitTrackerReport> GetHabitsWithDaysByUserId(int userId)
+    {
+        return _dbSet
+            .Where(x => x.UserId == userId)
+            .Select(x => new HabitTrackerReport()
+            {
+                Title = x.Title,
+                CompletedDates = x.CompletedDates
+                    .Select(d => d.DateOfCompletion)
+                    .ToList(),
+            })
+            .OrderBy(x => x.Title)
+            .ToList();
     }
 }

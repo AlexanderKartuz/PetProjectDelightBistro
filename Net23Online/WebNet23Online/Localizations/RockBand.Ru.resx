@@ -190,6 +190,12 @@
   <data name="Index_Edit_Save_Button" xml:space="preserve">
     <value>Сохранить</value>
   </data>
+  <data name="Index_Likes_Label" xml:space="preserve">
+    <value>Лайки:</value>
+  </data>
+  <data name="Index_Like_Button" xml:space="preserve">
+    <value>Нравится</value>
+  </data>
   <data name="Index_Header" xml:space="preserve">
     <value>Мои любимые группы</value>
   </data>

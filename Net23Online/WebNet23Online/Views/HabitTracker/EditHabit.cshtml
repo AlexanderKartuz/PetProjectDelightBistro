@@ -1,4 +1,5 @@
 @using WebNet23Online.Models.HabitTracker
+@using WebNet23Online.Localizations.HabitTracker
 @model HabitTrackerViewModel
 
 @{
@@ -11,13 +12,13 @@
     <div class="settings-card">
         <div class="settings-card-header">
             <span class="settings-icon">✎</span>
-            <h3>Редактирование привычки</h3>
+            <h3>@HabitTracker.EditHabit_title</h3>
         </div>
 
         <div class="form-group">
-            <label>Выберите привычку</label>
+            <label>@HabitTracker.EditHabit_label_select</label>
             <select id="habitSelect" class="input-field">
-                <option value="">— выберите —</option>
+                <option value="">@HabitTracker.EditHabit_select_default</option>
                 @foreach (var habit in Model.Habits)
                 {
                     <option value="@habit.Id"
@@ -33,20 +34,20 @@
 
         <form method="post">
             @Html.HiddenFor(x => x.EditHabit.Id)
-            
+
             <div class="form-group">
-                <label>Название</label>
+                <label>@HabitTracker.EditHabit_label_title</label>
                 @Html.TextBoxFor(x => x.EditHabit.Title, new { @class = "input-field" })
                 @Html.ValidationMessageFor(x => x.EditHabit.Title)
             </div>
 
             <div class="form-group">
-                <label>Цель — дней в месяц</label>
+                <label>@HabitTracker.EditHabit_label_goal</label>
                 @Html.TextBoxFor(x => x.EditHabit.MonthGoal, new { type = "number", @class = "input-field" })
                 @Html.ValidationMessageFor(x => x.EditHabit.MonthGoal)
             </div>
 
-            <button type="submit" class="btn-action btn-edit">Сохранить</button>
+            <button type="submit" class="btn-action btn-edit">@HabitTracker.EditHabit_btn_submit</button>
         </form>
     </div>
 </div>

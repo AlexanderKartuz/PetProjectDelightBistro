@@ -1,4 +1,5 @@
 @using WebNet23Online.Models.HabitTracker
+@using WebNet23Online.Localizations.HabitTracker
 @model HabitTrackerViewModel
 
 @{
@@ -10,21 +11,21 @@
 <div class="settings-card">
     <div class="settings-card-header">
         <span class="settings-icon">✕</span>
-        <h3>Удалить привычку</h3>
+        <h3>@HabitTracker.DeleteHabit_title</h3>
     </div>
 
     <form method="post">
         <div class="form-group">
-            <label>Выберите привычку</label>
+            <label>@HabitTracker.DeleteHabit_label_select</label>
 
             @Html.DropDownList("habitId", Model.Habits.Select(x => new SelectListItem {
                     Value = x.Id.ToString(),
                     Text = x.Title
-                }), 
-                "— выберите —", 
+                }),
+                HabitTracker.DeleteHabit_select_default,
                 new { @class = "input-field" })
         </div>
 
-        <button type="submit" class="btn-action btn-delete">Удалить</button>
+        <button type="submit" class="btn-action btn-delete">@HabitTracker.DeleteHabit_btn_submit</button>
     </form>
 </div>
