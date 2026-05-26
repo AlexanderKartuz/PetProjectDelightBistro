@@ -8,7 +8,7 @@ namespace WebNet23Online.Data.Repositories.Interfaces.Steam
     {
         List<GameData> GetFeaturedForHomePage();
         List<GameData> GetSpecialOffersForHomePage();
-        GameData GetGameWithPublisherAndGenres(int id);
+        GameData GetGameDetails(int id);
         bool IsTitleFree(string title, int excludeGameId = 0);
         PaginatedList<GameData> GetGames(GameFilter filter, int pageIndex, int pageSize);
     }

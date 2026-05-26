@@ -40,6 +40,7 @@ namespace WebNet23Online.Data
         public DbSet<GameData> Games { get; set; }
         public DbSet<PublisherData> Publishers { get; set; }
         public DbSet<GameGenreData> GameGenres { get; set; }
+        public DbSet<GameReviewData> GameReviews { get; set; }
 
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
@@ -213,6 +214,18 @@ namespace WebNet23Online.Data
                .WithMany(x => x.ModifiedGames)
                .HasForeignKey(x => x.ModifiedByUserId);
 
+            modelBuilder.Entity<GameReviewData>()
+                .HasOne(x => x.Author)
+                .WithMany(x => x.Reviews)
+                .HasForeignKey(x => x.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<GameReviewData>()
+                .HasOne(x => x.Game)
+                .WithMany(x => x.GameReviews)
+                .HasForeignKey(x => x.GameId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<LittleLemonData>()
                 .HasOne(x => x.Guest)
                 .WithMany(x => x.GuestLittleLemonReservations)
@@ -282,6 +295,7 @@ namespace WebNet23Online.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             
+
             modelBuilder.Entity<JdmCarsData>()
                  .HasOne(x => x.Creator)
                  .WithMany(x => x.CreatedByCarsJdm)

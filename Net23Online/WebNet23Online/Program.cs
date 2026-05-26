@@ -135,6 +135,7 @@ builder.Services.AddScoped<IRockLegendsGenresRepository, RockLegendsGenresReposi
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
+builder.Services.AddScoped<IGameReviewRepository, GameReviewRepository>();
 
 builder.Services.AddScoped<IJdmRepository, JdmRepository>();
 builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();

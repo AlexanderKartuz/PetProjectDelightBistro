@@ -19,7 +19,7 @@ namespace WebNet23Online.Localizations.Steam {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class GameDetailsPage {
@@ -120,6 +120,69 @@ namespace WebNet23Online.Localizations.Steam {
         public static string Free_Text {
             get {
                 return ResourceManager.GetString("Free_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave first review.
+        /// </summary>
+        public static string Leave_First_Review_Button {
+            get {
+                return ResourceManager.GetString("Leave_First_Review_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No reviews yet.
+        /// </summary>
+        public static string No_Reviews_Yet_Text {
+            get {
+                return ResourceManager.GetString("No_Reviews_Yet_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not recommended.
+        /// </summary>
+        public static string Not_Recommended_Text {
+            get {
+                return ResourceManager.GetString("Not_Recommended_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommended.
+        /// </summary>
+        public static string Recommended_Text {
+            get {
+                return ResourceManager.GetString("Recommended_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to recommend.
+        /// </summary>
+        public static string Recommend_Percent_Label {
+            get {
+                return ResourceManager.GetString("Recommend_Percent_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reviews.
+        /// </summary>
+        public static string Reviews_Title {
+            get {
+                return ResourceManager.GetString("Reviews_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write a review.
+        /// </summary>
+        public static string Write_A_Review_Button {
+            get {
+                return ResourceManager.GetString("Write_A_Review_Button", resourceCulture);
             }
         }
     }
