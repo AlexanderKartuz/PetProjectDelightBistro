@@ -1,0 +1,16 @@
+.notifications {
+  width: 300px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  margin: 10px;
+}
+
+.notification {
+  background: rgb(61, 45, 41);
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}

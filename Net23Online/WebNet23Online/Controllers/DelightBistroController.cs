@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
+using WebNet23Online.Hubs;
+using WebNet23Online.Hubs.Interfaces;
 using WebNet23Online.Models.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 
@@ -15,10 +18,11 @@ namespace WebNet23Online.Controllers
         private IIngredientGenerator _ingredientGenerator;
 
         private IFoodItemRepository _foodItemRepository;
+        private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
 
 
         public DelightBistroController(IFoodItemGenerator foodItemGenerator, IMenuTypeGenerator menuTypeGenerator
-            , IFoodItemRepository foodItemRepository, IIngredientGenerator ingredientGenerator)
+            , IFoodItemRepository foodItemRepository, IIngredientGenerator ingredientGenerator, IHubContext<DeligtBistroHub, IDeligtBistroHub> deligtBistroHub)
         {
             _foodItemGenerator = foodItemGenerator;
             _foodItemRepository = foodItemRepository;
@@ -26,7 +30,7 @@ namespace WebNet23Online.Controllers
             _menuTypeGenerator = menuTypeGenerator;
 
             _ingredientGenerator = ingredientGenerator;
-
+            _deligtBistroHub = deligtBistroHub;
         }
 
         public IActionResult Index(string menuType)
@@ -118,9 +122,14 @@ namespace WebNet23Online.Controllers
             if (viewModel.Id == 0)
             {
                 _foodItemGenerator.CreateFoodItemData(viewModel);
+
+                _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
+
                 return RedirectToAction(nameof(Index));
             }
             _foodItemGenerator.ChangeFoodItemData(viewModel);
+
+            _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
 
             return RedirectToAction(nameof(AllFoodItems));
         }
