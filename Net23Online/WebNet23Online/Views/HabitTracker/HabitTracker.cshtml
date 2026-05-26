@@ -1,3 +1,4 @@
+@using WebNet23Online.Localizations.HabitTracker
 @model WebNet23Online.Models.HabitTracker.HabitTrackerViewModel
 @{
     Layout = "_LayoutHabitTracker";
@@ -7,19 +8,19 @@
 
 
 <div class="tracker">
-  <div class="tracker-title">Трекер задач на неделю</div>
-  <div class="tracker-date">Сегодня - </div>
+  <div class="tracker-title">@HabitTracker.HabitTracker_tracker_title</div>
+  <div class="tracker-date">@HabitTracker.HabitTracker_tracker_date</div>
 
   <div class="table-tracker">
     <div class="tracker-header">
       <div class="habit-label-cell"></div>
-      <div class="day-cell">Пн</div>
-      <div class="day-cell">Вт</div>
-      <div class="day-cell">Ср</div>
-      <div class="day-cell">Чт</div>
-      <div class="day-cell">Пт</div>
-      <div class="day-cell">Сб</div>
-      <div class="day-cell">Вс</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_mon</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_tue</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_wed</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_thu</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_fri</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_sat</div>
+      <div class="day-cell">@HabitTracker.HabitTracker_day_sun</div>
     </div>
 
     @for (int i = 0; i < Model.Habits.Count; i++)
@@ -44,4 +45,3 @@
 @section Scripts {
     <script src="/js/habit-tracker/main.js"></script>
 }
-

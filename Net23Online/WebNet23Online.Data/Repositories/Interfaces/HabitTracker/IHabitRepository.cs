@@ -1,3 +1,4 @@
+using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.Models;
 
 namespace WebNet23Online.Data.Repositories.Interfaces;
@@ -13,4 +14,5 @@ public interface IHabitRepository : IBaseRepository<HabitData>
     List<string> GetTitlesByUserId(int userId);
     bool IsHabitTitleUniq(string title, int userId, int habitId);
     int GetHabitsCount(int userId);
+    List<HabitTrackerReport> GetHabitsWithDaysByUserId(int userId);
 }

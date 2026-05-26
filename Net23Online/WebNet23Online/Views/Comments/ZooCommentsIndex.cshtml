@@ -1,0 +1,59 @@
+﻿@using WebNet23Online.Models.Comments
+@using WebNet23Online.Services.Interfaces
+@inject IAuthService authService
+@model AllCommentsViewModel
+@{
+    Layout = "_LayoutAnimalWorld";
+}
+
+@section Scripts {
+    <script src="~/js/comments/add-zoo-comment.js"></script>
+}
+
+<title>Отзывы — @Model.DisplayName</title>
+
+<div class="main-place">
+    <div class="green-title">
+        <h2>Отзывы: @Model.DisplayName</h2>
+    </div>
+    <hr class="green-line">
+    @if (authService.IsAuthenticated())
+    {
+        <div class="comments-form-section animal entity-card">
+            <form id="comment-form">
+                <h3 class="green-title">Оставить комментарий</h3>
+                <input type="hidden" name="CommentsType" id="form-comments-type" value="@((int)Model.CommentsType)" />
+                <input type="hidden" name="EntityId" id="form-entity-id" value="@Model.EntityId" />
+                <div class="form-group">
+                    <div for="form-comment-text">Ваш отзыв:</div>
+                    <textarea name="NewCommentText" id="form-comment-text" class="form-input comment-textarea" rows="4" placeholder="Поделитесь вашими впечатлениями..." required></textarea>
+                </div>
+                <button type="submit" class="find-animal-button">Отправить</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <p class="empty-list-note">Войдите в аккаунт, чтобы оставить отзыв.</p>
+    }
+
+    <h3 class="green-title">Что говорят посетители:</h3>
+    <p id="empty-note" class="empty-comments-note @(Model.HasComments ? "d-none" : "")">
+        Пока нет отзывов. Будьте первым!
+    </p>
+    <div id="comments-container">
+        @if (Model.HasComments)
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="animal comment-item-box">
+                    <div class="comment-item-header">
+                        <strong class="comment-author">@comment.AuthorDisplayName</strong>
+                        <div class="comment-date">@comment.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                    </div>
+                    <p class="comment-text">@comment.Text</p>
+                </div>
+            }
+        }
+    </div>
+</div>

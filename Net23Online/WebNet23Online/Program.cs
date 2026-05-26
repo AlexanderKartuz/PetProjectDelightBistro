@@ -10,6 +10,7 @@ using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Data.Repositories.Interfaces.HabitTracker;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Data.Repositories.Steam;
+using WebNet23Online.Hubs;
 using WebNet23Online.MiddlewareServices;
 using WebNet23Online.Services;
 using WebNet23Online.Services.DelightBistro;
@@ -19,6 +20,8 @@ using WebNet23Online.Services.Interfaces.Steam;
 using WebNet23Online.Services.LittleLemon;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Online;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<WebContext>(op => op.UseSqlServer(connectionString));
@@ -85,6 +88,7 @@ builder.Services.AddScoped<IRockBandsService, RockBandsService>();
 builder.Services.AddSingleton<IRockLegendsPick, RockLegendsPick>();
 
 builder.Services.AddSingleton<ISlayTheSpire2RewardImageService, SlayTheSpire2RewardImageService>();
+builder.Services.AddSingleton<ISlayTheSpire2CardOptionsService, SlayTheSpire2CardOptionsService>();
 
 builder.Services.AddScoped<ICatalogService, CatalogService>();
 
@@ -114,11 +118,14 @@ builder.Services.AddScoped<IHabitDoneDatesRepository, HabitDoneDatesRepository>(
 builder.Services.AddScoped<IHabitDiaryRepository, HabitDiaryRepository>();
 builder.Services.AddScoped<IHabitTrackerAdminRepository, HabitTrackerAdminRepository>();
 builder.Services.AddScoped<ISlayTheSpire2HeroesRepository, SlayTheSpire2HeroesRepository>();
+builder.Services.AddScoped<ISlayTheSpire2HeroesCardsRepository, SlayTheSpire2HeroesCardsRepository>();
 builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
 builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IRockBandsRepository, RockBandsRepository>();
+builder.Services.AddScoped<IRockBandLikeRepository, RockBandLikeRepository>();
 builder.Services.AddScoped<IGenreOfRockBandsRepository, GenreOfRockBandsRepository>();
 builder.Services.AddScoped<ILittleLemonReservationRepository, LittleLemonReservationRepository>();
 builder.Services.AddScoped<ILittleLemonGuestRepository, LittleLemonGuestRepository>();
@@ -133,6 +140,13 @@ builder.Services.AddScoped<IGameReviewRepository, GameReviewRepository>();
 builder.Services.AddScoped<IJdmRepository, JdmRepository>();
 builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
 builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
+
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -155,6 +169,8 @@ app.UseAuthentication();    // Who Am I?
 app.UseAuthorization();     // May I?
 
 app.UseMiddleware<MyLocalizationMiddleware>();
+
+app.MapHub<AnimeHub>("/my-hub/anime");
 
 app.MapControllerRoute(
     name: "default",

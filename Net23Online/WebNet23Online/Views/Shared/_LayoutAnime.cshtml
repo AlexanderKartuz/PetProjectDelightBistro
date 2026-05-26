@@ -9,13 +9,18 @@
     <link rel="stylesheet" href="~/WebNet23Online.styles.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="/css/anime-girl/style-nice.css">
+    <link rel="stylesheet" href="/css/anime-girl/style.css">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/anime-girl/notification.js"></script>
     
     @RenderSection("Scripts", required: false)
 </head>
 <body>
+    <div class="notifications"></div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">

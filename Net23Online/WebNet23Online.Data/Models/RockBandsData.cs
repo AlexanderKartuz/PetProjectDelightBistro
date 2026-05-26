@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebNet23Online.Data.Models
+﻿namespace WebNet23Online.Data.Models
 {
     public class RockBandsData : BaseModel
     {
@@ -12,7 +6,9 @@ namespace WebNet23Online.Data.Models
         public string Description { get; set; }
         public string Url { get; set; }
         public int? CreatedByUserId { get; set; }
+        public int Likes { get; set; }
         public virtual UserData? CreatedByUser { get; set; }
         public virtual ICollection<RockBandGenreData> RockBandGenres { get; set; } = new List<RockBandGenreData>();
+        public virtual ICollection<RockBandLikeData> RockBandLikes { get; set; } = new List<RockBandLikeData>();
     }
 }

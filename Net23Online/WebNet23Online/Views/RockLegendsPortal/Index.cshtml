@@ -4,6 +4,9 @@
 @{
     Layout = "_LayoutRockLegends";
 }
+@section Scripts {
+    <script src="~/js/rock-legends-portal/index.js"></script>
+}
     <title>Rock Legends Portal</title>
     <link rel="icon" type="image/png" href="/images/rock-legends-portal/RockI-con.png">
     <link rel="stylesheet" href="/css/rock-legends-portal/style.css">
@@ -13,7 +16,7 @@
         <img src="/images/rock-legends-portal/WebLogo.png" alt="Rock Legends Portal" class="main-logo">
         <div class="content-wrapper">
             <div class="rockStars">
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/8vjorlwiubdxz4iwq84t5/video1.mp4?rlkey=3siyrcsc0xc9fo3gyxhnhx7hi&st=2dzrypwc&raw=1')">
+                <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/8vjorlwiubdxz4iwq84t5/video1.mp4?rlkey=3siyrcsc0xc9fo3gyxhnhx7hi&st=2dzrypwc&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock1.jpg" alt="KISS" />
@@ -25,7 +28,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/qoa0jjexm40j8dv5aeavg/video2.mp4?rlkey=pq0e559wzhhkk1q40o0wfxzf1&st=6l0eodcw&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/qoa0jjexm40j8dv5aeavg/video2.mp4?rlkey=pq0e559wzhhkk1q40o0wfxzf1&st=6l0eodcw&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock2.jpg" alt="Ozzy" />
@@ -37,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/7bfhnsa2wztuaktg32rzu/video3.mp4?rlkey=y1gpom0pig5xrhha3ki8twiba&st=nkqa8rwo&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/7bfhnsa2wztuaktg32rzu/video3.mp4?rlkey=y1gpom0pig5xrhha3ki8twiba&st=nkqa8rwo&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock3.jpg" alt="AC/DC" />
@@ -49,7 +52,7 @@
                     </div>
                 </div>
     
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/ox0cn3lbkvpw4v0ntztoi/video4.mp4?rlkey=031d8lt6qyl4cqokm0vbgkt48&st=j7xhsqud&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/ox0cn3lbkvpw4v0ntztoi/video4.mp4?rlkey=031d8lt6qyl4cqokm0vbgkt48&st=j7xhsqud&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock4.jpg" alt="Bon" />
@@ -61,7 +64,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/36svrr54v0c5z14uhzgkq/video5.mp4?rlkey=j4cfcxrunmpe9k10dkmfg7mqs&st=a17nht9v&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/36svrr54v0c5z14uhzgkq/video5.mp4?rlkey=j4cfcxrunmpe9k10dkmfg7mqs&st=a17nht9v&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock5.jpg" alt="Rammstein" />
@@ -73,7 +76,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/7e4s0p46e4cijq8r6945k/video6.mp4?rlkey=2vn2qmi1p7impxjziz8m84azi&st=t4z0jznz&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/7e4s0p46e4cijq8r6945k/video6.mp4?rlkey=2vn2qmi1p7impxjziz8m84azi&st=t4z0jznz&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock6.png" alt="Three Days Grace" />
@@ -85,7 +88,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/glcr4hmigap4jex2b8vfv/video7.mp4?rlkey=hv7h1xrvn2u5ainp53h4ob6bs&st=cfu1rw3a&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/glcr4hmigap4jex2b8vfv/video7.mp4?rlkey=hv7h1xrvn2u5ainp53h4ob6bs&st=cfu1rw3a&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock7.jpg" alt="Slipknot" />
@@ -97,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/uti3xcxy7spxm4zbsrb1c/video8.mp4?rlkey=zq1cc1rh785x719r18kq15ymf&st=b1e1o8bd&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/uti3xcxy7spxm4zbsrb1c/video8.mp4?rlkey=zq1cc1rh785x719r18kq15ymf&st=b1e1o8bd&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock8.png" alt="Skillet" />
@@ -109,7 +112,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/5jbbmon0m41d4or4xji39/video9.mp4?rlkey=4lodphweofn4fejaj47u3zaxi&st=f1wjoggf&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/5jbbmon0m41d4or4xji39/video9.mp4?rlkey=4lodphweofn4fejaj47u3zaxi&st=f1wjoggf&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock9.webp" alt="Metallica" />
@@ -121,7 +124,7 @@
                     </div>
                 </div>
 
-                <div class="rockStar" onclick="toggleGroup(this, 'https://www.dropbox.com/scl/fi/5r0bj24o1oxhpepafv0z5/video10.mp4?rlkey=svl3so5tmoef56rv9sewu0r1z&st=459w7bay&raw=1')">
+            <div class="rockStar" data-video-url="https://www.dropbox.com/scl/fi/5r0bj24o1oxhpepafv0z5/video10.mp4?rlkey=svl3so5tmoef56rv9sewu0r1z&st=459w7bay&raw=1">
                     <div class="rockStar-header">
                         <div class="image-container">
                             <img src="/images/rock-legends-portal/Rock10.png" alt="Bring Me The Horizon" />
@@ -139,55 +142,36 @@
                 <video id="groupVideo" controls autoplay preload="auto" playsinline>
                     <source id="videoSource" src="" type="video/mp4">
                 </video>
-             <div class="poll-container">
-                     <p>@RockLegendsPortal.Survey</p>
-    
-                 <form asp-controller="RockLegendsPortal" asp-action="Index" method="post">
-                     <div class="poll-controls">
+            <div class="poll-container">
+                <p>@RockLegendsPortal.Survey</p>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="poll-controls" id="ajax-like-form">
                         <span class="easter-egg">@RockLegendsPortal.Easter_egg</span>
-                        <select name="SelectedBandId" id="rock-poll">
-                              <option value="2">KISS</option>
-                              <option value="3">Ozzy Osbourne</option>
-                              <option value="4">AC/DC</option>
-                              <option value="5">Bon Jovi</option>
-                              <option value="6">Rammstein</option>
-                              <option value="7">Three Days Grace</option>
-                              <option value="8">Slipknot</option>
-                              <option value="9">Skillet</option>
-                              <option value="10">Metallica</option>
-                              <option value="11">Bring Me The Horizon</option>
+
+                        <select id="rock-poll" class="form-control">
+                            <option value="2">KISS</option>
+                            <option value="3">Ozzy Osbourne</option>
+                            <option value="4">AC/DC</option>
+                            <option value="5">Bon Jovi</option>
+                            <option value="6">Rammstein</option>
+                            <option value="7">Three Days Grace</option>
+                            <option value="8">Slipknot</option>
+                            <option value="9">Skillet</option>
+                            <option value="10">Metallica</option>
+                            <option value="11">Bring Me The Horizon</option>
                         </select>
-                        <button type="submit" class="poll-button">@RockLegendsPortal.Send</button>
-                     </div>
-                 </form>
-             </div>
+
+                        <button type="button" id="btn-ajax-like" class="poll-button">👍 Проголосовать</button>
+                    </div>
+                    <p id="like-status-msg" class="like-status-success" style="display: none;"></p>
+                }
+                else
+                {
+                    <p class="auth-warning-msg">🎸 Чтобы проголосовать, пожалуйста, авторизуйтесь на сайте.</p>
+                }
             </div>
         </div>
     </div>
-
-    <script>
-            function toggleGroup(element, videoUrl) {
-                const description = element.querySelector('.rockStar-description');
-                const videoElement = document.getElementById('groupVideo');
-                const videoSource = document.getElementById('videoSource');
-        
-                const isOpening = description.style.display !== "block";
-
-                document.querySelectorAll('.rockStar-description').forEach(desc => {
-                    desc.style.display = "none";
-                });
-
-                if (isOpening) {
-                    description.style.display = "block";
-            
-                    videoSource.src = videoUrl;
-            
-                    videoElement.load();
-                    videoElement.play();
-                } else {
-                    description.style.display = "none";
-                    videoElement.pause();
-                    videoSource.src = "";
-                }
-            }
-    </script>
+</div>

@@ -23,9 +23,11 @@ namespace WebNet23Online.Data
         public DbSet<LittleLemonData> LittleLemon { get; set; }
         public DbSet<LittleLemonGuestData> LittleLemonGuests { get; set; }
         public DbSet<RockBandsData> RockBand { get; set; }
+        public DbSet<RockBandLikeData> RockBandLikes { get; set; }
         public DbSet<FoodItemData> FoodItems { get; set; }
         public DbSet<IngredientData> Ingredients { get; set; }
         public DbSet<MenuData> Menus { get; set; }
+        public DbSet<OrderData> Orders { get; set; }
         public DbSet<GenreOfRockBandsData> RockBandGenresDictionary { get; set; }
         public DbSet<RockBandGenreData> RockBandGenres { get; set; }
 
@@ -33,6 +35,7 @@ namespace WebNet23Online.Data
         public DbSet<RockLegendsGenres> RockLegendsGenres { get; set; }
 
         public DbSet<SlayTheSpire2HeroesData> SlayTheSpire2Heroes { get; set; }
+        public DbSet<SlayTheSpire2HeroesCards> SlayTheSpire2HeroesCards { get; set; }
 
         public DbSet<GameData> Games { get; set; }
         public DbSet<PublisherData> Publishers { get; set; }
@@ -42,6 +45,9 @@ namespace WebNet23Online.Data
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
         public DbSet<JdmCarsBlogCommentsData> JdmCarsBlogComments { get; set; }
+
+        public DbSet<TicketData> Tickets { get; set; }
+        public DbSet<CommentData> Comments { get; set; }
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -84,6 +90,30 @@ namespace WebNet23Online.Data
                 .WithMany(x => x.CreatedByMeAnimalSpecies)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TicketData>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.MyTickets)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TicketData>()
+                .HasOne(x => x.Zoo)
+                .WithMany(x => x.Tickets)
+                .HasForeignKey(x => x.ZooId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CommentData>()
+                .HasOne(x => x.Author)
+                .WithMany(x => x.MyComments)
+                .HasForeignKey(x => x.AuthorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CommentData>()
+                .HasOne(x => x.Zoo)
+                .WithMany(x => x.Comments)
+                .HasForeignKey(x => x.ZooId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserData>()
                 .HasOne(x => x.UserProfile)
@@ -153,6 +183,16 @@ namespace WebNet23Online.Data
                     j.ToTable("FoodItemIngredientDatas");
                 });
 
+            modelBuilder.Entity<OrderData>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<OrderData>()
+                .HasMany(x => x.FoodItems)
+                .WithMany(x => x.Orders);
+
             modelBuilder.Entity<RockLegendsData>()
                 .HasOne(x => x.Genres)
                 .WithMany(x => x.Groups)
@@ -211,6 +251,22 @@ namespace WebNet23Online.Data
                 .WithMany(x => x.RockBandGenres)
                 .HasForeignKey(x => x.GenreId);
 
+            modelBuilder.Entity<RockBandLikeData>()
+                .HasIndex(x => new { x.UserId, x.RockBandId })
+                .IsUnique();
+
+            modelBuilder.Entity<RockBandLikeData>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.RockBandLikes)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RockBandLikeData>()
+                .HasOne(x => x.RockBand)
+                .WithMany(x => x.RockBandLikes)
+                .HasForeignKey(x => x.RockBandId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<GenreOfRockBandsData>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
@@ -219,6 +275,26 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.JdmManufacturerData)
                 .WithMany(x => x.JdmCarsDatas)
                 .HasForeignKey(x => x.JdmManufacturerDataId);
+            
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.Hero)
+                .WithMany(x => x.Cards)
+                .HasForeignKey(x =>x.HeroId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany(x => x.CreatedSlayTheSpire2HeroesCards)
+                .HasForeignKey(x => x.CreatedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<SlayTheSpire2HeroesCards>()
+                .HasOne(x => x.ModifiedByUser)
+                .WithMany(x => x.ModifiedSlayTheSpire2HeroesCards)
+                .HasForeignKey(x => x.ModifiedByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            
 
             modelBuilder.Entity<JdmCarsData>()
                  .HasOne(x => x.Creator)

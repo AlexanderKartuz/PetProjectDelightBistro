@@ -1,4 +1,5 @@
-﻿@model WebNet23Online.Models.HabitTracker.HabitTrackerViewModel
+@using WebNet23Online.Localizations.HabitTracker
+@model WebNet23Online.Models.HabitTracker.HabitTrackerViewModel
 @{
     Layout = "_LayoutHabitTracker";
 }
@@ -6,7 +7,7 @@
 <link rel="stylesheet" href="/css/habit-tracker/statistics.css">
 
 <div class="tracker">
-    <div class="tracker-title">Статистика за месяц</div>
+    <div class="tracker-title">@HabitTracker.Statistics_title</div>
     <div class="tracker-date" id="month-label"></div>
 
     <div class="table-tracker stats-container">
