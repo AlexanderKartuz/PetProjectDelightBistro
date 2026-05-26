@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Data.Models.Steam;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Models.Steam;
+using WebNet23Online.Models.Steam.ApiResponses;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers.ApiControllers.steam
@@ -24,19 +25,19 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
         {
             if (!_authService.IsAuthenticated())
             {
-                return Unauthorized(new { error = "Login required." });
+                return Unauthorized(new ErrorApiResponse("Login required."));
             }
 
             if (request == null || request.GameId <= 0 || string.IsNullOrWhiteSpace(request.Text) || request.Rating < 1 || request.Rating > 10)
             {
-                return BadRequest(new { error = "Invalid data." });
+                return BadRequest(new ErrorApiResponse("Invalid data."));
             }
 
             var userId = _authService.GetUserId();
 
             if (_gameReviewRepository.ExistsForUser(request.GameId, userId))
             {
-                return Conflict(new { error = "You already reviewed this game." });
+                return Conflict(new ErrorApiResponse("You already reviewed this game."));
             }
 
             var review = new GameReviewData
@@ -51,12 +52,13 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
 
             _gameReviewRepository.Add(review);
 
-            return Ok(new
+            return Ok(new AddGameReviewApiResponse
             {
-                author = _authService.GetUserName(),
-                text = review.Text,
-                rating = review.Rating,
-                createdAt = review.CreatedAt
+                IsSuccess = true,
+                Author = _authService.GetUserName()!,
+                Text = review.Text,
+                Rating = review.Rating,
+                CreatedAt = review.CreatedAt
             });
         }
     }

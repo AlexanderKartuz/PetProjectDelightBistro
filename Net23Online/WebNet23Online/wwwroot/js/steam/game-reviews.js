@@ -10,7 +10,7 @@ $(document).ready(function () {
 
         setTimeout(() => {
             toast.addClass('show');
-        }, 3000);
+        }, 10);
 
         setTimeout(() => {
             toast.removeClass('show');
