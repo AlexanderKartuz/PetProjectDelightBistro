@@ -8,6 +8,6 @@ namespace WebNet23Online.Hubs
 
     public interface IAnimalWorldHub
     {
-        Task NewZooCreated(string zooName);
+        Task NewAnimalInZooAppeared(string zooName, string animalSpeciesName);
     }
 }

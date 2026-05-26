@@ -167,5 +167,15 @@ namespace WebNet23Online.Services
 
             return zoos;
         }
+
+        public string GetZooName(int zooId)
+        {
+            return _zooRepository.Get(zooId).ZooName;
+        }
+
+        public string GetAnimalSpeciesName(int animalSpeciesId)
+        {
+            return _animalSpeciesRepository.Get(animalSpeciesId).AnimalSpeciesName;
+        }
     }
 }
