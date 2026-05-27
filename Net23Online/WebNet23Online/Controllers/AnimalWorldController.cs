@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using WebNet23Online.Controllers.CustomAuthAttribute;
+using WebNet23Online.Hubs;
 using WebNet23Online.Models.AnimalWorld;
 using WebNet23Online.Services.Interfaces;
 
@@ -9,10 +11,12 @@ namespace WebNet23Online.Controllers
     public class AnimalWorldController : Controller
     {
         private IAnimalWorldService _animalWorldService;
+        private IHubContext<AnimalWorldHub, IAnimalWorldHub> _animalWorldHub;
 
-        public AnimalWorldController(IAnimalWorldService animalWorldService)
+        public AnimalWorldController(IAnimalWorldService animalWorldService, IHubContext<AnimalWorldHub, IAnimalWorldHub> animalWorldHub)
         {
             _animalWorldService = animalWorldService;
+            _animalWorldHub = animalWorldHub;
         }
 
         public IActionResult Index()
@@ -129,6 +133,9 @@ namespace WebNet23Online.Controllers
 
             if (_animalWorldService.BindZooWithAnimalSpecies(viewModel.ZooId, viewModel.AnimalSpeciesId))
             {
+                var zooName = _animalWorldService.GetZooName(viewModel.ZooId);
+                var animalSpeciesName = _animalWorldService.GetAnimalSpeciesName(viewModel.AnimalSpeciesId);
+                _animalWorldHub.Clients.All.NewAnimalInZooAppeared(zooName, animalSpeciesName);
                 return RedirectToAction("Index");
             }
 
