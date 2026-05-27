@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebNet23Online.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/animal-world/animal-world-style.css" />
+    <link rel="stylesheet" href="~/css/animal-world/notifications.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -50,10 +51,13 @@
             <p>@AnimalWorld.FooterText</p>
         </div>
     </footer>
+    <div class="notifications-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/js/animal-world/new-animal-species-appeared.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
