@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
+using Microsoft.AspNetCore.SignalR;
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Data.DataModels;
 using WebNet23Online.Data.Enums;
+using WebNet23Online.Hubs;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Models.RockLegendsPortal;
@@ -20,19 +22,22 @@ namespace WebNet23Online.Controllers
         private readonly IRockLegendsGenresRepository _genreRepository;
         private readonly IAuthService _authService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private IHubContext<RockLegendsHub, IRockLegendsHub> _rockLegendsHub;
 
         public RockLegendsPortalController(
             IRockLegendsPick rockService,
             IRockLegendsRepository rockLegendsRepository,
             IRockLegendsGenresRepository genreRepository,
             IAuthService authService,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IHubContext<RockLegendsHub, IRockLegendsHub> rockLegendsHub)
         {
             _rockService = rockService;
             _rockLegendsRepository = rockLegendsRepository;
             _genreRepository = genreRepository;
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
+            _rockLegendsHub = rockLegendsHub;
         }
 
         [HttpGet]
@@ -104,6 +109,7 @@ namespace WebNet23Online.Controllers
             };
 
             _genreRepository.Add(genre);
+            _rockLegendsHub.Clients.All.NewGenreCreated(viewModel.Name, viewModel.CoverUrl);
 
             if (viewModel.Image != null)
             {

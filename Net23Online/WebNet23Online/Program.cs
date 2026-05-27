@@ -171,6 +171,7 @@ app.UseAuthorization();     // May I?
 app.UseMiddleware<MyLocalizationMiddleware>();
 
 app.MapHub<AnimeHub>("/my-hub/anime");
+app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
 app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
 
 app.MapControllerRoute(
