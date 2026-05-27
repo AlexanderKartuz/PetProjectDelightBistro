@@ -967,6 +967,43 @@ namespace WebNet23Online.Data.Migrations
                     b.ToTable("GameGenres");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameReviewData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("GameReviews");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.PublisherData", b =>
                 {
                     b.Property<int>("Id")
@@ -1497,22 +1534,23 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Publisher");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.TicketData", b =>
+            modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameReviewData", b =>
                 {
-                    b.HasOne("WebNet23Online.Data.Models.UserData", "User")
-                        .WithMany("MyTickets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "Author")
+                        .WithMany("Reviews")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebNet23Online.Data.Models.AnimalWorld.ZooData", "Zoo")
-                        .WithMany("Tickets")
-                        .HasForeignKey("ZooId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasOne("WebNet23Online.Data.Models.Steam.GameData", "Game")
+                        .WithMany("GameReviews")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Author");
 
-                    b.Navigation("Zoo");
+                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.UserData", b =>
@@ -1588,9 +1626,9 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Groups");
                 });
 
-            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", b =>
+            modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameData", b =>
                 {
-                    b.Navigation("Cards");
+                    b.Navigation("GameReviews");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.PublisherData", b =>
@@ -1626,9 +1664,7 @@ namespace WebNet23Online.Data.Migrations
 
                     b.Navigation("ModifiedGames");
 
-                    b.Navigation("MyComments");
-
-                    b.Navigation("MyTickets");
+                    b.Navigation("Reviews");
 
                     b.Navigation("RockBand");
 

@@ -375,3 +375,15 @@ article.media-card.active {
 .mode-edit {
     display: none;
 }
+
+.template{
+    display: none;
+}
+
+.create-new-film .anime-catalog-card__cover {
+    aspect-ratio: 3 / 3;
+}
+
+.create-new-film .anime-catalog-card__body {
+    flex-direction: column;
+}

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebNet23Online", "WebNet23O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebNet23Online.Data", "WebNet23Online.Data\WebNet23Online.Data.csproj", "{5BE0A6F9-05E0-4B08-80A9-706B9FE4D9D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieMinimalApi", "MovieMinimalApi\MovieMinimalApi.csproj", "{EF4AE332-81B1-4345-944E-75823F5728F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5BE0A6F9-05E0-4B08-80A9-706B9FE4D9D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BE0A6F9-05E0-4B08-80A9-706B9FE4D9D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BE0A6F9-05E0-4B08-80A9-706B9FE4D9D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF4AE332-81B1-4345-944E-75823F5728F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF4AE332-81B1-4345-944E-75823F5728F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF4AE332-81B1-4345-944E-75823F5728F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF4AE332-81B1-4345-944E-75823F5728F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

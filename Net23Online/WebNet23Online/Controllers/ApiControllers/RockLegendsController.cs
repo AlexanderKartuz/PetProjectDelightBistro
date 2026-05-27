@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.SignalR;
+using WebNet23Online.Hubs;
 
 namespace WebNet23Online.Controllers.ApiControllers
 {
@@ -10,13 +12,16 @@ namespace WebNet23Online.Controllers.ApiControllers
     {
         private readonly IRockLegendsRepository _rockLegendsRepository;
         private readonly IRockLegendsGenresRepository _genreRepository;
+        private IHubContext<RockLegendsHub, IRockLegendsHub> _rockLegendsHub;
 
         public RockLegendsApiController(
             IRockLegendsRepository rockLegendsRepository,
-            IRockLegendsGenresRepository genreRepository)
+            IRockLegendsGenresRepository genreRepository,
+            IHubContext<RockLegendsHub, IRockLegendsHub> rockLegendsHub)
         {
             _rockLegendsRepository = rockLegendsRepository;
             _genreRepository = genreRepository;
+            _rockLegendsHub = rockLegendsHub;
         }
 
         [HttpPost("like/{id}")]
@@ -64,6 +69,10 @@ namespace WebNet23Online.Controllers.ApiControllers
             }
 
             return Ok(new { isValid = true });
+        }
+        public void NotifyAboutGenre(string name)
+        {
+            _rockLegendsHub.Clients.All.NewGenreCreated(name, "https://www.pngall.com/wp-content/uploads/9/Rock-Music-Transparent.png");
         }
     }
 }

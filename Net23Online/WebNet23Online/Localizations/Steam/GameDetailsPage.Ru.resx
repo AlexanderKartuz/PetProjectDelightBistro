@@ -138,4 +138,25 @@
   <data name="Free_Text" xml:space="preserve">
     <value>Бесплатно</value>
   </data>
+  <data name="Leave_First_Review_Button" xml:space="preserve">
+    <value>Напишите отзыв первым</value>
+  </data>
+  <data name="Not_Recommended_Text" xml:space="preserve">
+    <value>Не рекомендует</value>
+  </data>
+  <data name="No_Reviews_Yet_Text" xml:space="preserve">
+    <value>Отзывов нет</value>
+  </data>
+  <data name="Recommended_Text" xml:space="preserve">
+    <value>Рекомендует</value>
+  </data>
+  <data name="Recommend_Percent_Label" xml:space="preserve">
+    <value>рекомендуют</value>
+  </data>
+  <data name="Reviews_Title" xml:space="preserve">
+    <value>Отзывы</value>
+  </data>
+  <data name="Write_A_Review_Button" xml:space="preserve">
+    <value>Написать отзыв</value>
+  </data>
 </root>

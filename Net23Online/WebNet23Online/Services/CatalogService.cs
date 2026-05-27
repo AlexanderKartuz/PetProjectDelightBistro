@@ -185,13 +185,13 @@ namespace WebNet23Online.Services
 
         public GameData GetGameDetails(int id)
         {
-            var game = _gameRepository.GetGameWithPublisherAndGenres(id);
+            var game = _gameRepository.GetGameDetails(id);
             return game;
         }
 
         public void UpdateGame(EditGameViewModel viewModel)
         {
-            var game = _gameRepository.GetGameWithPublisherAndGenres(viewModel.Id);
+            var game = _gameRepository.GetGameDetails(viewModel.Id);
 
             if (game == null)
             {

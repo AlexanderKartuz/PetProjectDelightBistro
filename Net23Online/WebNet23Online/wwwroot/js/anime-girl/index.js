@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
 
+    init();
+
     $('article.media-card').click(function () {
         const self = $(this);
 
@@ -67,5 +69,41 @@
                 });
         }
     })
+
+    $('.create-movie-button').click(function () {
+        const requestUrl = `https://localhost:7142/CreateMovie`;
+        const name = $('.movie-name-input').val();
+        const url = $('.movie-url-input').val();
+
+        const data = { name, url };
+
+        $.ajax({
+            type: 'POST',
+            url: requestUrl,
+            contentType: 'application/json',
+            data: JSON.stringify(data)
+        }).done(function (movie) {
+            drawMovie(movie);
+        });
+    });
+
+    function init() {
+        const url = `https://localhost:7142/GetMovies`;
+        $.get(url)
+            .done(function (movies) {
+                movies.forEach((movie) => {
+                    drawMovie(movie);
+                });
+            });
+    }
+
+    function drawMovie(movie) {
+        const movieContainer = $('.section-movie-catalog .anime-catalog-grid');
+        const divForMovie = $('.section-movie-catalog .anime-catalog-card.template').clone();
+        divForMovie.removeClass('template');
+        divForMovie.find('.anime-catalog-card__title').text(movie.name);
+        divForMovie.find('.anime-catalog-card__cover img').attr('src', movie.url);
+        movieContainer.append(divForMovie);
+    }
 
 });

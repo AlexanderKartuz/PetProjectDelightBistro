@@ -33,11 +33,13 @@ namespace WebNet23Online.Data.Repositories.Steam
             return specialOffers;
         }
 
-        public GameData GetGameWithPublisherAndGenres(int id)
+        public GameData GetGameDetails(int id)
         {
             var gameData = _dbSet
                 .Include(g => g.Publisher)
                 .Include(g => g.GameGenres)
+                .Include(g => g.GameReviews)
+                    .ThenInclude(r => r.Author)
                 .FirstOrDefault(g => g.Id == id);
             return gameData;
         }

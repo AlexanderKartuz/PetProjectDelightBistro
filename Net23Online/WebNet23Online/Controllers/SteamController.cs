@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Controllers.CustomAuthAttribute.Steam;
 using WebNet23Online.Data.Enums;
+using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Models.Steam;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.Steam;
@@ -18,14 +19,17 @@ namespace WebNet23Online.Controllers
 
         private readonly ICatalogService _catalogService;
         private readonly IAuthService _authService;
+        private readonly IGameReviewRepository _gameReviewRepository;
 
         public SteamController(
             ICatalogService catalogService,
             IAuthService authService
-        )
+,
+            IGameReviewRepository gameReviewRepository)
         {
             _catalogService = catalogService;
             _authService = authService;
+            _gameReviewRepository = gameReviewRepository;
         }
 
         [AllowAnonymous]
@@ -112,7 +116,22 @@ namespace WebNet23Online.Controllers
                     .ToList(),
                 PublisherName = gameData.Publisher?.Name ?? "Unknown",
                 PublisherId = gameData.PublisherId,
-                IsUserAtLeastModerator = _authService.AtLeastModerator()
+                IsUserAtLeastModerator = _authService.AtLeastModerator(),
+                HasUserReviewed = _authService.IsAuthenticated()
+                    && _gameReviewRepository.ExistsForUser(id, _authService.GetUserId()),
+                Reviews = gameData.GameReviews
+                    .Select(r => new GameReviewViewModel()
+                    {
+                        Id = r.Id,
+                        GameId = r.GameId,
+                        Text = r.Text,
+                        Rating = r.Rating,
+                        IsRecommended = r.Rating >= 7,
+                        AuthorName = r.Author.Name,
+                        CreatedAt = r.CreatedAt,
+                        ModifiedAt = r.ModifiedAt,
+                    })
+                    .ToList()
             };
 
             return View(viewModel);
