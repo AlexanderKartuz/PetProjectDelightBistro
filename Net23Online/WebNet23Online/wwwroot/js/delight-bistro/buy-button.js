@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-    function updateOrderBox() {
+  function updateOrderBox() {
     const chosenItems = getChosenItems();
     counterDisplay.textContent = chosenItems.length;
 
@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const oldItems = orderList.querySelectorAll('.order-food-item');
     oldItems.forEach((item) => item.remove());
 
-    // Добавление в order-box
     chosenItems.forEach((item) => {
       const li = document.createElement('li');
       li.className = 'order-food-item';
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Выбранные элементы:', chosenItems);
   }
 
-  // выбор foodItems по кнопке
   function getChosenItems() {
     const chosenButtons = document.querySelectorAll(
       '.buy-button.choose-to-buy',
@@ -54,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderFoodItems = [];
 
     chosenButtons.forEach((button) => {
-      // тип number для связи с бд, запарсить в число?
       const id = button.dataset.foodItemId;
       const foodItem = button.closest('.food-item');
 
@@ -70,10 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Отправка заказа
-   postOrderButton.addEventListener('click', function () {
+  postOrderButton.addEventListener('click', function () {
     const chosenItems = getChosenItems();
 
-    // json key, list id
     const requestBody = {
       foodItemIds: chosenItems.map((item) => parseInt(item.id, 10)),
     };
@@ -82,12 +78,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Authorize only
     fetch('/api/DelightBistro/CreateOrder', {
-        method: 'Post',
-        // credentials: 'same-origin', // add?
+      method: 'Post',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin', // add cookie
       body: JSON.stringify(requestBody),
     })
       .then((response) => {
+        if (
+          // при редиректе на /Auth/Login, response.status===200 от /Auth/Login
+          response.redirected &&
+          response.url.includes('/Auth/Login')
+        ) {
+          window.location.href = '/Auth/Login';
+          return;
+        }
+        if (response.status === 401) {
+          window.location.href = '/Auth/Login';
+          return;
+        }
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }

@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using WebNet23Online.Data.HelperModels.DelightBistro;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
+using WebNet23Online.Hubs;
+using WebNet23Online.Hubs.Interfaces;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers.ApiControllers
@@ -17,12 +20,14 @@ namespace WebNet23Online.Controllers.ApiControllers
         private IFoodItemRepository _foodItemRepository;
         private IOrderRepository _orderRepository;
         private IAuthService _authService;
+        private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
 
-        public DelightBistroController(IFoodItemRepository foodItemRepository, IAuthService authService, IOrderRepository orderRepository)
+        public DelightBistroController(IFoodItemRepository foodItemRepository, IAuthService authService, IOrderRepository orderRepository, IHubContext<DeligtBistroHub, IDeligtBistroHub> deligtBistroHub)
         {
             _foodItemRepository = foodItemRepository;
             _authService = authService;
             _orderRepository = orderRepository;
+            _deligtBistroHub = deligtBistroHub;
         }
 
         public bool Delete([FromQuery] List<int> ids)
@@ -33,19 +38,18 @@ namespace WebNet23Online.Controllers.ApiControllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateOrder([FromBody] CreateOrderDto createOrder) // принимать List id?
+        public IActionResult CreateOrder([FromBody] CreateOrderDto createOrder)
         {
-            if (!_authService.IsAuthenticated())
-            {
-                return BadRequest(new { message = "Авторизуйтесь для заказа" });
-            }
+            //if (!_authService.IsAuthenticated())
+            //{
+            //    return BadRequest(new { message = "Авторизуйтесь для заказа" });
+            //}
 
             if (createOrder.foodItemIds.IsNullOrEmpty())
             {
                 return BadRequest(new { message = "Заказ пустой" });
             }
 
-            // list ids
             var selectedIds = createOrder.foodItemIds;
             var selectedFoodItems = _foodItemRepository.GetByIds(selectedIds);
 
@@ -81,6 +85,11 @@ namespace WebNet23Online.Controllers.ApiControllers
             };
 
             return Ok(responseDto);
+        }
+
+        public void NotifyAboutFood(string name, decimal price)
+        {
+            _deligtBistroHub.Clients.All.NewFoodWasCreated(name, price);
         }
     }
 }
