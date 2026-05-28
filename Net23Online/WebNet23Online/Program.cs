@@ -176,6 +176,8 @@ app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
 app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
 app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
 
+app.MapHub<JdmHub>("/my-hub/jdm");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

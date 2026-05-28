@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.SignalR;
 using NAudio;
 using System.Globalization;
 using System.IO;
@@ -15,6 +16,8 @@ using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories;
 using WebNet23Online.Data.Repositories.Interfaces;
+using WebNet23Online.Hubs;
+using WebNet23Online.Hubs.Interfaces;
 using WebNet23Online.Models.JapaneseDomesticMarket;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Interfaces;
@@ -31,8 +34,9 @@ namespace WebNet23Online.Controllers
         private readonly IAuthService _authService;
         public IWebHostEnvironment _webHostEnvironment;
         private readonly IJdmJournalCommentRepository _journalCommentRepository;
+        private IHubContext<JdmHub, IJdmHub> _jdmHub;
 
-        public JapaneseDomesticMarketController(IJapaneseDomesticMarketGenerator jdmItemGenerator, IJDMCatalogGenerator jdmCatalogGenerator, IJdmRepository jdmRepository, IJdmManufacturerRepository jdmManufacturerRepository, IAuthService authService, IWebHostEnvironment webHostEnvironment, IJdmJournalCommentRepository journalCommentRepository)
+        public JapaneseDomesticMarketController(IJapaneseDomesticMarketGenerator jdmItemGenerator, IJDMCatalogGenerator jdmCatalogGenerator, IJdmRepository jdmRepository, IJdmManufacturerRepository jdmManufacturerRepository, IAuthService authService, IWebHostEnvironment webHostEnvironment, IJdmJournalCommentRepository journalCommentRepository, IHubContext<JdmHub, IJdmHub> jdmHub)
         {
             _jdmItemGenerator = jdmItemGenerator;
             _jdmCatalogGenerator = jdmCatalogGenerator;
@@ -41,6 +45,7 @@ namespace WebNet23Online.Controllers
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
             _journalCommentRepository = journalCommentRepository;
+            _jdmHub = jdmHub;
         }
         public IActionResult Home()
         {
@@ -116,6 +121,7 @@ namespace WebNet23Online.Controllers
                     ManufacturerType = manufacturer.ManufacturerType
                 };
                 _jdmRepository.Add(jdmCarsData);
+                _jdmHub.Clients.All.NewJdmCarsCreated(viewModel.Model, viewModel.Price, viewModel.Url);
 
                 if (viewModel.VehicleInspectionHistoryUrl is not null && viewModel.VehicleInspectionHistoryUrl.Length > 0)
                 {
