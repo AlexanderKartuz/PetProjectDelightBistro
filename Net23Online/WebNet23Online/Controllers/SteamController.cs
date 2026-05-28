@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.SignalR;
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Controllers.CustomAuthAttribute.Steam;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
+using WebNet23Online.Hubs;
+using WebNet23Online.Hubs.Interfaces;
 using WebNet23Online.Models.Steam;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.Steam;
@@ -20,16 +22,25 @@ namespace WebNet23Online.Controllers
         private readonly ICatalogService _catalogService;
         private readonly IAuthService _authService;
         private readonly IGameReviewRepository _gameReviewRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        //private readonly IHubContext<SteamChatHub, ISteamChatHub> _steamChatHub;
+        private readonly IHubContext<SteamNotificationHub, ISteamNotificationHub> _steamNotificationHub;
 
         public SteamController(
             ICatalogService catalogService,
-            IAuthService authService
-,
-            IGameReviewRepository gameReviewRepository)
+            IAuthService authService,
+            IGameReviewRepository gameReviewRepository,
+            IWebHostEnvironment webHostEnvironment,
+            //IHubContext<SteamChatHub, ISteamChatHub> steamChatHub,
+            IHubContext<SteamNotificationHub, ISteamNotificationHub> steamNotificationHub)
+
         {
             _catalogService = catalogService;
             _authService = authService;
             _gameReviewRepository = gameReviewRepository;
+            _webHostEnvironment = webHostEnvironment;
+            //_steamChatHub = steamChatHub;
+            _steamNotificationHub = steamNotificationHub;
         }
 
         [AllowAnonymous]
@@ -89,6 +100,7 @@ namespace WebNet23Online.Controllers
                 return View(viewModel);
             }
             _catalogService.AddGame(viewModel);
+            _steamNotificationHub.Clients.All.NewGameAdded(viewModel.Title, viewModel.ImageUrl);
 
             return RedirectToAction(nameof(Catalog));
         }

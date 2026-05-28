@@ -895,3 +895,33 @@ article.card.active {
 .toast--success{
     background: #5cb85c;
 }
+
+/* Notifications */
+
+.notifications {
+    width: 500px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    margin: 10px;
+}
+
+.notification {
+    background: #2a475e;
+    color: white; 
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid #66c0f4;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 9999;
+}
+
+    .notification .preview {
+        max-width: 400px;
+        max-height: 300px;
+        width: auto;
+    }
+
