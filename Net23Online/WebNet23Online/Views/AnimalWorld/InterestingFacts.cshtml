@@ -1,0 +1,39 @@
+﻿@using WebNet23Online.Localizations
+@{
+    Layout = "_LayoutAnimalWorld";
+}
+
+@section Scripts {
+    <script src="~/js/animal-world/get-animal-species-names.js"></script>
+}
+
+<title>Интересные факты</title>
+
+<div class="main-place">
+    <h2 class="green-title">Факты о животных</h2>
+    <div class="green-line"></div>
+
+    
+    <div class="form-group">
+        <label for="animal-type-select">Вид животного:</label>
+        <select id="animal-type-select" class="form-input">
+            <option value="">Загрузка видов...</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="factText">Текст факта:</label>
+        <textarea id="factText" class="form-input comment-textarea" rows="4" placeholder="Введите интересный факт..."></textarea>
+    </div>
+
+    <div class="find-animal">
+        <button type="button" id="addFactBtn" class="find-animal-button">Добавить факт</button>
+        <span id="fact-form-feedback" class="zoo-name-feedback"></span>
+    </div>
+
+    <h3 class="green-title">Известные факты</h3>
+    <div class="green-line"></div>
+
+    
+    <p class="empty-list-note">Загрузка фактов...</p>
+</div>

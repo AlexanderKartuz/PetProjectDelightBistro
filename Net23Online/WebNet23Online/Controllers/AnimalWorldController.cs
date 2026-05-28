@@ -147,5 +147,10 @@ namespace WebNet23Online.Controllers
         {
             return View(_animalWorldService.GetAllZoos());
         }
+
+        public IActionResult InterestingFacts()
+        {
+            return View();
+        }
     }
 }
