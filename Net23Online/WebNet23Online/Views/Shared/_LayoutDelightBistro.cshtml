@@ -18,7 +18,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="/js/delight-bistro/delight-bistro-hub.js"></script>
-    <link rel="stylesheet" href="/css/delight-bistro/delight-bistro-hub.css"/>
+    <link rel="stylesheet" href="/css/delight-bistro/delight-bistro-hub.css" />
 
 
     @RenderSection("Scripts", required: false)
@@ -40,6 +40,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="/DelightBistro/Index">Delight Bistro</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DelightBistro" asp-action="Chat">Chat</a>
                         </li>
                         @if (authService.IsAuthenticated())
                         {
