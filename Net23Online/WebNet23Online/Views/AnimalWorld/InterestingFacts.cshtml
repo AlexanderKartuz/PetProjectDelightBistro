@@ -12,12 +12,13 @@
 <div class="main-place">
     <h2 class="green-title">Факты о животных</h2>
     <div class="green-line"></div>
+    <br />
 
-    
+    <!-- Форма создания факта -->
     <div class="form-group">
         <label for="animal-type-select">Вид животного:</label>
         <select id="animal-type-select" class="form-input">
-            <option value="">Загрузка видов...</option>
+            <option>Загрузка...</option>
         </select>
     </div>
 
@@ -30,10 +31,14 @@
         <button type="button" id="addFactBtn" class="find-animal-button">Добавить факт</button>
         <span id="fact-form-feedback" class="zoo-name-feedback"></span>
     </div>
+    <br />
 
+    <!-- Блок отображения существующих фактов -->
     <h3 class="green-title">Известные факты</h3>
     <div class="green-line"></div>
+    <br />
 
-    
-    <p class="empty-list-note">Загрузка фактов...</p>
+    <div id="facts-container" class="add-links-grid">
+        <p class="empty-list-note" id="facts-loading-status">Загрузка фактов...</p>
+    </div>
 </div>
