@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const inputField = document.querySelector('.message-input');
     const currentUser = document.querySelector('.current-user');
     let currentUserName = currentUser.textContent.trim();
+    const connectedUsers = new Map();
 
     sendButton.addEventListener('click', sendMessage);
 
@@ -23,11 +24,23 @@ document.addEventListener('DOMContentLoaded', function () {
     hub.on('ReceiveMessage', function (senderName, message) {
         console.log(`New message: ${senderName}, ${message}`);
 
-        const isSend = (senderName === currentUserName)
+        const isSend = (senderName === currentUserName);
         addMessageToChat(senderName, message, isSend);
 
     });
 
+    hub.on('UserConnected', function (connectionId, userName) {
+        console.log(`${userName} Подключился к чату (id ${connectionId})`);
+        // Add user to userlist
+        addUserToList(connectionId, userName);
+    });
+
+    // add userName
+    hub.on('UserDisconnected', function (connectionId, userName) {
+        console.log(`${userName} отключился (id ${connectionId})`);
+        // delete user from UserList
+        removeUserFromList(connectionId);
+    });
 
     function addMessageToChat(senderName, messageText, isSent) {
 
@@ -49,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
         messageDiv.appendChild(messageContentDiv);
 
         chatRoom.appendChild(messageDiv);
-    }
+    };
 
     function sendMessage() {
         const messageText = inputField.value.trim();
@@ -63,9 +76,41 @@ document.addEventListener('DOMContentLoaded', function () {
         // или добавить локально, но вызывать в хабе Clients.Other
         // addMessageToChat(messageSender, messageText, true) 
         inputField.value = '';
-        console.log('Сообщение оправлено' + messageText);
+        console.log(`${currentUserName} Отправил сообщение:` + messageText);
+    };
 
-    }
+    function addUserToList(connectionId, userName) {
+
+        if (connectedUsers.has(connectionId)) {
+            return;
+        }
+
+        const userList = document.querySelector('.user-list');
+
+        const userDiv = document.createElement('div');
+        userDiv.dataset.connectionId = connectionId;
+        userDiv.classList.add('chat-user');
+
+        const nameDiv = document.createElement('div');
+        nameDiv.classList.add('user-name');
+        nameDiv.textContent = userName;
+
+        userDiv.appendChild(nameDiv);
+        userList.appendChild(userDiv);
+
+        // для быстрого удаления
+        connectedUsers.set(connectionId, userDiv);
+    };
+    //Исправить удаление и добавление
+    // Use connectionId
+    function removeUserFromList(connectionId) {
+        const userToRemove = document
+            .querySelector(`[data-connection-id="${connectionId}"]`);
+
+        if (userToRemove) {
+            userToRemove.remove();
+        }
+    };
 
     hub.start();
 });

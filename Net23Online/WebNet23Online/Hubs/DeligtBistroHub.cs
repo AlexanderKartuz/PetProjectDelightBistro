@@ -12,18 +12,33 @@ namespace WebNet23Online.Hubs
             return Clients.All.ReceiveMessage(senderName, message);
         }
 
-        public async override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
             // Get Current User
             var userName = Context.User?
                 .FindFirstValue(AuthService.COOCKIE_NAME_KEY)
                 ?? "Anonymous";
 
-            await Clients.Caller.SetUserName(userName);
+            var conectionId = Context.ConnectionId;
 
-            await Clients.All.UserConnected(userName);
+            await Clients.Caller.SetUserName(userName);
+            await Clients.All.UserConnected(conectionId, userName);
 
             await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            var userName = Context.User?
+                .FindFirstValue(AuthService.COOCKIE_NAME_KEY)
+                ?? "Anonymous";
+
+            var connectionId = Context.ConnectionId;
+
+            await Clients.All.UserDisconnected(connectionId, userName);
+
+            await base.OnDisconnectedAsync(exception);
+
         }
     }
 }
