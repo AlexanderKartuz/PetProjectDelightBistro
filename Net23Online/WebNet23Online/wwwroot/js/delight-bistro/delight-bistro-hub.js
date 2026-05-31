@@ -1,10 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // одно подключение 
     const { hub, ready } = window.delightBistroSignalR;
-    ready.then(function() { /* });*/
-
-        // const url = `https://localhost:7284/my-hub/delightbistro`;
-        // const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
+    ready.then(function () {
 
         hub.on('NewFoodWasCreated', function (name, price) {
             console.log(`New food was added: ${name}, ${price}`);
@@ -20,7 +17,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 newNotificationDiv.remove();
             }, 5000);
         });
-
-        //hub.start();
     });
 });

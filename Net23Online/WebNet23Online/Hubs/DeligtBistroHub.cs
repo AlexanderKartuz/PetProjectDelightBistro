@@ -9,7 +9,6 @@ namespace WebNet23Online.Hubs
     {
         // Общие пользователи
         private static Dictionary<string, string> _chatUsers = new();
-        
         // DTO
         public record ChatUser(string connectionId, string userName);
 

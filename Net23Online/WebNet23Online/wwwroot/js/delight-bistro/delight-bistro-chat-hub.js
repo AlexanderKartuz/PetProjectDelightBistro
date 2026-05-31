@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // const url = `https://localhost:7284/my-hub/delightbistro`;
-    // const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
-
     const { hub, ready } = window.delightBistroSignalR;
 
     const chatRoom = document.querySelector('.chat-room-messages');
@@ -44,14 +41,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         hub.on('UserConnected', function (connectionId, userName) {
             console.log(`${userName} Подключился к хабу (id ${connectionId})`);
-            // Add user to userlist
             addUserToList(connectionId, userName);
         });
 
         // add userName
         hub.on('UserDisconnected', function (connectionId, userName) {
             console.log(`${userName} отключился (id ${connectionId})`);
-            // delete user from UserList
             removeUserFromList(connectionId);
         });
 
@@ -85,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // hub
             hub.invoke('SendMessage', currentUserName, messageText);
                         
             inputField.value = '';
@@ -97,8 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (connectedUsers.has(connectionId)) {
                 return;
             }
-            // для быстрого удаления
-
             const userList = document.querySelector('.user-list');
 
             const userDiv = document.createElement('div');
@@ -131,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        // hub.start();
     });
 });
 
