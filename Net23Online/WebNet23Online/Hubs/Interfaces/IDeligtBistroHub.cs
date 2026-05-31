@@ -1,4 +1,6 @@
-﻿namespace WebNet23Online.Hubs.Interfaces
+﻿using static WebNet23Online.Hubs.DeligtBistroHub;
+
+namespace WebNet23Online.Hubs.Interfaces
 {
     public interface IDeligtBistroHub
     {
@@ -7,6 +9,7 @@
         Task UserConnected(string conectionId, string userName);
         Task UserDisconnected(string connectionId, string userName);
         Task SetUserName(string userName);
+        Task ConnectedUsers(IEnumerable<ChatUser> chatUsers);
 
     }
 }

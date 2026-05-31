@@ -1,21 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const url = `https://localhost:7284/my-hub/delightbistro`;
-  const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
+    // одно подключение 
+    const { hub, ready } = window.delightBistroSignalR;
+    ready.then(function() { /* });*/
 
-  hub.on('NewFoodWasCreated', function (name, price) {
-    console.log(`New food was added: ${name}, ${price}`);
+        // const url = `https://localhost:7284/my-hub/delightbistro`;
+        // const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
 
-    const notificationBox = document.querySelector('.notifications');
-    const newNotificationDiv = document.createElement('div');
+        hub.on('NewFoodWasCreated', function (name, price) {
+            console.log(`New food was added: ${name}, ${price}`);
 
-    newNotificationDiv.textContent = `New food was added: ${name}, price: ${price} BYN`;
-    newNotificationDiv.className = 'notification';
-    notificationBox.appendChild(newNotificationDiv);
+            const notificationBox = document.querySelector('.notifications');
+            const newNotificationDiv = document.createElement('div');
 
-    setTimeout(() => {
-      newNotificationDiv.remove();
-    }, 5000);
-  });
+            newNotificationDiv.textContent = `New food was added: ${name}, price: ${price} BYN`;
+            newNotificationDiv.className = 'notification';
+            notificationBox.appendChild(newNotificationDiv);
 
-  hub.start();
+            setTimeout(() => {
+                newNotificationDiv.remove();
+            }, 5000);
+        });
+
+        //hub.start();
+    });
 });

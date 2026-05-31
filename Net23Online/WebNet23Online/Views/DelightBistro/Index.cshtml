@@ -7,9 +7,11 @@
 }
 
 @section Scripts {
-    <script src="/js/delight-bistro/buy-button.js"></script>
-
     <link rel="stylesheet" href="/css/delight-bistro/style.css" />
+    <link rel="stylesheet" href="/css/delight-bistro/delight-bistro-hub.css" />
+
+    <script src="/js/delight-bistro/buy-button.js"></script>
+    <script src="/js/delight-bistro/delight-bistro-hub.js"></script>
 }
 
 <header class="head-menu">
@@ -25,7 +27,8 @@
     </div>
 </header>
 <div class="notifications"></div>
-<div class="order-box hidden">Заказать блюда:
+<div class="order-box hidden">
+    Заказать блюда:
     <div>
         Выбрано блюд:
     </div>
@@ -76,8 +79,10 @@
                                 </div>
                                 <div class="btnright">
                                     <button data-food-item-id="@foodItem.Id"
-                                    data-food-item-price="@foodItem.Price"
-                                     class="buy-button add-button colorbtn">+</button>
+                                            data-food-item-price="@foodItem.Price"
+                                            class="buy-button add-button colorbtn">
+                                        +
+                                    </button>
                                 </div>
                             </div>
                             <div class="recept">
@@ -98,7 +103,7 @@
         }
     }
 </div>
-        
+
 <aside class="right-bar">
     <div class="form-field">
         <form method="post">
@@ -126,7 +131,7 @@
 
         }
         <br>
-            
+
         <br>
         <li><a href="\DelightBistro\CreateMenu">@DelightBistro.Index_Create_menu</a> </li>
         <li><a href="\DelightBistro\CreateIngredient">@DelightBistro.Index_Create_ingredient</a> </li>
