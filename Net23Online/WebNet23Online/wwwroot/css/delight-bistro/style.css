@@ -317,3 +317,47 @@ div.food-item.active {
 .order-success.hidden {
   display: none;
 }
+
+.teas-catalog {
+  display: contents;
+}
+
+.create-tea-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.create-tea-form input {
+  width: 100%;
+  height: 30px;
+  border-color: #1d1a1a;
+  background-color: #423333;
+  border-radius: 10px;
+  color: white;
+}
+
+.create-tea-form .create-button {
+  width: 100%;
+  height: 45px;
+  background-color: #1d1a1a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.teas-catalog .food-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.teas-catalog .food-item .name-price {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
