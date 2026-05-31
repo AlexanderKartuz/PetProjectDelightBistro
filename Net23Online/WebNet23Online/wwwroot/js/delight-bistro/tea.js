@@ -5,10 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const teasCatalogDiv = document.querySelector('.teas-catalog');
     const createButton = document.querySelector('.create-button');
+    const createTeaForm = document.querySelector('.create-tea-form');
+    const teaFormToggle = document.querySelector('.tea-form-toggle');
 
     getAllTeas();
 
     createButton.addEventListener('click', createTea);
+
+    teaFormToggle.addEventListener('click', function () {
+        createTeaForm.classList.toggle('hidden');
+    });
 
     function getAllTeas() {
         fetch(urlGet)
@@ -48,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const priceDiv = document.createElement('div');
         priceDiv.classList.add('price');
-        priceDiv.textContent = (tea.price || 0) + 'р';
+        priceDiv.textContent = (tea.price || 0) + ' р';
         namePriceDiv.appendChild(priceDiv);
 
         teaItemDiv.appendChild(namePriceDiv);
