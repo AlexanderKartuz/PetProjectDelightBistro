@@ -55,7 +55,7 @@ namespace WebNet23Online.Hubs
             await Clients.Caller.ConnectedUsers(chatUsers);
             await Clients.Others.UserConnected(connectionId, userName);
         }
-
+        
         public string GetUserName()
         {
             var userName = Context.User?
