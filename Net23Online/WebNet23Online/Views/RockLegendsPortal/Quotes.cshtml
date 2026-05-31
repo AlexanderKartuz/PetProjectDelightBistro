@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "_LayoutRockLegends";
+}
+@section Scripts {
+    <script src="~/js/rock-legends-portal/quotes.js"></script>
+}
+<link rel="stylesheet" href="/css/rock-legends-portal/style.css">
+
+<div class="main-container quote-page-container">
+    <h1 class="quote-page-title">Мудрость Рок-Легенд</h1>
+
+    <div class="poll-container quote-form-block">
+        <h3>Добавить цитату в архив</h3>
+        <div class="poll-controls quote-fields-stack">
+            <input type="text" class="quote-author-input form-control" placeholder="Имя музыканта (например, Ozzy Osbourne)" />
+            <input type="text" class="quote-url-input form-control" placeholder="URL фото музыканта" />
+            <textarea class="quote-text-input form-control" placeholder="Текст великой цитаты..." rows="3"></textarea>
+            <button type="button" class="create-quote-button poll-button">Увековечить цитату 🤘</button>
+        </div>
+    </div>
+
+    <div class="quotes-catalog-grid">
+
+        <div class="rockStar quote-card-template">
+            <div class="rockStar-header quote-card-layout">
+                <div class="image-container quote-avatar-box">
+                    <img src="" alt="Фото музыканта" />
+                </div>
+                <div class="quote-card-body">
+                    <div class="rockStar-name quote-author">***</div>
+                    <div class="quote-text-content">"***"</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
