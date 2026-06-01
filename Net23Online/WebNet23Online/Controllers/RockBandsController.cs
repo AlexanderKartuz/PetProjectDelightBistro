@@ -4,6 +4,8 @@ using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Models.RockBands;
 using WebNet23Online.Services.Interfaces;
+using WebNet23Online.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WebNet23Online.Controllers
 {
@@ -11,11 +13,13 @@ namespace WebNet23Online.Controllers
     {
         private readonly IRockBandsService _rockBandsService;
         private readonly IAuthService _authService;
+        private readonly IHubContext<RockBandHub, IRockBandHub> _rockBandHub;
 
-        public RockBandsController(IRockBandsService rockBandsService, IAuthService authService)
+        public RockBandsController(IRockBandsService rockBandsService, IAuthService authService, IHubContext<RockBandHub, IRockBandHub> rockBandHub)
         {
             _rockBandsService = rockBandsService;
             _authService = authService;
+            _rockBandHub = rockBandHub;
         }
 
         [HttpGet]
@@ -71,6 +75,11 @@ namespace WebNet23Online.Controllers
 
             var createdByUserId = _authService.GetUserId();
             _rockBandsService.AddBand(band, createdByUserId);
+
+            _rockBandHub.Clients.All.NewRockBandWasCreated(
+                band.Name,
+                band.ImageUrl ?? string.Empty);
+
             return RedirectToAction(nameof(Index));
         }
 
