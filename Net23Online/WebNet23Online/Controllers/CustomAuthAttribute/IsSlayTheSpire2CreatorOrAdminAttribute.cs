@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Repositories.Interfaces;
@@ -11,10 +11,21 @@ namespace WebNet23Online.Controllers.CustomAuthAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (!TryResolveCardId(context, out var cardId))
+            var denyResult = GetDenyResultIfUserCannotEditCard(context);
+            if (denyResult != null)
             {
-                context.Result = new BadRequestResult();
+                context.Result = denyResult;
                 return;
+            }
+
+            base.OnActionExecuting(context);
+        }
+
+        private IActionResult? GetDenyResultIfUserCannotEditCard(ActionExecutingContext context)
+        {
+            if (!TryGetCardIdFromRequest(context, out var cardId))
+            {
+                return new BadRequestResult();
             }
 
             var cardsRepository = context
@@ -30,16 +41,13 @@ namespace WebNet23Online.Controllers.CustomAuthAttribute
             var card = cardsRepository.Get(cardId);
             if (card == null)
             {
-                context.Result = new NotFoundResult();
-                return;
+                return new NotFoundResult();
             }
 
             var currentUserId = authService.GetUserId();
             if (currentUserId == 0)
             {
-                context.Result = ((Controller)context.Controller)
-                    .RedirectToAction("Deny", "Auth");
-                return;
+                return ((Controller)context.Controller).RedirectToAction("Deny", "Auth");
             }
 
             var isAdmin = authService.GetRole() == UserRole.Admin;
@@ -47,27 +55,27 @@ namespace WebNet23Online.Controllers.CustomAuthAttribute
 
             if (!isAdmin && !isCreator)
             {
-                context.Result = ((Controller)context.Controller)
-                    .RedirectToAction("Deny", "Auth");
-                return;
+                return ((Controller)context.Controller).RedirectToAction("Deny", "Auth");
             }
 
-            base.OnActionExecuting(context);
+            return null;
         }
 
-        private static bool TryResolveCardId(ActionExecutingContext context, out int cardId)
+        private bool TryGetCardIdFromRequest(ActionExecutingContext context, out int cardId)
         {
-            if (int.TryParse(context.RouteData.Values["id"]?.ToString(), out cardId) && cardId > 0)
+            if (int.TryParse(context.RouteData.Values["id"]?.ToString(), out var routeCardId) && routeCardId > 0)
             {
+                cardId = routeCardId;
                 return true;
             }
 
-            if (context.ActionArguments.TryGetValue("form", out var model) &&
-                model is EditHeroCardFormViewModel editModel &&
-                editModel.CardId > 0)
+            foreach (var argument in context.ActionArguments.Values)
             {
-                cardId = editModel.CardId;
-                return true;
+                if (argument is HeroCardFormViewModel form && form.CardId > 0)
+                {
+                    cardId = form.CardId;
+                    return true;
+                }
             }
 
             cardId = 0;

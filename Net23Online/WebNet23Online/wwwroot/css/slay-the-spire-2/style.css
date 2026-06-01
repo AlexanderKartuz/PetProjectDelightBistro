@@ -293,6 +293,38 @@ body {
     color: rgba(212, 175, 95, 0.9);
 }
 
+.spire-hero-cards-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.spire-hero-cards-header .spire-hero-cards-title {
+    margin: 0;
+}
+
+.spire-hero-add-card-link {
+    display: inline-block;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #1a1208;
+    background: linear-gradient(180deg, #d4af5f 0%, #a67c2e 100%);
+    border: 1px solid rgba(212, 175, 95, 0.85);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.spire-hero-add-card-link:hover {
+    color: #1a1208;
+    background: linear-gradient(180deg, #e0c070 0%, #b88935 100%);
+}
+
 .spire-hero-cards-empty {
     margin: 0;
     padding: 1rem 1.25rem;
@@ -300,6 +332,44 @@ body {
     border: 1px dashed rgba(255, 255, 255, 0.15);
     border-radius: 10px;
     color: rgba(232, 230, 227, 0.75);
+}
+
+.spire-hero-cards-deleteButton {
+    margin: 0 0 1rem;
+    text-align: right;
+}
+
+.spire-hero-cards-deleteButton .delete-card {
+    padding: 0.5rem 1.25rem;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #f5e8e8;
+    background: linear-gradient(180deg, rgba(150, 52, 52, 0.95) 0%, rgba(72, 20, 28, 0.98) 100%);
+    border: 1px solid rgba(220, 120, 120, 0.5);
+    border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transition: filter 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spire-hero-cards-deleteButton .delete-card:hover:not(:disabled) {
+    filter: brightness(1.1);
+    border-color: rgba(240, 150, 150, 0.7);
+    box-shadow: 0 4px 18px rgba(120, 32, 32, 0.4);
+}
+
+.spire-hero-cards-deleteButton .delete-card:focus-visible {
+    outline: 2px solid rgba(212, 175, 95, 0.75);
+    outline-offset: 3px;
+}
+
+.spire-hero-cards-deleteButton .delete-card:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .spire-hero-cards-grid {
@@ -451,6 +521,43 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.spire-create-card-page {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-top: 1.25rem;
+}
+
+.spire-create-card-form {
+    flex: 1 1 22rem;
+    min-width: 0;
+}
+
+.spire-create-card-form .spire-hero-add-card-form {
+    max-width: none;
+    margin: 0;
+}
+
+.spire-create-card-preview {
+    flex: 0 1 16rem;
+    min-width: 14rem;
+}
+
+.spire-create-card-preview-title {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    color: rgba(212, 175, 95, 0.9);
+}
+
+.spire-hero-card-preview {
+    max-width: 16rem;
+    margin: 0 auto;
+}
+
 .spire-hero-add-card-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -560,4 +667,15 @@ body {
     .spire-hero-add-card-form {
         grid-template-columns: 1fr;
     }
+
+    .spire-create-card-page {
+        flex-direction: column;
+    }
+
+    .spire-create-card-preview {
+        width: 100%;
+    }
+}
+li.spire-hero-card.active {
+    box-shadow: 0 0 0 3px #d4af5f;
 }
