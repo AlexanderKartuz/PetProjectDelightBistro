@@ -176,9 +176,8 @@ app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
 app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
 app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
 
-//app.MapHub<SteamChatHub>("/steam/community-chat");
+app.MapHub<SteamChatHub>("/steam/community-chat");
 app.MapHub<SteamNotificationHub>("/steam/notification");
-//app.MapHub<SteamNotificationHub>("/my-hub/steam");
 
 
 app.MapControllerRoute(

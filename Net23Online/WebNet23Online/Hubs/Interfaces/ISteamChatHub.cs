@@ -2,6 +2,6 @@
 {
     public interface ISteamChatHub
     {
-        void SendChatMessage(string userName, string message);
+        Task SendChatMessage(string userName, string message);
     }
 }

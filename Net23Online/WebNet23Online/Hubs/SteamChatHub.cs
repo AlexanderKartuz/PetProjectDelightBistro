@@ -5,5 +5,6 @@ namespace WebNet23Online.Hubs
 {
     public class SteamChatHub : Hub<ISteamChatHub>
     {
+        
     }
 }

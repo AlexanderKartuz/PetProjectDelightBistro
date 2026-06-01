@@ -23,7 +23,7 @@ namespace WebNet23Online.Controllers
         private readonly IAuthService _authService;
         private readonly IGameReviewRepository _gameReviewRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        //private readonly IHubContext<SteamChatHub, ISteamChatHub> _steamChatHub;
+        private readonly IHubContext<SteamChatHub, ISteamChatHub> _steamChatHub;
         private readonly IHubContext<SteamNotificationHub, ISteamNotificationHub> _steamNotificationHub;
 
         public SteamController(
@@ -31,7 +31,7 @@ namespace WebNet23Online.Controllers
             IAuthService authService,
             IGameReviewRepository gameReviewRepository,
             IWebHostEnvironment webHostEnvironment,
-            //IHubContext<SteamChatHub, ISteamChatHub> steamChatHub,
+            IHubContext<SteamChatHub, ISteamChatHub> steamChatHub,
             IHubContext<SteamNotificationHub, ISteamNotificationHub> steamNotificationHub)
 
         {
@@ -39,7 +39,7 @@ namespace WebNet23Online.Controllers
             _authService = authService;
             _gameReviewRepository = gameReviewRepository;
             _webHostEnvironment = webHostEnvironment;
-            //_steamChatHub = steamChatHub;
+            _steamChatHub = steamChatHub;
             _steamNotificationHub = steamNotificationHub;
         }
 
@@ -197,6 +197,12 @@ namespace WebNet23Online.Controllers
         {
             _catalogService.DeleteGame(id);
             return RedirectToAction(nameof(Catalog));
+        }
+
+        [HttpGet]
+        public IActionResult CommunityChat()
+        {
+            return View();
         }
     }
 }
