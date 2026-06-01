@@ -213,4 +213,7 @@
   <data name="Reservation_DessertPhoto" xml:space="preserve">
     <value>Фотографии десертов </value>
   </data>
+  <data name="Reservation_DuplicateWarning" xml:space="preserve">
+    <value>У вас уже есть бронь на эту дату и время. Выберите другой слот или посмотрите историю.</value>
+  </data>
 </root>

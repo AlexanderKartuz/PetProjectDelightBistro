@@ -213,4 +213,7 @@
   <data name="Reservation_DessertPhoto" xml:space="preserve">
     <value>Dessert Photo</value>
   </data>
+  <data name="Reservation_DuplicateWarning" xml:space="preserve">
+    <value>You already have a reservation at this date and time. Choose another slot or check your history.</value>
+  </data>
 </root>
