@@ -151,5 +151,10 @@ namespace WebNet23Online.Controllers
 
         [HttpGet]
         public IActionResult Index() => View();
+
+        public IActionResult Quotes()
+        {
+            return View();
+        }
     }
 }
