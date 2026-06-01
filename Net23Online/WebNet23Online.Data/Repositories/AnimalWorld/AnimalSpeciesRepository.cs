@@ -21,5 +21,12 @@ namespace WebNet23Online.Data.Repositories.AnimalWorld
         {
             return _dbSet.FirstOrDefault(animal => animal.AnimalSpeciesName.ToLower() == name.ToLower());
         }
+
+        public List<string> GetAllAnimalSpeciesNames()
+        {
+            var sql = @$"SELECT AnimalSpeciesName
+                         FROM AnimalSpecies";
+            return _context.Database.SqlQueryRaw<string>(sql).ToList();
+        }
     }
 }
