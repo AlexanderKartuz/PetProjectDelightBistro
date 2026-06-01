@@ -138,4 +138,31 @@
   <data name="Layout_MainPage" xml:space="preserve">
     <value>Главная</value>
   </data>
+  <data name="Layout_Relics" xml:space="preserve">
+    <value>Реликвии</value>
+  </data>
+  <data name="Relics_PageTitle" xml:space="preserve">
+    <value>Реликвия</value>
+  </data>
+  <data name="Relics_SectionIntro" xml:space="preserve">
+    <value>Имена, редкость и изображения реликвий.</value>
+  </data>
+  <data name="Relics_CreateTitle" xml:space="preserve">
+    <value>Новая реликвия</value>
+  </data>
+  <data name="Relics_CreateButton" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Relics_NamePlaceholder" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Relics_UrlPlaceholder" xml:space="preserve">
+    <value>URL изображения</value>
+  </data>
+  <data name="Relics_RarityPlaceholder" xml:space="preserve">
+    <value>Редкость</value>
+  </data>
+  <data name="Relics_RarityLabel" xml:space="preserve">
+    <value>Редкость</value>
+  </data>
 </root>
