@@ -1,5 +1,6 @@
 ﻿@using WebNet23Online.Localizations.Steam
 @using WebNet23Online.Models.Steam
+@model CommunityChatViewModel
 @{
     Layout = "_LayoutSteam";
 }
@@ -8,15 +9,34 @@
     <script src="~/js/steam/community-chat.js" asp-append-version="true"></script>
 }
 
-<main class="page">
+<main class="chat-page" data-user-id="@Model.CurrentUserId">
     <div class="chat-header">
         <h3>Community Chat</h3>
+        <span class="online-count">● <span id="onlineCount">0</span> online</span>
     </div>
 
-    <div class="messages"></div>
+    <div class="messages" id="messagesList">
+        @if (Model.ChatMessages != null && Model.ChatMessages.Any())
+        {
+            foreach (var message in Model.ChatMessages)
+            {
+                <div class="message @(message.IsOwnMessage ? "message-own" : "message-other")">
+                    <strong>@message.UserName</strong>
+                    <span class="time">@message.TimeStamp.ToString("HH:mm")</span>
+                    <div>@message.Message</div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="welcome-message">
+                Welcome to the chat! Be the first to send a message.
+            </div>
+        }
+    </div>
 
     <div class="chat-input-area">
-        <input type="text" id="messageInput" class="chat-input" placeholder="Write a message..." />
+        <input type="text" id="messageInput" class="chat-input" placeholder="Write a message..."/>
         <button id="sendButton" class="chat-send-btn">Send</button>
     </div>
 </main>

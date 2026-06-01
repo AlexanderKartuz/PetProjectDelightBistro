@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
-using WebNet23Online.Hubs;
-using WebNet23Online.Hubs.Interfaces;
-using WebNet23Online.Services.Interfaces;
+using WebNet23Online.Services.Interfaces.Steam;
 
 namespace WebNet23Online.Controllers.ApiControllers.steam
 {
@@ -13,23 +10,22 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
     [Authorize]
     public class ChatController : ControllerBase
     {
-        private readonly IAuthService _authService;
-        private IHubContext<SteamChatHub, ISteamChatHub> _steamChatHub;
+        private readonly IChatService _chatService;
 
-        public ChatController(IAuthService authService, IHubContext<SteamChatHub, ISteamChatHub> steamChatHub)
+        public ChatController(IChatService chatService)
         {
-            _authService = authService;
-            _steamChatHub = steamChatHub;
+            _chatService = chatService;
         }
 
         public IActionResult SendChatMessage(string message)
         {
-            //var user = _authService.GetUser();
-            var userName = _authService.GetUserName();
-            _steamChatHub.Clients.All.SendChatMessage(userName, message);
-
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return BadRequest("Message cannot be empty");
+            }
+            
+            _chatService.AddChatMessage(message);
             return Ok();
         }
-
     }
 }
