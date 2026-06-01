@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.6.11822.322 stable
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36616.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstConsoleApp", "FirstConsoleApp\FirstConsoleApp.csproj", "{9DEDD8F1-0D32-4357-8860-1D017F07DE7A}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebNet23Online.Data", "WebNet23Online.Data\WebNet23Online.Data.csproj", "{5BE0A6F9-05E0-4B08-80A9-706B9FE4D9D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieMinimalApi", "MovieMinimalApi\MovieMinimalApi.csproj", "{EF4AE332-81B1-4345-944E-75823F5728F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuotesMinimalApi", "QuotesMinimalApi\QuotesMinimalApi.csproj", "{26F245D6-2F63-4BBA-9F76-B130288FBA22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelightBistroMinimalApi", "DelightBistroMinimalApi\DelightBistroMinimalApi.csproj", "{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}"
 EndProject
@@ -51,6 +53,10 @@ Global
 		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

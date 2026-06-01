@@ -1,21 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const url = `https://localhost:7284/my-hub/delightbistro`;
-  const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
+  // одно подключение
+  const { hub, ready } = window.delightBistroSignalR;
+  ready.then(function () {
+    hub.on('NewFoodWasCreated', function (name, price) {
+      console.log(`New food was added: ${name}, ${price}`);
 
-  hub.on('NewFoodWasCreated', function (name, price) {
-    console.log(`New food was added: ${name}, ${price}`);
+      const notificationBox = document.querySelector('.notifications');
+      const newNotificationDiv = document.createElement('div');
 
-    const notificationBox = document.querySelector('.notifications');
-    const newNotificationDiv = document.createElement('div');
+      newNotificationDiv.textContent = `New food was added: ${name}, price: ${price} BYN`;
+      newNotificationDiv.className = 'notification';
+      notificationBox.appendChild(newNotificationDiv);
 
-    newNotificationDiv.textContent = `New food was added: ${name}, price: ${price} BYN`;
-    newNotificationDiv.className = 'notification';
-    notificationBox.appendChild(newNotificationDiv);
-
-    setTimeout(() => {
-      newNotificationDiv.remove();
-    }, 5000);
+      setTimeout(() => {
+        newNotificationDiv.remove();
+      }, 5000);
+    });
   });
-
-  hub.start();
 });

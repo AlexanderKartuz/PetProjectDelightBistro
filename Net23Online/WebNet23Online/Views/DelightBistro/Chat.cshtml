@@ -1,0 +1,43 @@
+﻿@using WebNet23Online.Models.DelightBistro;
+
+@{
+    Layout = "_LayoutDelightBistro";
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="/css/delight-bistro/chat.css" />
+
+    <script src="/js/delight-bistro/delight-bistro-chat-hub.js"></script>
+}
+<div class="main-container">
+    <div class="chat-container">
+        <div class="sidebar">
+            <div class="current-user">You: Current User Name</div>
+            <div class="user-box">
+                <div class="user-list">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-room hiden">
+
+        <div class="chat-room-messages">
+            @* <div class="message sent">
+                <div class="message-sender">Me</div>
+                <div class="message-text">MyMessage</div>
+            </div>
+            <div class="message recived">
+                <div class="message-sender">You</div>
+                <div class="message-text">YourMessage</div>
+            </div> *@
+        </div>
+
+        <div class="chat-input-box">
+            <input type="text" name="message" class="message-input" placeholder="Введите сообщение..." />
+            <button type="button" class="btn-send-message">Отправить</button>
+        </div>
+    </div>
+
+</div>
+

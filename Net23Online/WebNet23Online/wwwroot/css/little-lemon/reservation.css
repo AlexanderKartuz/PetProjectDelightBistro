@@ -82,6 +82,23 @@ select {
     background-position-y: center;
 }
 
+.reservation-duplicate-warning {
+    grid-column: 1 / -1;
+    margin: 0 0.5rem 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    background-color: #fef2f2;
+    border: 1px solid #b91c1c;
+    color: #b91c1c;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.booking-section .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .booking-section .btn {
     grid-column: 1 / -1;
     width: 100%;
