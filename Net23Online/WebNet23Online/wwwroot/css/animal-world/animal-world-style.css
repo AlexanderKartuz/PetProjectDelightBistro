@@ -376,3 +376,58 @@ body {
         transform: translateY(0);
     }
 }
+
+.page-title {
+    margin-bottom: 15px;
+}
+
+.section-title {
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+
+.facts-form-container {
+    margin-top: 25px;
+    max-width: 600px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.facts-form-container .form-input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.facts-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fact-item {
+    box-sizing: border-box;
+}
+
+.fact-animal-type {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #1b5e20;
+    font-size: 16px;
+}
+
+.fact-item .comment-text {
+    margin-top: 0;
+    margin-bottom: 0;
+}
