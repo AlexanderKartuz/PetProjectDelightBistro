@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using WebNet23Online.Tests.E2E.Helper;
+using WebNet23Online.Tests.E2E.Path;
 using WebNet23Online.Tests.E2E.Selectors;
 
 namespace WebNet23Online.Tests.E2E.Tests
@@ -18,19 +19,23 @@ namespace WebNet23Online.Tests.E2E.Tests
         public void OneTimeSetup()
         {
             _webDriver = new ChromeDriver();
-            _waiter = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(6));
+            _waiter = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(4));
         }
 
         [TestCase("TestName1", "20", 0, "100")]
         public void CreateFoodItem_Positive(string foodName, string foodPrice, int ingredientIndex, string ingredientCount)
         {
             _webDriver.Logout();
+            Thread.Sleep(100);
             _webDriver.LoginAsAdmin();
+            Thread.Sleep(100);
+            _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}{DelightBistroPaths.Index}");
 
-            _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/DelightBistro/Index");
-
-            //var foodBuilderDataLink = _webDriver.FindElement(DelightBistroIndexPage.FoodBuilderDataLink);
             var foodBuilderDataLink = _waiter.Until(d => d.FindElement(DelightBistroIndexPage.FoodBuilderDataLink));
+            new Actions(_webDriver)
+               .ScrollToElement(foodBuilderDataLink)
+               .Perform();
+            _waiter.Until(d => foodBuilderDataLink.Displayed);
             foodBuilderDataLink.Click();
 
             _waiter.Until(d => d.FindElement(DelightBistroBuildFoodItemPage.FoodNameInput).Displayed);
@@ -40,7 +45,7 @@ namespace WebNet23Online.Tests.E2E.Tests
 
             var foodItemPriceInput = _webDriver
                 .FindElement(DelightBistroBuildFoodItemPage.FoodPriceInput);
-            foodItemPriceInput.Click();
+            foodItemPriceInput.Clear();
             foodItemPriceInput.SendKeys($"{foodPrice}");
 
             //var menuList = _webDriver.FindElement(DelightBistroBuildFoodItemPage.MenuListDropDown);
@@ -70,8 +75,39 @@ namespace WebNet23Online.Tests.E2E.Tests
             Assert.That(previewPrice == foodPrice);
 
             submitButton.Click();
+
+            var allFoodItemsLink = _waiter.Until(d => d.FindElement(DelightBistroIndexPage.AllFoodItemsLink));
+            new Actions(_webDriver)
+               .ScrollToElement(allFoodItemsLink)
+               .Perform();
+            _waiter.Until(d => allFoodItemsLink.Displayed);
+            allFoodItemsLink.Click();
+
+            var foodItems = _webDriver.FindElements(DelightBistroAllFoodItemsPage.FoodItem);
+
+            _waiter.Until(d => foodItems.Any());
+
+            var lastFoodItem = foodItems.Last();
+            var lastFoodName = lastFoodItem.FindElement(DelightBistroAllFoodItemsPage.FoodName).Text;
+            var lastFoodPrice = lastFoodItem.FindElement(DelightBistroAllFoodItemsPage.FoodPrice).Text;
+
+            Assert.That(lastFoodName == foodName);
+            Assert.That(lastFoodPrice, Does.Contain($"{foodPrice}."));
+
+            var deleteLink = lastFoodItem.FindElement(DelightBistroAllFoodItemsPage.DeleteFoodLinkInto);
+            new Actions(_webDriver)
+               .ScrollToElement(deleteLink)
+               .Perform();
+            _waiter.Until(d => deleteLink.Displayed);
+            deleteLink.Click();
+            Thread.Sleep(100);
         }
 
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            _webDriver.Quit();
+        }
 
     }
 }
