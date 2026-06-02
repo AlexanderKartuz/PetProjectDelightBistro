@@ -63,7 +63,7 @@ namespace WebNet23Online.Services.DelightBistro
             {
                 Name = viewModel.Name,
                 Price = viewModel.Price,
-                ImgURL = viewModel.ImgURL,
+                ImgURL = viewModel.ImgUrl,
 
                 MenuData = selectedMenu,
 
@@ -92,7 +92,7 @@ namespace WebNet23Online.Services.DelightBistro
 
                 changedFoodItemData.Name = viewModel.Name;
                 changedFoodItemData.Price = viewModel.Price;
-                changedFoodItemData.ImgURL = viewModel.ImgURL;
+                changedFoodItemData.ImgURL = viewModel.ImgUrl;
                 changedFoodItemData.MenuData = GetSelectedMenu(viewModel);
 
                 changedFoodItemData.FoodItemIngredientDatas = links;
@@ -145,7 +145,7 @@ namespace WebNet23Online.Services.DelightBistro
                 Id = foodItemData.Id,
                 Name = foodItemData.Name,
                 Price = foodItemData.Price,
-                ImgURL = foodItemData.ImgURL,
+                ImgUrl = foodItemData.ImgURL,
 
                 MenuId = foodItemData.MenuData?.Id,
 

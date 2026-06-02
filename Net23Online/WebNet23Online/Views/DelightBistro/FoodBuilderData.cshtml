@@ -20,7 +20,7 @@
     {
         <div class="change-food">
             <div class="change-food">
-                <img src=@Model.ImgURL alt=@Model.Name />
+                <img src=@Model.ImgUrl alt=@Model.Name />
             </div>
         </div>
     }
@@ -50,15 +50,15 @@
 
     <form method="post" enctype="multipart/form-data">
         <div class="input-box">
-           
+
             <div>Название блюда</div>
-            @Html.TextBoxFor(x => x.Name, new { type = "text", required = "required", placeholder = "Имя блюда" })
+            @Html.TextBoxFor(x => x.Name, new { type = "text", required = "required", placeholder = "Имя блюда", data_test = "food-name" })
             @Html.ValidationMessageFor(x => x.Name)
 
         </div>
         <div class="input-box">
             <div>Цена блюда</div>
-            @Html.TextBoxFor(x => x.Price, new { type = "number", required = "required", placeholder = "Стоимость" })
+            @Html.TextBoxFor(x => x.Price, new { type = "number", required = "required", placeholder = "Стоимость", data_test = "food-price" })
             @Html.ValidationMessageFor(x => x.Price)
         </div>
         <div class="input-radio-box">
@@ -67,10 +67,10 @@
             </div>
             <div class="radio-box-container">
                 <div class="radio-box">
-                    @Html.DropDownListFor(x => x.MenuId, Model.Menus, "Выберите меню")
+                    @Html.DropDownListFor(x => x.MenuId, Model.Menus, "Выберите меню", new { data_test = "menu-list" })
 
                 </div>
-                
+
             </div>
             <div class="input-box">
                 <div>
@@ -78,19 +78,18 @@
                 </div>
                 @for (var i = 0; i < Model.IngredientsList.Count; i++)
                 {
-                    <div>
+                    <div data-test="ingredient-name" data-index="@i">
                         @Html.HiddenFor(x => x.IngredientsList[i].Id)
                         @Html.HiddenFor(x => x.IngredientsList[i].Name)
                         <label>@Model.IngredientsList[i].Name</label>
-                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected, new { data_ingredient_name = Model.IngredientsList[i].Name })
+                        @Html.CheckBoxFor(x => x.IngredientsList[i].IsSelected, new { data_ingredient_name = Model.IngredientsList[i].Name, data_test = $"ingredient-checked-box-{i}" })
                         @Html.TextBoxFor(x => x.IngredientsList[i].Quantity
                             , new
                             {
-                                type = "number"
-                                ,
-                                min = "1"
-                                ,
-                                placeholder = "Граммы"
+                                type = "number",
+                                min = "1",
+                                placeholder = "Граммы",
+                                data_test = $"ingredient-quantity-{i}",
                             })
                         @Html.ValidationMessageFor(x => x.IngredientsList[i].Name)
 
@@ -100,15 +99,15 @@
 
             </div>
         </div>
-        
+
         <div class="input-box url-box">
             <div class="input-box url-box">
                 <input type="file" name="Image" />
             </div>
-            @Html.TextBoxFor(x => x.ImgURL, new { type = "string", placeholder = "Добавьте URL изображения" })
-            @Html.ValidationMessageFor(x => x.ImgURL)
+            @Html.TextBoxFor(x => x.ImgUrl, new { type = "string", placeholder = "Добавьте URL изображения", data_test = "imgUrl" })
+            @Html.ValidationMessageFor(x => x.ImgUrl)
         </div>
-        <div class="food-create-button"><button type="submit">Добавить блюдо</button></div>
+        <div class="food-create-button"><button type="submit" data-test="submit-button">Добавить блюдо</button></div>
     </form>
 
 </div>
