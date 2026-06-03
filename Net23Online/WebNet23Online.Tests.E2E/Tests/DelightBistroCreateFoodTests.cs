@@ -99,8 +99,8 @@ namespace WebNet23Online.Tests.E2E.Tests
                .ScrollToElement(deleteLink)
                .Perform();
             _waiter.Until(d => deleteLink.Displayed);
-            deleteLink.Click();
             Thread.Sleep(100);
+            deleteLink.Click();
         }
 
         [OneTimeTearDown]
