@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.SignalR;
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Controllers.CustomAuthAttribute.Steam;
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
+using WebNet23Online.Hubs;
+using WebNet23Online.Hubs.Interfaces;
 using WebNet23Online.Models.Steam;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.Steam;
@@ -19,17 +21,25 @@ namespace WebNet23Online.Controllers
 
         private readonly ICatalogService _catalogService;
         private readonly IAuthService _authService;
+        private readonly IChatService _chatService;
         private readonly IGameReviewRepository _gameReviewRepository;
+        private readonly IHubContext<SteamNotificationHub, ISteamNotificationHub> _steamNotificationHub;
 
         public SteamController(
             ICatalogService catalogService,
-            IAuthService authService
-,
-            IGameReviewRepository gameReviewRepository)
+            IAuthService authService,
+            IGameReviewRepository gameReviewRepository,
+            IWebHostEnvironment webHostEnvironment,
+            IHubContext<SteamChatHub, ISteamChatHub> steamChatHub,
+            IHubContext<SteamNotificationHub, ISteamNotificationHub> steamNotificationHub,
+            IChatService chatService)
+
         {
             _catalogService = catalogService;
             _authService = authService;
             _gameReviewRepository = gameReviewRepository;
+            _steamNotificationHub = steamNotificationHub;
+            _chatService = chatService;
         }
 
         [AllowAnonymous]
@@ -89,6 +99,7 @@ namespace WebNet23Online.Controllers
                 return View(viewModel);
             }
             _catalogService.AddGame(viewModel);
+            _steamNotificationHub.Clients.All.NewGameAdded(viewModel.Title, viewModel.ImageUrl);
 
             return RedirectToAction(nameof(Catalog));
         }
@@ -185,6 +196,18 @@ namespace WebNet23Online.Controllers
         {
             _catalogService.DeleteGame(id);
             return RedirectToAction(nameof(Catalog));
+        }
+
+        [HttpGet]
+        public IActionResult CommunityChat()
+        {
+            var model = new CommunityChatViewModel
+            {
+                ChatMessages = _chatService.GetMessages(),
+                CurrentUserId = _authService.GetUserId()
+            };
+                
+            return View(model);
         }
     }
 }

@@ -91,6 +91,7 @@ builder.Services.AddSingleton<ISlayTheSpire2RewardImageService, SlayTheSpire2Rew
 builder.Services.AddSingleton<ISlayTheSpire2CardOptionsService, SlayTheSpire2CardOptionsService>();
 
 builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 //DelightBistro DI
 builder.Services.AddScoped<IFoodItemGenerator, FoodItemGenerator>();
@@ -136,6 +137,7 @@ builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
 builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
 builder.Services.AddScoped<IGameReviewRepository, GameReviewRepository>();
+builder.Services.AddScoped<ICommunityChatMessageRepository, CommunityChatMessageRepository>();
 
 builder.Services.AddScoped<IJdmRepository, JdmRepository>();
 builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
@@ -175,6 +177,10 @@ app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
 
 app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
 app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
+
+app.MapHub<SteamChatHub>("/steam/community-chat");
+app.MapHub<SteamNotificationHub>("/steam/notification");
+
 
 app.MapControllerRoute(
     name: "default",

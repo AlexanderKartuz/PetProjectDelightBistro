@@ -209,6 +209,15 @@ namespace WebNet23Online.Localizations
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to You already have a reservation at this date and time. Choose another slot or check your history..
+        /// </summary>
+        public static string Reservation_DuplicateWarning {
+            get {
+                return ResourceManager.GetString("Reservation_DuplicateWarning", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Do You want to add anything else?.
         /// </summary>
         public static string Reservation_ExtraLabel {
