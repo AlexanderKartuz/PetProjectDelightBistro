@@ -38,6 +38,12 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpGet]
+        public IActionResult Relics()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult Heroes(int id)
         {
             return View(BuildHeroesViewModel(id));

@@ -679,3 +679,154 @@ body {
 li.spire-hero-card.active {
     box-shadow: 0 0 0 3px #d4af5f;
 }
+
+.spire-relics-page {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 1rem 0 2.5rem;
+    color: #e8e6e3;
+}
+
+.spire-relics-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.spire-relics-title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+    letter-spacing: 0.04em;
+    color: #f0e6d8;
+}
+
+.spire-relics-intro {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(232, 230, 227, 0.75);
+}
+
+.spire-relics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 1rem;
+}
+
+.spire-relic-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.spire-relic-card-image-frame {
+    width: 100%;
+    line-height: 0;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.spire-relic-card-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 12rem;
+    object-fit: contain;
+    object-position: center;
+}
+
+.spire-relic-card-body {
+    margin: 0;
+    padding: 0.85rem 1rem 1rem;
+    text-align: center;
+}
+
+.spire-relic-card-name {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #f0e6d8;
+}
+
+.spire-relic-card-stats {
+    margin: 0;
+    padding: 0;
+}
+
+.spire-relic-card-stats dt {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(212, 175, 95, 0.85);
+}
+
+.spire-relic-card-stats dd {
+    margin: 0.2rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: rgba(232, 230, 227, 0.92);
+}
+
+.spire-relic-create {
+    border-style: dashed;
+    border-color: rgba(212, 175, 95, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.spire-relic-create .spire-relic-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    text-align: left;
+}
+
+.spire-relic-create-title {
+    margin: 0 0 0.25rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    color: rgba(212, 175, 95, 0.9);
+}
+
+.spire-relic-input {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.28);
+    color: #f0e6d8;
+    font: inherit;
+}
+
+.spire-relic-input::placeholder {
+    color: rgba(232, 230, 227, 0.45);
+}
+
+.spire-relic-input:focus {
+    outline: 2px solid rgba(212, 175, 95, 0.55);
+    outline-offset: 1px;
+}
+
+.spire-relic-create-button {
+    margin-top: 0.25rem;
+    padding: 0.55rem 1.25rem;
+    font: inherit;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #1a1208;
+    background: linear-gradient(180deg, #d4af5f 0%, #a67c2e 100%);
+    border: 1px solid rgba(212, 175, 95, 0.85);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.spire-relic-create-button:hover {
+    background: linear-gradient(180deg, #e0c070 0%, #b88935 100%);
+}
