@@ -29,5 +29,10 @@ namespace WebNet23Online.Tests.E2E.Helper
         {
             _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/Auth/Logout");
         }
+
+        public static void LoginAsUser(this IWebDriver _webDriver)
+        {
+            Login(_webDriver, "user", "user");
+        }
     }
 }
