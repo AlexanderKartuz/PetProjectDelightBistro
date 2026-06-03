@@ -37,6 +37,14 @@ app.MapPost("CreateMovie", (MiniDbContext dbContext, [FromBody]Movie movie) =>
     return movie;
 });
 
+app.MapDelete("DeleteMovie", (MiniDbContext dbContext, [FromBody] int id) =>
+{
+    var movie = dbContext.Movies.First(m => m.Id == id);
+    dbContext.Movies.Remove(movie);
+    dbContext.SaveChanges();
+    return true;
+});
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
