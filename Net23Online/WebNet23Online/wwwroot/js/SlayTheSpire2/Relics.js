@@ -55,16 +55,6 @@ $(document).ready(function ()
         const card = template.clone();
         card.removeClass('spire-relic-template');
         card.removeAttr('hidden').removeAttr('aria-hidden');
-            {
-                console.error('Relics: не удалось загрузить GetRelics.', status, error, xhr);
-            });
-    }
-
-    function drawRelic(relic)
-    {
-        const card = template.clone();
-        card.removeClass('spire-relic-template');
-        card.removeAttr('hidden').removeAttr('aria-hidden');
         card.attr('data-id', relic.id);
 
         const name = relic.name?.trim() || '—';
