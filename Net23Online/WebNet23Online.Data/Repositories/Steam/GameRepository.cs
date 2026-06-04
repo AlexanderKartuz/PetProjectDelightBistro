@@ -44,6 +44,11 @@ namespace WebNet23Online.Data.Repositories.Steam
             return gameData;
         }
 
+        public GameData GetByTitle(string title)
+        {
+            return _dbSet.FirstOrDefault(g => g.Title == title);
+        }
+
         public bool IsTitleFree(string title, int excludeGameId = 0)
         {
             return !_dbSet.Any(x => x.Title == title && x.Id != excludeGameId);

@@ -5,7 +5,7 @@ namespace WebNet23Online.Tests.E2E.Helper
 {
     public static class LoginHelper
     {
-        public static void Login(this IWebDriver _webDriver , string login, string password)
+        public static void Login(this IWebDriver _webDriver, string login, string password)
         {
             _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/Auth/Login");
 
