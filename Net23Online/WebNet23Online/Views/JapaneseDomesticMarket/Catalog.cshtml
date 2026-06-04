@@ -4,6 +4,9 @@
 @{
     Layout = "_LayoutJapaneseDomesticMarket";
 }
+@section Scripts{
+    <script src="~/js/japanese-domestic-market/createJdmMerch.js"></script>
+}
 
 <div class="container">
     @foreach (var manufacture in Model.CatalogAuto)
@@ -45,3 +48,25 @@
         </ul>
     </section>
 }
+<div class="container-title"><h2>@JapaneseDomesticMarket.Catalog_header_catalog_product</h2></div>
+<div class="merch-container">
+    <section class="jdm-merch-container">
+        <div class="product-card create-new-jdm-merch" id="product-card">
+            <input value="" class="new-jdm-merch-input new-jdm-merch-name" placeholder="Name" />
+            <input value="" class="new-jdm-merch-input new-jdm-merch-description" placeholder="description" />
+            <input value="" class="new-jdm-merch-input new-jdm-merch-price" placeholder="price" />
+            <input value="" class="new-jdm-card-picture" placeholder="pictureUrl" />
+            <button class="button-create-new-jdm-merch">@JapaneseDomesticMarket.Catalog_button_add_merch</button>
+        </div>
+</section>
+    <section class="jdm-merch-container">
+        <div class="jdm-merch">
+            <div class="product-card template" id="product-card">
+                <div class="product-card-title" id="product-card-title">***</div>
+                <div class="product-card-description" id="product-card-description">***</div>
+                <div class="product-card-price" id="product-card-price">***</div>
+                <div class="product-card-picture" id="product-card-picture"><img src="***" class="product-card-picture" /></div>
+            </div>
+        </div>
+    </section>
+</div>
