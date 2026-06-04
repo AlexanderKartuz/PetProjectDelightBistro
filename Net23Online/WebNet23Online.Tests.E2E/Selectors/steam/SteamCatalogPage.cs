@@ -10,6 +10,7 @@ namespace WebNet23Online.Tests.E2E.Selectors.steam
         public static By CatalogActivePage = By.CssSelector(".catalog-pagination .btn.active");
         public static By CatalogPageLinks = By.CssSelector(".catalog-pagination a.btn");
         public static By GameCardTitle = By.CssSelector(".card-title");
+        public static By GameCard = By.CssSelector(".card");
         public static By DeleteGameButton = By.CssSelector(".remove-game-card");
     }
 }

@@ -5,8 +5,9 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
-using WebNet23Online.Data;
 
+using WebNet23Online.Data;
+using WebNet23Online.Data.Repositories.Steam;
 using WebNet23Online.Tests.E2E.Helper;
 using WebNet23Online.Tests.E2E.Selectors.steam;
 
@@ -16,17 +17,24 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
     {
         private IWebDriver _webDriver;
         private WebDriverWait _waiter;
-        private string _gameTitle = string.Empty;
-        private string _gamePrice = "49.99";
-        private string _gameDescription = "Test description";
+        private string GameTitle { get; set; } = string.Empty;
+        private const string DEFAULT_GAME_PRICE = "49.99";
+        private const string DEFAULT_GAME_DESCRIPTION = "Test description";
         private const string NOT_VALID_IMAGE_URL = "https://google.com/some-page";
         private const string VALID_IMAGE_URL = "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1237950/header.jpg";
+        private GameRepository _gameRepository;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _webDriver = new ChromeDriver();
             _waiter = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(8));
+            var options = new DbContextOptionsBuilder<WebContext>()
+                  .UseSqlServer(GlobalConstants.DB_CONNECTION_STRING)
+                  .Options;
+
+            var context = new WebContext(options);
+            _gameRepository = new GameRepository(context);
         }
 
         [OneTimeTearDown]
@@ -38,20 +46,20 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
         [TearDown]
         public void TearDown()
         {
-            if (!string.IsNullOrEmpty(_gameTitle))
+            if (!string.IsNullOrEmpty(GameTitle))
             {
                 _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/Steam/Catalog");
                 _waiter.Until(d => d.FindElements(SteamCatalogPage.GameCardTitles).Any());
 
                 GoToLastPage();
 
-                var gameCards = _webDriver.FindElements(By.CssSelector(".card"));
+                var gameCards = _webDriver.FindElements(SteamCatalogPage.GameCard);
                 IWebElement targetCard = null;
 
                 foreach (var card in gameCards)
                 {
                     var titleElement = card.FindElement(SteamCatalogPage.GameCardTitle);
-                    if (titleElement.Text == _gameTitle)
+                    if (titleElement.Text == GameTitle)
                     {
                         targetCard = card;
                         break;
@@ -67,7 +75,7 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
                         var el = d.FindElement(SteamCatalogPage.DeleteGameButton);
                         return el.Displayed && el.Enabled;
                     });
-                    
+
                     var deleteButton = _webDriver.FindElement(SteamCatalogPage.DeleteGameButton);
                     deleteButton.Click();
                 }
@@ -77,12 +85,12 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
         [Test]
         public void AddGame_Positive()
         {
-            _gameTitle = $"E2E Star Wars {Guid.NewGuid():N}";
+            GameTitle = $"E2E Test{Guid.NewGuid():N}";
 
             _webDriver.Logout();
             _webDriver.LoginAsAdmin();
 
-            _waiter.Until(d => d.FindElements(By.CssSelector("a[href*='/Auth/Logout']")).Any());
+            _waiter.Until(d => d.FindElements(SteamIndexPage.LogoutLink).Any());
 
             _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/Steam/Index");
 
@@ -112,15 +120,15 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
                 return titleInput.Displayed && titleInput.Enabled;
             });
 
-            _webDriver.FindElement(AddGamePage.TitleInput).SendKeys(_gameTitle);
+            _webDriver.FindElement(AddGamePage.TitleInput).SendKeys(GameTitle);
             _webDriver.FindElement(AddGamePage.ImageUrlInput)
                 .SendKeys(VALID_IMAGE_URL);
             _webDriver.FindElement(AddGamePage.DescriptionInput)
-                .SendKeys(_gameDescription);
+                .SendKeys(DEFAULT_GAME_DESCRIPTION);
 
             var priceInput = _webDriver.FindElement(AddGamePage.PriceInput);
             priceInput.Clear();
-            priceInput.SendKeys(_gamePrice);
+            priceInput.SendKeys(DEFAULT_GAME_PRICE);
 
             var genreSelect = new SelectElement(
                 _webDriver.FindElement(AddGamePage.GameGenreSelect));
@@ -150,24 +158,24 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
 
             _waiter.Until(d =>
                 d.FindElements(SteamCatalogPage.GameCardTitles)
-                 .Any(e => e.Text == _gameTitle));
+                 .Any(e => e.Text == GameTitle));
 
             var addedGameTitle = _webDriver
                 .FindElements(SteamCatalogPage.GameCardTitles)
-                .First(e => e.Text == _gameTitle)
+                .First(e => e.Text == GameTitle)
                 .Text;
 
-            Assert.That(addedGameTitle, Is.EqualTo(_gameTitle));
+            Assert.That(addedGameTitle, Is.EqualTo(GameTitle));
         }
 
         [Test]
         public void AddGame_WithInvalidImageUrl_ShouldShowValidationMessage_GameNotAdded()
         {
-            _gameTitle = "E2E Test";
+            GameTitle = "E2E Test";
             _webDriver.Logout();
             _webDriver.LoginAsAdmin();
 
-            _waiter.Until(d => d.FindElements(By.CssSelector("a[href*='/Auth/Logout']")).Any());
+            _waiter.Until(d => d.FindElements(SteamIndexPage.LogoutLink).Any());
 
             _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/Steam/AddGame");
 
@@ -178,17 +186,17 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
             });
 
             _webDriver.FindElement(AddGamePage.TitleInput)
-                .SendKeys(_gameTitle);
+                .SendKeys(GameTitle);
 
             _webDriver.FindElement(AddGamePage.ImageUrlInput)
                 .SendKeys(NOT_VALID_IMAGE_URL);
 
             _webDriver.FindElement(AddGamePage.DescriptionInput)
-                .SendKeys(_gameDescription);
+                .SendKeys(DEFAULT_GAME_DESCRIPTION);
 
             var price = _webDriver.FindElement(AddGamePage.PriceInput);
             price.Clear();
-            price.SendKeys(_gamePrice);
+            price.SendKeys(DEFAULT_GAME_PRICE);
 
             var genreSelect = new SelectElement(_webDriver.FindElement(AddGamePage.GameGenreSelect));
             genreSelect.SelectByText("Action");
@@ -209,24 +217,11 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
                 }
             });
 
-            //_waiter.Until(d =>
-            //{
-            //    var msg = d.FindElements(By.CssSelector("span[data-valmsg-for='ImageUrl']"));
-            //    return msg.Any() && msg.First().Displayed;
-            //});
-
             var validationMessage = _webDriver.FindElement(AddGamePage.ValidationMessageForImageUrl);
             Assert.That(validationMessage.Text, Is.Not.Empty);
 
-            var options = new DbContextOptionsBuilder<WebContext>()
-                  .UseSqlServer(GlobalConstants.DB_CONNECTION_STRING)
-                  .Options;
-
-            using (var context = new WebContext(options))
-            {
-                var gameInDb = context.Games.FirstOrDefault(g => g.Title == _gameTitle);
-                Assert.That(gameInDb, Is.Null, $"Game '{_gameTitle}' should not exist in database");
-            }
+            var gameInDb = _gameRepository.GetByTitle(GameTitle);
+            Assert.That(gameInDb, Is.Null, $"Game '{GameTitle}' should not exist in database");
 
             _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/Steam/Catalog");
             GoToLastPage();
@@ -234,7 +229,7 @@ namespace WebNet23Online.Tests.E2E.Tests.steam
 
             var exists = _webDriver
                 .FindElements(SteamCatalogPage.GameCardTitles)
-                .Any(e => e.Text == _gameTitle);
+                .Any(e => e.Text == GameTitle);
 
             Assert.That(exists, Is.False);
         }
