@@ -39,7 +39,6 @@ body {
 }
 
 .container {
-    display:flex;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -266,6 +265,10 @@ output {
 }
 
 /*movie*/
+.feeadback-container-box{
+    display:flex;
+}
+
 .container-content {
     width: 100%;
     height: 100%;
@@ -321,4 +324,27 @@ output {
 
 section.comments.active {
     border: 3px red solid;
+}
+
+.notice-box {
+    width: 500px;
+    height: 150px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+}
+
+.notice {
+    background: #f1f1f1;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 15px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.notice-box .notice .preview img {
+    max-width: 200px;
+    height: 120px;
 }
