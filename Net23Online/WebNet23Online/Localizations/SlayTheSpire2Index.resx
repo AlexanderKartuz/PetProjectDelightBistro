@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -137,5 +137,32 @@
   </data>
   <data name="Layout_MainPage" xml:space="preserve">
     <value>MainPage</value>
+  </data>
+  <data name="Layout_Relics" xml:space="preserve">
+    <value>Relics</value>
+  </data>
+  <data name="Relics_PageTitle" xml:space="preserve">
+    <value>Relics</value>
+  </data>
+  <data name="Relics_SectionIntro" xml:space="preserve">
+    <value>Name, Rarity and image relic</value>
+  </data>
+  <data name="Relics_CreateTitle" xml:space="preserve">
+    <value>New Relic</value>
+  </data>
+  <data name="Relics_CreateButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Relics_NamePlaceholder" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Relics_UrlPlaceholder" xml:space="preserve">
+    <value>URL image</value>
+  </data>
+  <data name="Relics_RarityPlaceholder" xml:space="preserve">
+    <value>Rarity</value>
+  </data>
+  <data name="Relics_RarityLabel" xml:space="preserve">
+    <value>Rarity</value>
   </data>
 </root>

@@ -900,6 +900,31 @@ namespace WebNet23Online.Data.Migrations
                     b.ToTable("SlayTheSpire2Heroes");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.Steam.CommunityChatMessageData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommunityChatMessages");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameData", b =>
                 {
                     b.Property<int>("Id")
@@ -1490,7 +1515,7 @@ namespace WebNet23Online.Data.Migrations
             modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesCards", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
-                        .WithMany()
+                        .WithMany("CreatedSlayTheSpire2HeroesCards")
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -1502,7 +1527,7 @@ namespace WebNet23Online.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WebNet23Online.Data.Models.UserData", "ModifiedByUser")
-                        .WithMany()
+                        .WithMany("ModifiedSlayTheSpire2HeroesCards")
                         .HasForeignKey("ModifiedByUserId")
                         .OnDelete(DeleteBehavior.NoAction);
 
@@ -1511,6 +1536,17 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Hero");
 
                     b.Navigation("ModifiedByUser");
+                });
+
+            modelBuilder.Entity("WebNet23Online.Data.Models.Steam.CommunityChatMessageData", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "CreatedByUser")
+                        .WithMany("CommunityChatMessages")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameData", b =>
@@ -1551,6 +1587,24 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("WebNet23Online.Data.Models.TicketData", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "User")
+                        .WithMany("MyTickets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WebNet23Online.Data.Models.AnimalWorld.ZooData", "Zoo")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ZooId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("User");
+
+                    b.Navigation("Zoo");
                 });
 
             modelBuilder.Entity("WebNet23Online.Data.Models.UserData", b =>
@@ -1626,6 +1680,11 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Groups");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.SlayTheSpire2HeroesData", b =>
+                {
+                    b.Navigation("Cards");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.Steam.GameData", b =>
                 {
                     b.Navigation("GameReviews");
@@ -1638,6 +1697,8 @@ namespace WebNet23Online.Data.Migrations
 
             modelBuilder.Entity("WebNet23Online.Data.Models.UserData", b =>
                 {
+                    b.Navigation("CommunityChatMessages");
+
                     b.Navigation("CreatedByCarsJdm");
 
                     b.Navigation("CreatedByMeAnimalFamilies");
@@ -1654,6 +1715,8 @@ namespace WebNet23Online.Data.Migrations
 
                     b.Navigation("CreatedMenus");
 
+                    b.Navigation("CreatedSlayTheSpire2HeroesCards");
+
                     b.Navigation("DiaryEntries");
 
                     b.Navigation("HabitTrackerProfile");
@@ -1663,6 +1726,14 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("JournalComments");
 
                     b.Navigation("ModifiedGames");
+
+                    b.Navigation("ModifiedSlayTheSpire2HeroesCards");
+
+                    b.Navigation("MyComments");
+
+                    b.Navigation("MyTickets");
+
+                    b.Navigation("Orders");
 
                     b.Navigation("Reviews");
 

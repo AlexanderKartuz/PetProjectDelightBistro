@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Controllers.CustomAuthAttribute;
+using WebNet23Online.Localizations;
 using WebNet23Online.Models.LittleLemon;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
@@ -110,7 +111,31 @@ namespace WebNet23Online.Controllers
 
                 return View(pageModel);
             }
-            var reservationId = _littleLemonReservationService.CreateReservation(viewModel.Reservation!);
+
+            var reservation = viewModel.Reservation!;
+            if (_littleLemonReservationService.HasReservationAtDateTime(
+                    reservation.ReservationDateOnly!,
+                    reservation.AvailableTimesOnly!,
+                    reservation.SeatingPreference!))
+            {
+                ModelState.AddModelError(string.Empty, LittleLemon.Reservation_DuplicateWarning);
+                var heroOnDuplicate = new LittleLemonHeroSectionViewModel
+                {
+                    CallToActionHref = (Url.Action("Index", "LittleLemon") + "#menu") ?? "/LittleLemon/Index#menu",
+                    CallToActionText = "Order For Delivery",
+                    HeroImageUrl = "/images/little-lemon/images/restauranfood.jpg",
+                    HeroImageAlt = "Signature Mediterranean platter at Little Lemon"
+                };
+                var pageModelOnDuplicate = new LittleLemonReservationPageViewModel
+                {
+                    Hero = heroOnDuplicate,
+                    Reservation = reservation
+                };
+
+                return View(pageModelOnDuplicate);
+            }
+
+            var reservationId = _littleLemonReservationService.CreateReservation(reservation);
             if (viewModel.DessertReferencePhoto != null && viewModel.DessertReferencePhoto.Length > 0)
             {
                 var pathToFolder = Path.Combine("images", "little-lemon", "reservation-desserts");

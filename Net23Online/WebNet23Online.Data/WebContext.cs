@@ -41,6 +41,7 @@ namespace WebNet23Online.Data
         public DbSet<PublisherData> Publishers { get; set; }
         public DbSet<GameGenreData> GameGenres { get; set; }
         public DbSet<GameReviewData> GameReviews { get; set; }
+        public DbSet<CommunityChatMessageData> CommunityChatMessages { get; set; }
 
         public DbSet<JdmCarsData> JdmCars { get; set; }
         public DbSet<JdmManufacturerData> JdmManufacturer { get; set; }
@@ -224,6 +225,12 @@ namespace WebNet23Online.Data
                 .HasOne(x => x.Game)
                 .WithMany(x => x.GameReviews)
                 .HasForeignKey(x => x.GameId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CommunityChatMessageData>()
+                .HasOne(x => x.CreatedByUser)
+                .WithMany(x => x.CommunityChatMessages)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<LittleLemonData>()

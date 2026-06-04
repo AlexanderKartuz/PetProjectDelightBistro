@@ -146,6 +146,36 @@ namespace WebNet23Online.Services.LittleLemon
 
         }
 
+        public bool HasReservationAtDateTime(string date, string time, string seatingPreference)
+        {
+            if (!_authService.IsAuthenticated())
+            {
+                return false;
+            }
+
+            var role = _authService.GetRole();
+            if (role != UserRole.User && role != UserRole.Admin)
+            {
+                return false;
+            }
+
+            var userId = _authService.GetUserId();
+            var userReservations = _reservationDataRepository.GetAll()
+                .Where(reservation => reservation.CreatedByUserId == userId);
+
+            if (role == UserRole.Admin)
+            {
+                return userReservations.Any(reservation =>
+                    reservation.ReservationDateOnly == date
+                    && reservation.AvailableTimesOnly == time
+                    && reservation.SeatingPreference == seatingPreference);
+            }
+
+            return userReservations.Any(reservation =>
+                reservation.ReservationDateOnly == date
+                && reservation.AvailableTimesOnly == time);
+        }
+
     }
 }
 

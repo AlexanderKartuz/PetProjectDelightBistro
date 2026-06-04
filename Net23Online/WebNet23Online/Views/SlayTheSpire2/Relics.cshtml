@@ -1,0 +1,46 @@
+@using WebNet23Online.Localizations
+@{
+    Layout = "_LayoutSLayTheSpire";
+    ViewData["Title"] = SlayTheSpire2Index.Relics_PageTitle;
+}
+
+@section Scripts
+{
+    <script src="~/js/SlayTheSpire2/Relics.js" asp-append-version="true"></script>
+}
+
+<div class="spire-relics-page">
+    <section class="spire-relics-section" id="relics-catalog" aria-labelledby="relics-catalog-title">
+        <header class="spire-relics-header">
+            <h1 class="spire-relics-title" id="relics-catalog-title">@SlayTheSpire2Index.Relics_PageTitle</h1>
+            <p class="spire-relics-intro">@SlayTheSpire2Index.Relics_SectionIntro</p>
+        </header>
+
+        <div class="spire-relics-grid">
+
+            <article class="spire-relic-card spire-relic-create" data-id="">
+                <div class="spire-relic-card-body">
+                    <h2 class="spire-relic-create-title">@SlayTheSpire2Index.Relics_CreateTitle</h2>
+                    <input value="" class="relic-name-input spire-relic-input" placeholder="@SlayTheSpire2Index.Relics_NamePlaceholder">
+                    <input value="" class="relic-url-input spire-relic-input" placeholder="@SlayTheSpire2Index.Relics_UrlPlaceholder">
+                    <input value="" class="relic-rarity-input spire-relic-input" placeholder="@SlayTheSpire2Index.Relics_RarityPlaceholder">
+                    <button type="button" class="create-relic-button spire-relic-create-button">@SlayTheSpire2Index.Relics_CreateButton</button>
+                </div>
+            </article>
+
+            <article class="spire-relic-card spire-relic-template" data-id="" hidden aria-hidden="true">
+                <div class="spire-relic-card-image-frame">
+                    <img class="spire-relic-card-image" src="" alt="" loading="lazy" decoding="async">
+                </div>
+                <div class="spire-relic-card-body">
+                    <h2 class="spire-relic-card-name"></h2>
+                    <dl class="spire-relic-card-stats">
+                        <dt>@SlayTheSpire2Index.Relics_RarityLabel</dt>
+                        <dd class="spire-relic-card-rarity"></dd>
+                    </dl>
+                </div>
+            </article>
+
+        </div>
+    </section>
+</div>

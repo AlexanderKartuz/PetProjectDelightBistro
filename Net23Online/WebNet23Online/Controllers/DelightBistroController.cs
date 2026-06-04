@@ -169,5 +169,10 @@ namespace WebNet23Online.Controllers
             return View(viewModels);
         }
 
+        public IActionResult Chat()
+        {
+            return View();
+        }
+
     }
 }
