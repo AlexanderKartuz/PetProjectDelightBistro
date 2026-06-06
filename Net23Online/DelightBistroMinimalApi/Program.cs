@@ -40,4 +40,12 @@ app.MapPost("CreateTea", (MiniDbContext dbContext, [FromBody] Tea tea) =>
     return tea;
 });
 
+app.MapDelete("DeleteDrink", (MiniDbContext dbContext, [FromBody] int id) =>
+{
+    var drink = dbContext.Teas.First(i => i.Id == id);
+    dbContext.Teas.Remove(drink);
+    dbContext.SaveChanges();
+    return true;
+});
+
 app.Run();

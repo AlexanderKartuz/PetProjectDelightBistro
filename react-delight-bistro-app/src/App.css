@@ -186,12 +186,18 @@
 .drink-list {
   width: 70%;
   max-width: 960px;
+  margin: 10px;
+}
+.drink-list-title {
+  font-size: large;
+  font-weight: 800;
+  margin-bottom: 20px;
 }
 .drink-list-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: space-between;
+  gap: 20px;
 }
 .drink-card {
   display: flex;

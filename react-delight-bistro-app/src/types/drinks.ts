@@ -3,7 +3,7 @@ export interface Drink {
   name: string;
   price: number;
 }
-export interface CreateDrinks {
+export interface CreateDrinkPayload {
   name: string;
   price: number;
 }
