@@ -1,4 +1,5 @@
 import type { ApiError } from '../types/errors.js';
+import { Button } from './button.js';
 
 interface ErrorListProps {
   errors: ApiError[];
@@ -19,14 +20,12 @@ export const ErrorList = function ({ errors, onRemove }: ErrorListProps) {
               <div className="error-discription">{error.description}</div>
             )}
           </div>
-
-          <button
-            type="button"
+          <Button
+            className="delete-error-btn"
             onClick={() => onRemove(error.id)}
-            className="delete-btn button"
           >
             ✕
-          </button>
+          </Button>
         </div>
       ))}
     </div>

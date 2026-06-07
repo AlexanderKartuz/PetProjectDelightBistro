@@ -1,4 +1,5 @@
 import type { Drink } from '../types/drinks.js';
+import { Button } from './button.js';
 
 interface DrinkCardProps {
   drink: Drink;
@@ -14,13 +15,12 @@ export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
         <span className="price-currency">BYN</span>
       </div>
       {onDelete && (
-        <button
-          type="button"
-          className="drink-card-delete-btn button"
+        <Button
+          className="drink-card-delete-btn"
           onClick={() => onDelete(drink.id)}
         >
           Удалить напиток
-        </button>
+        </Button>
       )}
     </div>
   );

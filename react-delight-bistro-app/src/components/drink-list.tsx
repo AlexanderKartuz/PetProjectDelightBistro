@@ -11,21 +11,26 @@ export const DrinksList = function () {
   const [errors, setErrors] = useState<ApiError[]>([]);
   const nextErrorId = useRef(0);
 
-  const addError = useCallback((message: string, discription?: string) => {
-    const newError: ApiError = {
-      id: nextErrorId.current++,
-      message,
-    };
-
-    if (discription !== undefined) {
-      newError.description = discription;
-    }
-    setErrors((old) => [...old, newError]);
-  }, []);
-
   const removeError = useCallback((id: number) => {
     setErrors((prev) => prev.filter((e) => e.id !== id));
   }, []);
+
+  const addError = useCallback(
+    (message: string, discription?: string) => {
+      const id = nextErrorId.current++;
+      const newError: ApiError = { id, message };
+
+      if (discription !== undefined) {
+        newError.description = discription;
+      }
+      setErrors((old) => [...old, newError]);
+
+      setTimeout(() => {
+        removeError(id);
+      }, 5000);
+    },
+    [removeError],
+  );
 
   const loadDrinks = useCallback(async () => {
     try {
