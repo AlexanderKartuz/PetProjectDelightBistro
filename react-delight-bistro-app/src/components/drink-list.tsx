@@ -1,40 +1,75 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Drink } from '../types/drinks.js';
-import { getDrinks } from '../services/drinks-service.js';
+import { deleteDrink, getDrinks } from '../services/drinks-service.js';
 import { DrinkCard } from './drink-card.js';
 import { CreteDrinkForm } from './create-drinks-form.js';
-
-const API_BASE = 'https://localhost:7090';
-const API_GET_TEAS = '/GetTeas';
+import type { ApiError } from '../types/errors.js';
+import { ErrorList } from './error-list.js';
 
 export const DrinksList = function () {
   const [drinks, setDrinks] = useState<Drink[]>([]);
-  //   const [loading, setLoading] =useState(true)
-  //   const [error, setError]= useState(null)
+  const [errors, setErrors] = useState<ApiError[]>([]);
+  const nextErrorId = useRef(0);
+
+  const addError = useCallback((message: string, discription?: string) => {
+    const newError: ApiError = {
+      id: nextErrorId.current++,
+      message,
+    };
+
+    if (discription !== undefined) {
+      newError.description = discription;
+    }
+    setErrors((old) => [...old, newError]);
+  }, []);
+
+  const removeError = useCallback((id: number) => {
+    setErrors((prev) => prev.filter((e) => e.id !== id));
+  }, []);
 
   const loadDrinks = useCallback(async () => {
-    const data = await getDrinks();
-    setDrinks(data);
-  }, []);
+    try {
+      const data = await getDrinks();
+      setDrinks(data);
+    } catch (err) {
+      addError(
+        err instanceof Error ? err.message : 'Не удалось загрузить напитки',
+        'Ошибка загрузки',
+      );
+    }
+  }, [addError]);
 
   useEffect(() => {
     loadDrinks();
   }, [loadDrinks]);
 
-  const handleDrinkCreated = useCallback(
-    async (newDrink: Drink) => {
-      setDrinks((old) => [newDrink, ...old]);
+  const handleDrinkCreated = useCallback((newDrink: Drink) => {
+    setDrinks((old) => [newDrink, ...old]);
+  }, []);
+
+  const handleDelete = useCallback(
+    async (id: number) => {
+      try {
+        await deleteDrink(id);
+        setDrinks((drinks) => drinks.filter((drinks) => drinks.id != id));
+      } catch (err) {
+        addError(
+          err instanceof Error ? err.message : 'Не удалось удалить напиток',
+          'Ошибка удаления',
+        );
+      }
     },
-    [drinks],
+    [addError],
   );
 
   return (
     <section className="drink-list">
       <div className="drink-list-title">List of Drinks</div>
       <CreteDrinkForm onCreated={handleDrinkCreated} />
+      <ErrorList errors={errors} onRemove={removeError} />
       <div className="drink-list-grid">
         {drinks.map((drink) => (
-          <DrinkCard key={drink.id} drink={drink} />
+          <DrinkCard key={drink.id} drink={drink} onDelete={handleDelete} />
         ))}
       </div>
     </section>

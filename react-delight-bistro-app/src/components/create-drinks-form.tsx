@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, type FormEvent } from 'react';
 import type { Drink } from '../types/drinks.js';
 import { createDrink } from '../services/drinks-service.js';
 import { DrinkCard } from './drink-card.js';
+import type { ApiError } from '../types/errors.js';
 
 interface CreateDrinkFormProps {
   onCreated: (newDrink: Drink) => void;
@@ -13,7 +14,7 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
     setError(null);
@@ -61,7 +62,7 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
             price,
           }}
         />
-        <button type="submit" disabled={submitting}>
+        <button type="submit" disabled={submitting} className="button">
           {submitting ? 'Сохранение...' : 'Создать напиток'}
         </button>
       </div>
