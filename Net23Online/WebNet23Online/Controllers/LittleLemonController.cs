@@ -92,7 +92,7 @@ namespace WebNet23Online.Controllers
         }
         [HttpPost]
         [CanAccessLittleLemonReservation]
-        public IActionResult Reservation(LittleLemonReservationPageViewModel viewModel)
+        public async Task<IActionResult> Reservation(LittleLemonReservationPageViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -146,14 +146,15 @@ namespace WebNet23Online.Controllers
                 }
                 var fileName = $"cake-{reservationId}.jpg";
                 var path = Path.Combine(fullPath, fileName);
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                await using (var fileStream = new FileStream(path, FileMode.Create))
                 {
-                    viewModel.DessertReferencePhoto.CopyTo(fileStream);
+                    await viewModel.DessertReferencePhoto.CopyToAsync(fileStream);
                 }
                 var cakePhotoUrl = $"/{pathToFolder.Replace("\\", "/")}/{fileName}";
                 _littleLemonReservationService.SetReservationCakePhotoUrl(reservationId, cakePhotoUrl);
             }
 
+            await _littleLemonReservationService.NotifyReservationCreatedAsync(reservationId);
 
             return RedirectToAction(nameof(Confirmation), new { reservationId });
         }
@@ -203,6 +204,12 @@ namespace WebNet23Online.Controllers
             };
             return View(pageModel);
         }
+        [CanAccessLittleLemonReservation]
+        public IActionResult Chat()
+        {
+            return View();
+        }
+
         [CanAccessLittleLemonReservation]
         public IActionResult History()
         {
