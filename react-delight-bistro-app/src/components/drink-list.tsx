@@ -69,7 +69,7 @@ export const DrinksList = function () {
 
   return (
     <section className="drink-list">
-      <div className="drink-list-title">List of Drinks</div>
+      <h2 className="drink-list-title">List of Drinks</h2>
       <CreteDrinkForm onCreated={handleDrinkCreated} />
       <ErrorList errors={errors} onRemove={removeError} />
       <div className="drink-list-grid">
