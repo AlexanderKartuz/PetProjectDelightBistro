@@ -1,0 +1,82 @@
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+
+.drink-list {
+  width: 70%;
+  max-width: 960px;
+  margin: 10px;
+}
+.drink-list-title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+.drink-list-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.drink-card {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 200px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--accent-bg);
+  padding: 5px;
+  margin: 10px;
+  gap: 5px;
+}
+.drink-name {
+  font-size: large;
+  font-weight: 800;
+}
+.price-value {
+  margin-right: 10px;
+}
+
+.drink-price {
+  font-weight: 800;
+}
+
+.create-drink-form-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 40px;
+}
+
+.button {
+  min-width: 30px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+.button:hover {
+  box-shadow: 0 2px 8px #2c2c2c;
+}
