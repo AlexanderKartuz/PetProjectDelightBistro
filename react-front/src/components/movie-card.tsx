@@ -1,12 +1,18 @@
-import type { Movie } from '../types/movie'
+import { Link } from "react-router-dom";
+import type { Movie } from "../types/movie";
+import { MovieTags } from "./movie-tags";
 
 interface MovieCardProps {
-  movie: Movie
-  onDelete?: (id: number) => void
-  deleting?: boolean
+  movie: Movie;
+  onDelete?: (id: number) => void;
+  deleting?: boolean;
 }
 
-export const MovieCard = function ({ movie, onDelete, deleting }: MovieCardProps) {
+export const MovieCard = function ({
+  movie,
+  onDelete,
+  deleting,
+}: MovieCardProps) {
   return (
     <article className="movie-card">
       <div className="movie-card__poster">
@@ -17,8 +23,11 @@ export const MovieCard = function ({ movie, onDelete, deleting }: MovieCardProps
         )}
       </div>
       <div className="movie-card__info">
-        <h3 className="movie-card__title">{movie.name}</h3>
+        <h3 className="movie-card__title">
+          <Link to={`/movie/${movie.id}`}>{movie.name}</Link>
+        </h3>
         <p className="movie-card__rating">Рейтинг: {movie.rating}</p>
+        <MovieTags tags={movie.tags ?? []} clickable />
         {onDelete && (
           <button
             type="button"
@@ -26,10 +35,10 @@ export const MovieCard = function ({ movie, onDelete, deleting }: MovieCardProps
             onClick={() => onDelete(movie.id)}
             disabled={deleting}
           >
-            {deleting ? 'Удаление...' : 'Удалить'}
+            {deleting ? "Удаление..." : "Удалить"}
           </button>
         )}
       </div>
     </article>
-  )
-}
+  );
+};

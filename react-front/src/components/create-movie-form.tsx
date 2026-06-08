@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { createMovie } from '../services/movie-service'
+import { parseTagsInput } from '../types/movie'
 import { MovieCard } from './movie-card'
 import type { Movie } from '../types/movie'
 
@@ -11,8 +12,11 @@ export const CreateMovieForm = function ({ onCreated }: CreateMovieFormProps) {
   const [name, setName] = useState('')
   const [url, setUrl] = useState('')
   const [rating, setRating] = useState(0)
+  const [tagsInput, setTagsInput] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const previewTags = parseTagsInput(tagsInput)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -20,13 +24,19 @@ export const CreateMovieForm = function ({ onCreated }: CreateMovieFormProps) {
     setError(null)
 
     try {
-      const movie = await createMovie({ name, url, rating })
+      const tags = parseTagsInput(tagsInput)
+      const movie = await createMovie({
+        name,
+        url,
+        rating,
+        tags: tags.length > 0 ? tags : undefined,
+      })
       onCreated(movie)
 
       setName('')
       setUrl('')
       setRating(0)
-      
+      setTagsInput('')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Не удалось создать фильм')
     } finally {
@@ -70,6 +80,17 @@ export const CreateMovieForm = function ({ onCreated }: CreateMovieFormProps) {
         />
       </label>
 
+      <label className="create-movie-form__field">
+        <span>Теги</span>
+        <input
+          type="text"
+          value={tagsInput}
+          onChange={(event) => setTagsInput(event.target.value)}
+          placeholder="Боевик, Кристофер Нолан"
+        />
+        <span className="create-movie-form__hint">Через запятую</span>
+      </label>
+
       <div className="create-movie-form__preview">
         <span className="create-movie-form__preview-label">Превью</span>
         <MovieCard
@@ -78,6 +99,7 @@ export const CreateMovieForm = function ({ onCreated }: CreateMovieFormProps) {
             name: name || 'Название фильма',
             url,
             rating,
+            tags: previewTags,
           }}
         />
       </div>
