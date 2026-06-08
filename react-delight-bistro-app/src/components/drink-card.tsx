@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { CreateDrinkPayload, Drink } from '../types/drinks.js';
 import { Button } from './button.js';
 import { changeDrink } from '../services/drinks-service.js';
@@ -18,6 +18,9 @@ export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
 
   const isItemChanged =
     newName !== currentDrink.name || newPrice !== currentDrink.price;
+
+  const isEditing = isNameEditing || isPriceEditing;
+
   const resetEditing = () => {
     setIsNameEditing(false);
     setIsPriceEditing(false);
@@ -26,10 +29,10 @@ export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
   };
 
   const handleSaveChanges = async () => {
-    // if (!isItemChanged) {
-    //   resetEditing();
-    //   return;
-    // }
+    if (!isItemChanged) {
+      resetEditing();
+      return;
+    }
 
     const changedDrink: CreateDrinkPayload = {
       name: newName.trim(),
@@ -47,7 +50,7 @@ export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
 
   return (
     <div className="drink-card">
-      {isNameEditing ? (
+      {isEditing ? (
         <input
           type="text"
           className="drink-name-input"
@@ -61,7 +64,7 @@ export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
       )}
 
       <div className="drink-price">
-        {isPriceEditing ? (
+        {isEditing ? (
           <input
             type="number"
             className="drink-price-input"
