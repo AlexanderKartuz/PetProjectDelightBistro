@@ -1,4 +1,3 @@
-import React from 'react'
 import type { AnimalFact } from '../types/animal-fact'
 
 interface AnimalFactCardProps {

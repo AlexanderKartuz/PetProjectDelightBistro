@@ -4,6 +4,7 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import { Counter } from './components/counter'
 import { MovieList } from './components/movie-list'
+import { AnimalFactsList } from './components/animal-fact-list'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         </div>
         <Counter />
         <MovieList />
+        <AnimalFactsList />
       </section>
 
       <div className="ticks"></div>

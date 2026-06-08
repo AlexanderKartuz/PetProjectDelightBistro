@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { AnimalFact } from '../types/animal-fact'
 import { getFacts, createFact } from '../services/animal-fact-service'
 import { CreateAnimalFactForm } from './create-animal-fact-form'
@@ -59,7 +59,6 @@ export const AnimalFactsList = function () {
       <h2 className="green-title page-title">Факты о животных</h2>
       <div className="green-line"></div>
 
-      {}
       <CreateAnimalFactForm onCreated={handleFactCreated} />
 
       <h3 className="green-title section-title">Известные факты</h3>

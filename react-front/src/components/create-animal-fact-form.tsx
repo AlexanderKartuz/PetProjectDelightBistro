@@ -20,12 +20,16 @@ export const CreateAnimalFactForm = function ({ onCreated }: CreateAnimalFactFor
         const data = await getAnimalSpeciesNames()
         if (!cancelled) {
           setSpeciesList(data)
-          if (data.length > 0) setSelectedSpecies(data[0])
+          if (data.length > 0) {
+            setSelectedSpecies(data[0])
+          }
         }
       } catch (err) {
         console.error(err)
       } finally {
-        if (!cancelled) setLoadingSpecies(false)
+        if (!cancelled) {
+          setLoadingSpecies(false)
+        }
       }
     }
 
@@ -38,7 +42,9 @@ export const CreateAnimalFactForm = function ({ onCreated }: CreateAnimalFactFor
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
-    if (!inputText.trim()) return
+    if (!inputText.trim()) {
+      return
+    }
 
     onCreated({
       animalSpeciesName: selectedSpecies,
