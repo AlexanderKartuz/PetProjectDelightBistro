@@ -6,24 +6,24 @@ interface RelicCardProps {
   deleting?: boolean
 }
 
-function getRarityClass(rarity: string): string {
-  const normalized = rarity.trim().toLowerCase()
-
-  if (normalized.includes('starter')) return 'relic-card--starter'
-  if (normalized.includes('common')) return 'relic-card--common'
-  if (normalized.includes('uncommon')) return 'relic-card--uncommon'
-  if (normalized.includes('rare')) return 'relic-card--rare'
-  if (normalized.includes('boss')) return 'relic-card--boss'
-  if (normalized.includes('shop')) return 'relic-card--shop'
-
-  return 'relic-card--default'
-}
-
 export const RelicCard = function ({ relic, onDelete, deleting }: RelicCardProps) {
   const rarity = relic.rarity.trim()
 
+  const getRarityClass = () => {
+    const normalized = rarity.toLowerCase()
+
+    if (normalized.includes('starter')) return 'relic-card--starter'
+    if (normalized.includes('common')) return 'relic-card--common'
+    if (normalized.includes('uncommon')) return 'relic-card--uncommon'
+    if (normalized.includes('rare')) return 'relic-card--rare'
+    if (normalized.includes('boss')) return 'relic-card--boss'
+    if (normalized.includes('shop')) return 'relic-card--shop'
+
+    return 'relic-card--default'
+  }
+
   return (
-    <article className={`relic-card ${getRarityClass(rarity)}`}>
+    <article className={`relic-card ${getRarityClass()}`}>
       <div className="relic-card__frame">
         <div className="relic-card__glow" aria-hidden="true" />
         <div className="relic-card__poster">
