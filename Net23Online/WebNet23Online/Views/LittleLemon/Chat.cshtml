@@ -1,10 +1,9 @@
-@using WebNet23Online.Data.Enums
-@using WebNet23Online.Services.Interfaces
-@inject IAuthService authService
+@using WebNet23Online.Models.LittleLemon
+@model LittleLemonChatPageViewModel
+
 @{
 	Layout = "_LayoutLittleLemon";
 	ViewData["Title"] = "Support Chat";
-	var isAdmin = authService.GetRole() == UserRole.Admin;
 }
 @section Scripts {
 	<link rel="stylesheet" href="/css/little-lemon/chat.css" />
@@ -12,15 +11,14 @@
 }
 
 <section class="chat-page"
-		 data-user-id="@authService.GetUserId()"
-		 data-user-name="@authService.GetUserName()"
-		 data-role="@authService.GetRole()"
-		 data-is-admin="@isAdmin.ToString().ToLowerInvariant()">
+		 data-user-id="@Model.UserId"
+		 data-user-name="@Model.UserName"
+		 data-is-admin="@Model.IsAdmin">
 	<h2 class="chat-title">Support Chat</h2>
 
 	<div class="chat-messages" aria-live="polite"></div>
 
-	@if (isAdmin)
+	@if (Model.IsAdmin)
 	{
 		<div class="chat-admin-controls">
 			<label class="chat-target-user-label" for="chat-target-user-id">

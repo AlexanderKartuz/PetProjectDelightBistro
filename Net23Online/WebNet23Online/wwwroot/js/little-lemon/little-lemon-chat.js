@@ -5,7 +5,8 @@ $(document).ready(function () {
     }
 
     const userId = parseInt($page.data('user-id'), 10);
-    const isAdmin = $page.data('is-admin') === true;
+    const isAdmin = $page.data('is-admin').toString().toLowerCase() === 'true';
+    const userName = $page.data('user-name');
     const $messages = $page.find('.chat-messages');
     const $input = $page.find('.chat-input');
     const $target = $page.find('.chat-target-user-id');
@@ -22,7 +23,7 @@ $(document).ready(function () {
         const root = template.content.firstElementChild.cloneNode(true);
 
         root.classList.add(sent ? 'sent' : 'received');
-        setChatField(root, 'sender', sent ? 'Me' : senderName);
+        setChatField(root, 'sender', sent ? 'Me' : userName);
         setChatField(root, 'text', message);
 
         messagesEl.appendChild(root);

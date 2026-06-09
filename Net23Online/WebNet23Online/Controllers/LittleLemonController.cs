@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Controllers.CustomAuthAttribute;
+using WebNet23Online.Data.Enums;
 using WebNet23Online.Localizations;
 using WebNet23Online.Models.LittleLemon;
 using WebNet23Online.Services.Interfaces;
@@ -14,18 +15,20 @@ namespace WebNet23Online.Controllers
         private ILittleLemonSubscribeService _littleLemonSubscribeService;
         private ILittleLemonReservationService _littleLemonReservationService;
         private IWebHostEnvironment _webHostEnvironment;
-
+        private IAuthService _authService;
         public LittleLemonController(ILittleLemonMenuService littleLemonMenuService,
                                      ILittleLemonTestimonialService littleLemonTestimonialService,
                                      ILittleLemonSubscribeService littleLemonSubscribeService,
                                      ILittleLemonReservationService littleLemonReservationService,
-                                     IWebHostEnvironment webHostEnvironment)
+                                     IWebHostEnvironment webHostEnvironment,
+                                     IAuthService authService)
         {
             _littleLemonMenuService = littleLemonMenuService;
             _littleLemonTestimonialService = littleLemonTestimonialService;
             _littleLemonSubscribeService = littleLemonSubscribeService;
             _littleLemonReservationService = littleLemonReservationService;
             _webHostEnvironment = webHostEnvironment;
+            _authService = authService;
         }
 
         public IActionResult Index(string category)
@@ -207,7 +210,14 @@ namespace WebNet23Online.Controllers
         [CanAccessLittleLemonReservation]
         public IActionResult Chat()
         {
-            return View();
+            var role = _authService.GetRole();
+            var pageModel = new LittleLemonChatPageViewModel
+            {
+                UserId = _authService.GetUserId(),
+                UserName = _authService.GetUserName() ?? string.Empty,
+                IsAdmin = role == UserRole.Admin
+            };
+            return View(pageModel);
         }
 
         [CanAccessLittleLemonReservation]

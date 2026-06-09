@@ -75,10 +75,14 @@ namespace WebNet23Online.Services.LittleLemon
             return reservationData.Id;
         }
 
-        public LittleLemonReservationViewModel GetReservationViewModelById(int id)
+        public LittleLemonReservationViewModel? GetReservationViewModelById(int id)
         {
             var reservationDataById = _reservationDataRepository.Get(id);
-            var guest = _guestDataRepository.Get(reservationDataById!.GuestId);
+            if (reservationDataById is null)
+            {
+                return null;
+            }
+            var guest = _guestDataRepository.Get(reservationDataById.GuestId);
 
             return new LittleLemonReservationViewModel
             {
@@ -186,12 +190,8 @@ namespace WebNet23Online.Services.LittleLemon
 
         public async Task NotifyReservationCreatedAsync(int reservationId)
         {
-            if (_reservationDataRepository.Get(reservationId) is null)
-            {
-                return;
-            }
-
-            var reservation = GetReservationViewModelById(reservationId);
+            var reservation = GetReservationViewModelById(reservationId)
+                ?? throw new InvalidOperationException("Reservation not found.");
 
             await _hubContext.Clients
                 .Group(_chatService.AdminGroupName)
