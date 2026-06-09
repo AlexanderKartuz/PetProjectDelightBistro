@@ -70,13 +70,13 @@ export const DrinksList = function () {
   return (
     <section className="drink-list">
       <h2 className="drink-list-title">List of Drinks</h2>
-      <CreteDrinkForm onCreated={handleDrinkCreated} />
       <ErrorList errors={errors} onRemove={removeError} />
       <div className="drink-list-grid">
         {drinks.map((drink) => (
           <DrinkCard key={drink.id} drink={drink} onDelete={handleDelete} />
         ))}
       </div>
+      <CreteDrinkForm onCreated={handleDrinkCreated} />
     </section>
   );
 };

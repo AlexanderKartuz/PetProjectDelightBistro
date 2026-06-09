@@ -5,7 +5,8 @@ import { DrinkCard } from './drink-card.js';
 import type { ApiError } from '../types/errors.js';
 
 interface CreateDrinkFormProps {
-  onCreated: (newDrink: Drink) => void;
+  onCreated?: (newDrink: Drink) => void;
+  showDetailsLink?: boolean;
 }
 
 export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
@@ -21,7 +22,7 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
 
     try {
       const drink = await createDrink({ name, price });
-      onCreated(drink);
+      onCreated?.(drink);
       setName('');
       setPrice(0);
     } catch (err) {
@@ -61,6 +62,7 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
             name: name || 'Название напитка',
             price,
           }}
+          showDetailsLink={false}
         />
         <button type="submit" disabled={submitting} className="button">
           {submitting ? 'Сохранение...' : 'Создать напиток'}
