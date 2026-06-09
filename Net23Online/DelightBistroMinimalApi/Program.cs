@@ -40,4 +40,29 @@ app.MapPost("CreateTea", (MiniDbContext dbContext, [FromBody] Tea tea) =>
     return tea;
 });
 
+app.MapPut("ChangeDrink/{id}", (MiniDbContext dbContext, int id, [FromBody] Tea tea) =>
+{
+    var changedTea = dbContext.Teas.FirstOrDefault(t => t.Id == id);
+
+    if (changedTea == null)
+    {
+        return Results.NotFound();
+    }
+
+    changedTea.Name = tea.Name;
+    changedTea.Price = tea.Price;
+
+    dbContext.SaveChanges();
+
+    return Results.Ok(changedTea);
+});
+
+app.MapDelete("DeleteDrink", (MiniDbContext dbContext, [FromBody] int id) =>
+{
+    var tea = dbContext.Teas.First(i => i.Id == id);
+    dbContext.Teas.Remove(tea);
+    dbContext.SaveChanges();
+    return true;
+});
+
 app.Run();

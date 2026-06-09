@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieMinimalApi.DbStuff;
 
@@ -10,9 +11,11 @@ using MovieMinimalApi.DbStuff;
 namespace MovieMinimalApi.Migrations
 {
     [DbContext(typeof(MiniDbContext))]
-    partial class MiniDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608174050_AddTags")]
+    partial class AddTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
