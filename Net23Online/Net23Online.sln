@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelightBistroMinimalApi", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlayTheSpire2RelicsMinimalApi", "SlayTheSpire2RelicsMinimalApi\SlayTheSpire2RelicsMinimalApi.csproj", "{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LittleLemonMinimalApi", "LittleLemonMinimalApi\LittleLemonMinimalApi.csproj", "{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
