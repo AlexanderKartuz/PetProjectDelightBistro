@@ -1,10 +1,12 @@
-﻿
-using WebNet23Online.Services.Interfaces.LittleLemon;
+﻿using WebNet23Online.Services.Interfaces.LittleLemon;
 using WebNet23Online.Models.LittleLemon;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Data.Enums;
+using Microsoft.AspNetCore.SignalR;
+using WebNet23Online.Hubs;
+using WebNet23Online.Hubs.Interfaces;
 namespace WebNet23Online.Services.LittleLemon
 {
     public class LittleLemonReservationService : ILittleLemonReservationService
@@ -12,15 +14,21 @@ namespace WebNet23Online.Services.LittleLemon
         private ILittleLemonReservationRepository _reservationDataRepository;
         private ILittleLemonGuestRepository _guestDataRepository;
         private IAuthService _authService;
+        private IHubContext<LittleLemonHub, ILittleLemonHub> _hubContext;
+        private ILittleLemonChatService _chatService;
 
         public LittleLemonReservationService(
             ILittleLemonReservationRepository reservationDataRepository,
             ILittleLemonGuestRepository guestDataRepository,
-            IAuthService authService)
+            IAuthService authService,
+            IHubContext<LittleLemonHub, ILittleLemonHub> hubContext,
+            ILittleLemonChatService chatService)
         {
             _reservationDataRepository = reservationDataRepository;
             _guestDataRepository = guestDataRepository;
             _authService = authService;
+            _hubContext = hubContext;
+            _chatService = chatService;
         }
 
         public int CreateGuest(string guestName)
@@ -67,10 +75,14 @@ namespace WebNet23Online.Services.LittleLemon
             return reservationData.Id;
         }
 
-        public LittleLemonReservationViewModel GetReservationViewModelById(int id)
+        public LittleLemonReservationViewModel? GetReservationViewModelById(int id)
         {
             var reservationDataById = _reservationDataRepository.Get(id);
-            var guest = _guestDataRepository.Get(reservationDataById!.GuestId);
+            if (reservationDataById is null)
+            {
+                return null;
+            }
+            var guest = _guestDataRepository.Get(reservationDataById.GuestId);
 
             return new LittleLemonReservationViewModel
             {
@@ -174,6 +186,25 @@ namespace WebNet23Online.Services.LittleLemon
             return userReservations.Any(reservation =>
                 reservation.ReservationDateOnly == date
                 && reservation.AvailableTimesOnly == time);
+        }
+
+        public async Task NotifyReservationCreatedAsync(int reservationId)
+        {
+            var reservation = GetReservationViewModelById(reservationId)
+                ?? throw new InvalidOperationException("Reservation not found.");
+
+            await _hubContext.Clients
+                .Group(_chatService.AdminGroupName)
+                .NewReservationCreated(
+                    reservationId,
+                    reservation.GuestName ?? string.Empty,
+                    reservation.ReservationDateOnly ?? string.Empty,
+                    reservation.AvailableTimesOnly ?? string.Empty,
+                    reservation.NumberOfGuests,
+                    reservation.SeatingPreference ?? string.Empty,
+                    reservation.Occasion ?? string.Empty,
+                    reservation.UserComments ?? string.Empty,
+                    reservation.CakePhotoUrl);
         }
 
     }
