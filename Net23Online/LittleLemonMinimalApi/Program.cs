@@ -27,22 +27,9 @@ app.UseCors();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("GetMenuItems", (MiniDbContext dbContext, string? category) =>
+app.MapGet("GetMenuItems", (MiniDbContext dbContext) =>
 {
-    var allMenuItems = dbContext.MenuItems.ToList();
-
-    if (string.IsNullOrEmpty(category))
-    {
-        return allMenuItems;
-    }
-
-    var filteredMenuItems = allMenuItems
-        .Where(item => item.Category == category)
-        .ToList();
-
-    return filteredMenuItems.Count == 0
-        ? allMenuItems
-        : filteredMenuItems;
+    return dbContext.MenuItems.ToList();
 });
 
 app.MapPost("CreateMenuItem", (MiniDbContext dbContext, [FromBody] MenuItem menuItem) =>
