@@ -7,15 +7,18 @@
     <title>@ViewData["Title"] - WebNet23Online</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebNet23Online.styles.css" asp-append-version="true" />
-
     <link rel="stylesheet" href="~/css/slay-the-spire-2/style.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
 </head>
 <body>
     <header class="spire-navbar">
         <a class="spire-navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebNet23Online</a>
         <nav class="spire-navbar-nav" aria-label="Меню">
+            <a class="spire-navbar-link" asp-area="" asp-controller="SlayTheSpire2" asp-action="Relics">@SlayTheSpire2Index.Layout_Relics</a>
             <a class="spire-navbar-link" asp-area="" asp-controller="SlayTheSpire2" asp-action="Index">@SlayTheSpire2Index.Layout_MainPage</a>
-        </nav>
+                  </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

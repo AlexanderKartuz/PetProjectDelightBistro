@@ -4,6 +4,10 @@
     Layout = "_LayoutSLayTheSpire";
     ViewData["Title"] = Model.Found ? Model.Name : "Герой";
 }
+@section Scripts 
+{
+    <script src="/js/SlayTheSpire2/Hero.js"></script>
+}
 
 <div class="spire-heroes-detail">
     <p class="spire-heroes-back">
@@ -23,7 +27,13 @@
         </dl>
 
         <section class="spire-hero-cards" aria-labelledby="hero-cards-heading">
-            <h2 id="hero-cards-heading" class="spire-hero-cards-title">Карты героя</h2>
+            <div class="spire-hero-cards-header">
+                <h2 id="hero-cards-heading" class="spire-hero-cards-title">Карты героя</h2>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="SlayTheSpire2" asp-action="AddCard" asp-route-heroId="@Model.HeroId" class="spire-hero-add-card-link">Добавить карту</a>
+                }
+            </div>
 
             @if (Model.Cards.Count == 0)
             {
@@ -31,6 +41,7 @@
             }
             else
             {
+                <p class="spire-hero-cards-deleteButton"> <button type="button" class="delete-card" disabled="disabled">Удалить</button></p>
                 <ul class="spire-hero-cards-grid">
                     @foreach (var card in Model.Cards)
                     {
@@ -76,65 +87,6 @@
                         </li>
                     }
                 </ul>
-            }
-
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-            <section class="spire-hero-add-card" aria-labelledby="hero-add-card-heading">
-                <h2 id="hero-add-card-heading" class="spire-hero-cards-title">Добавить карту</h2>
-
-                <form asp-controller="SlayTheSpire2" asp-action="AddCard" method="post" class="spire-hero-add-card-form" novalidate>
-                    <label class="spire-hero-add-card-field spire-hero-add-card-field-wide">
-                        <span>Герой</span>
-                        <select asp-for="AddCardForm.HeroId" asp-items="Model.HeroOptions"></select>
-                        <span asp-validation-for="AddCardForm.HeroId"></span>
-                    </label>
-                    <div asp-validation-summary="ModelOnly" class="spire-hero-add-card-errors"></div>
-
-                    <label class="spire-hero-add-card-field">
-                        <span>Название</span>
-                        <input asp-for="AddCardForm.Name" />
-                        <span asp-validation-for="AddCardForm.Name"></span>
-                    </label>
-
-                    <label class="spire-hero-add-card-field">
-                        <span>Тип карты</span>
-                        <select asp-for="AddCardForm.TypeOfCard" asp-items="Model.TypeOfCardOptions"></select>
-                        <span asp-validation-for="AddCardForm.TypeOfCard"></span>
-                    </label>
-
-                    <label class="spire-hero-add-card-field">
-                        <span>Мана</span>
-                        <input asp-for="AddCardForm.ManaCost" type="number" min="0" max="99" />
-                        <span asp-validation-for="AddCardForm.ManaCost"></span>
-                    </label>
-
-                    <label class="spire-hero-add-card-field">
-                        <span>Редкость</span>
-                        <select asp-for="AddCardForm.Rarity" asp-items="Model.RarityOptions"></select>
-                        <span asp-validation-for="AddCardForm.Rarity"></span>
-                    </label>
-
-                    <label class="spire-hero-add-card-field spire-hero-add-card-field-wide">
-                        <span>Описание</span>
-                        <textarea asp-for="AddCardForm.Description" rows="3"></textarea>
-                        <span asp-validation-for="AddCardForm.Description"></span>
-                    </label>
-
-                    <label class="spire-hero-add-card-field spire-hero-add-card-field-wide">
-                        <span>URL изображения</span>
-                        <input asp-for="AddCardForm.ImageUrl" placeholder="/images/slay-the-spire-2/cards/..." />
-                        <span asp-validation-for="AddCardForm.ImageUrl"></span>
-                    </label>
-
-                    <label class="spire-hero-add-card-checkbox">
-                        <input asp-for="AddCardForm.Upgraded" type="checkbox" />
-                        <span>Улучшенная карта (+)</span>
-                    </label>
-
-                    <button type="submit" class="spire-hero-add-card-submit">Сохранить карту</button>
-                </form>
-            </section>
             }
         </section>
     }

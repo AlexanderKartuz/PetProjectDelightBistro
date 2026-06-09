@@ -12,7 +12,7 @@ namespace WebNet23Online.Models.DelightBistro
 
         [Range(1, 150)]
         public decimal Price { get; set; }
-        public string? ImgURL { get; set; }
+        public string? ImgUrl { get; set; }
 
         public List<CreateIngredientViewModel> IngredientsList { get; set; } = new();
 

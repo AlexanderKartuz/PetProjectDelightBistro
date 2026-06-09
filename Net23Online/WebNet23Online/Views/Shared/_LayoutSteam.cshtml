@@ -12,18 +12,21 @@
     <link rel="stylesheet" href="/css/steam/styles.css">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script src="~/js/steam/notification.js"></script>
     @RenderSection("Scripts", required: false)
 </head>
 <body>
+    <div class="notifications"></div>
     <header class="site-header">
         <div class="topbar">
             <a class="brand" href="/Steam/Index">STEAM</a>
 
             <nav class="primary-nav">
                 <ul class="nav-list">
-                    <li><a href="/Steam/Index">@SteamShared.Primary_Nav_Store</a></li>
-                    <li><a href="/Steam/Catalog">@SteamShared.Primary_Nav_Catalog</a></li>
-                    <li><a href="/community">@SteamShared.Primary_Nav_Community</a></li>
+                    <li class="store-link"><a href="/Steam/Index">@SteamShared.Primary_Nav_Store</a></li>
+                    <li class="catalog-link"><a href="/Steam/Catalog">@SteamShared.Primary_Nav_Catalog</a></li>
+                    <li class="community-chat-link"><a href="/Steam/CommunityChat">@SteamShared.Primary_Nav_Community</a></li>
                     <li><a href="/about">@SteamShared.Primary_Nav_About</a></li>
                     <li><a href="/support">@SteamShared.Primary_Nav_Support</a></li>
                 </ul>
@@ -90,10 +93,5 @@
             </div>
         </div>
     </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @* @await RenderSectionAsync("Scripts", required: false) *@
 </body>
 </html>

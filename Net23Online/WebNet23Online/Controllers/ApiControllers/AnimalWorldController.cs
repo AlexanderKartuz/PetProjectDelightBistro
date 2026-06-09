@@ -8,16 +8,24 @@ namespace WebNet23Online.Controllers.ApiControllers
     public class AnimalWorldController : ControllerBase
     {
         private IZooRepository _zooRepository;
+        private IAnimalSpeciesRepository _animalSpeciesRepository;
 
-        public AnimalWorldController(IZooRepository zooRepository)
+        public AnimalWorldController(IZooRepository zooRepository, IAnimalSpeciesRepository animalSpeciesRepository)
         {
             _zooRepository = zooRepository;
+            _animalSpeciesRepository = animalSpeciesRepository;
         }
 
         [HttpGet]
         public bool IsZooNameFree([FromQuery] string zooName)
         {
             return _zooRepository.GetElementByName(zooName) == null;
+        }
+
+        [HttpGet]
+        public List<string> GetAnimalSpeciesNames()
+        {
+            return _animalSpeciesRepository.GetAllAnimalSpeciesNames();
         }
     }
 }

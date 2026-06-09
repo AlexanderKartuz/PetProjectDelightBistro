@@ -38,24 +38,46 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpGet]
+        public IActionResult Relics()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult Heroes(int id)
         {
             return View(BuildHeroesViewModel(id));
         }
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult AddCard(int heroId)
+        {
+            if (_heroesRepository.GetById(heroId) == null)
+            {
+                return NotFound();
+            }
+
+            return View("EditCard", BuildCardFormViewModel(heroId: heroId));
+        }
+
         [HttpPost]
         [Authorize]
-        public IActionResult AddCard([Bind(Prefix = "AddCardForm")] AddHeroCardFormViewModel form)
+        public IActionResult AddCard(HeroCardFormViewModel form)
         {
-            var hero = _heroesRepository.GetById(form.HeroId);
-            if (hero == null)
+            if (!form.IsNew)
+            {
+                return BadRequest();
+            }
+
+            if (_heroesRepository.GetById(form.HeroId) == null)
             {
                 return NotFound();
             }
 
             if (!ModelState.IsValid)
             {
-                return View("Heroes", BuildHeroesViewModel(form.HeroId, form));
+                return View("EditCard", BuildCardFormViewModel(form: form));
             }
 
             var userId = _authService.GetUserId();
@@ -89,22 +111,22 @@ namespace WebNet23Online.Controllers
                 return NotFound();
             }
 
-            return View(BuildEditCardViewModel(card));
+            return View(BuildCardFormViewModel(card: card));
         }
 
         [HttpPost]
         [Authorize]
         [IsSlayTheSpire2CreatorOrAdmin]
-        public IActionResult EditCard(EditHeroCardFormViewModel form)
+        public IActionResult EditCard(HeroCardFormViewModel form)
         {
+            if (form.IsNew)
+            {
+                return BadRequest();
+            }
+
             if (_heroesRepository.GetById(form.HeroId) == null)
             {
                 return NotFound();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(BuildEditCardViewModel(form));
             }
 
             var card = _heroesCardsRepository.Get(form.CardId);
@@ -113,6 +135,24 @@ namespace WebNet23Online.Controllers
                 return NotFound();
             }
 
+            if (!ModelState.IsValid)
+            {
+                return View("EditCard", BuildCardFormViewModel(form: form));
+            }
+
+            ApplyFormToCard(card, form);
+
+            var userId = _authService.GetUserId();
+            card.ModifiedByUserId = userId;
+            card.ModifiedAt = DateTime.UtcNow;
+
+            _heroesCardsRepository.Update(card);
+
+            return RedirectToAction(nameof(Heroes), new { id = form.HeroId });
+        }
+
+        private void ApplyFormToCard(SlayTheSpire2HeroesCards card, HeroCardFormViewModel form)
+        {
             card.HeroId = form.HeroId;
             card.Name = form.Name.Trim();
             card.Description = form.Description.Trim();
@@ -121,44 +161,53 @@ namespace WebNet23Online.Controllers
             card.TypeOfCard = form.TypeOfCard.Trim();
             card.Upgraded = form.Upgraded;
             card.ImageUrl = string.IsNullOrWhiteSpace(form.ImageUrl) ? string.Empty : form.ImageUrl.Trim();
-
-            var userId = _authService.GetUserId();
-            card.ModifiedByUserId = userId;
-            card.ModifiedAt = DateTime.UtcNow;
-
-            _heroesCardsRepository.Update(card);
-
-            return RedirectToAction(nameof(Heroes), new { id = card.HeroId });
         }
 
-        private EditHeroCardFormViewModel BuildEditCardViewModel(SlayTheSpire2HeroesCards card) =>
-            new()
-            {
-                CardId = card.Id,
-                HeroId = card.HeroId,
-                HeroName = _heroesRepository.GetById(card.HeroId)?.Name,
-                Name = card.Name,
-                Description = card.Description,
-                Rarity = card.Rarity,
-                ManaCost = card.ManaCost,
-                TypeOfCard = card.TypeOfCard,
-                Upgraded = card.Upgraded,
-                ImageUrl = card.ImageUrl,
-                HeroOptions = BuildHeroSelectList(card.HeroId),
-                RarityOptions = _cardOptionsService.BuildRaritySelectList(card.Rarity),
-                TypeOfCardOptions = _cardOptionsService.BuildTypeOfCardSelectList(card.TypeOfCard)
-            };
-
-        private EditHeroCardFormViewModel BuildEditCardViewModel(EditHeroCardFormViewModel form)
+        private HeroCardFormViewModel BuildCardFormViewModel(
+            int heroId = 0,
+            SlayTheSpire2HeroesCards? card = null,
+            HeroCardFormViewModel? form = null)
         {
-            form.HeroOptions = BuildHeroSelectList(form.HeroId);
-            form.RarityOptions = _cardOptionsService.BuildRaritySelectList(form.Rarity);
-            form.TypeOfCardOptions = _cardOptionsService.BuildTypeOfCardSelectList(form.TypeOfCard);
-            form.HeroName = _heroesRepository.GetById(form.HeroId)?.Name;
-            return form;
+            if (form != null)
+            {
+                form.HeroOptions = BuildHeroSelectList(form.HeroId);
+                form.RarityOptions = _cardOptionsService.BuildRaritySelectList(form.Rarity);
+                form.TypeOfCardOptions = _cardOptionsService.BuildTypeOfCardSelectList(form.TypeOfCard);
+                form.HeroName = _heroesRepository.GetById(form.HeroId)?.Name;
+                return form;
+            }
+
+            if (card != null)
+            {
+                return new HeroCardFormViewModel
+                {
+                    CardId = card.Id,
+                    HeroId = card.HeroId,
+                    HeroName = _heroesRepository.GetById(card.HeroId)?.Name,
+                    Name = card.Name,
+                    Description = card.Description,
+                    Rarity = card.Rarity,
+                    ManaCost = card.ManaCost,
+                    TypeOfCard = card.TypeOfCard,
+                    Upgraded = card.Upgraded,
+                    ImageUrl = card.ImageUrl,
+                    HeroOptions = BuildHeroSelectList(card.HeroId),
+                    RarityOptions = _cardOptionsService.BuildRaritySelectList(card.Rarity),
+                    TypeOfCardOptions = _cardOptionsService.BuildTypeOfCardSelectList(card.TypeOfCard)
+                };
+            }
+
+            return new HeroCardFormViewModel
+            {
+                HeroId = heroId,
+                HeroName = _heroesRepository.GetById(heroId)?.Name,
+                HeroOptions = BuildHeroSelectList(heroId),
+                RarityOptions = _cardOptionsService.BuildRaritySelectList(null),
+                TypeOfCardOptions = _cardOptionsService.BuildTypeOfCardSelectList(null)
+            };
         }
 
-        private HeroesViewModel BuildHeroesViewModel(int heroId, AddHeroCardFormViewModel? addCardForm = null)
+        private HeroesViewModel BuildHeroesViewModel(int heroId)
         {
             var hero = _heroesRepository.GetById(heroId);
             var currentUserId = _authService.GetUserId();
@@ -182,24 +231,13 @@ namespace WebNet23Online.Controllers
                     .ToList()
                 : new List<HeroCardViewModel>();
 
-            addCardForm ??= new AddHeroCardFormViewModel { HeroId = heroId };
-
-            if (addCardForm.HeroId == 0)
-            {
-                addCardForm.HeroId = heroId;
-            }
-
             return new HeroesViewModel
             {
                 HeroId = heroId,
                 Found = hero != null,
                 Name = hero?.Name,
                 Color = hero?.Color,
-                Cards = cards,
-                AddCardForm = addCardForm,
-                HeroOptions = BuildHeroSelectList(addCardForm.HeroId),
-                RarityOptions = _cardOptionsService.BuildRaritySelectList(addCardForm.Rarity),
-                TypeOfCardOptions = _cardOptionsService.BuildTypeOfCardSelectList(addCardForm.TypeOfCard)
+                Cards = cards
             };
         }
 

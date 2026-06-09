@@ -44,6 +44,56 @@ namespace MovieMinimalApi.Migrations
 
                     b.ToTable("Movies");
                 });
+
+            modelBuilder.Entity("MovieMinimalApi.DbStuff.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("MovieTag", b =>
+                {
+                    b.Property<int>("MoviesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MoviesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("MovieTag", (string)null);
+                });
+
+            modelBuilder.Entity("MovieTag", b =>
+                {
+                    b.HasOne("MovieMinimalApi.DbStuff.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MoviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieMinimalApi.DbStuff.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 #pragma warning restore 612, 618
         }
     }

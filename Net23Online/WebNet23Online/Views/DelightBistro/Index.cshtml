@@ -7,14 +7,13 @@
 }
 
 @section Scripts {
-    <script src="/js/delight-bistro/buy-button.js"></script>
-
     <link rel="stylesheet" href="/css/delight-bistro/style.css" />
+
+    <script src="/js/delight-bistro/buy-button.js"></script>
+    <script src="/js/delight-bistro/tea.js"></script>
+    <script src="/js/delight-bistro/delight-bistro-hub.js"></script>
 }
 
-
-<link rel="stylesheet" href="\css\delight-bistro\style.css" />
- 
 <header class="head-menu">
     <div class="logo-container">
         <div class="logo">
@@ -25,10 +24,12 @@
     <div class="main-info center">
         <div class="head-menu-item">Info</div>
         <div class="head-menu-item">Head menu</div>
+        <button type="button" class="head-menu-item tea-form-toggle">Режим админа</button>
     </div>
 </header>
 <div class="notifications"></div>
-<div class="order-box hidden">Заказать блюда:
+<div class="order-box hidden">
+    Заказать блюда:
     <div>
         Выбрано блюд:
     </div>
@@ -69,6 +70,7 @@
                             {
                                 <div> Creator: @foodItem.Creator</div>
                             }
+
                             <div class="image-container">
                                 <a href="\DelightBistro\FoodBuilderData?id=@foodItem.Id"><img src="@foodItem.ImgURL" alt="@foodItem.Name" /></a>
                             </div>
@@ -79,8 +81,10 @@
                                 </div>
                                 <div class="btnright">
                                     <button data-food-item-id="@foodItem.Id"
-                                    data-food-item-price="@foodItem.Price"
-                                     class="buy-button add-button colorbtn">+</button>
+                                            data-food-item-price="@foodItem.Price"
+                                            class="buy-button add-button colorbtn">
+                                        +
+                                    </button>
                                 </div>
                             </div>
                             <div class="recept">
@@ -99,9 +103,46 @@
                 </div>
             </div>
         }
+
+       
     }
+
+    <div class="type-of-food">
+        <div class="type-name center">Teas</div>
+
+        <div class="menu">
+            <div class="create-tea-form food-item hidden">
+                <div>Создание нового чая</div>
+                <input type="text" class="tea-name-input input-box" placeholder="Название чая" />
+                <input type="number" class="tea-price-input input-box" placeholder="Цена" />
+                <button type="button" class="create-button input-box">Добавить чай</button>
+            </div>
+            <div class="teas-catalog">
+
+                @* <div class="food-item" data-item-id="***">
+
+                    <div class="image-container"></div>
+                <div class="name-price-btn">
+                    <div class="name-price">
+                        <div class="food-name">="***"></div>
+                        <div class="price">="***"> р</div>
+                    </div>
+                    <div class="btnright">
+                        <button data-food-item-id="="***">"
+                                data-food-item-price="="***">"
+                                class="buy-button add-button colorbtn">
+                            +
+                        </button>
+                    </div>
+                </div>
+
+                </div> *@
+            </div>
+        </div>
+
+    </div>
 </div>
-        
+
 <aside class="right-bar">
     <div class="form-field">
         <form method="post">
@@ -129,16 +170,17 @@
 
         }
         <br>
-            
+
         <br>
-        <li><a href="\DelightBistro\CreateMenu">@DelightBistro.Index_Create_menu</a> </li>
-        <li><a href="\DelightBistro\CreateIngredient">@DelightBistro.Index_Create_ingredient</a> </li>
-        <li><a href="\DelightBistro\FoodBuilderData">@DelightBistro.Index_Create_dish</a> </li>
+        <li><a href="\DelightBistro\CreateMenu" data-test="create-menu">@DelightBistro.Index_Create_menu</a> </li>
+        <li><a href="\DelightBistro\CreateIngredient" data-test="create-ingredient">@DelightBistro.Index_Create_ingredient</a> </li>
+        <li><a href="\DelightBistro\FoodBuilderData" data-test="food-builder">@DelightBistro.Index_Create_dish</a> </li>
         <br>
-        <li><a href="\DelightBistro\AllFoodItems">@DelightBistro.Index_All_dish</a> </li>
+        <li><a href="\DelightBistro\AllFoodItems" data-test="all-foods">@DelightBistro.Index_All_dish</a> </li>
         <li><a href="\DelightBistro\Stats">Stats</a> </li>
 
     </ul>
 </aside>
+</div>
 </div>
 
