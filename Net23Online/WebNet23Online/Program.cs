@@ -152,6 +152,17 @@ builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCors(o =>
+{
+    o.AddDefaultPolicy(p =>
+    {
+        p.AllowAnyHeader();
+        p.AllowAnyMethod();
+        p.SetIsOriginAllowed(_ => true);
+        p.AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -166,6 +177,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthentication();    // Who Am I?
 app.UseAuthorization();     // May I?
@@ -182,6 +195,7 @@ app.MapHub<JdmHub>("/my-hub/jdm");
 app.MapHub<SteamChatHub>("/steam/community-chat");
 app.MapHub<SteamNotificationHub>("/steam/notification");
 
+app.MapControllers();
 
 app.MapControllerRoute(
     name: "default",
