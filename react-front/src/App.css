@@ -595,3 +595,23 @@
     border-right-color: var(--border);
   }
 }
+.quotes-page-container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.quote-page-title {
+  margin: 0 0 24px;
+  font-size: 1.5rem;
+  text-align: center;
+  font-family: var(--heading);
+  color: var(--text-h);
+}
+
+.quotes-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
