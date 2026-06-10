@@ -23,6 +23,7 @@ builder.Services.AddCors(o =>
 });
 
 var app = builder.Build();
+
 app.UseCustomExeptionHandling();
 app.UseCustomRequestLogging();
 
