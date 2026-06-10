@@ -6,22 +6,20 @@ import type { Drink } from '../types/drinks.js';
 
 export const DrinkPage = function () {
   const { id } = useParams();
-  const drinkId = Number(id);
+  // const drinkId = Number(id);
   const [drink, setDrink] = useState<Drink | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const loadDrink = useCallback(async () => {
     try {
-      const data = await getDrink(drinkId);
+      const data = await getDrink(Number(id));
       setDrink(data);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : `Элемент с id= ${drinkId} не найден`,
+        err instanceof Error ? err.message : `Элемент с id= ${id} не найден`,
       );
     }
-  }, [drinkId]);
+  }, [id]);
 
   useEffect(() => {
     loadDrink();
