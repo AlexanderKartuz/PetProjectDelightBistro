@@ -7,6 +7,7 @@ import { MovieList } from './components/movie-list'
 import { RockQuotesContainer } from './components/rock-quotes-container';
 import { NavLink, Route, Routes } from "react-router-dom";
 import "./App.css";
+import './animal-world.css'
 import { Movie } from "./pages/Movie";
 import { Home } from "./pages/Home";
 import { MovieDetail } from "./pages/MovieDetail";
