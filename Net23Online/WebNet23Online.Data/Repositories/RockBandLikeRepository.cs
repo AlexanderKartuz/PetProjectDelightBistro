@@ -4,13 +4,13 @@ using WebNet23Online.Data.Repositories.Interfaces;
 
 namespace WebNet23Online.Data.Repositories
 {
-    public class RockBandLikeRepository : IRockBandLikeRepository
+    public class RockBandLikeRepository : BaseRepository<RockBandLikeData>, IRockBandLikeRepository
     {
         private readonly WebContext _context;
         private readonly DbSet<RockBandLikeData> _likes;
         private readonly DbSet<RockBandsData> _bands;
 
-        public RockBandLikeRepository(WebContext context)
+        public RockBandLikeRepository(WebContext context) : base(context)
         {
             _context = context;
             _likes = context.Set<RockBandLikeData>();
