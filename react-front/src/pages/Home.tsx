@@ -2,7 +2,6 @@ import reactLogo from '../assets/react.svg'
 import viteLogo from '../assets/vite.svg'
 import heroImg from '../assets/hero.png'
 import { Counter } from '../components/counter'
-import { AnimalFactsList } from '../components/animal-fact-list'
 
 export const Home = () => {
   return (
@@ -20,7 +19,6 @@ export const Home = () => {
           </p>
         </div>
         <Counter />
-        <AnimalFactsList />
       </section>
 
       <div className="ticks"></div>

@@ -7,9 +7,11 @@ import { MovieList } from './components/movie-list'
 import { RockQuotesContainer } from './components/rock-quotes-container';
 import { NavLink, Route, Routes } from "react-router-dom";
 import "./App.css";
+import './animal-world.css'
 import { Movie } from "./pages/Movie";
 import { Home } from "./pages/Home";
 import { MovieDetail } from "./pages/MovieDetail";
+import { AnimalFacts } from "./pages/AnimalFacts";
 
 function App() {
   return (
@@ -138,6 +140,14 @@ function App() {
           >
             Movies
           </NavLink>
+          <NavLink
+            to="/animal-facts"
+            className={({ isActive }) =>
+              `app-nav__link${isActive ? " app-nav__link--active" : ""}`
+            }
+          >
+            Animal Facts
+          </NavLink>
         </nav>
       </header>
       <main className="app-main">
@@ -145,6 +155,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movie />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/animal-facts" element={<AnimalFacts />} />
         </Routes>
       </main>
     </>
