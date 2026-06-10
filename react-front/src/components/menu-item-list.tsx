@@ -1,71 +1,96 @@
-import { useMemo, useState } from 'react'
-import { useMenuItems } from '../hooks/use-menu-items'
-import { CreateMenuItemForm } from './create-menu-item-form'
-import { MenuItemCard } from './menu-item-card'
-import type { MenuItem } from '../types/menu-item'
+import { useState } from "react";
+import { useMenuItems } from "../hooks/use-menu-items";
+import { deleteMenuItem } from "../services/menu-item-service";
+import { CreateMenuItemForm } from "./create-menu-item-form";
+import { MenuItemCard } from "./menu-item-card";
+import type { MenuItem } from "../types/menu-item";
 
-const MAINS_CATEGORY = 'Mains'
+const MAINS_CATEGORY = "Mains";
 
-function getCategoryFilters(items: MenuItem[]) {
-    const categories = [
-        ...new Set(
-            items
-                .map((item) => item.category)
-                .filter((category) => category.length > 0 && category !== MAINS_CATEGORY),
+function getCategoryFilters(items: MenuItem[]): string[] {
+  const categories = [
+    ...new Set(
+      items
+        .map((item) => item.category)
+        .filter(
+          (category) => category.length > 0 && category !== MAINS_CATEGORY,
         ),
-    ]
+    ),
+  ];
 
-    return [
-        { label: MAINS_CATEGORY, category: MAINS_CATEGORY },
-        ...categories.map((category) => ({ label: category, category })),
-    ]
+  return [MAINS_CATEGORY, ...categories];
 }
 
-export const MenuItemList = function () {
-    const [category, setCategory] = useState(MAINS_CATEGORY)
-    const { items, loading, error, addMenuItem } = useMenuItems()
+export function MenuItemList() {
+  const [category, setCategory] = useState(MAINS_CATEGORY);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const { items, loading, error, setError, addMenuItem, removeMenuItem } =
+    useMenuItems();
 
-    const filters = useMemo(() => getCategoryFilters(items), [items])
+  async function handleDelete(id: number) {
+    setDeletingId(id);
+    setError(null);
 
-    const visibleItems =
-        category === MAINS_CATEGORY
-            ? items
-            : items.filter((item) => item.category === category)
+    try {
+      await deleteMenuItem(id);
+      removeMenuItem(id);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to delete menu item",
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
-    return (
-        <section id="menu" className="menu-section">
-            <CreateMenuItemForm onCreated={addMenuItem} />
-            <div className="menu-container">
-                <h2 className="menu-heading-lg">This week specials!</h2>
+  const filters = getCategoryFilters(items);
 
-                <div className="menu-filter-items">
-                    {filters.map((filter) => (
-                        <button
-                            key={filter.category}
-                            type="button"
-                            className={`btn-filter${category === filter.category ? ' btn-filter--active' : ''}`}
-                            onClick={() => setCategory(filter.category)}
-                        >
-                            {filter.label}
-                        </button>
-                    ))}
-                </div>
+  const visibleItems =
+    category === MAINS_CATEGORY
+      ? items
+      : items.filter((item) => item.category === category);
 
-                {loading && <p className="menu-list__status">Loading menu...</p>}
-                {error && <p className="menu-list__status menu-list__status--error">{error}</p>}
+  return (
+    <section id="menu" className="menu-section">
+      <CreateMenuItemForm onCreated={addMenuItem} />
+      <div className="menu-container">
+        <h2 className="menu-heading-lg">This week specials!</h2>
 
-                {!loading && !error && visibleItems.length === 0 && (
-                    <p className="menu-list__status">No menu items yet.</p>
-                )}
+        {!error && (
+          <div className="menu-filter-items">
+            {filters.map((filterCategory) => (
+              <button
+                key={filterCategory}
+                type="button"
+                className={`btn-filter${category === filterCategory ? " btn-filter--active" : ""}`}
+                onClick={() => setCategory(filterCategory)}
+              >
+                {filterCategory}
+              </button>
+            ))}
+          </div>
+        )}
 
-                {!loading && !error && visibleItems.length > 0 && (
-                    <div className="menu-item-container">
-                        {visibleItems.map((item) => (
-                            <MenuItemCard key={item.id} item={item} />
-                        ))}
-                    </div>
-                )}
-            </div>
-        </section>
-    )
+        {loading && <p className="menu-list__status">Loading menu...</p>}
+        {error && (
+          <p className="menu-list__status menu-list__status--error">{error}</p>
+        )}
+        {!loading && !error && visibleItems.length === 0 && (
+          <p className="menu-list__status">No menu items yet.</p>
+        )}
+        {!loading && visibleItems.length > 0 && (
+          <div className="menu-item-container">
+            {visibleItems.map((item) => (
+              <MenuItemCard
+                key={item.id}
+                item={item}
+                onDelete={handleDelete}
+                deleting={deletingId === item.id}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
 }
