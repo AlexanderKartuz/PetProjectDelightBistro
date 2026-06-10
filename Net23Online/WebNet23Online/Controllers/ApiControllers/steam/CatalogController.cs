@@ -2,6 +2,8 @@
 
 using WebNet23Online.Controllers.CustomAuthAttribute.Steam;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
+using WebNet23Online.Models.Steam;
+using WebNet23Online.Services.Interfaces.Steam;
 
 namespace WebNet23Online.Controllers.ApiControllers.steam
 {
@@ -10,11 +12,52 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
     public class CatalogController : ControllerBase
     {
         private readonly IGameRepository _gameRepository;
+        private readonly ICatalogService _catalogService;
 
-        public CatalogController(IGameRepository gameRepository)
+        public CatalogController(IGameRepository gameRepository, ICatalogService catalogService)
         {
             _gameRepository = gameRepository;
+            _catalogService = catalogService;
+        }
 
+        [HttpGet]
+        public IActionResult GetGames([FromQuery] CatalogFilterViewModel? filter)
+        {
+            filter ??= new CatalogFilterViewModel();
+
+            if (filter.Page < 1)
+            {
+                filter.Page = 1;
+            }
+
+            if (filter.PageSize < 1)
+            {
+                filter.PageSize = 12;
+            }
+
+            var catalog = _catalogService.GetCatalog(filter);
+            return Ok(catalog.Games);
+        }
+
+        [HttpGet]
+        public IActionResult GetGameDetails([FromQuery] int id)
+        {
+            var game = _catalogService.GetGameDetails(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new SteamGameViewModel
+            {
+                Id = game.Id,
+                Title = game.Title,
+                Description = game.Description,
+                ImageUrl = game.ImageUrl,
+                Price = game.Price,
+                Genres = game.GameGenres?.Select(g => g.Name).ToList() ?? new(),
+            });
         }
 
         [IsAdminApi]

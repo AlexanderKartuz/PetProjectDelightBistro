@@ -4,6 +4,7 @@ using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Data.Repositories.Interfaces.HabitTracker;
+using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Services
@@ -20,6 +21,7 @@ namespace WebNet23Online.Services
         private readonly IUserRepository _userRepository;
         private readonly IHabitTrackerAdminRepository _habitTrackerAdminRepository;
 
+        [AutoRegister]
         public AuthService(IHttpContextAccessor httpContextAccessor,
             IUserRepository userRepository, IHabitTrackerAdminRepository  habitTrackerAdminRepository)
         {

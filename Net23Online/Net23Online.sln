@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.37111.16 d17.14
+VisualStudioVersion = 17.14.37111.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstConsoleApp", "FirstConsoleApp\FirstConsoleApp.csproj", "{9DEDD8F1-0D32-4357-8860-1D017F07DE7A}"
 EndProject
@@ -16,6 +16,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieMinimalApi", "MovieMinimalApi\MovieMinimalApi.csproj", "{EF4AE332-81B1-4345-944E-75823F5728F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JdmMerchMinimalApi", "JdmMerchMinimalApi\JdmMerchMinimalApi.csproj", "{A4E9D60C-364C-1872-851B-BA66559E312E}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimalWorldMinimalApi", "AnimalWorldMinimalApi\AnimalWorldMinimalApi.csproj", "{D0B80C93-D0EA-4726-BA04-D45CC6F87055}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuotesMinimalApi", "QuotesMinimalApi\QuotesMinimalApi.csproj", "{26F245D6-2F63-4BBA-9F76-B130288FBA22}"
@@ -27,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlayTheSpire2RelicsMinimalApi", "SlayTheSpire2RelicsMinimalApi\SlayTheSpire2RelicsMinimalApi.csproj", "{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LittleLemonMinimalApi", "LittleLemonMinimalApi\LittleLemonMinimalApi.csproj", "{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReflectionExample", "ReflectionExample\ReflectionExample.csproj", "{6BC48193-8A87-43D0-ABC8-49CCD88B5941}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,10 +69,6 @@ Global
 		{D0B80C93-D0EA-4726-BA04-D45CC6F87055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0B80C93-D0EA-4726-BA04-D45CC6F87055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0B80C93-D0EA-4726-BA04-D45CC6F87055}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26F245D6-2F63-4BBA-9F76-B130288FBA22}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,6 +77,10 @@ Global
 		{D9912CC9-3447-4DF6-A8A7-45A3B48B4D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9912CC9-3447-4DF6-A8A7-45A3B48B4D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9912CC9-3447-4DF6-A8A7-45A3B48B4D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DAA4DB0-86B0-4DD1-81E1-BA70383A0E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -86,6 +89,10 @@ Global
 		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
