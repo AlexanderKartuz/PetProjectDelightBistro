@@ -24,10 +24,10 @@ export const GameList = function () {
       } catch (err) {
         if (err instanceof Error && err.message === "Failed to fetch") {
           if (!cancelled) {
-            setError("Server unavailable");
+            setError("Start backend server");
           }
         } else if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Error loading games");
+          setError(err instanceof Error ? err.message : "Can't load games");
         }
       } finally {
         if (!cancelled) {
@@ -44,7 +44,7 @@ export const GameList = function () {
   }, []);
 
   if (loading) {
-    return <p className="game-list__status">Game loading...</p>;
+    return <p className="game-list__status">Games loading...</p>;
   }
 
   if (error) {
@@ -53,9 +53,14 @@ export const GameList = function () {
     );
   }
 
+  if (games.length === 0) {
+    return <p className="game-list__status">Games not found</p>;
+  }
+
   return (
     <section className="game-list">
-      <h2 className="game-list__heading">Steam Catalog</h2>
+      <h2 className="game-list__heading">Steam catalog</h2>
+      <p className="game-list__count">{games.length} games</p>
       <div className="game-list__grid">
         {games.map((game) => (
           <GameCard key={game.id} game={game} />

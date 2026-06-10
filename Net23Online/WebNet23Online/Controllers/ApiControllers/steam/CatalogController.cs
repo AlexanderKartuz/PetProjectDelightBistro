@@ -21,7 +21,7 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
         }
 
         [HttpGet]
-        public ActionResult<List<SteamGameViewModel>> GetGames([FromQuery] CatalogFilterViewModel? filter)
+        public IActionResult GetGames([FromQuery] CatalogFilterViewModel? filter)
         {
             filter ??= new CatalogFilterViewModel();
 
@@ -37,6 +37,27 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
 
             var catalog = _catalogService.GetCatalog(filter);
             return Ok(catalog.Games);
+        }
+
+        [HttpGet]
+        public IActionResult GetGameDetails([FromQuery] int id)
+        {
+            var game = _catalogService.GetGameDetails(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new SteamGameViewModel
+            {
+                Id = game.Id,
+                Title = game.Title,
+                Description = game.Description,
+                ImageUrl = game.ImageUrl,
+                Price = game.Price,
+                Genres = game.GameGenres?.Select(g => g.Name).ToList() ?? new(),
+            });
         }
 
         [IsAdminApi]

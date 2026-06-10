@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { SteamGame } from "../types/steam-game";
 
 interface GameCardProps {
@@ -7,15 +8,17 @@ interface GameCardProps {
 export const GameCard = function ({ game }: GameCardProps) {
   return (
     <article className="game-card">
-      <div className="game-card__media">
+      <Link to={`/gameCatalog/${game.id}`} className="game-card__media">
         {game.imageUrl ? (
           <img src={game.imageUrl} alt={game.title} />
         ) : (
           <div className="game-card__no-image">No image</div>
         )}
-      </div>
+      </Link>
       <div className="game-card__body">
-        <h3 className="game-card__title">{game.title}</h3>
+        <h3 className="game-card__title">
+          <Link to={`/gameCatalog/${game.id}`}>{game.title}</Link>
+        </h3>
         {game.genres.length > 0 && (
           <div className="game-card__genres">
             {game.genres.map((genre) => (
