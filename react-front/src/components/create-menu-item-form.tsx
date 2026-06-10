@@ -14,7 +14,7 @@ export const CreateMenuItemForm = function ({ onCreated }: CreateMenuItemFormPro
     const [imageUrl, setImageUrl] = useState('')
     const [price, setPrice] = useState(0)
     const [description, setDescription] = useState('')
-    const [category, setCategory] = useState<string>()
+    const [category, setCategory] = useState<string>(CATEGORIES[0])
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
