@@ -2,13 +2,19 @@ import { useCallback, useState } from 'react';
 import type { CreateDrinkPayload, Drink } from '../types/drinks.js';
 import { Button } from './button.js';
 import { changeDrink } from '../services/drinks-service.js';
+import { NavLink } from 'react-router-dom';
 
 interface DrinkCardProps {
   drink: Drink;
   onDelete?: (id: number) => void;
+  showDetailsLink?: boolean;
 }
 
-export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
+export const DrinkCard = function ({
+  drink,
+  onDelete,
+  showDetailsLink = true,
+}: DrinkCardProps) {
   const [isNameEditing, setIsNameEditing] = useState(false);
   const [isPriceEditing, setIsPriceEditing] = useState(false);
   const [newName, setNewName] = useState(drink.name);
@@ -90,6 +96,13 @@ export const DrinkCard = function ({ drink, onDelete }: DrinkCardProps) {
         >
           Удалить напиток
         </Button>
+      )}
+      {showDetailsLink && (
+        <div className="drink-card-link">
+          <NavLink to={`/drink/${currentDrink.id}`} className="drink-link">
+            Подробнее
+          </NavLink>
+        </div>
       )}
     </div>
   );

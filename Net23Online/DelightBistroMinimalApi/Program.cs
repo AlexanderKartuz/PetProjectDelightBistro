@@ -36,6 +36,18 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapGet("GetTeas", (MiniDbContext dbContext) => dbContext.Teas.ToList());
 
+app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id) =>
+{
+    var tea = dbContext.Teas.FirstOrDefault(t => t.Id == id);
+
+    if (tea == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(tea);
+});
+
 app.MapPost("CreateTea", (MiniDbContext dbContext, [FromBody] Tea tea) =>
 {
     dbContext.Teas.Add(tea);
