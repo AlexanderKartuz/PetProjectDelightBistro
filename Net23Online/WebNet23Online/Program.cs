@@ -42,6 +42,7 @@ builder.Services.AddScoped<ILittleLemonMenuService, LittleLemonMenuService>();
 builder.Services.AddScoped<ILittleLemonTestimonialService, LittleLemonTestimonialService>();
 builder.Services.AddScoped<ILittleLemonSubscribeService, LittleLemonSubscribeService>();
 builder.Services.AddScoped<ILittleLemonReservationService, LittleLemonReservationService>();
+builder.Services.AddScoped<ILittleLemonChatService, LittleLemonChatService>();
 
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
@@ -196,6 +197,7 @@ app.MapHub<SteamChatHub>("/steam/community-chat");
 app.MapHub<SteamNotificationHub>("/steam/notification");
 
 app.MapControllers();
+app.MapHub<LittleLemonHub>("/my-hub/little-lemon");
 
 app.MapControllerRoute(
     name: "default",

@@ -326,6 +326,46 @@ section.comments.active {
     border: 3px red solid;
 }
 
+.jdm-merch-container {
+    max-width: 25%;
+    
+}
+
+.product-card {
+    display: grid;
+    gap: 7px;
+}
+
+
+.new-jdm-merch-input {
+    border-radius: 7px;
+    align-items: center;
+}
+
+.jdm-merch {
+    display: flex;
+    gap: 15px;
+}
+
+.merch-container {
+    padding-left: 15px;
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 15px;
+}
+
+.container-title {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 15px;
+}
+
+.product-card-picture {
+    max-width: 200px;
+    border: 1px black solid;
 .notice-box {
     width: 500px;
     height: 150px;
