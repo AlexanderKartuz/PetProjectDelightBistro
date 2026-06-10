@@ -21,7 +21,13 @@ export const AnimalFactsList = function () {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Не удалось загрузить факты')
+          if (err instanceof Error) {
+            const isNetworkError = err.message.toLowerCase().includes('fetch');
+            setError(isNetworkError ? 'Ошибка соединения. Проверьте запуск MinimalApi.' : err.message);
+          }
+          else {
+            setError(err instanceof Error ? err.message : 'Не удалось загрузить факты')
+          }
         }
       } finally {
         if (!cancelled) {
@@ -38,12 +44,8 @@ export const AnimalFactsList = function () {
   }, [])
 
   const handleFactCreated = useCallback(async (newFactData: AnimalFact) => {
-    try {
-      await createFact(newFactData)
-      setFacts((oldFacts) => [newFactData, ...oldFacts])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не удалось сохранить факт')
-    }
+    await createFact(newFactData)
+    setFacts((oldFacts) => [newFactData, ...oldFacts])
   }, [])
 
   if (loading) {
@@ -55,23 +57,25 @@ export const AnimalFactsList = function () {
   }
 
   return (
-    <div className="main-place" style={{ padding: '20px' }}>
-      <h2 className="green-title page-title">Факты о животных</h2>
-      <div className="green-line"></div>
+    <div className="animal-facts-page">
+      <div className="main-place">
+        <h2 className="green-title page-title">Факты о животных</h2>
+        <div className="green-line"></div>
 
-      <CreateAnimalFactForm onCreated={handleFactCreated} />
+        <CreateAnimalFactForm onCreated={handleFactCreated} />
 
-      <h3 className="green-title section-title">Известные факты</h3>
-      <div className="green-line"></div>
+        <h3 className="green-title section-title">Известные факты</h3>
+        <div className="green-line"></div>
 
-      <div className="facts-list">
-        {facts.length === 0 ? (
-          <p className="empty-list-note">Фактов пока нет.</p>
-        ) : (
-          facts.map((fact, index) => (
-            <AnimalFactCard key={index} fact={fact} />
-          ))
-        )}
+        <div className="facts-list">
+          {facts.length === 0 ? (
+            <p className="empty-list-note">Фактов пока нет.</p>
+          ) : (
+            facts.map((fact, index) => (
+              <AnimalFactCard key={index} fact={fact} />
+            ))
+          )}
+        </div>
       </div>
     </div>
   )
