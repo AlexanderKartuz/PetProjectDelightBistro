@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { getAnimalSpeciesNames } from '../services/animal-fact-service'
 import type { AnimalFact } from '../types/animal-fact'
 
 interface CreateAnimalFactFormProps {
-  onCreated: (fact: AnimalFact) => void
+  onCreated: (fact: AnimalFact) => Promise<void>
 }
 
 export const CreateAnimalFactForm = function ({ onCreated }: CreateAnimalFactFormProps) {
@@ -11,6 +11,7 @@ export const CreateAnimalFactForm = function ({ onCreated }: CreateAnimalFactFor
   const [selectedSpecies, setSelectedSpecies] = useState('')
   const [inputText, setInputText] = useState('')
   const [loadingSpecies, setLoadingSpecies] = useState(true)
+  const [formError, setFormError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -40,22 +41,26 @@ export const CreateAnimalFactForm = function ({ onCreated }: CreateAnimalFactFor
     }
   }, [])
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
+  const handleButtonClick = async () => {
     if (!inputText.trim()) {
+      setFormError('Пожалуйста, введите текст факта.')
       return
     }
 
-    onCreated({
-      animalSpeciesName: selectedSpecies,
-      text: inputText.trim(),
-    })
-
-    setInputText('')
-  }
+    try {
+      setFormError(null)
+      await onCreated({
+        animalSpeciesName: selectedSpecies,
+        text: inputText.trim(),
+      })
+      setInputText('')
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'Не удалось сохранить факт')
+    }
+}
 
   return (
-    <form className="facts-form-container" onSubmit={handleSubmit}>
+    <div className="facts-form-container">
       <div className="form-group">
         <label className="form-label">Вид животного:</label>
         <select
@@ -89,10 +94,20 @@ export const CreateAnimalFactForm = function ({ onCreated }: CreateAnimalFactFor
       </div>
 
       <div className="find-animal align-items-center">
-        <button type="submit" className="find-animal-button">
+        <button 
+          type="button" 
+          className="find-animal-button"
+          onClick={handleButtonClick}
+        >
           Добавить факт
         </button>
+        
+        {formError && (
+          <span className="zoo-name-feedback zoo-name-feedback-invalid">
+            {formError}
+          </span>
+        )}
       </div>
-    </form>
+    </div>
   )
 }

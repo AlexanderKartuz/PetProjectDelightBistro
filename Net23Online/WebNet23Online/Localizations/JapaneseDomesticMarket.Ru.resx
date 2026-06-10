@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Catalog_button_add_merch" xml:space="preserve">
+    <value>Добавить мерч</value>
+  </data>
   <data name="Catalog_Button_More_Details" xml:space="preserve">
     <value>Подробнее</value>
+  </data>
+  <data name="Catalog_header_catalog_product" xml:space="preserve">
+    <value>Каталог товаров</value>
   </data>
   <data name="Catalog_Statistics_VehicalHistory" xml:space="preserve">
     <value>История техосмотра</value>

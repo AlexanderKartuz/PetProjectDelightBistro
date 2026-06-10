@@ -10,10 +10,33 @@
 	<title>@ViewData["Title"] - WebNet23Online</title>
 	<link rel="stylesheet" href="/css/little-lemon/home-page-styles.css" asp-append-version="true" />
 	<link rel="stylesheet" href="/css/little-lemon/reservation.css" asp-append-version="true" />
+	<link rel="stylesheet" href="/css/little-lemon/notifications.css" asp-append-version="true" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/js/little-lemon/little-lemon-signalr.js" asp-append-version="true"></script>
+	<script src="~/js/little-lemon/reservation-notification.js" asp-append-version="true"></script>
 	@RenderSection("Scripts", required: false);
 </head>
 <body>
+	<div class="notifications"></div>
+	<template id="reservation-notification-template">
+		<div class="notification">
+			<h3 class="notification-title"></h3>
+			<ul class="notification-details">
+				<li data-field="name"></li>
+				<li data-field="date"></li>
+				<li data-field="time"></li>
+				<li data-field="guests"></li>
+				<li data-field="seating"></li>
+				<li data-field="occasion"></li>
+				<li data-field="notes"></li>
+				<li data-field="cake" hidden>
+					Cake Photo:
+					<img class="notification-cake-photo" alt="Cake Photo" />
+				</li>
+			</ul>
+		</div>
+	</template>
 	<header class="header">
 		<div class="header-container">
 			<h1 class="header-title">@LittleLemon.Layout_Title</h1>
@@ -34,6 +57,7 @@
 					<li><a href="#footer">@LittleLemon.Layout_Contact</a></li>
 					@if (authService.IsAuthenticated())
 					{
+						<li><a href="/LittleLemon/Chat">Chat</a></li>
 						<li><a asp-controller="Auth" asp-action="Logout">@LittleLemon.Layout_Logout</a></li>
 					}
 					else

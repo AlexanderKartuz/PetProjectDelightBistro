@@ -12,6 +12,7 @@ using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Data.Repositories.Steam;
 using WebNet23Online.Hubs;
 using WebNet23Online.MiddlewareServices;
+using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
@@ -42,6 +43,7 @@ builder.Services.AddScoped<ILittleLemonMenuService, LittleLemonMenuService>();
 builder.Services.AddScoped<ILittleLemonTestimonialService, LittleLemonTestimonialService>();
 builder.Services.AddScoped<ILittleLemonSubscribeService, LittleLemonSubscribeService>();
 builder.Services.AddScoped<ILittleLemonReservationService, LittleLemonReservationService>();
+builder.Services.AddScoped<ILittleLemonChatService, LittleLemonChatService>();
 
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
@@ -73,8 +75,8 @@ builder.Services.AddScoped<ILittleLemonReservationService, LittleLemonReservatio
 
 builder.Services.AddScoped<IAnimeGirlService, AnimeGirlGenerator>();
 builder.Services.AddScoped<IEpicMeanlessPhraseGenerator, EpicMeanlessPhraseGenerator>();
-builder.Services.AddScoped<IRandomBuilder, RandomBuilder>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+//builder.Services.AddScoped<IRandomBuilder, RandomBuilder>();
+//builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddSingleton<IMazeBuilder, MazeBuilder>();
 builder.Services.AddSingleton<IMazeService, MazeService>();
@@ -108,49 +110,60 @@ builder.Services.AddScoped<IJapaneseDomesticMarketGenerator, JapaneseDomesticMar
 builder.Services.AddScoped<IJDMCatalogGenerator, JDMCatalogGenerator>();
 
 // Repositories
-builder.Services.AddScoped<IZooRepository, ZooRepository>();
-builder.Services.AddScoped<IAnimalFamilyRepository, AnimalFamilyRepository>();
-builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
-builder.Services.AddScoped<IAnimeGirlRepository, AnimeGirlRepository>();
-builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
-builder.Services.AddScoped<IMazeRepository, MazeRepository>();
-builder.Services.AddScoped<IHabitRepository, HabitRepository>();
-builder.Services.AddScoped<IHabitDoneDatesRepository, HabitDoneDatesRepository>();
-builder.Services.AddScoped<IHabitDiaryRepository, HabitDiaryRepository>();
-builder.Services.AddScoped<IHabitTrackerAdminRepository, HabitTrackerAdminRepository>();
-builder.Services.AddScoped<ISlayTheSpire2HeroesRepository, SlayTheSpire2HeroesRepository>();
-builder.Services.AddScoped<ISlayTheSpire2HeroesCardsRepository, SlayTheSpire2HeroesCardsRepository>();
-builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
-builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
-builder.Services.AddScoped<IMenuRepository, MenuRepository>();
-builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IRockBandsRepository, RockBandsRepository>();
-builder.Services.AddScoped<IRockBandLikeRepository, RockBandLikeRepository>();
-builder.Services.AddScoped<IGenreOfRockBandsRepository, GenreOfRockBandsRepository>();
-builder.Services.AddScoped<ILittleLemonReservationRepository, LittleLemonReservationRepository>();
-builder.Services.AddScoped<ILittleLemonGuestRepository, LittleLemonGuestRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRockLegendsGenresRepository, RockLegendsGenresRepository>();
-
-builder.Services.AddScoped<IGameRepository, GameRepository>();
-builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
-builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
-builder.Services.AddScoped<IGameReviewRepository, GameReviewRepository>();
-builder.Services.AddScoped<ICommunityChatMessageRepository, CommunityChatMessageRepository>();
-
-builder.Services.AddScoped<IJdmRepository, JdmRepository>();
-builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
-builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
+//builder.Services.AddScoped<IZooRepository, ZooRepository>();
+//builder.Services.AddScoped<IAnimalFamilyRepository, AnimalFamilyRepository>();
+//builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
+//builder.Services.AddScoped<IAnimeGirlRepository, AnimeGirlRepository>();
+//builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
+//builder.Services.AddScoped<IMazeRepository, MazeRepository>();
+//builder.Services.AddScoped<IHabitRepository, HabitRepository>();
+//builder.Services.AddScoped<IHabitDoneDatesRepository, HabitDoneDatesRepository>();
+//builder.Services.AddScoped<IHabitDiaryRepository, HabitDiaryRepository>();
+//builder.Services.AddScoped<IHabitTrackerAdminRepository, HabitTrackerAdminRepository>();
+//builder.Services.AddScoped<ISlayTheSpire2HeroesRepository, SlayTheSpire2HeroesRepository>();
+//builder.Services.AddScoped<ISlayTheSpire2HeroesCardsRepository, SlayTheSpire2HeroesCardsRepository>();
+//builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
+//builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
+//builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+//builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
+//builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+//builder.Services.AddScoped<IRockBandsRepository, RockBandsRepository>();
+//builder.Services.AddScoped<IRockBandLikeRepository, RockBandLikeRepository>();
+//builder.Services.AddScoped<IGenreOfRockBandsRepository, GenreOfRockBandsRepository>();
+//builder.Services.AddScoped<ILittleLemonReservationRepository, LittleLemonReservationRepository>();
+//builder.Services.AddScoped<ILittleLemonGuestRepository, LittleLemonGuestRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IRockLegendsGenresRepository, RockLegendsGenresRepository>();
+//builder.Services.AddScoped<IGameRepository, GameRepository>();
+//builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+//builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
+//builder.Services.AddScoped<IGameReviewRepository, GameReviewRepository>();
+//builder.Services.AddScoped<ICommunityChatMessageRepository, CommunityChatMessageRepository>();
+//builder.Services.AddScoped<IJdmRepository, JdmRepository>();
+//builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
+//builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
+//builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+//builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.ResolveRepositories();
+builder.Services.ResolveByAttribute();
 
 builder.Services.AddScoped<ITicketService, TicketService>();
-builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 
 builder.Services.AddScoped<ICommentsService, CommentsService>();
-builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(o =>
+{
+    o.AddDefaultPolicy(p =>
+    {
+        p.AllowAnyHeader();
+        p.AllowAnyMethod();
+        p.SetIsOriginAllowed(_ => true);
+        p.AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -167,6 +180,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCors();
+
 app.UseAuthentication();    // Who Am I?
 app.UseAuthorization();     // May I?
 
@@ -182,6 +197,8 @@ app.MapHub<JdmHub>("/my-hub/jdm");
 app.MapHub<SteamChatHub>("/steam/community-chat");
 app.MapHub<SteamNotificationHub>("/steam/notification");
 
+app.MapControllers();
+app.MapHub<LittleLemonHub>("/my-hub/little-lemon");
 
 app.MapControllerRoute(
     name: "default",

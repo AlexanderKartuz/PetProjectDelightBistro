@@ -38,6 +38,13 @@ app.MapPost("CreatRelic", (MiniDbContextSlayTheSpire2Relics dbContext, [FromBody
     dbContext.SaveChanges();
     return relic;
 });
+app.MapDelete("DeleteRelic", (MiniDbContextSlayTheSpire2Relics dbContext, [FromBody] int id) =>
+{
+    var relic = dbContext.Relics.First(r => r.Id == id);
+    dbContext.Relics.Remove(relic);
+    dbContext.SaveChanges();
+    return true;
+});
 
 app.UseSwagger();
 app.UseSwaggerUI();
