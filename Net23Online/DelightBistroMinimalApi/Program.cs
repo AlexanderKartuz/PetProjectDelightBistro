@@ -1,6 +1,7 @@
 using DelightBistroMinimalApi.DbStuff;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using DelightBistroMinimalApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddCors(o =>
 });
 
 var app = builder.Build();
+app.UseCustomExeptionHandling();
+app.UseCustomRequestLogging();
 
 app.UseCors();
 
@@ -64,5 +67,7 @@ app.MapDelete("DeleteDrink", (MiniDbContext dbContext, [FromBody] int id) =>
     dbContext.SaveChanges();
     return true;
 });
+
+app.MapGet("Exception", () => { throw new Exception(); });
 
 app.Run();
