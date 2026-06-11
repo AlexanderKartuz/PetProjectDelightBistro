@@ -1,8 +1,10 @@
+using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using DelightBistroMinimalApi.Middlewares;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +16,18 @@ builder.Services.AddSwaggerGen();
 
 //Output Caching, Запрос доходит до сервера, но эндпоинт не выполняется
 // (вместо Response Caching Middleware)
+// Кеш HTTP ответов
 builder.Services.AddOutputCache(options =>
 {
-    options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(30);
+    options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
     options.MaximumBodySize = 64 * 1024;// макс размер ответа
     options.SizeLimit = 100 * 1024 * 1024; //общий размер кеша
 });
+
+// MemoryCahe in endpoints
+// Кеш данных
+//Запрос доходит до эндпоинта, но БД не вызывается
+builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(o =>
 {
@@ -34,17 +42,12 @@ builder.Services.AddCors(o =>
 
 var app = builder.Build();
 
-
-//MemoryCache / IMemoryCache (кеш в коде)
-//Запрос доходит до эндпоинта, но БД не вызывается
-
-
-
 app.UseCustomExeptionHandling();
-app.UseOutputCache(); // middleware
-app.UseResponseHeader();// заголовки, кеш в браузере headers
-app.UseCustomRequestLogging();
 
+//Cache
+app.UseResponseHeader();// кеш в браузере
+app.UseOutputCache();
+app.UseCustomRequestLogging();
 
 app.UseCors();
 
@@ -53,41 +56,66 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("GetTeas", (MiniDbContext dbContext) =>
+app.MapGet("GetTeas", (MiniDbContext dbContext, IMemoryCache memoryCache) =>
 {
-    Console.WriteLine("Иду в базу");
-    var teas = dbContext.Teas.ToList();
-    return Results.Ok(teas);
-}
-).CacheOutput(o => o.Tag("teas")); // не дойдет до эндпоинта
-                                       // , middleware сразу выдаст ответ при совпадении запросов?
+    var teas = memoryCache.GetOrCreate(CacheKeys.TEAS, entry =>
+    {
+        entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5);
+        entry.SlidingExpiration = TimeSpan.FromMinutes(2);
 
-app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id) =>
+        Console.WriteLine("Иду в базу");
+        return dbContext.Teas.ToList();
+    });
+
+    return Results.Ok(teas);
+}).CacheOutput(o => o.Tag(CacheTags.TEAS)); // кеширование для запроса, не дойдет до эндпоинта
+                                            // , middleware сразу выдаст ответ при совпадении запросов?
+
+app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryCache) =>
 {
-    Console.WriteLine("Иду в базу");
-    var tea = dbContext.Teas.FirstOrDefault(t => t.Id == id);
+    var cacheKey = $"{CacheKeys.TEA}:{id}";
+
+    var tea = memoryCache.GetOrCreate(cacheKey, entry =>
+    {
+        entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(10); // Истекает в теч 10минут после использования 
+        entry.SlidingExpiration = TimeSpan.FromMinutes(5); // Истекает после не использования в теч 5 минут
+
+        Console.WriteLine("Иду в базу");
+
+        return dbContext.Teas.FirstOrDefault(t => t.Id == id);
+    });
 
     if (tea == null)
     {
-        return Results.NotFound();
+        return Results.NotFound(); //?
     }
 
     return Results.Ok(tea);
-}).CacheOutput(o => o.Expire(TimeSpan.FromMinutes(3)));
+}).CacheOutput(o => o
+.Tag(CacheTags.TEA)
+.SetVaryByRouteValue("id")
+.Expire(TimeSpan.FromMinutes(2)));
 
 app.MapPost("CreateTea",
-   async (MiniDbContext dbContext, [FromBody] Tea tea, IOutputCacheStore cache) =>
+   async (MiniDbContext dbContext,
+   [FromBody] Tea tea,
+   IOutputCacheStore outputCache,
+   IMemoryCache memoryCache) =>
 {
     dbContext.Teas.Add(tea);
     dbContext.SaveChanges();
 
-    await cache.EvictByTagAsync("teas", default); //При создании сбрасываем кеш сервера
+    memoryCache.Remove(CacheKeys.TEAS); // Сброс
+    await outputCache.EvictByTagAsync(CacheTags.TEAS, default); //При создании сбрасываем кеш сервера
 
-    return tea;
+    return Results.Ok(tea);
 });
 
 app.MapPut("ChangeDrink/{id}",
-   async (MiniDbContext dbContext, int id, [FromBody] Tea tea, IOutputCacheStore cache) =>
+   async (MiniDbContext dbContext,
+   int id, [FromBody] Tea tea,
+   IOutputCacheStore outputCache,
+   IMemoryCache memoryCache) =>
 {
     var changedTea = dbContext.Teas.FirstOrDefault(t => t.Id == id);
 
@@ -98,22 +126,37 @@ app.MapPut("ChangeDrink/{id}",
 
     changedTea.Name = tea.Name;
     changedTea.Price = tea.Price;
+    changedTea.Description = tea.Description;
+    changedTea.ImgUrl = tea.ImgUrl;
 
     dbContext.SaveChanges();
 
-    await cache.EvictByTagAsync("teas", default);
+    memoryCache.Remove(CacheKeys.TEAS);
+    memoryCache.Remove($"{CacheKeys.TEA}:{id}");
+    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
     return Results.Ok(changedTea);
 });
 
 app.MapDelete("DeleteDrink",
-    async (MiniDbContext dbContext, [FromBody] int id, IOutputCacheStore cache) =>
+    async (MiniDbContext dbContext,
+    [FromBody] int id,
+    IOutputCacheStore outputCache,
+    IMemoryCache memoryCache) =>
 {
-    var tea = dbContext.Teas.First(i => i.Id == id);
+    var tea = dbContext.Teas.FirstOrDefault(i => i.Id == id);
+
+    if (tea == null)
+    {
+        return false;
+    }
+
     dbContext.Teas.Remove(tea);
     dbContext.SaveChanges();
 
-    await cache.EvictByTagAsync("teas", default);
+    memoryCache.Remove(CacheKeys.TEAS);
+    memoryCache.Remove($"{CacheKeys.TEA}:{id}");
+    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
     return true;
 });
