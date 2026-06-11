@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CreateDrinkPayload, Drink } from '../types/drinks.js';
 import { Button } from './button.js';
 import { changeDrink } from '../services/drinks-service.js';
@@ -23,6 +23,7 @@ export const DrinkCard = function ({
   const [newImgUrl, setNewImgUrl] = useState(drink.imgUrl ?? '');
 
   const [currentDrink, setCurrentDrink] = useState<Drink>(drink);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setCurrentDrink(drink);
@@ -40,12 +41,32 @@ export const DrinkCard = function ({
 
   const isEditing = isNameEditing || isPriceEditing;
 
-  const resetEditing = () => {
+  const resetEditing = useCallback(() => {
     setIsNameEditing(false);
     setIsPriceEditing(false);
     setNewName(currentDrink.name);
     setNewPrice(currentDrink.price);
-  };
+    setNewDescription(currentDrink.description ?? '');
+    setNewImgUrl(currentDrink.imgUrl ?? '');
+  }, [currentDrink]);
+
+  useEffect(() => {
+    if (!isEditing || isItemChanged) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        cardRef.current &&
+        !cardRef.current.contains(event.target as Node)
+      ) {
+        resetEditing();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isEditing, isItemChanged, resetEditing]);
 
   const handleSaveChanges = async () => {
     if (!isItemChanged) {
@@ -70,7 +91,7 @@ export const DrinkCard = function ({
   };
 
   return (
-    <div className="drink-card">
+    <div className="drink-card" ref={cardRef}>
       {isEditing ? (
         <input
           type="text"
