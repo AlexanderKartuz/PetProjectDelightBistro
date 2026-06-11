@@ -26,7 +26,7 @@
                 //(endpoint уже отработал)
                 if (context.Request.Method == "GET" && context.Response.StatusCode == StatusCodes.Status200OK)
                 {
-                    context.Response.Headers["Cache-Control"] = "public, max-age=30"; //30 секунд
+                    context.Response.Headers["Cache-Control"] = "public, max-age=10"; //10 секунд
                 }
 
                 return Task.CompletedTask;

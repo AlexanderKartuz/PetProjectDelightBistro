@@ -14,8 +14,6 @@ builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionStr
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Output Caching, Запрос доходит до сервера, но эндпоинт не выполняется
-// (вместо Response Caching Middleware)
 // Кеш HTTP ответов
 builder.Services.AddOutputCache(options =>
 {
@@ -24,8 +22,8 @@ builder.Services.AddOutputCache(options =>
     options.SizeLimit = 100 * 1024 * 1024; //общий размер кеша
 });
 
-// MemoryCahe in endpoints
-// Кеш данных
+
+// Кеш данных в endpoints
 //Запрос доходит до эндпоинта, но БД не вызывается
 builder.Services.AddMemoryCache();
 
@@ -44,12 +42,15 @@ var app = builder.Build();
 
 app.UseCustomExeptionHandling();
 
+
+// UseCors must be called before UseResponseCaching
+app.UseCors();
+
 //Cache
-app.UseResponseHeader();// кеш в браузере
-app.UseOutputCache();
+app.UseResponseHeader(); 
+app.UseOutputCache(); // Запрос доходит до сервера, но эндпоинт не выполняется
 app.UseCustomRequestLogging();
 
-app.UseCors();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -68,8 +69,8 @@ app.MapGet("GetTeas", (MiniDbContext dbContext, IMemoryCache memoryCache) =>
     });
 
     return Results.Ok(teas);
-}).CacheOutput(o => o.Tag(CacheTags.TEAS)); // кеширование для запроса, не дойдет до эндпоинта
-                                            // , middleware сразу выдаст ответ при совпадении запросов?
+}).CacheOutput(o => o.Tag(CacheTags.TEAS));
+                                            
 
 app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryCache) =>
 {
@@ -87,7 +88,7 @@ app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryC
 
     if (tea == null)
     {
-        return Results.NotFound(); //?
+        return Results.NotFound();
     }
 
     return Results.Ok(tea);
@@ -104,9 +105,9 @@ app.MapPost("CreateTea",
 {
     dbContext.Teas.Add(tea);
     dbContext.SaveChanges();
-
-    memoryCache.Remove(CacheKeys.TEAS); // Сброс
-    await outputCache.EvictByTagAsync(CacheTags.TEAS, default); //При создании сбрасываем кеш сервера
+    // Сброс ключа или тега
+    memoryCache.Remove(CacheKeys.TEAS); 
+    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
     return Results.Ok(tea);
 });
