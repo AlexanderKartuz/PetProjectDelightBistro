@@ -26,6 +26,7 @@ var app = builder.Build();
 
 app.UseCustomExeptionHandling();
 app.UseCustomRequestLogging();
+app.UseResponseHeader();// заголовки
 
 app.UseCors();
 

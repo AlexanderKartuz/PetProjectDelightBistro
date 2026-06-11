@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CreateDrinkPayload, Drink } from '../types/drinks.js';
 import { Button } from './button.js';
 import { changeDrink } from '../services/drinks-service.js';
@@ -19,11 +19,24 @@ export const DrinkCard = function ({
   const [isPriceEditing, setIsPriceEditing] = useState(false);
   const [newName, setNewName] = useState(drink.name);
   const [newPrice, setNewPrice] = useState(drink.price);
+  const [newDescription, setNewDescription] = useState(drink.description ?? '');
+  const [newImgUrl, setNewImgUrl] = useState(drink.imgUrl ?? '');
 
   const [currentDrink, setCurrentDrink] = useState<Drink>(drink);
 
+  useEffect(() => {
+    setCurrentDrink(drink);
+    setNewName(drink.name);
+    setNewPrice(drink.price);
+    setNewDescription(drink.description ?? '');
+    setNewImgUrl(drink.imgUrl ?? '');
+  }, [drink.id, drink.name, drink.price, drink.description, drink.imgUrl]);
+
   const isItemChanged =
-    newName !== currentDrink.name || newPrice !== currentDrink.price;
+    newName !== currentDrink.name ||
+    newPrice !== currentDrink.price ||
+    newDescription !== (currentDrink.description ?? '') ||
+    newImgUrl !== (currentDrink.imgUrl ?? '');
 
   const isEditing = isNameEditing || isPriceEditing;
 
@@ -43,6 +56,8 @@ export const DrinkCard = function ({
     const changedDrink: CreateDrinkPayload = {
       name: newName.trim(),
       price: newPrice,
+      description: newDescription.trim(),
+      imgUrl: newImgUrl.trim(),
     };
 
     try {
@@ -84,6 +99,20 @@ export const DrinkCard = function ({
         )}
         <span className="price-currency">BYN</span>
       </div>
+      <div className="drink-img-url">
+        {currentDrink.imgUrl ? (
+          <img
+            src={currentDrink.imgUrl}
+            alt={currentDrink.name}
+            className="drink-image"
+          />
+        ) : (
+          <div className="drink-image-placeholder">Изображение отсутствует</div>
+        )}
+      </div>
+      <div className="drink-card-description">
+        {currentDrink.description || 'Описание отсутствует'}
+      </div>
       {isItemChanged && (
         <Button className="drink-card-update-btn" onClick={handleSaveChanges}>
           Обновить напиток
@@ -98,10 +127,12 @@ export const DrinkCard = function ({
         </Button>
       )}
       {showDetailsLink && (
-        <div className="drink-card-link">
-          <NavLink to={`/drink/${currentDrink.id}`} className="drink-link">
-            Подробнее
-          </NavLink>
+        <div>
+          <div className="drink-card-link">
+            <NavLink to={`/drink/${currentDrink.id}`} className="drink-link">
+              Подробнее
+            </NavLink>
+          </div>
         </div>
       )}
     </div>

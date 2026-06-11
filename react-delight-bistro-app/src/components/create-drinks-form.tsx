@@ -12,6 +12,9 @@ interface CreateDrinkFormProps {
 export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,10 +24,12 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
     setError(null);
 
     try {
-      const drink = await createDrink({ name, price });
+      const drink = await createDrink({ name, price, description, imgUrl });
       onCreated?.(drink);
       setName('');
       setPrice(0);
+      setDescription('');
+      setImgUrl('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Не удалось создать');
     } finally {
@@ -44,6 +49,7 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
           required
         />
       </div>
+
       <div className="create-drink-form-dield">
         <div>Стоимость</div>
         <input
@@ -54,6 +60,23 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
         />
       </div>
 
+      <div className="create-drink-form-dield">
+        <div>Описание</div>
+        <input
+          type="text"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+        />
+      </div>
+      <div className="create-drink-form-dield">
+        <div>URL картинки</div>
+        <input
+          type="text"
+          value={imgUrl}
+          onChange={(event) => setImgUrl(event.target.value)}
+        />
+      </div>
+
       <div className="create-drink-form-preview">
         <span>Превью</span>
         <DrinkCard
@@ -61,6 +84,8 @@ export const CreteDrinkForm = function ({ onCreated }: CreateDrinkFormProps) {
             id: 0,
             name: name || 'Название напитка',
             price,
+            description,
+            imgUrl,
           }}
           showDetailsLink={false}
         />
