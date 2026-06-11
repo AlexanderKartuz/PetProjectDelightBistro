@@ -16,19 +16,25 @@
             var requestId = Guid.NewGuid().ToString("N")[..12];
             context.Items["RequestId"] = requestId;
 
-            var startTime = DateTime.UtcNow;
-
             context.Response.Headers["X-Request-Id"] = requestId;
             context.Response.Headers.XContentTypeOptions = "nosniff";
 
+            // Кеш в браузере на GET запросы, до сервера запросы не доходят
+            // В самый последний момент перед отправкой заголовков клиенту 
+            context.Response.OnStarting(() =>
+            {
+                //(endpoint уже отработал)
+                if (context.Request.Method == "GET" && context.Response.StatusCode == StatusCodes.Status200OK)
+                {
+                    context.Response.Headers["Cache-Control"] = "public, max-age=100"; //100 секунд
+                }
+
+                return Task.CompletedTask;
+            });
+
             await _next(context);
 
-            var duration = DateTime.UtcNow - startTime;
-            var statusCode = context.Response.StatusCode;
-
-
-
-            _logger.LogInformation("RequestId={RequestId} | Duration={Duration}ms | Status={Status}", requestId, duration, statusCode);
+            _logger.LogInformation("RequestId={RequestId} | Status={Status}", requestId, context.Response.StatusCode);
 
         }
     }
