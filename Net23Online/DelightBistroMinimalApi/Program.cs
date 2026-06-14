@@ -47,7 +47,7 @@ app.UseCustomExeptionHandling();
 app.UseCors();
 
 //Cache
-app.UseResponseHeader(); 
+app.UseResponseHeader();
 app.UseOutputCache(); // Запрос доходит до сервера, но эндпоинт не выполняется
 app.UseCustomRequestLogging();
 
@@ -57,20 +57,20 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("GetTeas", (MiniDbContext dbContext, IMemoryCache memoryCache) =>
+app.MapGet("GetTeas", async (MiniDbContext dbContext, IMemoryCache memoryCache, CancellationToken cancellationToken) =>
 {
-    var teas = memoryCache.GetOrCreate(CacheKeys.TEAS, entry =>
+    var teas = await memoryCache.GetOrCreateAsync(CacheKeys.TEAS, async entry =>
     {
         entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
 
         Console.WriteLine("Иду в базу");
-        return dbContext.Teas.ToList();
+        return await dbContext.Teas.ToListAsync(cancellationToken); // cancellationToken only in async
     });
 
     return Results.Ok(teas);
 }).CacheOutput(o => o.Tag(CacheTags.TEAS));
-                                            
+
 
 app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryCache) =>
 {
@@ -106,7 +106,7 @@ app.MapPost("CreateTea",
     dbContext.Teas.Add(tea);
     dbContext.SaveChanges();
     // Сброс ключа или тега
-    memoryCache.Remove(CacheKeys.TEAS); 
+    memoryCache.Remove(CacheKeys.TEAS);
     await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
     return Results.Ok(tea);
