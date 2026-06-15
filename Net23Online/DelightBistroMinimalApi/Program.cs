@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System.Threading.RateLimiting;
@@ -26,6 +27,12 @@ builder.Services.AddOutputCache(options =>
     options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
     options.MaximumBodySize = 64 * 1024;// макс размер ответа
     options.SizeLimit = 100 * 1024 * 1024; //общий размер кеша
+});
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+    options.InstanceName = "local";
 });
 
 
@@ -169,5 +176,14 @@ app.MapDelete("DeleteDrink",
 });
 
 app.MapGet("Exception", () => { throw new Exception(); });
+
+app.MapGet("/redis-test", async (IDistributedCache cache) =>
+{
+    await cache.SetStringAsync("test", "Redis is working!");
+    var value = await cache.GetStringAsync("test");
+
+    return Results.Ok(value);
+});
+
 
 app.Run();
