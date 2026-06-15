@@ -1,15 +1,63 @@
 using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
+using DelightBistroMinimalApi.Middlewares.RateLimit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Tea;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
+
+//var myOptions = new GlobalRateLimitOptions();
+//builder.Configuration.GetSection(GlobalRateLimitOptions.SectionName).Bind(myOptions);
+
+//builder.Services.AddRateLimiter(opt =>
+//{
+//    opt.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+//    opt.GlobalLimiter = PartitionedRateLimiter.CreateChained(
+
+//        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+//        {
+//            var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+//            return RateLimitPartition.GetSlidingWindowLimiter(partitionKey: ip,
+//                factory: _ => new SlidingWindowRateLimiterOptions
+//                {
+//                    PermitLimit = myOptions.PermitLimit,
+//                    Window = TimeSpan.FromSeconds(myOptions.WindowSeconds),
+//                    SegmentsPerWindow= myOptions.SegmentsPerWindow,
+//                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+//                    QueueLimit = myOptions.QueueLimit,
+//                });
+//        }),
+
+//        //Global
+//        PartitionedRateLimiter.Create<HttpContext, string>(_ =>
+//        {
+//            return RateLimitPartition.GetSlidingWindowLimiter(partitionKey: "global",
+//                factory: _ => new SlidingWindowRateLimiterOptions
+//                {
+//                    PermitLimit = myOptions.PermitLimit,
+//                    Window = TimeSpan.FromSeconds(myOptions.WindowSeconds),
+//                    SegmentsPerWindow = myOptions.SegmentsPerWindow,
+//                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+//                    QueueLimit = myOptions.QueueLimit,
+
+//                }
+//            );
+//        })
+//    );
+//});
+
+builder.Services.AddCustomRateLimiter(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,7 +93,7 @@ app.UseCustomExeptionHandling();
 
 // UseCors must be called before UseResponseCaching
 app.UseCors();
-
+app.UseRateLimiter();
 //Cache
 app.UseResponseHeader();
 app.UseOutputCache(); // Запрос доходит до сервера, но эндпоинт не выполняется
@@ -69,7 +117,7 @@ app.MapGet("GetTeas", async (MiniDbContext dbContext, IMemoryCache memoryCache, 
     });
 
     return Results.Ok(teas);
-}).CacheOutput(o => o.Tag(CacheTags.TEAS));
+}).CacheOutput(o => o.Tag(CacheTags.TEAS))/*.RequireRateLimiting(slidingPolicy)*/;
 
 
 app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryCache) =>
