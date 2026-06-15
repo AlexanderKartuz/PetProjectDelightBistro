@@ -1,4 +1,5 @@
 ﻿using DelightBistroMinimalApi.Middlewares.RateLimit.Interfaces;
+using DelightBistroMinimalApi.Middlewares.RateLimit.Options;
 using System.Threading.RateLimiting;
 
 namespace DelightBistroMinimalApi.Middlewares.RateLimit

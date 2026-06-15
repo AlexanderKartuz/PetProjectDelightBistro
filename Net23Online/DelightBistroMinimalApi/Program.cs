@@ -15,48 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Tea;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
 
-//var myOptions = new GlobalRateLimitOptions();
-//builder.Configuration.GetSection(GlobalRateLimitOptions.SectionName).Bind(myOptions);
-
-//builder.Services.AddRateLimiter(opt =>
-//{
-//    opt.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-
-//    opt.GlobalLimiter = PartitionedRateLimiter.CreateChained(
-
-//        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-//        {
-//            var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-
-//            return RateLimitPartition.GetSlidingWindowLimiter(partitionKey: ip,
-//                factory: _ => new SlidingWindowRateLimiterOptions
-//                {
-//                    PermitLimit = myOptions.PermitLimit,
-//                    Window = TimeSpan.FromSeconds(myOptions.WindowSeconds),
-//                    SegmentsPerWindow= myOptions.SegmentsPerWindow,
-//                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-//                    QueueLimit = myOptions.QueueLimit,
-//                });
-//        }),
-
-//        //Global
-//        PartitionedRateLimiter.Create<HttpContext, string>(_ =>
-//        {
-//            return RateLimitPartition.GetSlidingWindowLimiter(partitionKey: "global",
-//                factory: _ => new SlidingWindowRateLimiterOptions
-//                {
-//                    PermitLimit = myOptions.PermitLimit,
-//                    Window = TimeSpan.FromSeconds(myOptions.WindowSeconds),
-//                    SegmentsPerWindow = myOptions.SegmentsPerWindow,
-//                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-//                    QueueLimit = myOptions.QueueLimit,
-
-//                }
-//            );
-//        })
-//    );
-//});
-
 builder.Services.AddCustomRateLimiter(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();

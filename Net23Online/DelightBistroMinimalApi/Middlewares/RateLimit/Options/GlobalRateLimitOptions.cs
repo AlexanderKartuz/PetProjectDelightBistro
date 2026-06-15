@@ -1,7 +1,7 @@
 ﻿using DelightBistroMinimalApi.Middlewares.RateLimit.Interfaces;
 using System.Threading.RateLimiting;
 
-namespace DelightBistroMinimalApi.Middlewares.RateLimit
+namespace DelightBistroMinimalApi.Middlewares.RateLimit.Options
 {
     public class GlobalRateLimitOptions : IRateLimitOptions
     {
