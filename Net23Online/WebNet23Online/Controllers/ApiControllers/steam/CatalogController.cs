@@ -36,7 +36,18 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
             }
 
             var catalog = _catalogService.GetCatalog(filter);
-            return Ok(catalog.Games);
+            var meta = catalog.PaginationMetadata;
+
+            return Ok(new PaginatedGamesApiViewModel
+            {
+                Items = catalog.Games,
+                TotalCount = meta.TotalCount,
+                PageSize = filter.PageSize,
+                CurrentPage = meta.CurrentPage,
+                TotalPages = meta.TotalPages,
+                HasPrevious = meta.HasPreviousPage,
+                HasNext = meta.HasNextPage,
+            });
         }
 
         [HttpGet]
