@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Tea;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
+builder.Services.AddScoped<TeaService>();
+builder.Services.AddScoped<TeaRepository>();
+
 
 builder.Services.AddCustomRateLimiter(builder.Configuration);
 
@@ -71,22 +74,21 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("GetTeas", async (MiniDbContext dbContext, IMemoryCache memoryCache, CancellationToken cancellationToken) =>
+app.MapGet("GetTeas", /*async*/ (TeaRepository teaRepository, IMemoryCache memoryCache/*, CancellationToken cancellationToken*/) =>
 {
-    var teas = await memoryCache.GetOrCreateAsync(CacheKeys.TEAS, async entry =>
+    var teas = /*await*/ memoryCache.GetOrCreate/*GetOrCreateAsync*/(CacheKeys.TEAS, /*async*/ entry =>
     {
         entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
 
-        Console.WriteLine("Иду в базу");
-        return await dbContext.Teas.ToListAsync(cancellationToken); // cancellationToken only in async
+        return teaRepository.GetTeas();/*ToListAsync(cancellationToken);*/ // cancellationToken only in async
     });
 
     return Results.Ok(teas);
 }).CacheOutput(o => o.Tag(CacheTags.TEAS));
 
 
-app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryCache) =>
+app.MapGet("GetTea/{id}", (TeaRepository teaRepository, int id, IMemoryCache memoryCache) =>
 {
     var cacheKey = $"{CacheKeys.TEA}:{id}";
 
@@ -95,7 +97,7 @@ app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryC
         entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(10); // Истекает в теч 10минут после использования 
         entry.SlidingExpiration = TimeSpan.FromMinutes(5); // Истекает после не использования в теч 5 минут
 
-        return dbContext.Teas.FirstOrDefault(t => t.Id == id);
+        return teaRepository.GetTea(id);
     });
 
     if (tea == null)
@@ -109,12 +111,11 @@ app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryC
 .SetVaryByRouteValue("id")
 .Expire(TimeSpan.FromMinutes(2)));
 
-app.MapPost("CreateTea", async (MiniDbContext dbContext, [FromBody] Tea tea, IOutputCacheStore outputCache,
+app.MapPost("CreateTea", async (TeaRepository teaRepository, [FromBody] Tea tea, IOutputCacheStore outputCache,
    IMemoryCache memoryCache) =>
 {
-    dbContext.Teas.Add(tea);
-    dbContext.SaveChanges();
-    // Сброс ключа или тега
+    teaRepository.CreateTea(tea);
+
     memoryCache.Remove(CacheKeys.TEAS);
     await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
@@ -122,24 +123,17 @@ app.MapPost("CreateTea", async (MiniDbContext dbContext, [FromBody] Tea tea, IOu
 });
 
 app.MapPut("ChangeDrink/{id}",
-   async (MiniDbContext dbContext,
+   async (TeaRepository teaRepository,
    int id, [FromBody] Tea tea,
    IOutputCacheStore outputCache,
    IMemoryCache memoryCache) =>
 {
-    var changedTea = dbContext.Teas.FirstOrDefault(t => t.Id == id);
+    var changedTea = teaRepository.ChangeTea(id, tea);
 
     if (changedTea == null)
     {
         return Results.NotFound();
     }
-
-    changedTea.Name = tea.Name;
-    changedTea.Price = tea.Price;
-    changedTea.Description = tea.Description;
-    changedTea.ImgUrl = tea.ImgUrl;
-
-    dbContext.SaveChanges();
 
     memoryCache.Remove(CacheKeys.TEAS);
     memoryCache.Remove($"{CacheKeys.TEA}:{id}");
@@ -149,20 +143,16 @@ app.MapPut("ChangeDrink/{id}",
 });
 
 app.MapDelete("DeleteDrink",
-    async (MiniDbContext dbContext,
+    async (TeaRepository teaRepository,
     [FromBody] int id,
     IOutputCacheStore outputCache,
     IMemoryCache memoryCache) =>
 {
-    var tea = dbContext.Teas.FirstOrDefault(i => i.Id == id);
-
-    if (tea == null)
+    var canDelete = teaRepository.DeleteTea(id);
+    if (!canDelete)
     {
         return false;
     }
-
-    dbContext.Teas.Remove(tea);
-    dbContext.SaveChanges();
 
     memoryCache.Remove(CacheKeys.TEAS);
     memoryCache.Remove($"{CacheKeys.TEA}:{id}");
@@ -173,7 +163,7 @@ app.MapDelete("DeleteDrink",
 
 app.MapGet("Exception", () => { throw new Exception(); });
 
-app.MapGet("/redis-test", async (IDistributedCache cache) =>
+app.MapGet("redis-test", async (IDistributedCache cache) =>
 {
     var value = await cache.GetStringAsync("test");
 
@@ -194,5 +184,63 @@ app.MapGet("/redis-test", async (IDistributedCache cache) =>
     return Results.Ok(value);
 });
 
+
+app.MapGet("GetTeasRedis", (TeaService teaService) =>
+{
+    var teas = teaService.GetTeas();
+
+    return Results.Ok(teas);
+}).CacheOutput(o => o.Tag(CacheTags.TEAS));
+
+app.MapGet("GetTeaRedis/{id}", (TeaService teaService, int id) =>
+{
+    var tea = teaService.GetTea(id);
+
+    return Results.Ok(tea);
+}).CacheOutput(o => o.Tag(CacheTags.TEA)
+.SetVaryByRouteValue("id")
+.Expire(TimeSpan.FromMinutes(2)));
+
+app.MapPost("CreateTeaRedis", async (TeaService teaService, [FromBody] Tea tea, IOutputCacheStore outputCache) =>
+{
+    teaService.CreateTea(tea);
+
+    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
+
+    return Results.Ok(tea);
+});
+
+app.MapPut("ChangeDrinkRedis/{id}",
+   async (TeaService teaService,
+   int id, [FromBody] Tea tea,
+   IOutputCacheStore outputCache) =>
+   {
+       var changedTea = teaService.ChangeTea(id, tea);
+
+       if (changedTea == null)
+       {
+           return Results.NotFound();
+       }
+             
+       await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
+
+       return Results.Ok(changedTea);
+   });
+
+app.MapDelete("DeleteDrinkRedis",
+    async (TeaService teaService,
+    [FromBody] int id,
+    IOutputCacheStore outputCache) =>
+    {
+        var canDelete = teaService.DeleteTea(id);
+        if (!canDelete)
+        {
+            return false;
+        }
+              
+        await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
+
+        return true;
+    });
 
 app.Run();

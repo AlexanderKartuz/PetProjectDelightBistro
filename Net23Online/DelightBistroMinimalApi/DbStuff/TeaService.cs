@@ -1,4 +1,5 @@
 ﻿using DelightBistroMinimalApi.Constans;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
@@ -7,12 +8,13 @@ namespace DelightBistroMinimalApi.DbStuff
 {
     public class TeaService
     {
-        private MiniDbContext _dbContext { get; set; }
-        private IDistributedCache _cache { get; set; }
-        public TeaService(MiniDbContext dbContext, IDistributedCache cache)
+        private TeaRepository _teaRepository;
+        private IDistributedCache _cache;
+
+        public TeaService(TeaRepository teaRepository, IDistributedCache cache)
         {
-            _dbContext = dbContext;
             _cache = cache;
+            _teaRepository = teaRepository;
         }
 
         public List<Tea> GetTeas()
@@ -27,7 +29,7 @@ namespace DelightBistroMinimalApi.DbStuff
                 return result;
             }
 
-            var teasDb = _dbContext.Teas.ToList();
+            var teasDb = _teaRepository.GetTeas();
 
             var options = new DistributedCacheEntryOptions
             {
@@ -52,7 +54,7 @@ namespace DelightBistroMinimalApi.DbStuff
                 return result;
             }
 
-            var teaDb = _dbContext.Teas.FirstOrDefault(t => t.Id == id);
+            var teaDb = _teaRepository.GetTea(id);
             if (teaDb != null)
             {
                 var options = new DistributedCacheEntryOptions
@@ -67,14 +69,33 @@ namespace DelightBistroMinimalApi.DbStuff
             return teaDb;
         }
 
-        public void RemoveTeaListCache()
+        public void CreateTea(Tea tea)
         {
+            _teaRepository.CreateTea(tea);
             _cache.Remove(CacheKeys.TEAS);
         }
 
-        public void RemoveTeaCache(int id)
+        public Tea? ChangeTea(int id, Tea tea)
         {
+            var changedTea = _teaRepository.ChangeTea(id, tea);
+            if (changedTea != null)
+            {
+                _cache.Remove(CacheKeys.TEAS);
+                _cache.Remove($"{CacheKeys.TEA}:{id}");
+            }
+            return changedTea;
+        }
+
+        public bool DeleteTea(int id)
+        {
+            var canDelete=_teaRepository.DeleteTea(id);
+            if (!canDelete)
+            {
+                return false;
+            }
+            _cache.Remove(CacheKeys.TEAS);
             _cache.Remove($"{CacheKeys.TEA}:{id}");
+            return true;
         }
     }
 }
