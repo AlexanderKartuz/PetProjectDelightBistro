@@ -7,7 +7,7 @@ namespace DelightBistroMinimalApi.Middlewares.RateLimit.Options
     {
         public const string SectionName = "GlobalRateLimitingOptions";
 
-        public int PermitLimit { get; set; } = 100;
+        public int PermitLimit { get; set; } = 200;
         public int WindowSeconds { get; set; } = 30;
         public int SegmentsPerWindow { get; set; } = 3;
         public int QueueLimit { get; set; } = 5;

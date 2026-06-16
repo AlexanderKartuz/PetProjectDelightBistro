@@ -29,10 +29,11 @@ builder.Services.AddOutputCache(options =>
     options.SizeLimit = 100 * 1024 * 1024; //общий размер кеша
 });
 
+// TO DO: ADD TTL
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = "localhost:6379";
-    options.InstanceName = "local";
+    options.InstanceName = "delightBistro";
 });
 
 
@@ -82,7 +83,7 @@ app.MapGet("GetTeas", async (MiniDbContext dbContext, IMemoryCache memoryCache, 
     });
 
     return Results.Ok(teas);
-}).CacheOutput(o => o.Tag(CacheTags.TEAS))/*.RequireRateLimiting(slidingPolicy)*/;
+}).CacheOutput(o => o.Tag(CacheTags.TEAS));
 
 
 app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryCache) =>
@@ -93,8 +94,6 @@ app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryC
     {
         entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(10); // Истекает в теч 10минут после использования 
         entry.SlidingExpiration = TimeSpan.FromMinutes(5); // Истекает после не использования в теч 5 минут
-
-        Console.WriteLine("Иду в базу");
 
         return dbContext.Teas.FirstOrDefault(t => t.Id == id);
     });
@@ -110,10 +109,7 @@ app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id, IMemoryCache memoryC
 .SetVaryByRouteValue("id")
 .Expire(TimeSpan.FromMinutes(2)));
 
-app.MapPost("CreateTea",
-   async (MiniDbContext dbContext,
-   [FromBody] Tea tea,
-   IOutputCacheStore outputCache,
+app.MapPost("CreateTea", async (MiniDbContext dbContext, [FromBody] Tea tea, IOutputCacheStore outputCache,
    IMemoryCache memoryCache) =>
 {
     dbContext.Teas.Add(tea);
@@ -179,8 +175,21 @@ app.MapGet("Exception", () => { throw new Exception(); });
 
 app.MapGet("/redis-test", async (IDistributedCache cache) =>
 {
-    await cache.SetStringAsync("test", "Redis is working!");
     var value = await cache.GetStringAsync("test");
+
+    if (value == null)
+    {
+        // TTL
+        var options = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1),
+        };
+
+        var initValue = "Redis is working!";
+        await cache.SetStringAsync("test", initValue, options);
+
+        return Results.Ok(initValue);
+    }
 
     return Results.Ok(value);
 });
