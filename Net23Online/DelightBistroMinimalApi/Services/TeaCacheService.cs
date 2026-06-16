@@ -1,17 +1,16 @@
 ﻿using DelightBistroMinimalApi.Constans;
-using Microsoft.EntityFrameworkCore;
+using DelightBistroMinimalApi.DbStuff;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 
-namespace DelightBistroMinimalApi.DbStuff
+namespace DelightBistroMinimalApi.Services
 {
-    public class TeaService
+    public class TeaCacheService
     {
         private TeaRepository _teaRepository;
         private IDistributedCache _cache;
 
-        public TeaService(TeaRepository teaRepository, IDistributedCache cache)
+        public TeaCacheService(TeaRepository teaRepository, IDistributedCache cache)
         {
             _cache = cache;
             _teaRepository = teaRepository;
@@ -88,7 +87,7 @@ namespace DelightBistroMinimalApi.DbStuff
 
         public bool DeleteTea(int id)
         {
-            var canDelete=_teaRepository.DeleteTea(id);
+            var canDelete = _teaRepository.DeleteTea(id);
             if (!canDelete)
             {
                 return false;

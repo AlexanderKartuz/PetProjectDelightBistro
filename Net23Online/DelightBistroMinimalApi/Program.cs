@@ -2,20 +2,18 @@ using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
 using DelightBistroMinimalApi.Middlewares.RateLimit;
+using DelightBistroMinimalApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Tea;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
-builder.Services.AddScoped<TeaService>();
+builder.Services.AddScoped<TeaCacheService>();
 builder.Services.AddScoped<TeaRepository>();
 
 
@@ -24,7 +22,7 @@ builder.Services.AddCustomRateLimiter(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Кеш HTTP ответов
+// Кеш HTTP ответов  
 builder.Services.AddOutputCache(options =>
 {
     options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
@@ -32,16 +30,12 @@ builder.Services.AddOutputCache(options =>
     options.SizeLimit = 100 * 1024 * 1024; //общий размер кеша
 });
 
-// TO DO: ADD TTL
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = "localhost:6379";
-    options.InstanceName = "delightBistro";
+    options.InstanceName = "DelightBistro_";
 });
 
-
-// Кеш данных в endpoints
-//Запрос доходит до эндпоинта, но БД не вызывается
 builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(o =>
@@ -63,9 +57,10 @@ app.UseCustomExeptionHandling();
 // UseCors must be called before UseResponseCaching
 app.UseCors();
 app.UseRateLimiter();
+
 //Cache
 app.UseResponseHeader();
-app.UseOutputCache(); // Запрос доходит до сервера, но эндпоинт не выполняется
+app.UseOutputCache();
 app.UseCustomRequestLogging();
 
 
@@ -94,8 +89,8 @@ app.MapGet("GetTea/{id}", (TeaRepository teaRepository, int id, IMemoryCache mem
 
     var tea = memoryCache.GetOrCreate(cacheKey, entry =>
     {
-        entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(10); // Истекает в теч 10минут после использования 
-        entry.SlidingExpiration = TimeSpan.FromMinutes(5); // Истекает после не использования в теч 5 минут
+        entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(10);
+        entry.SlidingExpiration = TimeSpan.FromMinutes(5);
 
         return teaRepository.GetTea(id);
     });
@@ -185,14 +180,14 @@ app.MapGet("redis-test", async (IDistributedCache cache) =>
 });
 
 
-app.MapGet("GetTeasRedis", (TeaService teaService) =>
+app.MapGet("GetTeasRedis", (TeaCacheService teaService) =>
 {
     var teas = teaService.GetTeas();
 
     return Results.Ok(teas);
 }).CacheOutput(o => o.Tag(CacheTags.TEAS));
 
-app.MapGet("GetTeaRedis/{id}", (TeaService teaService, int id) =>
+app.MapGet("GetTeaRedis/{id}", (TeaCacheService teaService, int id) =>
 {
     var tea = teaService.GetTea(id);
 
@@ -201,7 +196,7 @@ app.MapGet("GetTeaRedis/{id}", (TeaService teaService, int id) =>
 .SetVaryByRouteValue("id")
 .Expire(TimeSpan.FromMinutes(2)));
 
-app.MapPost("CreateTeaRedis", async (TeaService teaService, [FromBody] Tea tea, IOutputCacheStore outputCache) =>
+app.MapPost("CreateTeaRedis", async (TeaCacheService teaService, [FromBody] Tea tea, IOutputCacheStore outputCache) =>
 {
     teaService.CreateTea(tea);
 
@@ -211,7 +206,7 @@ app.MapPost("CreateTeaRedis", async (TeaService teaService, [FromBody] Tea tea, 
 });
 
 app.MapPut("ChangeDrinkRedis/{id}",
-   async (TeaService teaService,
+   async (TeaCacheService teaService,
    int id, [FromBody] Tea tea,
    IOutputCacheStore outputCache) =>
    {
@@ -228,7 +223,7 @@ app.MapPut("ChangeDrinkRedis/{id}",
    });
 
 app.MapDelete("DeleteDrinkRedis",
-    async (TeaService teaService,
+    async (TeaCacheService teaService,
     [FromBody] int id,
     IOutputCacheStore outputCache) =>
     {
