@@ -19,14 +19,13 @@
             context.Response.Headers["X-Request-Id"] = requestId;
             context.Response.Headers.XContentTypeOptions = "nosniff";
 
-            // Кеш в браузере на GET запросы, до сервера запросы не доходят
-            // В самый последний момент перед отправкой заголовков клиенту 
+            
             context.Response.OnStarting(() =>
             {
-                //(endpoint уже отработал)
+                //endpoint уже отработал
                 if (context.Request.Method == "GET" && context.Response.StatusCode == StatusCodes.Status200OK)
                 {
-                    context.Response.Headers["Cache-Control"] = "public, max-age=10"; //10 секунд
+                    context.Response.Headers["Cache-Control"] = "public, max-age=10"; //10 sec
                 }
 
                 return Task.CompletedTask;

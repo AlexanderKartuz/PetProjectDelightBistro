@@ -26,8 +26,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOutputCache(options =>
 {
     options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
-    options.MaximumBodySize = 64 * 1024;// макс размер ответа
-    options.SizeLimit = 100 * 1024 * 1024; //общий размер кеша
+    options.MaximumBodySize = 64 * 1024;
+    options.SizeLimit = 100 * 1024 * 1024;
 });
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -69,14 +69,14 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("GetTeas", /*async*/ (TeaRepository teaRepository, IMemoryCache memoryCache/*, CancellationToken cancellationToken*/) =>
+app.MapGet("GetTeas", (TeaRepository teaRepository, IMemoryCache memoryCache) =>
 {
-    var teas = /*await*/ memoryCache.GetOrCreate/*GetOrCreateAsync*/(CacheKeys.TEAS, /*async*/ entry =>
+    var teas = memoryCache.GetOrCreate(CacheKeys.TEAS, entry =>
     {
         entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
 
-        return teaRepository.GetTeas();/*ToListAsync(cancellationToken);*/ // cancellationToken only in async
+        return teaRepository.GetTeas();
     });
 
     return Results.Ok(teas);
@@ -158,6 +158,7 @@ app.MapDelete("DeleteDrink",
 
 app.MapGet("Exception", () => { throw new Exception(); });
 
+// When Redis is on
 app.MapGet("redis-test", async (IDistributedCache cache) =>
 {
     var value = await cache.GetStringAsync("test");
@@ -216,7 +217,7 @@ app.MapPut("ChangeDrinkRedis/{id}",
        {
            return Results.NotFound();
        }
-             
+
        await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
        return Results.Ok(changedTea);
@@ -232,7 +233,7 @@ app.MapDelete("DeleteDrinkRedis",
         {
             return false;
         }
-              
+
         await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
 
         return true;
