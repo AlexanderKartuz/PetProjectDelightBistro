@@ -1,6 +1,7 @@
 import React from 'react';
 
-interface RockQuoteProps {
+interface RockQuoteProps 
+{
     name: string;
     url: string;
     quote_text: string;

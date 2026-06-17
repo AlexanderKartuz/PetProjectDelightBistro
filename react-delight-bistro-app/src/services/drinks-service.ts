@@ -5,6 +5,9 @@ const API_GET_TEAS = '/GetTeas';
 const API_POST_CREATE_TEA = '/CreateTea';
 const API_DELETE = '/DeleteDrink';
 const API_CHANGE = '/ChangeDrink';
+const API_GET_TEA = '/GetTea';
+
+// GetTea/{id}
 
 export async function getDrinks(): Promise<Drink[]> {
   const response = await fetch(`${API_BASE}${API_GET_TEAS}`);
@@ -61,6 +64,21 @@ export async function changeDrink(
     throw new Error(`Ошибка запроса: ${response.status}`);
   }
 
+  const data: Drink = await response.json();
+  return data;
+}
+
+export async function getDrink(id: number): Promise<Drink> {
+  const response = await fetch(`${API_BASE}${API_GET_TEA}/${id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (response.status === 404) {
+    throw new Error(`Чай с id= ${id} не найден`);
+  }
+  if (!response.ok) {
+    throw new Error(`Ошибка запроса: ${response.status}`);
+  }
   const data: Drink = await response.json();
   return data;
 }
