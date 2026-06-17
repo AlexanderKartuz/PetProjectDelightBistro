@@ -1,6 +1,7 @@
 using DelightBistroMinimalApi.DbStuff;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using DelightBistroMinimalApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services.AddCors(o =>
 
 var app = builder.Build();
 
+app.UseCustomExeptionHandling();
+app.UseCustomRequestLogging();
+
 app.UseCors();
 
 app.UseSwagger();
@@ -31,6 +35,18 @@ app.UseSwaggerUI();
 app.MapGet("/", () => "Hello World!");
 
 app.MapGet("GetTeas", (MiniDbContext dbContext) => dbContext.Teas.ToList());
+
+app.MapGet("GetTea/{id}", (MiniDbContext dbContext, int id) =>
+{
+    var tea = dbContext.Teas.FirstOrDefault(t => t.Id == id);
+
+    if (tea == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(tea);
+});
 
 app.MapPost("CreateTea", (MiniDbContext dbContext, [FromBody] Tea tea) =>
 {
@@ -64,5 +80,7 @@ app.MapDelete("DeleteDrink", (MiniDbContext dbContext, [FromBody] int id) =>
     dbContext.SaveChanges();
     return true;
 });
+
+app.MapGet("Exception", () => { throw new Exception(); });
 
 app.Run();

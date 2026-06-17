@@ -1,7 +1,9 @@
-﻿using WebNet23Online.Services.Interfaces;
+﻿using WebNet23Online.RelfectionTools;
+using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Services
 {
+    [AutoRegister]
     public class RandomBuilder : IRandomBuilder
     {
         private Random _random;

@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using NAudio.Wave;
 using System.Globalization;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Hubs;
 using WebNet23Online.Models.AnimeGirl;
+using WebNet23Online.Models.DTOs;
+using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers
@@ -22,13 +25,19 @@ namespace WebNet23Online.Controllers
         private IAuthService _authService;
         private IWebHostEnvironment _webHostEnvironment;
         private IHubContext<AnimeHub, IAnimeHub> _animeHub;
+        private JokeApi _jokeApi;
+        private WaifuApi _waifuApi;
+        private CatApi _catApi;
 
         public AnimeGirlController(IAnimeGirlService animeGirlGenerator,
             IAnimeGirlRepository animeGirlRepository,
             IAnimeRepository animeRepository,
             IAuthService authService,
             IWebHostEnvironment webHostEnvironment,
-            IHubContext<AnimeHub, IAnimeHub> animeHub)
+            IHubContext<AnimeHub, IAnimeHub> animeHub,
+            JokeApi jokeApi,
+            WaifuApi waifuApi,
+            CatApi catApi)
         {
             _animeGirlService = animeGirlGenerator;
             _animeGirlRepository = animeGirlRepository;
@@ -36,22 +45,38 @@ namespace WebNet23Online.Controllers
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
             _animeHub = animeHub;
+            _jokeApi = jokeApi;
+            _waifuApi = waifuApi;
+            _catApi = catApi;
         }
 
         //    /AnimeGirl/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var animeGirlDatas = _animeGirlRepository.GetAllIncludeAnime();
+            var animeGirlDatas = _animeGirlRepository.GetAllIncludeAnime(); // Get From DB
             var animeDatas = _animeRepository.GetAll();
 
             var viewModels = _animeGirlService.GenerateList(animeGirlDatas);
             var animeViewModels = _animeGirlService.AnimeMap(animeDatas);
 
+            var jokeDtoTask = _jokeApi.GetJoke();
+            var waifuDtoTask = _waifuApi.GetWaifu();
+            var catDtosTask = _catApi.GetCats(); 
+
+            Task.WaitAll(jokeDtoTask, waifuDtoTask, catDtosTask);
+
+            var jokeDto = jokeDtoTask.Result;
+            var waifuDto = waifuDtoTask.Result;
+            var catDtos = catDtosTask.Result;
+
             var mainViewModel = new MainIndexViewModel
             {
                 AnimeGirls = viewModels,
                 Animes = animeViewModels,
-                CanDeleteGirl = _authService.AtLeastModerator()
+                CanDeleteGirl = _authService.AtLeastModerator(),
+                Cats = catDtos,
+                Joke = jokeDto,
+                Waifu = waifuDto
             };
 
             return View(mainViewModel);
