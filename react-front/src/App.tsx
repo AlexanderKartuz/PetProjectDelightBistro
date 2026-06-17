@@ -6,7 +6,7 @@ import { Home } from "./pages/Home";
 import { MovieDetail } from "./pages/MovieDetail";
 import { RockQuotes } from "./pages/RockQuotes";
 import { AnimalFacts } from "./pages/AnimalFacts";
-
+import { LittleLemon } from "./pages/LittleLemon";
 function App() {
   return (
     <>
@@ -48,6 +48,14 @@ function App() {
           >
             Rock Quotes
           </NavLink>
+          <NavLink
+            to="/menu"
+            className={({ isActive }) =>
+              `app-nav__link${isActive ? " app-nav__link--active" : ""}`
+            }
+          >
+            LLMenu
+          </NavLink>
         </nav>
       </header>
       <main className="app-main">
@@ -57,6 +65,7 @@ function App() {
           <Route path="/movie/:id" element={<MovieDetail />} />
           <Route path="/animal-facts" element={<AnimalFacts />} />
           <Route path="/rock-quotes" element={<RockQuotes />} />
+          <Route path="/menu" element={<LittleLemon />} />
         </Routes>
       </main>
     </>
