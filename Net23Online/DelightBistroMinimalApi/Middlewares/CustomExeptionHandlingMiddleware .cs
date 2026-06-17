@@ -23,6 +23,12 @@ namespace DelightBistroMinimalApi.Middlewares
             }
             catch (Exception ex)
             {
+                if (context.Response.HasStarted)
+                {
+                    _logger.LogError(ex, "Cannot write error response, already started");
+                    throw;
+                }
+
                 _logger.LogError(ex, "Exception in {Method} {Path}:{Message} ",
                     context.Request.Method,
                     context.Request.Path,

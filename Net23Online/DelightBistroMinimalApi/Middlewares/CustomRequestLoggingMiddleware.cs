@@ -21,7 +21,6 @@
                 context.Request.Path,
                 startTime);
 
-            // Call the next delegate/middleware in the pipeline.
             await _next(context);
 
             var durationTime = DateTime.UtcNow - startTime;
