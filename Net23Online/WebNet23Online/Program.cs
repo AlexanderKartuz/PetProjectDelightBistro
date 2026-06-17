@@ -14,6 +14,7 @@ using WebNet23Online.Hubs;
 using WebNet23Online.MiddlewareServices;
 using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
+using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
@@ -44,6 +45,21 @@ builder.Services.AddScoped<ILittleLemonTestimonialService, LittleLemonTestimonia
 builder.Services.AddScoped<ILittleLemonSubscribeService, LittleLemonSubscribeService>();
 builder.Services.AddScoped<ILittleLemonReservationService, LittleLemonReservationService>();
 builder.Services.AddScoped<ILittleLemonChatService, LittleLemonChatService>();
+
+builder.Services.AddHttpClient<JokeApi>(x =>
+{
+    x.BaseAddress = new Uri("https://official-joke-api.appspot.com");
+});
+
+builder.Services.AddHttpClient<WaifuApi>(x =>
+{
+    x.BaseAddress = new Uri("https://api.waifu.im");
+});
+
+builder.Services.AddHttpClient<CatApi>(x =>
+{
+    x.BaseAddress = new Uri("https://cataas.com");
+});
 
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>

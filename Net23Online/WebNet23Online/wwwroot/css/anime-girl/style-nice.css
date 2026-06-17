@@ -296,6 +296,187 @@ main {
     color: var(--text-soft);
 }
 
+.fun-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.fun-card {
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    padding: 1.15rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+    .fun-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 44px rgba(180, 140, 160, 0.2);
+    }
+
+.fun-card__header,
+.fun-cats__header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.65rem;
+}
+
+.fun-card__icon {
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.fun-card__title {
+    margin: 0;
+    font-family: "Sniglet", cursive;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text);
+    flex: 1 1 auto;
+}
+
+.fun-card__badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    background: rgba(255, 232, 239, 0.85);
+    border: 1px solid rgba(232, 141, 168, 0.35);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+}
+
+.fun-card--joke {
+    background: linear-gradient(155deg, rgba(255, 255, 255, 0.82), rgba(255, 232, 239, 0.55));
+}
+
+.joke-quote {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.joke-setup {
+    margin: 0 0 0.65rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+.joke-punchline {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--accent-deep);
+    line-height: 1.45;
+}
+
+.fun-card__img-wrap {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(145deg, var(--blush), var(--lavender));
+}
+
+    .fun-card__img-wrap--waifu {
+        aspect-ratio: 3 / 4;
+    }
+
+    .fun-card__img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.45s ease;
+    }
+
+.fun-card--waifu:hover .fun-card__img-wrap img {
+    transform: scale(1.03);
+}
+
+.fun-card__link-wrap {
+    margin: 0;
+    text-align: center;
+}
+
+.fun-card__link {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent-deep);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(201, 107, 138, 0.45);
+}
+
+    .fun-card__link:hover {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+    }
+
+.fun-cats {
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    padding: 1.15rem 1.25rem 1.35rem;
+}
+
+.fun-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.85rem;
+    margin-top: 0.85rem;
+}
+
+.fun-cat-card {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: linear-gradient(160deg, var(--mint), var(--lavender));
+    box-shadow: 0 8px 24px rgba(180, 140, 160, 0.12);
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+    .fun-cat-card:hover {
+        transform: translateY(-3px) rotate(-1deg);
+        box-shadow: 0 12px 28px rgba(180, 140, 160, 0.2);
+    }
+
+.fun-cat-card__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.fun-cat-card__img-wrap {
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+    .fun-cat-card__img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+.fun-cat-card:hover .fun-cat-card__img-wrap img {
+    transform: scale(1.06);
+}
+
 .section-placeholder .placeholder-box {
     background: var(--card);
     backdrop-filter: blur(8px);
@@ -338,15 +519,23 @@ main {
     .media-card,
     .media-card__img-wrap img,
     .anime-catalog-card,
-    .anime-catalog-card__cover img {
+    .anime-catalog-card__cover img,
+    .fun-card,
+    .fun-card__img-wrap img,
+    .fun-cat-card,
+    .fun-cat-card__img-wrap img {
         transition: none;
     }
 
-        .media-card:hover {
+        .media-card:hover,
+        .fun-card:hover,
+        .fun-cat-card:hover {
             transform: none;
         }
 
-            .media-card:hover .media-card__img-wrap img {
+            .media-card:hover .media-card__img-wrap img,
+            .fun-card--waifu:hover .fun-card__img-wrap img,
+            .fun-cat-card:hover .fun-cat-card__img-wrap img {
                 transform: none;
             }
 

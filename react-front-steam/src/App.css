@@ -80,6 +80,43 @@
   color: #ff8a8a;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #2a475e;
+}
+
+.pagination__btn {
+  padding: 8px 16px;
+  border: 1px solid #2a475e;
+  border-radius: 3px;
+  background: #171a21;
+  color: #67c1f5;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.pagination__btn:hover:not(:disabled) {
+  background: #2a475e;
+  color: #fff;
+}
+
+.pagination__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination__info {
+  min-width: 72px;
+  text-align: center;
+  color: #8f98a0;
+  font-size: 0.9rem;
+}
+
 .game-card {
   display: flex;
   flex-direction: column;
