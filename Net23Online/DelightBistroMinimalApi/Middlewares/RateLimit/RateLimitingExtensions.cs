@@ -6,28 +6,27 @@ namespace DelightBistroMinimalApi.Middlewares.RateLimit
 {
     public static class RateLimitingExtensions
     {
-        private const string PARTITIONEDLIMITINGKEY = "global";
-        public static IServiceCollection AddCustomRateLimiter(this IServiceCollection services,
-            IConfiguration configuration)
+        private const string PARTITIONED_LIMITING_KEY = "global";
+        public static WebApplicationBuilder AddCustomRateLimiter(this WebApplicationBuilder builder)
         {
             var globalOptions = new GlobalRateLimitOptions();
-            configuration.GetSection(GlobalRateLimitOptions.SectionName).Bind(globalOptions);
+            builder.Configuration.GetSection(GlobalRateLimitOptions.SectionName).Bind(globalOptions);
 
             var ipOptions = new IpRateLimitOptions();
-            configuration.GetSection(IpRateLimitOptions.SectionName).Bind(ipOptions);
+            builder.Configuration.GetSection(IpRateLimitOptions.SectionName).Bind(ipOptions);
 
-            services.AddRateLimiter(opt =>
+            builder.Services.AddRateLimiter(opt =>
             {
                 opt.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
                 opt.GlobalLimiter = PartitionedRateLimiter.CreateChained(
 
                     CreateIpPartionedLimiter(ipOptions),
-                    CreatePartitionedLimiter(globalOptions, PARTITIONEDLIMITINGKEY)
+                    CreatePartitionedLimiter(globalOptions, PARTITIONED_LIMITING_KEY)
                 );
             });
 
-            return services;
+            return builder;
         }
 
         private static PartitionedRateLimiter<HttpContext> CreateIpPartionedLimiter(IRateLimitOptions options)

@@ -19,13 +19,11 @@
             context.Response.Headers["X-Request-Id"] = requestId;
             context.Response.Headers.XContentTypeOptions = "nosniff";
 
-            
             context.Response.OnStarting(() =>
             {
-                //endpoint уже отработал
                 if (context.Request.Method == "GET" && context.Response.StatusCode == StatusCodes.Status200OK)
                 {
-                    context.Response.Headers["Cache-Control"] = "public, max-age=10"; //10 sec
+                    context.Response.Headers["Cache-Control"] = "public, max-age=10";
                 }
 
                 return Task.CompletedTask;
@@ -34,7 +32,6 @@
             await _next(context);
 
             _logger.LogInformation("RequestId={RequestId} | Status={Status}", requestId, context.Response.StatusCode);
-
         }
     }
 

@@ -16,13 +16,11 @@ builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionStr
 builder.Services.AddScoped<TeaCacheService>();
 builder.Services.AddScoped<TeaRepository>();
 
-
-builder.Services.AddCustomRateLimiter(builder.Configuration);
+builder.AddCustomRateLimiter();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Кеш HTTP ответов  
 builder.Services.AddOutputCache(options =>
 {
     options.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
@@ -53,16 +51,12 @@ var app = builder.Build();
 
 app.UseCustomExeptionHandling();
 
-
-// UseCors must be called before UseResponseCaching
 app.UseCors();
 app.UseRateLimiter();
 
-//Cache
 app.UseResponseHeader();
 app.UseOutputCache();
 app.UseCustomRequestLogging();
-
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -81,7 +75,6 @@ app.MapGet("GetTeas", (TeaRepository teaRepository, IMemoryCache memoryCache) =>
 
     return Results.Ok(teas);
 }).CacheOutput(o => o.Tag(CacheTags.TEAS));
-
 
 app.MapGet("GetTea/{id}", (TeaRepository teaRepository, int id, IMemoryCache memoryCache) =>
 {
