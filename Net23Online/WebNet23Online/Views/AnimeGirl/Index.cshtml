@@ -26,6 +26,84 @@
 </header>
 
 <main>
+    @if (Model.Joke != null || Model.Waifu?.items?.Count > 0 || Model.Cats?.Count > 0)
+    {
+        <section class="section section-fun" id="fun-stuff" aria-labelledby="fun-stuff-title">
+            <h2 class="section-title" id="fun-stuff-title">Немного позитива</h2>
+            <p class="section-intro">Случайная шутка, waifu и котики — подгружаются при каждом открытии страницы.</p>
+
+            <div class="fun-grid">
+                @if (Model.Joke != null)
+                {
+                    <article class="fun-card fun-card--joke" aria-labelledby="joke-title">
+                        <div class="fun-card__header">
+                            <span class="fun-card__icon" aria-hidden="true">😄</span>
+                            <h3 class="fun-card__title" id="joke-title">Шутка дня</h3>
+                            @if (!string.IsNullOrEmpty(Model.Joke.type))
+                            {
+                                <span class="fun-card__badge">@Model.Joke.type</span>
+                            }
+                        </div>
+                        <blockquote class="joke-quote">
+                            <p class="joke-setup">@Model.Joke.setup</p>
+                            <p class="joke-punchline">@Model.Joke.punchline</p>
+                        </blockquote>
+                    </article>
+                }
+
+                @if (Model.Waifu?.items?.Count > 0)
+                {
+                    var waifuImage = Model.Waifu.items[0];
+                    <article class="fun-card fun-card--waifu" aria-labelledby="waifu-title">
+                        <div class="fun-card__header">
+                            <span class="fun-card__icon" aria-hidden="true">🌸</span>
+                            <h3 class="fun-card__title" id="waifu-title">Waifu</h3>
+                        </div>
+                        <div class="fun-card__img-wrap fun-card__img-wrap--waifu">
+                            <img src="@waifuImage.url"
+                                 alt="Waifu illustration"
+                                 width="@(waifuImage.width > 0 ? waifuImage.width : 480)"
+                                 height="@(waifuImage.height > 0 ? waifuImage.height : 720)"
+                                 loading="lazy"
+                                 decoding="async">
+                        </div>
+                        <p class="fun-card__link-wrap">
+                            <a class="fun-card__link" href="@waifuImage.url" target="_blank" rel="noopener noreferrer">Открыть оригинал</a>
+                        </p>
+                    </article>
+                }
+            </div>
+
+            @if (Model.Cats?.Count > 0)
+            {
+                <div class="fun-cats">
+                    <div class="fun-cats__header">
+                        <span class="fun-card__icon" aria-hidden="true">🐱</span>
+                        <h3 class="fun-card__title">Котики</h3>
+                    </div>
+                    <div class="fun-cats-grid">
+                        @foreach (var cat in Model.Cats)
+                        {
+                            var catUrl = $"https://cataas.com/cat/{cat.id}";
+                            <article class="fun-cat-card">
+                                <a class="fun-cat-card__link" href="@catUrl" target="_blank" rel="noopener noreferrer" title="Кот @cat.id">
+                                    <div class="fun-cat-card__img-wrap">
+                                        <img src="@catUrl"
+                                             alt="Кот @cat.id"
+                                             width="320"
+                                             height="320"
+                                             loading="lazy"
+                                             decoding="async">
+                                    </div>
+                                </a>
+                            </article>
+                        }
+                    </div>
+                </div>
+            }
+        </section>
+    }
+
     <section class="section section-link" id="link-anime-hero" aria-labelledby="link-anime-hero-title">
         <h2 class="section-title" id="link-anime-hero-title">Связать персонажа с аниме</h2>
         <p class="section-intro">Выберите аниме и персонажа — сохранение связи подключим позже.</p>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37111.16
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11903.348 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstConsoleApp", "FirstConsoleApp\FirstConsoleApp.csproj", "{9DEDD8F1-0D32-4357-8860-1D017F07DE7A}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LittleLemonMinimalApi", "LittleLemonMinimalApi\LittleLemonMinimalApi.csproj", "{B7C4E2A1-9F3D-4E8B-A6C5-1D2E3F4A5B6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReflectionExample", "ReflectionExample\ReflectionExample.csproj", "{6BC48193-8A87-43D0-ABC8-49CCD88B5941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultyThreadExample", "MultyThreadExample\MultyThreadExample.csproj", "{A60E18B5-3986-4B85-8F39-FC72DD2D6782}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BC48193-8A87-43D0-ABC8-49CCD88B5941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A60E18B5-3986-4B85-8F39-FC72DD2D6782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A60E18B5-3986-4B85-8F39-FC72DD2D6782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A60E18B5-3986-4B85-8F39-FC72DD2D6782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A60E18B5-3986-4B85-8F39-FC72DD2D6782}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
