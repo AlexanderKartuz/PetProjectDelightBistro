@@ -61,6 +61,10 @@ builder.Services.AddHttpClient<CatApi>(x =>
     x.BaseAddress = new Uri("https://cataas.com");
 });
 
+builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
+{
+    x.BaseAddress = new Uri("https://fakerestaurantapi.runasp.net");
+});
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
 //{
