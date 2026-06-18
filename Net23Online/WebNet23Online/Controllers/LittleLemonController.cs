@@ -39,6 +39,7 @@ namespace WebNet23Online.Controllers
             var menuItems = _littleLemonMenuService.GetMenuItems(category);
 
             var testimonials = _littleLemonTestimonialService.GetTestimonials();
+
             var hero = new LittleLemonHeroSectionViewModel
             {
                 CallToActionHref = Url.Action("Reservation", "LittleLemon") ?? "/LittleLemon/Reservation",
@@ -46,8 +47,6 @@ namespace WebNet23Online.Controllers
                 HeroImageUrl = "/images/little-lemon/images/restauranfood.jpg",
                 HeroImageAlt = "Signature Mediterranean platter at Little Lemon"
             };
-
-
 
             var fakeMenuItems = await _fakeRestaurantApi.GetFakeMenuItems();
             var pageModel = new LittleLemonIndexPageViewModel
