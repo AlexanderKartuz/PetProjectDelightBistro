@@ -65,6 +65,9 @@ builder.Services.AddHttpClient<CatApi>(x =>
 builder.Services.AddHttpClient<CatFactApi>(x =>
 x.BaseAddress = new Uri("https://catfact.ninja"));
 
+builder.Services.AddHttpClient<DogApi>(x =>
+x.BaseAddress = new Uri("https://dog.ceo"));
+
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
 //{

@@ -8,6 +8,7 @@ namespace WebNet23Online.Models.DelightBistro
 
         // API
         public CatFactDto CatFactViewModel { get; set; }
+        public DogDto DogViewModel { get; set; }
 
     }
 }

@@ -412,13 +412,24 @@ div.food-item.active {
 }
 
 .api-box-items {
-    width: 250px;
-    padding: 10px;
     min-height: 300px;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     background: #382e2e;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.api-box-item {
+    width: 250px;
+    padding: 10px;
+    margin: 10px;
+    min-height: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background: #1d1a1a;
     border-radius: 8px;
     overflow-wrap: break-word;
     hyphens: auto;
@@ -433,4 +444,11 @@ div.food-item.active {
 .api-fact {
     margin: 7px;
     text-align: center;
+}
+
+.api-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
 }
