@@ -18,7 +18,7 @@ namespace WebNet23Online.Services
         private IAuthService _authService;
         private IWebHostEnvironment _webHostEnvironment;
         private AnimalWorldRandomAnimalApi _randomAnimalApi;
-        private const int RANDOM_ANIMAL_IMAGE_COUNT = 10;
+        private const int RANDOM_ANIMAL_IMAGE_COUNT = 9;
         private Random _random;
 
         public AnimalWorldService(IZooRepository zooRepository, IAnimalFamilyRepository animalFamilyRepository, IAnimalSpeciesRepository animalSpeciesRepository, IAnimalWorldMapper animalWorldMapper, IAuthService authService, IWebHostEnvironment webHostEnvironment, AnimalWorldRandomAnimalApi randomAnimalApi)
@@ -33,33 +33,33 @@ namespace WebNet23Online.Services
             _random = new Random();
         }
 
-        public StartPageAnimalWorldInfoViewModel GetStartInfo()
+        public async Task<StartPageAnimalWorldInfoViewModel> GetStartInfo()
         {
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
-            var animalImagesTask = GetRandomAnimalImages();
-            animalImagesTask.Wait();
+            var animalImages = await GetRandomAnimalImages();
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
                 AnimalFamilies = animalFamilies,
                 AnimalSpecies = animalSpecies,
-                RandomAnimals = animalImagesTask.Result,
+                RandomAnimals = animalImages,
             };
             return startPageInfo;
         }
 
         private async Task<List<AnimalWorldRandomAnimalDto>> GetRandomAnimalImages()
         {
-            var getAnimalSpecies = await _randomAnimalApi.GetAnimalSpecies();
-            var animalWorldRandomAnimals = new List<AnimalWorldRandomAnimalDto>();
+            var animalSpecies = await _randomAnimalApi.GetAnimalSpecies();
+            var tasks = new List<Task<AnimalWorldRandomAnimalDto>>();
             for ( var i = 0; i < RANDOM_ANIMAL_IMAGE_COUNT; i++)
             {
-                var index = _random.Next(getAnimalSpecies.Count());
-                var randomAnimal = await _randomAnimalApi.GetRandomAnimal(getAnimalSpecies[index]);
-                animalWorldRandomAnimals.Add(randomAnimal);
+                var index = _random.Next(animalSpecies.Count);
+                var selectedType = animalSpecies[index];
+                tasks.Add(_randomAnimalApi.GetRandomAnimal(selectedType));
             }
 
-            return animalWorldRandomAnimals;
+            var animalWorldRandomAnimals = await Task.WhenAll(tasks);
+            return animalWorldRandomAnimals.ToList();
         }
 
         public AnimalSpeciesViewModel GetAnimalSpeciesPageInfo()
