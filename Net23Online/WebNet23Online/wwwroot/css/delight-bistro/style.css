@@ -73,7 +73,8 @@ body {
   border-radius: 10px;
 }
 
-.food-item {
+.food-item,
+.api-box-item {
   width: 250px;
   min-height: 200px;
   background: #423333;
@@ -98,7 +99,8 @@ body {
   object-fit: cover;
 }
 
-.food-name {
+.food-name,
+.api-box-item-name {
   text-align: center;
 }
 
@@ -237,7 +239,8 @@ body {
 }
 
 body,
-.food-item {
+.food-item,
+.api-box-item {
   background-color: #1d1a1a;
 }
 
@@ -394,4 +397,9 @@ div.food-item.active {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.api-fact {
+    text-align: center;
+    margin-top: 10px;
 }
