@@ -61,6 +61,11 @@ builder.Services.AddHttpClient<CatApi>(x =>
     x.BaseAddress = new Uri("https://cataas.com");
 });
 
+builder.Services.AddHttpClient<AnimalWorldRandomAnimalApi>(x =>
+{
+    x.BaseAddress = new Uri("https://api.some-random-api.com");
+});
+
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
 //{

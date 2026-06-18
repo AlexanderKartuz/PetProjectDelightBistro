@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Models.AnimalWorld;
 using WebNet23Online.Data.Repositories.Interfaces.AnimalWorld;
 using WebNet23Online.Models.AnimalWorld;
+using WebNet23Online.Models.DTOs;
+using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Services
@@ -16,8 +17,11 @@ namespace WebNet23Online.Services
         private IAnimalWorldMapper _animalWorldMapper;
         private IAuthService _authService;
         private IWebHostEnvironment _webHostEnvironment;
+        private AnimalWorldRandomAnimalApi _randomAnimalApi;
+        private const int RANDOM_ANIMAL_IMAGE_COUNT = 10;
+        private Random _random;
 
-        public AnimalWorldService(IZooRepository zooRepository, IAnimalFamilyRepository animalFamilyRepository, IAnimalSpeciesRepository animalSpeciesRepository, IAnimalWorldMapper animalWorldMapper, IAuthService authService, IWebHostEnvironment webHostEnvironment)
+        public AnimalWorldService(IZooRepository zooRepository, IAnimalFamilyRepository animalFamilyRepository, IAnimalSpeciesRepository animalSpeciesRepository, IAnimalWorldMapper animalWorldMapper, IAuthService authService, IWebHostEnvironment webHostEnvironment, AnimalWorldRandomAnimalApi randomAnimalApi)
         {
             _zooRepository = zooRepository;
             _animalFamilyRepository = animalFamilyRepository;
@@ -25,26 +29,37 @@ namespace WebNet23Online.Services
             _animalWorldMapper = animalWorldMapper;
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
+            _randomAnimalApi = randomAnimalApi;
+            _random = new Random();
         }
 
         public StartPageAnimalWorldInfoViewModel GetStartInfo()
         {
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
-            //foreach (var animal in animalSpecies)
-            //{
-            //    if (string.IsNullOrEmpty(animal.Url) || !File.Exists(animal.Url))
-            //    {
-            //        animal.Url = DEFAULT_URL;
-            //    }
-            //}
-
+            var animalImagesTask = GetRandomAnimalImages();
+            animalImagesTask.Wait();
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
                 AnimalFamilies = animalFamilies,
                 AnimalSpecies = animalSpecies,
+                RandomAnimals = animalImagesTask.Result,
             };
             return startPageInfo;
+        }
+
+        private async Task<List<AnimalWorldRandomAnimalDto>> GetRandomAnimalImages()
+        {
+            var getAnimalSpecies = await _randomAnimalApi.GetAnimalSpecies();
+            var animalWorldRandomAnimals = new List<AnimalWorldRandomAnimalDto>();
+            for ( var i = 0; i < RANDOM_ANIMAL_IMAGE_COUNT; i++)
+            {
+                var index = _random.Next(getAnimalSpecies.Count());
+                var randomAnimal = await _randomAnimalApi.GetRandomAnimal(getAnimalSpecies[index]);
+                animalWorldRandomAnimals.Add(randomAnimal);
+            }
+
+            return animalWorldRandomAnimals;
         }
 
         public AnimalSpeciesViewModel GetAnimalSpeciesPageInfo()
