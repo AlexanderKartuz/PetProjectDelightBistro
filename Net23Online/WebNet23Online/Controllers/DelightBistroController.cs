@@ -6,6 +6,7 @@ using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Hubs;
 using WebNet23Online.Hubs.Interfaces;
 using WebNet23Online.Models.DelightBistro;
+using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.Interfaces;
 
 
@@ -13,6 +14,7 @@ namespace WebNet23Online.Controllers
 {
     public class DelightBistroController : Controller
     {
+        private IDelightBistroMainIndexGenerator _delightBistroMainIndexGenerator;
         private IFoodItemGenerator _foodItemGenerator;
         private IMenuTypeGenerator _menuTypeGenerator;
         private IIngredientGenerator _ingredientGenerator;
@@ -21,16 +23,22 @@ namespace WebNet23Online.Controllers
         private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
 
 
-        public DelightBistroController(IFoodItemGenerator foodItemGenerator, IMenuTypeGenerator menuTypeGenerator
-            , IFoodItemRepository foodItemRepository, IIngredientGenerator ingredientGenerator, IHubContext<DeligtBistroHub, IDeligtBistroHub> deligtBistroHub)
+        public DelightBistroController(IFoodItemGenerator foodItemGenerator,
+            IMenuTypeGenerator menuTypeGenerator,
+            IFoodItemRepository foodItemRepository,
+            IIngredientGenerator ingredientGenerator,
+            IHubContext<DeligtBistroHub,
+            IDeligtBistroHub> deligtBistroHub,
+            IDelightBistroMainIndexGenerator delightBistroMainIndexGenerator)
         {
-            _foodItemGenerator = foodItemGenerator;
             _foodItemRepository = foodItemRepository;
 
+            _foodItemGenerator = foodItemGenerator;
             _menuTypeGenerator = menuTypeGenerator;
-
             _ingredientGenerator = ingredientGenerator;
+
             _deligtBistroHub = deligtBistroHub;
+            _delightBistroMainIndexGenerator = delightBistroMainIndexGenerator;
         }
 
         public IActionResult Index(string menuType)
@@ -39,7 +47,8 @@ namespace WebNet23Online.Controllers
             _ingredientGenerator.FeelDataBase();
             _menuTypeGenerator.FeelDataBase();
 
-            var viewModel = _menuTypeGenerator.GetAllMenuViewModel(menuType);
+            //var viewModel = _menuTypeGenerator.GetAllMenuViewModel(menuType);
+            var viewModel = _delightBistroMainIndexGenerator.GetMainIndexViewModel(menuType);
 
             return View(viewModel);
         }

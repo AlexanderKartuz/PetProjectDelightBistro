@@ -1,6 +1,6 @@
 ﻿@using WebNet23Online.Models.DelightBistro;
 @using WebNet23Online.Localizations;
-@model List<MenuTypeViewModel>
+@model MainIndexViewModel
 
 @{
     Layout = "_LayoutDelightBistro";
@@ -52,7 +52,7 @@
 <div class="layout">
     <div class="plate">
 
-        @foreach (var category in Model)
+        @foreach (var category in Model.MenuTypeViewModels)
         {
             if ((category.FoodItems).Any())
             {
@@ -141,6 +141,12 @@
         </div>
 
     </div>
+
+    <div class="api-box api-cat-fact">
+        <div class="api-name">Cat fact</div>
+        <div class="api-fact">@Model.CatFactViewModel.Fact</div>
+    </div>
+
 </div>
 
 <aside class="right-bar">
@@ -164,7 +170,7 @@
     <ul class="navigation">
         <li><a href="\DelightBistro\Index">@DelightBistro.Index_All_menu</a> </li>
 
-        @foreach (var menu in Model)
+        @foreach (var menu in Model.MenuTypeViewModels)
         {
             <li><a href="\DelightBistro\Index?menutype=@menu.Name">@menu.Name</a> </li>
 
