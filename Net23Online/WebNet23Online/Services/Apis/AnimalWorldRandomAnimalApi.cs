@@ -14,7 +14,7 @@ namespace WebNet23Online.Services.Apis
         public async Task<List<string>> GetAnimalSpecies()
         {
             var endpoints = await _httpClient.GetFromJsonAsync<AnimalWorldRandomAnimalEndpointsDto>("/animal");
-            return endpoints.endpoints;
+            return endpoints.Endpoints;
         }
 
         public async Task<AnimalWorldRandomAnimalDto> GetRandomAnimal(string type)

@@ -1,8 +1,13 @@
-﻿namespace WebNet23Online.Models.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace WebNet23Online.Models.DTOs
 {
     public class AnimalWorldRandomAnimalDto
     {
-        public string image { get; set; }
-        public string fact { get; set; }
+        [JsonPropertyName("image")]
+        public string Image { get; set; }
+
+        [JsonPropertyName("fact")]
+        public string Fact { get; set; }
     }
 }
