@@ -49,6 +49,7 @@ namespace WebNet23Online.Data
 
         public DbSet<TicketData> Tickets { get; set; }
         public DbSet<CommentData> Comments { get; set; }
+        public DbSet<NotificationData> Notifications { get; set; }
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -57,6 +58,10 @@ namespace WebNet23Online.Data
             modelBuilder.Entity<AnimeData>()
                 .HasMany(x => x.Heroes)
                 .WithMany(x => x.Animes);
+
+            modelBuilder.Entity<NotificationData>()
+                .HasOne(x => x.Author)
+                .WithMany(x => x.Notifications);
 
             modelBuilder.Entity<AnimeStudioData>()
                 .HasMany(x => x.Animes)

@@ -1,0 +1,40 @@
+﻿@using WebNet23Online.Models.Notification
+@model List<SingleNotificationViewModel>
+
+
+<div class="maze">
+
+    <div>
+
+        @foreach (var preparedNotification in Model)
+        {
+            <div>
+                @preparedNotification.TimeToPublish.ToShortDateString()
+                @preparedNotification.TimeToPublish.ToShortTimeString()
+                @preparedNotification.Text [@preparedNotification.Id] (@preparedNotification.AuthorName)
+            </div>
+        }
+
+        <hr />
+
+        Enter new message for all
+        <form action="/Notification/SendInstantNotification" method="post">
+            <input name="text" />
+            <button type="submit">Send Instant Notification</button>
+        </form>
+
+        <hr />
+
+        <form action="/Notification/SavePreparedNotification" method="post">
+            <div>
+                <input name="text" placeholder="message of notification" />
+            </div>
+            <div>
+                When?
+                <input type="date" name="date" />
+                <input type="time" name="time" />
+            </div>
+            <button type="submit">PreSaved Notification</button>
+        </form>
+    </div>
+</div>
