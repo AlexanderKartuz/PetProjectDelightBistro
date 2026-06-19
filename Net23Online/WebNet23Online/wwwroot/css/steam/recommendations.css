@@ -1,0 +1,592 @@
+﻿/* ========== ОБЩИЕ СТИЛИ ========== */
+.recommendations-page,
+.game-details-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+    color: #c6d4df;
+}
+
+/* ========== ХЕДЕР ========== */
+.recommendations-header {
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1e2c3a;
+}
+
+    .recommendations-header h1 {
+        margin: 0 0 4px;
+        font-size: 28px;
+        font-weight: 300;
+        color: #fff;
+    }
+
+    .recommendations-header p {
+        margin: 0;
+        color: #8f98a0;
+        font-size: 14px;
+    }
+
+/* ========== ПОИСК ========== */
+.recommendations-search {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+    .recommendations-search input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 1px solid #1e2c3a;
+        border-radius: 2px;
+        background: #0d131a;
+        color: #c6d4df;
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+
+        .recommendations-search input:focus {
+            outline: none;
+            border-color: #66c0f4;
+        }
+
+        .recommendations-search input::placeholder {
+            color: #4d5a66;
+        }
+
+    .recommendations-search button {
+        padding: 10px 24px;
+        border: none;
+        border-radius: 2px;
+        background: linear-gradient(to bottom, #66c0f4, #4792c4);
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+    }
+
+        .recommendations-search button:hover {
+            background: linear-gradient(to bottom, #7bc8f5, #529ed4);
+        }
+
+/* ========== СЕКЦИИ ========== */
+.recommendations-section {
+    margin-bottom: 40px;
+}
+
+    .recommendations-section h2,
+    .section-subtitle,
+    .section-title {
+        margin: 0 0 16px;
+        font-size: 20px;
+        font-weight: 300;
+        color: #fff;
+    }
+
+.section-subtitle {
+    margin-top: 8px;
+}
+
+/* ========== СЕТКА ИГР ========== */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 16px;
+}
+
+/* ========== КАРТОЧКА ИГРЫ ========== */
+.game-card {
+    display: block;
+    background: #171d25;
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid transparent;
+}
+
+    .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        border-color: #2a475e;
+    }
+
+.game-card-image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    background: #0d131a;
+    overflow: hidden;
+}
+
+    .game-card-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Заполняет контейнер, обрезая лишнее */
+        display: block;
+    }
+
+    .game-card-image .no-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #4d5a66;
+        font-size: 12px;
+        background: #0d131a;
+    }
+
+.game-card-body {
+    padding: 10px 12px 12px;
+}
+
+.game-card-title {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #c6d4df;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.15s;
+}
+
+.game-card:hover .game-card-title {
+    color: #fff;
+}
+
+.game-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #6a7a8a;
+}
+
+.game-card-rating {
+    color: #ffd700;
+    flex-shrink: 0;
+}
+
+.game-card-year {
+    color: #6a7a8a;
+    flex-shrink: 0;
+}
+
+.game-card-genres {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: #6a7a8a;
+    margin-top: 4px;
+}
+
+/* ========== ВЫБРАННАЯ ИГРА (на странице поиска) ========== */
+.selected-game {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #171d25;
+    border: 1px solid #1e2c3a;
+    border-radius: 4px;
+}
+
+.selected-game-image {
+    flex-shrink: 0;
+    width: 220px;
+    position: relative;
+    padding-bottom: 123.75px; /* 220 * 0.5625 = 123.75 (16:9) */
+    border-radius: 4px;
+    overflow: hidden;
+    background: #0d131a;
+}
+
+    .selected-game-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .selected-game-image .no-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #4d5a66;
+        font-size: 12px;
+        background: #0d131a;
+    }
+
+.selected-game-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.selected-game-name {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 300;
+    color: #fff;
+}
+
+.selected-game-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #8f98a0;
+}
+
+    .selected-game-meta .rating {
+        color: #ffd700;
+    }
+
+.selected-game-genres {
+    margin: 0 0 10px;
+    color: #4d5a66;
+    font-size: 13px;
+}
+
+.selected-game-description {
+    margin: 0;
+    color: #8f98a0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ========== СТРАНИЦА ДЕТАЛЕЙ ИГРЫ ========== */
+.game-details-back {
+    margin-bottom: 20px;
+}
+
+.back-link {
+    color: #66c0f4;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.15s;
+}
+
+    .back-link:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+.game-details-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-bottom: 40px;
+    background: #171d25;
+    padding: 30px;
+    border-radius: 4px;
+    border: 1px solid #1e2c3a;
+}
+
+.game-details-image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    border-radius: 4px;
+    overflow: hidden;
+    background: #0d131a;
+}
+
+    .game-details-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .game-details-image .no-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #4d5a66;
+        font-size: 14px;
+        background: #0d131a;
+    }
+
+.game-details-info {
+    min-width: 0;
+}
+
+.game-details-title {
+    font-size: 32px;
+    color: #fff;
+    margin: 0 0 16px;
+    font-weight: 300;
+}
+
+.game-details-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.meta-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 12px;
+    border-radius: 4px;
+    color: #c7d5e0;
+    font-size: 14px;
+}
+
+    .meta-item.rating {
+        color: #ffd700;
+    }
+
+    .meta-item.metacritic {
+        color: #6c8b4f;
+    }
+
+.game-details-genres,
+.game-details-publishers,
+.game-details-developers {
+    margin-bottom: 8px;
+    color: #c7d5e0;
+    font-size: 14px;
+}
+
+    .game-details-genres strong,
+    .game-details-publishers strong,
+    .game-details-developers strong {
+        color: #fff;
+    }
+
+.game-details-website {
+    margin: 12px 0 16px;
+}
+
+    .game-details-website a {
+        color: #66c0f4;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.15s;
+    }
+
+        .game-details-website a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+.game-details-description {
+    margin-top: 16px;
+    color: #c7d5e0;
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+    .game-details-description h3 {
+        color: #fff;
+        margin: 0 0 10px;
+        font-size: 18px;
+        font-weight: 300;
+    }
+
+    .game-details-description p {
+        margin: 0;
+    }
+
+/* ========== СЕРИЯ ИГР ========== */
+.game-series-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #1e2c3a;
+}
+
+    .game-series-section .section-title {
+        margin-bottom: 20px;
+    }
+
+/* ========== НЕТ РЕЗУЛЬТАТОВ ========== */
+.no-results {
+    padding: 40px 16px;
+    text-align: center;
+    color: #8f98a0;
+}
+
+    .no-results h3 {
+        margin: 0 0 8px;
+        font-size: 22px;
+        font-weight: 300;
+        color: #c6d4df;
+    }
+
+    .no-results p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+.no-series {
+    padding: 20px;
+    text-align: center;
+    color: #8f98a0;
+    background: #171d25;
+    border-radius: 4px;
+    border: 1px solid #1e2c3a;
+    margin-top: 20px;
+}
+
+    .no-series p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+/* ========== ОШИБКА ========== */
+.error-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: #c6d4df;
+}
+
+    .error-message h2 {
+        color: #ff6b6b;
+        margin: 0 0 12px;
+        font-weight: 300;
+        font-size: 28px;
+    }
+
+    .error-message p {
+        margin: 0 0 20px;
+        font-size: 16px;
+        color: #8f98a0;
+    }
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 28px;
+    background: linear-gradient(to bottom, #66c0f4, #4792c4);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 2px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(to bottom, #7bc8f5, #529ed4);
+    }
+
+/* ========== АДАПТИВНОСТЬ ========== */
+@media (max-width: 1024px) {
+    .game-details-container {
+        grid-template-columns: 1fr 1.5fr;
+        gap: 24px;
+        padding: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .recommendations-search {
+        flex-direction: column;
+    }
+
+    .selected-game {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .selected-game-image {
+        width: 100%;
+        max-width: 400px;
+        padding-bottom: 56.25%; /* 16:9 */
+    }
+
+    .game-details-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .game-details-title {
+        font-size: 26px;
+    }
+
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .game-card-body {
+        padding: 8px 10px 10px;
+    }
+
+    .game-card-title {
+        font-size: 13px;
+    }
+
+    .game-details-image {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .recommendations-page,
+    .game-details-page {
+        padding: 16px 12px 32px;
+    }
+
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+
+    .game-details-container {
+        padding: 16px;
+    }
+
+    .game-details-title {
+        font-size: 22px;
+    }
+
+    .game-details-meta {
+        gap: 8px;
+    }
+
+    .meta-item {
+        font-size: 12px;
+        padding: 3px 10px;
+    }
+
+    .selected-game-name {
+        font-size: 20px;
+    }
+
+    .recommendations-section h2,
+    .section-subtitle,
+    .section-title {
+        font-size: 18px;
+    }
+}

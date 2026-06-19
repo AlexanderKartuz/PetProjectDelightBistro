@@ -15,6 +15,7 @@ using WebNet23Online.MiddlewareServices;
 using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Apis;
+using WebNet23Online.Services.Apis.steam;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
@@ -59,6 +60,11 @@ builder.Services.AddHttpClient<WaifuApi>(x =>
 builder.Services.AddHttpClient<CatApi>(x =>
 {
     x.BaseAddress = new Uri("https://cataas.com");
+});
+
+builder.Services.AddHttpClient<RawgApi>(client =>
+{
+    client.BaseAddress = new Uri("https://api.rawg.io/api/");
 });
 
 // Register Services
