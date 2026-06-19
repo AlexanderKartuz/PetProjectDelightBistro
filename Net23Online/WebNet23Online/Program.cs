@@ -16,6 +16,7 @@ using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.BackgroundServices;
+using WebNet23Online.Services.Apis.steam;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
@@ -73,6 +74,11 @@ x.BaseAddress = new Uri("https://catfact.ninja"));
 
 builder.Services.AddHttpClient<DogApi>(x =>
 x.BaseAddress = new Uri("https://dog.ceo"));
+
+builder.Services.AddHttpClient<RawgApi>(client =>
+{
+    client.BaseAddress = new Uri("https://api.rawg.io/api/");
+});
 
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
