@@ -26,13 +26,13 @@ namespace WebNet23Online.Services.DelightBistro
             Task.WaitAll(catFactTask, dogTask);
 
             var catFact = catFactTask.Result;
-            var dogDto= dogTask.Result;
+            var dogDto = dogTask.Result;
 
             var mainIndexViewModel = new MainIndexViewModel
             {
                 MenuTypeViewModels = _menuTypeGenerator.GetAllMenuViewModel(menuType),
                 CatFactViewModel = catFact,
-                DogViewModel= dogDto,
+                DogViewModel = dogDto,
             };
 
             return mainIndexViewModel;
