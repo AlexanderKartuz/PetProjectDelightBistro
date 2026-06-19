@@ -4,7 +4,7 @@ namespace WebNet23Online.Services.Interfaces
 {
     public interface IAnimalWorldService
     {
-        StartPageAnimalWorldInfoViewModel GetStartInfo();
+        Task<StartPageAnimalWorldInfoViewModel> GetStartInfo();
 
         AnimalSpeciesViewModel GetAnimalSpeciesPageInfo();
 

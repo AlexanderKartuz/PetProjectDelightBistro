@@ -15,6 +15,7 @@ using WebNet23Online.MiddlewareServices;
 using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Apis;
+using WebNet23Online.Services.BackgroundServices;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
@@ -60,6 +61,11 @@ builder.Services.AddHttpClient<WaifuApi>(x =>
 builder.Services.AddHttpClient<CatApi>(x =>
 {
     x.BaseAddress = new Uri("https://cataas.com");
+});
+
+builder.Services.AddHttpClient<AnimalWorldRandomAnimalApi>(x =>
+{
+    x.BaseAddress = new Uri("https://api.some-random-api.com");
 });
 
 builder.Services.AddHttpClient<CatFactApi>(x =>
@@ -133,40 +139,6 @@ builder.Services.AddScoped<IJapaneseDomesticMarketGenerator, JapaneseDomesticMar
 builder.Services.AddScoped<IJDMCatalogGenerator, JDMCatalogGenerator>();
 
 // Repositories
-//builder.Services.AddScoped<IZooRepository, ZooRepository>();
-//builder.Services.AddScoped<IAnimalFamilyRepository, AnimalFamilyRepository>();
-//builder.Services.AddScoped<IAnimalSpeciesRepository, AnimalSpeciesRepository>();
-//builder.Services.AddScoped<IAnimeGirlRepository, AnimeGirlRepository>();
-//builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
-//builder.Services.AddScoped<IMazeRepository, MazeRepository>();
-//builder.Services.AddScoped<IHabitRepository, HabitRepository>();
-//builder.Services.AddScoped<IHabitDoneDatesRepository, HabitDoneDatesRepository>();
-//builder.Services.AddScoped<IHabitDiaryRepository, HabitDiaryRepository>();
-//builder.Services.AddScoped<IHabitTrackerAdminRepository, HabitTrackerAdminRepository>();
-//builder.Services.AddScoped<ISlayTheSpire2HeroesRepository, SlayTheSpire2HeroesRepository>();
-//builder.Services.AddScoped<ISlayTheSpire2HeroesCardsRepository, SlayTheSpire2HeroesCardsRepository>();
-//builder.Services.AddScoped<IRockLegendsRepository, RockLegendsRepository>();
-//builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
-//builder.Services.AddScoped<IMenuRepository, MenuRepository>();
-//builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
-//builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-//builder.Services.AddScoped<IRockBandsRepository, RockBandsRepository>();
-//builder.Services.AddScoped<IRockBandLikeRepository, RockBandLikeRepository>();
-//builder.Services.AddScoped<IGenreOfRockBandsRepository, GenreOfRockBandsRepository>();
-//builder.Services.AddScoped<ILittleLemonReservationRepository, LittleLemonReservationRepository>();
-//builder.Services.AddScoped<ILittleLemonGuestRepository, LittleLemonGuestRepository>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<IRockLegendsGenresRepository, RockLegendsGenresRepository>();
-//builder.Services.AddScoped<IGameRepository, GameRepository>();
-//builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
-//builder.Services.AddScoped<IGameGenreRepository, GameGenreRepository>();
-//builder.Services.AddScoped<IGameReviewRepository, GameReviewRepository>();
-//builder.Services.AddScoped<ICommunityChatMessageRepository, CommunityChatMessageRepository>();
-//builder.Services.AddScoped<IJdmRepository, JdmRepository>();
-//builder.Services.AddScoped<IJdmManufacturerRepository, JdmManufacturerRepository>();
-//builder.Services.AddScoped<IJdmJournalCommentRepository, JdmJournalCommentRepository>();
-//builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-//builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.ResolveRepositories();
 builder.Services.ResolveByAttribute();
 
@@ -174,6 +146,8 @@ builder.Services.AddScoped<ITicketService, TicketService>();
 
 builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
+
+builder.Services.AddHostedService<NotificationBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -212,16 +186,13 @@ app.UseMiddleware<MyLocalizationMiddleware>();
 
 app.MapHub<AnimeHub>("/my-hub/anime");
 app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
-
 app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
 app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
-
 app.MapHub<JdmHub>("/my-hub/jdm");
 app.MapHub<SteamChatHub>("/steam/community-chat");
 app.MapHub<SteamNotificationHub>("/steam/notification");
-
-app.MapControllers();
 app.MapHub<LittleLemonHub>("/my-hub/little-lemon");
+app.MapHub<NotificationHub>("/my-hub/notification");
 
 app.MapControllerRoute(
     name: "default",
