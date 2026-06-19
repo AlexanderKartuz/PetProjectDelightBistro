@@ -41,6 +41,7 @@ builder.Services
         option.ExpireTimeSpan = TimeSpan.FromMinutes(13);
     });
 
+
 builder.Services.AddScoped<ILittleLemonMenuService, LittleLemonMenuService>();
 builder.Services.AddScoped<ILittleLemonTestimonialService, LittleLemonTestimonialService>();
 builder.Services.AddScoped<ILittleLemonSubscribeService, LittleLemonSubscribeService>();
@@ -66,6 +67,12 @@ builder.Services.AddHttpClient<AnimalWorldRandomAnimalApi>(x =>
 {
     x.BaseAddress = new Uri("https://api.some-random-api.com");
 });
+
+builder.Services.AddHttpClient<CatFactApi>(x =>
+x.BaseAddress = new Uri("https://catfact.ninja"));
+
+builder.Services.AddHttpClient<DogApi>(x =>
+x.BaseAddress = new Uri("https://dog.ceo"));
 
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
@@ -121,7 +128,7 @@ builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IFoodItemGenerator, FoodItemGenerator>();
 builder.Services.AddScoped<IMenuTypeGenerator, MenuTypeGenerator>();
 builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
-
+builder.Services.AddScoped<IDelightBistroMainIndexGenerator, DelightBistroMainIndexGenerator>();
 
 //HabitTracker DI
 builder.Services.AddScoped<IHabitService, HabitService>();
