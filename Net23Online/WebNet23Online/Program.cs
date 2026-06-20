@@ -148,6 +148,7 @@ builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddHostedService<DelightBistroOrderBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
 

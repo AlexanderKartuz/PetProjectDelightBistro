@@ -80,5 +80,11 @@ namespace WebNet23Online.Data.Repositories
             _dbSet.UpdateRange(models);
             _context.SaveChanges();
         }
+
+        public void DeleteRange(List<DataModel> models)
+        {
+            _dbSet.RemoveRange(models);
+            _context.SaveChanges();
+        }
     }
 }

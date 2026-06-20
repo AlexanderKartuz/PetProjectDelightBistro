@@ -1,0 +1,34 @@
+﻿using WebNet23Online.Data.Repositories.Interfaces;
+
+namespace WebNet23Online.Services.BackgroundServices
+{
+    public class DelightBistroOrderBackgroundService : BackgroundService
+    {
+        private const int DELAY_BETWEEN_ORDER_TIME_CHECK = 24 * 60 * 60; // one day
+        private IServiceProvider _serviceProvider;
+
+        public DelightBistroOrderBackgroundService(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            using var di = _serviceProvider.CreateScope();
+            var orderRepository = di.ServiceProvider.GetRequiredService<IOrderRepository>();
+
+            while (true)
+            {
+                var expiredOrders = orderRepository.GetExpiredOrderDatas();
+
+                if (expiredOrders.Any())
+                {
+                    orderRepository.DeleteRange(expiredOrders);
+                }
+
+                await Task.Delay(DELAY_BETWEEN_ORDER_TIME_CHECK * 1000);
+            }
+        }
+    }
+}
+
