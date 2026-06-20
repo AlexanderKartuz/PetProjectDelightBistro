@@ -14,11 +14,13 @@ namespace WebNet23Online.Services.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using var di = _serviceProvider.CreateScope();
-            var orderRepository = di.ServiceProvider.GetRequiredService<IOrderRepository>();
 
-            while (true)
+
+            while (!stoppingToken.IsCancellationRequested)
             {
+                using var di = _serviceProvider.CreateScope();
+                var orderRepository = di.ServiceProvider.GetRequiredService<IOrderRepository>();
+
                 var expiredOrders = orderRepository.GetExpiredOrderDatas();
 
                 if (expiredOrders.Any())
@@ -26,7 +28,7 @@ namespace WebNet23Online.Services.BackgroundServices
                     orderRepository.DeleteRange(expiredOrders);
                 }
 
-                await Task.Delay(DELAY_BETWEEN_ORDER_TIME_CHECK * 1000);
+                await Task.Delay(DELAY_BETWEEN_ORDER_TIME_CHECK * 1000, stoppingToken);
             }
         }
     }
