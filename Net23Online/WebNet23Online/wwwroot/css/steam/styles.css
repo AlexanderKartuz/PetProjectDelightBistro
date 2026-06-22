@@ -677,6 +677,50 @@ a {
         color: #8bc34a;
     }
 
+.game-rating-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: #1b2838;
+    border: 1px solid #2a475e;
+    border-radius: 8px;
+}
+
+.game-rating-score {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    color: #67c1f5;
+    font-weight: 700;
+    line-height: 1;
+}
+
+    .game-rating-score span {
+        font-size: 28px;
+    }
+
+    .game-rating-score small {
+        font-size: 14px;
+        color: #8f98a0;
+    }
+
+.game-rating-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+    .game-rating-details span {
+        font-size: 13px;
+        color: #c7d5e0;
+        background: #121a24;
+        border: 1px solid #2a475e;
+        border-radius: 6px;
+        padding: 5px 8px;
+    }
+
 .game-description {
     margin-bottom: 8px;
 }

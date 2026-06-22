@@ -2,20 +2,13 @@ using MazeCore;
 using MazeCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using WebNet23Online.Data;
-using WebNet23Online.Data.Repositories;
-using WebNet23Online.Data.Repositories.AnimalWorld;
-using WebNet23Online.Data.Repositories.Interfaces;
-using WebNet23Online.Data.Repositories.Interfaces.AnimalWorld;
-using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
-using WebNet23Online.Data.Repositories.Interfaces.HabitTracker;
-using WebNet23Online.Data.Repositories.Interfaces.Steam;
-using WebNet23Online.Data.Repositories.Steam;
 using WebNet23Online.Hubs;
 using WebNet23Online.MiddlewareServices;
 using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.BackgroundServices;
+using WebNet23Online.Services.BackgroundServices.steam;
 using WebNet23Online.Services.Apis.steam;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
@@ -154,6 +147,7 @@ builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddHostedService<RatingAnalyticsBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
 
