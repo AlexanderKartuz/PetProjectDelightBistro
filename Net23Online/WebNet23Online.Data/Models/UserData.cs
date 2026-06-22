@@ -49,6 +49,7 @@ namespace WebNet23Online.Data.Models
         public virtual List<TicketData> MyTickets { get; set; }
         public virtual List<CommentData> MyComments { get; set;    }
         public virtual List<NotificationData> Notifications { get; set; }
+        public virtual List<PromotionData> Promotions { get; set; }
         
     }
 }

@@ -22,6 +22,8 @@ using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
 using WebNet23Online.Services.Interfaces.Steam;
 using WebNet23Online.Services.LittleLemon;
+using Quartz;
+using WebNet23Online.Services.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -154,6 +156,16 @@ builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("CheckZooPromotions");
+    q.AddJob<AnimalWorldPromotionsCheckJob>(jobKey);
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithCronSchedule("0 0 9-21 ? * * *")
+    );
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 builder.Services.AddHttpContextAccessor();
 
