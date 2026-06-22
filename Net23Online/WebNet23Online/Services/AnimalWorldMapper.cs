@@ -40,5 +40,18 @@ namespace WebNet23Online.Services
             });
             return animalSpecies.ToList();
         }
+
+        public List<PromotionViewModel> FromPromotionDataToPromotionViewModel(List<PromotionData> promotionsData)
+        {
+            var promotions = promotionsData.Select(promotion => new PromotionViewModel
+            {
+                PromotionName = promotion.PromotionName,
+                Description = promotion.Description,
+                Place = promotion.Venue.ZooName,
+                EndDate = promotion.EndDate,
+                ZooId = promotion.ZooId,
+            });
+            return promotions.ToList();
+        }
     }
 }

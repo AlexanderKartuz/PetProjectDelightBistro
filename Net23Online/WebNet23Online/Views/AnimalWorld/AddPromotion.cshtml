@@ -1,0 +1,47 @@
+﻿@using WebNet23Online.Localizations
+@model WebNet23Online.Models.AnimalWorld.PromotionViewModel
+@{
+    Layout = "_LayoutAnimalWorld";
+}
+
+<title>Добвление акций</title>
+
+<div class="main-place">
+    <div class="green-title">
+        <h2>Добавить акцию</h2>
+    </div>
+    <hr class="green-line">
+    <form method="post">
+        <div class="form-group">
+            <div class="green-title">
+                <h6>Название акции</h6>
+            </div>
+            @Html.TextBoxFor(promotion => promotion.PromotionName, new { @class = "form-input", type = "text", placeholder = "Семейная скидка" })
+            @Html.ValidationMessageFor(promotion => promotion.PromotionName)
+        </div>
+        <div class="form-group">
+            <div class="green-title">
+                <h6>Описание</h6>
+            </div>
+            @Html.TextBoxFor(promotion => promotion.Description, new { @class = "form-input", type = "text", placeholder = "Описание акции" })
+            @Html.ValidationMessageFor(promotion => promotion.Description)
+        </div>
+        <div class="form-group">
+            <div class="green-title">
+                <h6>Место проведения</h6>
+            </div>
+            @Html.DropDownListFor(promotion => promotion.ZooId, Model.Zoos, "Выберите место проведения", new { @class = "form-input" })
+            @Html.ValidationMessageFor(promotion => promotion.ZooId)
+        </div>
+        <div class="form-group">
+            <div class="green-title">
+                <h6>Дата окончания</h6>
+            </div>
+            @Html.TextBoxFor(promotion => promotion.EndDate, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-input" })
+            @Html.ValidationMessageFor(promotion => promotion.EndDate)
+        </div>
+        <div class="button-group">
+            <button class="find-animal-button" type="submit">@AnimalWorld.Add</button>
+        </div>
+    </form>
+</div>
