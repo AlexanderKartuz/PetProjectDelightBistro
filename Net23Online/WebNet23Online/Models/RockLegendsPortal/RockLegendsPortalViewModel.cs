@@ -1,4 +1,6 @@
-﻿namespace WebNet23Online.Models.RockLegendsPortal
+﻿using WebNet23Online.Models.DTOs;
+
+namespace WebNet23Online.Models.RockLegendsPortal
 {
     public class RockLegendsPortalViewModel
     {
@@ -6,6 +8,7 @@
         public string BandName { get; set; }
         public string Biography { get; set; }
         public int PickTime { get; set; }
+        public RockTrackDto RockHit { get; set; }
 
     }
 }
