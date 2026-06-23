@@ -156,14 +156,13 @@ builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
-//builder.Services.AddHostedService<AnimalWorldPromotionsBackgroundService>();
 builder.Services.AddQuartz(q =>
 {
     var jobKey = new JobKey("ZooPromotions");
     q.AddJob<AnimalWorldPromotionsCheckJob>(opts => opts.WithIdentity(jobKey));
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
-        .WithCronSchedule("0 0/1 * * * ?"));
+        .WithCronSchedule("0 0 9-20 ? * *"));
 });
 
 builder.Services.AddQuartzHostedService(options =>

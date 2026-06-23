@@ -3,10 +3,8 @@
     const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
 
     hub.on('ZoosPromotions', function (text) {
-        console.log("Сработал метод!", text);
         const notification = $('<div>').addClass('zoo-notification');
         const title = $('<div>').addClass('zoo-notification-title').text('Акция!');
-
         const bodyText = text;
         const body = $('<div>').addClass('zoo-notification-body').text(bodyText);
 

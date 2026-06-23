@@ -34,7 +34,6 @@ namespace WebNet23Online.Services.Jobs
                         var zoo = zooRepository.Get(promotion.ZooId);
                         var message = $"В зоопарке {zoo.ZooName} проходит акция \"{promotion.PromotionName}\".\n\n{promotion.Description}\n\nАкция заканчивается {promotion.EndDate:yyyy-MM-dd}.";
                         await hub.Clients.All.ZoosPromotions(message);
-                        Console.WriteLine($"[AnimalWorldPromotionsBackgroundService] Отправлено: {message}");
                     }
                 }
 
