@@ -23,7 +23,7 @@
             <div class="green-title">
                 <h6>Описание</h6>
             </div>
-            @Html.TextBoxFor(promotion => promotion.Description, new { @class = "form-input", type = "text", placeholder = "Описание акции" })
+            @Html.TextAreaFor(promotion => promotion.Description, new { @class = "form-input", type = "text", placeholder = "Описание акции" })
             @Html.ValidationMessageFor(promotion => promotion.Description)
         </div>
         <div class="form-group">
