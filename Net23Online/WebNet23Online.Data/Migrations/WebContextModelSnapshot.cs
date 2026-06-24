@@ -182,6 +182,40 @@ namespace WebNet23Online.Data.Migrations
                     b.ToTable("AnimalSpecies");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.AnimalWorld.PromotionData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PromotionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ZooId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("ZooId");
+
+                    b.ToTable("Promotions");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.AnimalWorld.ZooData", b =>
                 {
                     b.Property<int>("Id")
@@ -1312,6 +1346,25 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.AnimalWorld.PromotionData", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "Creator")
+                        .WithMany("Promotions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WebNet23Online.Data.Models.AnimalWorld.ZooData", "Venue")
+                        .WithMany("Promotions")
+                        .HasForeignKey("ZooId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("Venue");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.AnimalWorld.ZooData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "Creator")
@@ -1664,6 +1717,8 @@ namespace WebNet23Online.Data.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Promotions");
+
                     b.Navigation("Tickets");
                 });
 
@@ -1775,6 +1830,8 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Promotions");
 
                     b.Navigation("Reviews");
 

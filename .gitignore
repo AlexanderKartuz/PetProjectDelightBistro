@@ -426,3 +426,7 @@ FodyWeavers.xsd
 
 # Ignore steam user avatars
 **/wwwroot/images/steam/avatars/
+
+# User Secrets
+secrets.json
+*_USER_SECRETS

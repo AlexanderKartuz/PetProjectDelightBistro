@@ -10,5 +10,7 @@ namespace WebNet23Online.Services.Interfaces
         List<AnimalFamilyViewModel> FromAnimalFamilyDataToAnimalFamilyViewModel(List<AnimalFamilyData> animalFamiliesData);
 
         List<AnimalSpeciesViewModel> FromAnimalSpeciesDataToAnimalSpeciesViewModel(List<AnimalSpeciesData> animalSpeciesData);
+
+        List<PromotionViewModel> FromPromotionDataToPromotionViewModel(List<PromotionData> promotionsData);
     }
 }

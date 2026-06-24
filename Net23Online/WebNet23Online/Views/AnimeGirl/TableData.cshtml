@@ -1,0 +1,30 @@
+﻿@using WebNet23Online.Models.AnimeGirl
+@model List<AnimeGirlImageInfoViewModel>
+@{
+    Layout = "_LayoutAnime";
+}<div>
+    <select name="filter">
+        <option value="">No Filter</option>
+        <option value="more">&gt;</option>
+        <option value="less">&lt;</option>
+        <option value="eq">==</option>
+    </select>
+    <input name="valueForFilter" placeholder="filter value" />
+</div>
+<div class="anime-grils">
+    <div class="girl-row header">
+        <div class="girl-cell"><a data-sort-by="Id" href="#">Id</a></div>
+        <div class="girl-cell"><a data-sort-by="Name" href="#">Title</a></div>
+        <div class="girl-cell"><a data-sort-by="" href="#">ConnectedAnimeTitles</a></div>
+        <div class="girl-cell"><a data-sort-by="Url" href="#">Url</a></div>
+    </div>
+    @foreach (var item in Model)
+    {
+        <div class="girl-row">
+            <div class="girl-cell">@item.Id</div>
+            <div class="girl-cell">@item.Title</div>
+            <div class="girl-cell">@item.ConnectedAnimeTitles</div>
+            <div class="girl-cell">@item.Url</div>
+        </div>
+    }
+</div>

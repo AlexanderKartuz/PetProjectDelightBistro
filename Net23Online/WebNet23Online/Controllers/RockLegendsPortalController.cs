@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NAudio.Wave;
 using System.IO;
 using Microsoft.AspNetCore.SignalR;
 using WebNet23Online.Controllers.CustomAuthAttribute;
@@ -11,6 +12,8 @@ using WebNet23Online.Hubs;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Models.RockLegendsPortal;
+using WebNet23Online.Models.DTOs;
+using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers
@@ -23,6 +26,7 @@ namespace WebNet23Online.Controllers
         private readonly IAuthService _authService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private IHubContext<RockLegendsHub, IRockLegendsHub> _rockLegendsHub;
+        private RockApi _rockApi;
 
         public RockLegendsPortalController(
             IRockLegendsPick rockService,
@@ -30,7 +34,8 @@ namespace WebNet23Online.Controllers
             IRockLegendsGenresRepository genreRepository,
             IAuthService authService,
             IWebHostEnvironment webHostEnvironment,
-            IHubContext<RockLegendsHub, IRockLegendsHub> rockLegendsHub)
+            IHubContext<RockLegendsHub, IRockLegendsHub> rockLegendsHub,
+            RockApi rockApi)
         {
             _rockService = rockService;
             _rockLegendsRepository = rockLegendsRepository;
@@ -38,6 +43,7 @@ namespace WebNet23Online.Controllers
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
             _rockLegendsHub = rockLegendsHub;
+            _rockApi = rockApi;
         }
 
         [HttpGet]
@@ -150,7 +156,27 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index() => View();
+        public async Task<IActionResult> Index()
+        {
+            RockTrackDto rockHit = null;
+            try
+            {
+                rockHit = await _rockApi.GetRandomRockHit();
+            }
+            catch (Exception ex)
+            {
+
+                System.Diagnostics.Debug.WriteLine($"Ошибка получения рок-хита: {ex.Message}");
+            }
+
+            var viewModel = new RockLegendsPortalViewModel
+            {
+                RockHit = rockHit
+
+            };
+
+            return View(viewModel);
+        }
 
         public IActionResult Quotes()
         {

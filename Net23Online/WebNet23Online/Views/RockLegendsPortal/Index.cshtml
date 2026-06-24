@@ -172,6 +172,36 @@
                     <p class="auth-warning-msg">🎸 Чтобы проголосовать, пожалуйста, авторизуйтесь на сайте.</p>
                 }
             </div>
+            @if (Model?.RockHit != null)
+            {
+                <div class="rock-hit-card">
+                    <h4 class="rock-hit-title">🎸 Рок-Хит Минуты</h4>
+
+                    <div class="rock-hit-body">
+                        <img src="@Model.RockHit.ArtworkUrl100" alt="Обложка" class="rock-hit-cover" />
+                        <div class="rock-hit-info">
+                            <div class="rock-hit-track" title="@Model.RockHit.TrackName">@Model.RockHit.TrackName</div>
+                            <div class="rock-hit-artist" title="@Model.RockHit.ArtistName">@Model.RockHit.ArtistName</div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.RockHit.PreviewUrl))
+                    {
+                        <div class="rock-hit-player-box">
+                            <audio controls class="rock-hit-audio">
+                                <source src="@Model.RockHit.PreviewUrl" type="audio/mpeg" />
+                                Плеер не поддерживается.
+                            </audio>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="rock-hit-error">
+                    Не удалось загрузить рок-музыку.
+                </div>
+            }
         </div>
     </div>
 </div>

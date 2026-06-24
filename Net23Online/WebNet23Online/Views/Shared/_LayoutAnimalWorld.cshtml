@@ -32,6 +32,7 @@
                     <a class="header-link add-data" href="/AnimalWorld/Add">@AnimalWorld.AddData</a>
                 }
                 <a class="header-link animal-facts" href="/AnimalWorld/InterestingFacts">@AnimalWorld.Interesting</a>
+                <a class="header-link promotions" href="/AnimalWorld/Promotions">Акции</a>
             </div>
             <div class="header-zone-right">
                 @if (authService.IsAuthenticated())
@@ -59,6 +60,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/animal-world/new-animal-species-appeared.js"></script>
+    <script src="~/js/animal-world/promotions.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -5,7 +5,7 @@ using WebNet23Online.Localizations;
 using WebNet23Online.Models.LittleLemon;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
-
+using WebNet23Online.Services.Apis;
 namespace WebNet23Online.Controllers
 {
     public class LittleLemonController : Controller
@@ -16,12 +16,14 @@ namespace WebNet23Online.Controllers
         private ILittleLemonReservationService _littleLemonReservationService;
         private IWebHostEnvironment _webHostEnvironment;
         private IAuthService _authService;
+        private FakeRestaurantApi _fakeRestaurantApi;
         public LittleLemonController(ILittleLemonMenuService littleLemonMenuService,
                                      ILittleLemonTestimonialService littleLemonTestimonialService,
                                      ILittleLemonSubscribeService littleLemonSubscribeService,
                                      ILittleLemonReservationService littleLemonReservationService,
                                      IWebHostEnvironment webHostEnvironment,
-                                     IAuthService authService)
+                                     IAuthService authService,
+                                     FakeRestaurantApi fakeRestaurantApi)
         {
             _littleLemonMenuService = littleLemonMenuService;
             _littleLemonTestimonialService = littleLemonTestimonialService;
@@ -29,13 +31,15 @@ namespace WebNet23Online.Controllers
             _littleLemonReservationService = littleLemonReservationService;
             _webHostEnvironment = webHostEnvironment;
             _authService = authService;
+            _fakeRestaurantApi = fakeRestaurantApi;
         }
 
-        public IActionResult Index(string category)
+        public async Task<IActionResult> Index(string category)
         {
             var menuItems = _littleLemonMenuService.GetMenuItems(category);
 
             var testimonials = _littleLemonTestimonialService.GetTestimonials();
+
             var hero = new LittleLemonHeroSectionViewModel
             {
                 CallToActionHref = Url.Action("Reservation", "LittleLemon") ?? "/LittleLemon/Reservation",
@@ -44,11 +48,13 @@ namespace WebNet23Online.Controllers
                 HeroImageAlt = "Signature Mediterranean platter at Little Lemon"
             };
 
+            var fakeMenuItems = await _fakeRestaurantApi.GetFakeMenuItems();
             var pageModel = new LittleLemonIndexPageViewModel
             {
                 Hero = hero,
                 MenuItems = menuItems,
-                Testimonials = testimonials
+                Testimonials = testimonials,
+                FakeMenuItems = fakeMenuItems,
             };
             return View(pageModel);
         }
