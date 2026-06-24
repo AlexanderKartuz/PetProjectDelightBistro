@@ -1,0 +1,31 @@
+﻿@using WebNet23Online.Models.AnimalWorld
+@model List<PromotionViewModel>
+@{
+    Layout = "_LayoutAnimalWorld";
+}
+
+<title>Акции</title>
+
+<div class="main-place">
+    <div class="green-title">
+        <h2>Список акций</h2>
+    </div>
+    <hr class="green-line">
+
+    @if (Model.Any())
+    {
+        @foreach (var promotion in Model)
+        {
+            <div class="animal entity-card">
+                <h3>@promotion.PromotionName</h3>
+                <p>@promotion.Description</p>
+                <p><strong>Место проведения: </strong>@promotion.Place</p>
+                <p><strong>Акция действительна до: </strong>@promotion.EndDate</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="empty-list-note">В настоящий момент акции не проводятся.</p>
+    }
+</div>

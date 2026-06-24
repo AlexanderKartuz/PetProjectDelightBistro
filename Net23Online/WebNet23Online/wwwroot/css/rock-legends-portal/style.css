@@ -612,3 +612,80 @@ select#rock-poll {
     overflow-wrap: break-word !important;
     white-space: normal !important;
 }
+
+.rock-hit-card {
+    margin-top: 25px;
+    padding: 15px;
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #fff;
+    text-align: left;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.rock-hit-title {
+    margin: 0 0 12px 0;
+    color: #e61919;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.rock-hit-body {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.rock-hit-cover {
+    width: 70px;
+    height: 70px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid #444;
+    flex-shrink: 0;
+}
+
+.rock-hit-info {
+    overflow: hidden;
+}
+
+.rock-hit-track {
+    font-weight: bold;
+    font-size: 16px;
+    color: #fff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.rock-hit-artist {
+    color: #ffcc00;
+    font-size: 14px;
+    margin-top: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.rock-hit-player-box {
+    margin-top: 12px;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+}
+
+.rock-hit-audio {
+    width: 100%;
+    height: 28px;
+    filter: invert(0.9) hue-rotate(180deg);
+}
+
+.rock-hit-error {
+    color: #e61919;
+    font-style: italic;
+    font-size: 14px;
+    margin-top: 15px;
+    text-align: center;
+}
