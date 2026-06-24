@@ -7,5 +7,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         bool IsNameFree(string name);
         void Link(int animeId, int heroId);
         List<AnimeGirlData> GetAllIncludeAnime();
+        List<AnimeGirlData> GetAllIncludeAnime(string? sortBy);
     }
 }

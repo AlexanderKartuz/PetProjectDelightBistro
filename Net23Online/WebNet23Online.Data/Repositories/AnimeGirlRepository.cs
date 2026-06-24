@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Linq.Expressions;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 
@@ -13,6 +15,32 @@ namespace WebNet23Online.Data.Repositories
             return _dbSet
                 .Include(g => g.Animes)
                 .ToList();
+        }
+
+        public List<AnimeGirlData> GetAllIncludeAnime(string? sortBy)
+        {
+            var dataSource = _dbSet
+                .Include(g => g.Animes)
+                .AsQueryable();
+
+            if (sortBy == "Id")
+            {
+                dataSource = dataSource.OrderBy(x => x.Id);
+            }
+            else if (sortBy == "Title")
+            {
+                dataSource = dataSource.OrderBy(x => x.Name);
+            }
+            else if (sortBy == "ConnectedAnimeTitles")
+            {
+                dataSource = dataSource.OrderBy(x => x.Animes.Count);
+            }
+            else if (sortBy == "Url")
+            {
+                dataSource = dataSource.OrderBy(x => x.Url);
+            }
+
+            return dataSource.ToList();
         }
 
         public override void Add(AnimeGirlData model)

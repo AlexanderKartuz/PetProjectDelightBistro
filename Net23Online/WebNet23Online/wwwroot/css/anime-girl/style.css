@@ -20,3 +20,18 @@
         max-height: 300px;
         width: auto;
     }
+
+.anime-grils .girl-row {
+    display: flex;
+}
+
+    .anime-grils .girl-row .girl-cell {
+        flex: 1;
+        overflow: hidden;
+        height: 30px;
+    }
+
+    .anime-grils .girl-row.header .girl-cell {
+        font-weight: 700;
+        font-size: 20px;
+    }
