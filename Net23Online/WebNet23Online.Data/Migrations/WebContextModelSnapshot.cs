@@ -681,6 +681,34 @@ namespace WebNet23Online.Data.Migrations
                     b.ToTable("Menus");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.NotificationData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeToPublish")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.OrderData", b =>
                 {
                     b.Property<int>("Id")
@@ -1444,6 +1472,17 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("WebNet23Online.Data.Models.NotificationData", b =>
+                {
+                    b.HasOne("WebNet23Online.Data.Models.UserData", "Author")
+                        .WithMany("Notifications")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("WebNet23Online.Data.Models.OrderData", b =>
                 {
                     b.HasOne("WebNet23Online.Data.Models.UserData", "User")
@@ -1732,6 +1771,8 @@ namespace WebNet23Online.Data.Migrations
                     b.Navigation("MyComments");
 
                     b.Navigation("MyTickets");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("Orders");
 

@@ -74,5 +74,11 @@ namespace WebNet23Online.Data.Repositories
             var foodItems = _dbSet.Where(x => ids.Contains(x.Id)).ToList();
             return foodItems;
         }
+
+        public void Update(List<DataModel> models)
+        {
+            _dbSet.UpdateRange(models);
+            _context.SaveChanges();
+        }
     }
 }

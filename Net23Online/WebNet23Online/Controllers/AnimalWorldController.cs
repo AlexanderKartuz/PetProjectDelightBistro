@@ -19,9 +19,10 @@ namespace WebNet23Online.Controllers
             _animalWorldHub = animalWorldHub;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_animalWorldService.GetStartInfo());
+            var startInfo = await _animalWorldService.GetStartInfo();
+            return View(startInfo);
         }
 
         [Authorize]
