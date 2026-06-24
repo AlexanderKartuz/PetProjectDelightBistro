@@ -159,7 +159,9 @@ namespace WebNet23Online.Controllers
         [IsModerator]
         public IActionResult AddPromotion()
         {
-            return View(_animalWorldService.GetPromotionsPageInfo());
+            var viewModel = _animalWorldService.GetPromotionsPageInfo();
+            viewModel.EndDate = DateTime.Now;
+            return View(viewModel);
         }
 
         [HttpPost]

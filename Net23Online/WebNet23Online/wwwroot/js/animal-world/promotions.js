@@ -1,12 +1,11 @@
 ﻿$(document).ready(function () {
-    const url = `https://localhost:7284/my-hub/animal-world`;
+    const url = `https://localhost:7284/my-hub/animal-world-promotions`;
     const hub = new signalR.HubConnectionBuilder().withUrl(url).build();
 
-    hub.on('NewAnimalInZooAppeared', function (zooName, animalSpeciesName) {
+    hub.on('ZoosPromotions', function (text) {
         const notification = $('<div>').addClass('zoo-notification');
-        const title = $('<div>').addClass('zoo-notification-title').text('Пополнение в зоопарке!');
-
-        const bodyText = `В зоопарке "${zooName}" появился новый вид животного — ${animalSpeciesName}!`;
+        const title = $('<div>').addClass('zoo-notification-title').text('Акция!');
+        const bodyText = text;
         const body = $('<div>').addClass('zoo-notification-body').text(bodyText);
 
         notification.append(title).append(body);

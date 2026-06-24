@@ -14,13 +14,13 @@ namespace WebNet23Online.Services.Jobs
             _scopeFactory = scopeFactory;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                var promotionsRepository = scope.ServiceProvider.GetService<IPromotionRepository>();
-                var zooRepository = scope.ServiceProvider.GetService<IZooRepository>();
-                var hub = scope.ServiceProvider.GetService<IHubContext<AnimalWorldHub, IAnimalWorldHub>>();
+                var promotionsRepository = scope.ServiceProvider.GetRequiredService<IPromotionRepository>();
+                var zooRepository = scope.ServiceProvider.GetRequiredService<IZooRepository>();
+                var hub = scope.ServiceProvider.GetRequiredService<IHubContext<AnimalWorldNotificationsHub, IAnimalWorldNotificationsHub>>();
                 var promotionsForDelete = new List<int>();
                 var promotions = promotionsRepository.GetAll();
                 foreach (var promotion in promotions)
@@ -33,7 +33,7 @@ namespace WebNet23Online.Services.Jobs
                     {
                         var zoo = zooRepository.Get(promotion.VenueId);
                         var message = $"В зоопарке {zoo.ZooName} проходит акция \"{promotion.PromotionName}\".\n\n{promotion.Description}\n\nАкция заканчивается {promotion.EndDate:yyyy-MM-dd}.";
-                        hub.Clients.All.ZoosPromotions(message);
+                        await hub.Clients.All.ZoosPromotions(message);
                     }
                 }
 
@@ -42,8 +42,6 @@ namespace WebNet23Online.Services.Jobs
                     promotionsRepository.Delete(promotionsForDelete);
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 }

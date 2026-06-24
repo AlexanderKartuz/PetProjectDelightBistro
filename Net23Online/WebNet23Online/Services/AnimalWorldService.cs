@@ -228,7 +228,7 @@ namespace WebNet23Online.Services
 
         public List<PromotionViewModel> GetAllPromotions()
         {
-            return _animalWorldMapper.FromPromotionDataToPromotionViewModel(_promotionRepository.GetAll());
+            return _animalWorldMapper.FromPromotionDataToPromotionViewModel(_promotionRepository.GetAllWithZoos());
         }
     }
 }
