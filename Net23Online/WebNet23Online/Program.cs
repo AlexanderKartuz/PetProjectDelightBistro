@@ -80,6 +80,10 @@ builder.Services.AddHttpClient<RawgApi>(client =>
     client.BaseAddress = new Uri("https://api.rawg.io/api/");
 });
 
+builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
+{
+    x.BaseAddress = new Uri("https://fakerestaurantapi.runasp.net");
+});
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
 //{
