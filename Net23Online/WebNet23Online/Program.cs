@@ -85,6 +85,10 @@ builder.Services.AddHttpClient<RockApi>(x =>
     x.BaseAddress = new Uri("https://itunes.apple.com");
 });
 
+builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
+{
+    x.BaseAddress = new Uri("https://fakerestaurantapi.runasp.net");
+});
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
 //{
