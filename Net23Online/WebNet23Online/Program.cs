@@ -80,6 +80,11 @@ builder.Services.AddHttpClient<RawgApi>(client =>
     client.BaseAddress = new Uri("https://api.rawg.io/api/");
 });
 
+builder.Services.AddHttpClient<RockApi>(x =>
+{
+    x.BaseAddress = new Uri("https://itunes.apple.com");
+});
+
 builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
 {
     x.BaseAddress = new Uri("https://fakerestaurantapi.runasp.net");
