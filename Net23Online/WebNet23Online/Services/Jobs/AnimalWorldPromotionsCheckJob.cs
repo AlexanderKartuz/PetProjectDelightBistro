@@ -31,7 +31,7 @@ namespace WebNet23Online.Services.Jobs
                     }
                     else
                     {
-                        var zoo = zooRepository.Get(promotion.ZooId);
+                        var zoo = zooRepository.Get(promotion.VenueId);
                         var message = $"В зоопарке {zoo.ZooName} проходит акция \"{promotion.PromotionName}\".\n\n{promotion.Description}\n\nАкция заканчивается {promotion.EndDate:yyyy-MM-dd}.";
                         hub.Clients.All.ZoosPromotions(message);
                     }

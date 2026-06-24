@@ -49,7 +49,7 @@ namespace WebNet23Online.Services
                 Description = promotion.Description,
                 Place = promotion.Venue.ZooName,
                 EndDate = promotion.EndDate,
-                ZooId = promotion.ZooId,
+                ZooId = promotion.VenueId,
             });
             return promotions.ToList();
         }
