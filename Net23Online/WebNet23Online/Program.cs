@@ -178,6 +178,7 @@ builder.Services.AddQuartzHostedService(options =>
 {
     options.WaitForJobsToComplete = true;
 });
+builder.Services.AddHostedService<DelightBistroOrderBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
 
