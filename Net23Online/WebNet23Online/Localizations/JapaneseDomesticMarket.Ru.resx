@@ -138,6 +138,15 @@
   <data name="CreateCars_Headers_Vehicle_Inspection_History" xml:space="preserve">
     <value>Прикрепите историю техосмотра</value>
   </data>
+  <data name="CreateCars_input_marka" xml:space="preserve">
+    <value>Введите марку</value>
+  </data>
+  <data name="CreateCars_input_model" xml:space="preserve">
+    <value>Введите модель</value>
+  </data>
+  <data name="CreateCars_input_price" xml:space="preserve">
+    <value>Введите стоимость</value>
+  </data>
   <data name="CreateCars_Manufacturer" xml:space="preserve">
     <value>Производитель</value>
   </data>
@@ -146,6 +155,12 @@
   </data>
   <data name="CreateCars_Send_Button" xml:space="preserve">
     <value>Отправить</value>
+  </data>
+  <data name="CteateCars_header_price" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="Journal_button_delete_post" xml:space="preserve">
+    <value>Удалить устаревшие посты</value>
   </data>
   <data name="Journal_Date_19_April" xml:space="preserve">
     <value>19 апреля 2026</value>

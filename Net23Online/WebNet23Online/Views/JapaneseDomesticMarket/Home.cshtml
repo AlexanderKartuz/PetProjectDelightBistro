@@ -1,4 +1,20 @@
-﻿@{
+﻿@using WebNet23Online.Localizations
+@{
     Layout = "_LayoutJapaneseDomesticMarket";
+    ViewData["Title"] = "Home";
 }
-<img src="~/images/japanese-domestic-market/header-photo.jpg" class="header-photo" />
+
+<section class="jdm-hero">
+    <img src="~/images/japanese-domestic-market/header-photo.jpg"
+         class="jdm-hero__image"
+         alt="JDM"
+         onerror="this.style.display='none'" />
+    <div class="jdm-hero__overlay"></div>
+    <div class="jdm-hero__content">
+        <h1 class="jdm-hero__title">JDM</h1>
+        <p class="jdm-hero__subtitle">Japanese Domestic Market</p>
+        <a class="jdm-hero__cta" href="/JapaneseDomesticMarket/Catalog">
+            @JapaneseDomesticMarket.Layout_Advertisements
+        </a>
+    </div>
+</section>

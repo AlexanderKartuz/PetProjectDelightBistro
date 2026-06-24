@@ -142,6 +142,33 @@ namespace WebNet23Online.Localizations {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter brand.
+        /// </summary>
+        public static string CreateCars_input_marka {
+            get {
+                return ResourceManager.GetString("CreateCars_input_marka", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter model.
+        /// </summary>
+        public static string CreateCars_input_model {
+            get {
+                return ResourceManager.GetString("CreateCars_input_model", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter price.
+        /// </summary>
+        public static string CreateCars_input_price {
+            get {
+                return ResourceManager.GetString("CreateCars_input_price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Manufacturer.
         /// </summary>
         public static string CreateCars_Manufacturer {
@@ -165,6 +192,24 @@ namespace WebNet23Online.Localizations {
         public static string CreateCars_Send_Button {
             get {
                 return ResourceManager.GetString("CreateCars_Send_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Price.
+        /// </summary>
+        public static string CteateCars_header_price {
+            get {
+                return ResourceManager.GetString("CteateCars_header_price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Delete old post&apos;s.
+        /// </summary>
+        public static string Journal_button_delete_post {
+            get {
+                return ResourceManager.GetString("Journal_button_delete_post", resourceCulture);
             }
         }
         

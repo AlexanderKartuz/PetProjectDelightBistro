@@ -7,57 +7,87 @@
 @section Scripts{
     <script src="~/js/japanese-domestic-market/journal.js"></script>
 }
+
+<div class="jdm-page-intro">
+    <h1>@JapaneseDomesticMarket.Layout_Journal</h1>
+    <p>ジャーナル — новости и обзоры</p>
+</div>
+
 <div class="container-content">
-    <article id="post-1" class="content-news">
-        <div class="title-form">@JapaneseDomesticMarket.Journal_Header</div>
-        <p>
-            @JapaneseDomesticMarket.Journal_Welcome_Line
-            <br>@JapaneseDomesticMarket.Journal_Text_Test_Models
-            <br> <i>@JapaneseDomesticMarket.Journal_Text_Test_Models_h2</i>
-            <div class="container-content">
-                <img src="~/images/japanese-domestic-market/dynamo-photo1.jpg" class="img-content" />
-                <img src="~/images/japanese-domestic-market/drift-photo1.jpg" class="img-content" />
-                <img src="~/images/japanese-domestic-market/dynamo-photo4.jpg" class="img-content" />
-            </div>
-        </p>
-        <div>
-            @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 1))
-        </div>
-    </article>
-
-    <article id="post-2" class="content-news">
-        <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_Raubichi</div>
-        <p class="date">@JapaneseDomesticMarket.Journal_Date_19_April</p>
-        <p>
-            @JapaneseDomesticMarket.Journal_Text_Raubichi_1
-            <br>@JapaneseDomesticMarket.Journal_Text_Raubichi_2
-        </p>
-        <p>
-            @JapaneseDomesticMarket.Journal_Text_Raubichi_3
-        </p>
-        <div class="container-content">
-            <img src="~/images/japanese-domestic-market/raubichi-1.JPG" class="img-content" />
-            <img src="~/images/japanese-domestic-market/raubichi-2.JPG" class="img-content" />
-        </div>
-        @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 2))
-    </article>
-
-
-    <article id="post-3" class="content-news">
-        <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_2</div>
-        <p class="date">@JapaneseDomesticMarket.Journal_Date_30_August</p>
-        <p>
-            @JapaneseDomesticMarket.Journal_Text_Lida_1
-        </p>
-    </article>
     <div class="container-content">
-        <img src="~/images/japanese-domestic-market/lida-1.jpg" class="img-content" />
-        <img src="~/images/japanese-domestic-market/lida-3.jpg" class="img-content" />
-        <img src="~/images/japanese-domestic-market/lida-2.jpg" class="img-content" />
+        <article class="content-news">
+            <div class="title-form">@JapaneseDomesticMarket.Journal_Header</div>
+            <p>
+                @JapaneseDomesticMarket.Journal_Welcome_Line
+                <br>@JapaneseDomesticMarket.Journal_Text_Test_Models
+                <br> <i>@JapaneseDomesticMarket.Journal_Text_Test_Models_h2</i>
+                <div class="container-content">
+                    <img src="~/images/japanese-domestic-market/dynamo-photo1.jpg" class="img-content" />
+                    <img src="~/images/japanese-domestic-market/dynamo-photo4.jpg" class="img-content" />
+                </div>
+            </p>
+            
+        </article>
+        <article class="content-news">
+            <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_Raubichi
+            <p class="date">@JapaneseDomesticMarket.Journal_Date_19_April</p>
+            <p>
+                @JapaneseDomesticMarket.Journal_Text_Raubichi_1
+                <br>@JapaneseDomesticMarket.Journal_Text_Raubichi_2
+            </p>
+            <p>
+                @JapaneseDomesticMarket.Journal_Text_Raubichi_3
+            </p>
+            <div class="container-content">
+                <img src="~/images/japanese-domestic-market/raubichi-1.JPG" class="img-content" />
+                <img src="~/images/japanese-domestic-market/raubichi-2.JPG" class="img-content" />
+            </div>
+            @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 2))
+            </div>
+        </article>
+
+
+        <article class="content-news">
+            <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_2</div>
+            <p class="date">@JapaneseDomesticMarket.Journal_Date_30_August</p>
+            <p>
+                @JapaneseDomesticMarket.Journal_Text_Lida_1
+            </p>
+        <div class="container-content">
+            <img src="~/images/japanese-domestic-market/lida-1.jpg" class="img-content" />
+            <img src="~/images/japanese-domestic-market/lida-3.jpg" class="img-content" />
+        </div>
+        @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 3))
+        </article>
     </div>
-    @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 3))
+
+        <div class="pop-up">
+            <span>&times;</span>
+            <img src="" alt="" />
+        </div>
+    </div>
+
+<div class="container-content">
+        @foreach (var post in Model.Posts)
+        {
+            <article id="post-@post.PostId" class="content-news">
+                <div class="title-form">@post.Title</div>
+                @if (post.PublishedDate.HasValue)
+                {
+                    <p class="date">@post.PublishedDate.Value.ToString("d MMMM yyyy")</p>
+                }
+                <img src="@post.UrlPicture" />
+                @await Html.PartialAsync("_JournalJdmCommentPartial", post)
+            </article>
+        }
+    </div>
+
+<form asp-action="DeleteOldPosts" method="post">
+    <button type="submit" class="delete-comments">@JapaneseDomesticMarket.Journal_button_delete_post</button>
+</form>
+
+
     <div class="pop-up">
         <span>&times;</span>
         <img src="" alt="" />
     </div>
-</div>
