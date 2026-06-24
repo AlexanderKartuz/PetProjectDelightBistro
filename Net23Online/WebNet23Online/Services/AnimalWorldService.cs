@@ -14,6 +14,7 @@ namespace WebNet23Online.Services
         private IZooRepository _zooRepository;
         private IAnimalFamilyRepository _animalFamilyRepository;
         private IAnimalSpeciesRepository _animalSpeciesRepository;
+        private IPromotionRepository _promotionRepository;
         private IAnimalWorldMapper _animalWorldMapper;
         private IAuthService _authService;
         private IWebHostEnvironment _webHostEnvironment;
@@ -21,7 +22,7 @@ namespace WebNet23Online.Services
         private const int RANDOM_ANIMAL_IMAGE_COUNT = 9;
         private Random _random;
 
-        public AnimalWorldService(IZooRepository zooRepository, IAnimalFamilyRepository animalFamilyRepository, IAnimalSpeciesRepository animalSpeciesRepository, IAnimalWorldMapper animalWorldMapper, IAuthService authService, IWebHostEnvironment webHostEnvironment, AnimalWorldRandomAnimalApi randomAnimalApi)
+        public AnimalWorldService(IZooRepository zooRepository, IAnimalFamilyRepository animalFamilyRepository, IAnimalSpeciesRepository animalSpeciesRepository, IAnimalWorldMapper animalWorldMapper, IAuthService authService, IWebHostEnvironment webHostEnvironment, AnimalWorldRandomAnimalApi randomAnimalApi, IPromotionRepository promotionRepository)
         {
             _zooRepository = zooRepository;
             _animalFamilyRepository = animalFamilyRepository;
@@ -31,6 +32,7 @@ namespace WebNet23Online.Services
             _webHostEnvironment = webHostEnvironment;
             _randomAnimalApi = randomAnimalApi;
             _random = new Random();
+            _promotionRepository = promotionRepository;
         }
 
         public async Task<StartPageAnimalWorldInfoViewModel> GetStartInfo()
@@ -76,6 +78,22 @@ namespace WebNet23Online.Services
                 AnimalFamilyNames = animalFamilyListItems
             };
 
+            return viewModel;
+        }
+
+        public PromotionViewModel GetPromotionsPageInfo()
+        {
+            var zoos = _zooRepository.GetAll();
+            var zooListItems = new List<SelectListItem>();
+            zooListItems.AddRange(zoos.Select(zoo => new SelectListItem
+            {
+                Text = zoo.ZooName,
+                Value = zoo.Id.ToString()
+            }));
+            var viewModel = new PromotionViewModel
+            {
+                Zoos = zooListItems
+            };
             return viewModel;
         }
 
@@ -166,6 +184,21 @@ namespace WebNet23Online.Services
             return true;
         }
 
+        public bool AddPromotion(PromotionViewModel viewModel)
+        {
+            var user = _authService.GetUser();
+            var promotionData = new PromotionData
+            {
+                PromotionName = viewModel.PromotionName,
+                Description = viewModel.Description,
+                EndDate = viewModel.EndDate,
+                CreatorId = user.Id,
+                VenueId = viewModel.ZooId,
+            };
+            _promotionRepository.Add(promotionData);
+            return true;
+        }
+
         public bool BindZooWithAnimalSpecies(int zooId, int animalSpeciesId)
         {
             _zooRepository.AddAnimalSpecies(zooId, animalSpeciesId);
@@ -191,6 +224,11 @@ namespace WebNet23Online.Services
         public string GetAnimalSpeciesName(int animalSpeciesId)
         {
             return _animalSpeciesRepository.Get(animalSpeciesId).AnimalSpeciesName;
+        }
+
+        public List<PromotionViewModel> GetAllPromotions()
+        {
+            return _animalWorldMapper.FromPromotionDataToPromotionViewModel(_promotionRepository.GetAllWithZoos());
         }
     }
 }
