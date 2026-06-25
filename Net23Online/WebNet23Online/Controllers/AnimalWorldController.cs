@@ -19,10 +19,9 @@ namespace WebNet23Online.Controllers
             _animalWorldHub = animalWorldHub;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var startInfo = await _animalWorldService.GetStartInfo();
-            return View(startInfo);
+            return View(_animalWorldService.GetStartInfo());
         }
 
         [Authorize]
@@ -181,6 +180,12 @@ namespace WebNet23Online.Controllers
             }
 
             return View();
+        }
+
+        public async Task<IActionResult> Gallery()
+        {
+            var animals = await _animalWorldService.GetRandomAnimalsAsync();
+            return View(animals);
         }
 
         public IActionResult InterestingFacts()

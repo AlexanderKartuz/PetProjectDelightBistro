@@ -35,18 +35,26 @@ namespace WebNet23Online.Services
             _promotionRepository = promotionRepository;
         }
 
-        public async Task<StartPageAnimalWorldInfoViewModel> GetStartInfo()
+        public StartPageAnimalWorldInfoViewModel GetStartInfo()
         {
             var animalFamilies = _animalWorldMapper.FromAnimalFamilyDataToAnimalFamilyViewModel(_animalFamilyRepository.GetRandomElements());
             var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesViewModel(_animalSpeciesRepository.GetRandomElements());
-            var animalImages = await GetRandomAnimalImages();
             var startPageInfo = new StartPageAnimalWorldInfoViewModel
             {
                 AnimalFamilies = animalFamilies,
                 AnimalSpecies = animalSpecies,
-                RandomAnimals = animalImages,
             };
             return startPageInfo;
+        }
+
+        public async Task<GalleryViewModel> GetRandomAnimalsAsync()
+        {
+            var animalImages = await GetRandomAnimalImages();
+            var gallery = new GalleryViewModel
+            {
+                RandomAnimals = animalImages,
+            };
+            return gallery;
         }
 
         private async Task<List<AnimalWorldRandomAnimalDto>> GetRandomAnimalImages()

@@ -22,17 +22,36 @@
             <div class="header-zone-left"></div>
             <div class="header-zone-center">
                 <a class="header-link main-page" href="/">@AnimalWorld.OnIndex</a>
-                <a class="header-link animal-world-page" href="/AnimalWorld/Index">@AnimalWorld.AnimalWorldTitle</a>
+
+                <div class="dropdown header-link-dropdown">
+                    <a class="header-link dropdown-toggle" href="#" role="button" id="animalDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        @AnimalWorld.AnimalWorldTitle
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="animalDropdown">
+                        <li>
+                            <a class="dropdown-item" href="/AnimalWorld/Index">@AnimalWorld.AnimalWorldTitle</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/AnimalWorld/AnimalSpeciesInfo">Виды животных</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/AnimalWorld/Gallery">Галерея животных</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/AnimalWorld/InterestingFacts">@AnimalWorld.Interesting</a>
+                        </li>
+                    </ul>
+                </div>
+
                 @if (authService.IsAuthenticated())
                 {
                     <a class="header-link zoo-book" href="/AnimalWorld/Zoos">@AnimalWorld.Reservation</a>
                 }
+                <a class="header-link promotions" href="/AnimalWorld/Promotions">Акции</a>
                 @if (authService.AtLeastModerator())
                 {
                     <a class="header-link add-data" href="/AnimalWorld/Add">@AnimalWorld.AddData</a>
                 }
-                <a class="header-link animal-facts" href="/AnimalWorld/InterestingFacts">@AnimalWorld.Interesting</a>
-                <a class="header-link promotions" href="/AnimalWorld/Promotions">Акции</a>
             </div>
             <div class="header-zone-right">
                 @if (authService.IsAuthenticated())
