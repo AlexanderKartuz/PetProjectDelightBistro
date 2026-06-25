@@ -41,6 +41,17 @@ namespace WebNet23Online.Services
             return animalSpecies.ToList();
         }
 
+        public List<AnimalSpeciesInfoViewModel> FromAnimalSpeciesDataToAnimalSpeciesInfoViewModel(List<AnimalSpeciesData> animalSpeciesData)
+        {
+            var animalSpecies = animalSpeciesData.Select(animalSpecies => new AnimalSpeciesInfoViewModel
+            {
+                AnimalSpeciesName = animalSpecies.AnimalSpeciesName,
+                AnimalFamilyName = animalSpecies.AnimalFamily.AnimalFamilyName,
+                NativeRange = animalSpecies.NativeRange
+            });
+            return animalSpecies.ToList();
+        }
+
         public List<PromotionViewModel> FromPromotionDataToPromotionViewModel(List<PromotionData> promotionsData)
         {
             var promotions = promotionsData.Select(promotion => new PromotionViewModel

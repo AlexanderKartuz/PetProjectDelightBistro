@@ -28,5 +28,10 @@ namespace WebNet23Online.Data.Repositories.AnimalWorld
                          FROM AnimalSpecies";
             return _context.Database.SqlQueryRaw<string>(sql).ToList();
         }
+
+        public List<AnimalSpeciesData> GetAllWithFamilies()
+        {
+            return _dbSet.Include(s => s.AnimalFamily).ToList();
+        }
     }
 }

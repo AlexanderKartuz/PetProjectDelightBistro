@@ -238,5 +238,11 @@ namespace WebNet23Online.Services
         {
             return _animalWorldMapper.FromPromotionDataToPromotionViewModel(_promotionRepository.GetAllWithZoos());
         }
+
+        public List<AnimalSpeciesInfoViewModel> AnimalSpeciesInfo()
+        {
+            var animalSpecies = _animalWorldMapper.FromAnimalSpeciesDataToAnimalSpeciesInfoViewModel(_animalSpeciesRepository.GetAllWithFamilies());
+            return animalSpecies; 
+        }
     }
 }

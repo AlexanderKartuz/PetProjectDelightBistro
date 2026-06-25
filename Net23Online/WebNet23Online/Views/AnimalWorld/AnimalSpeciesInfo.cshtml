@@ -1,5 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using WebNet23Online.Localizations
+@model List<WebNet23Online.Models.AnimalWorld.AnimalSpeciesInfoViewModel>
 @{
+    Layout = "_LayoutAnimalWorld";
 }
+
+@section Scripts {
+    <script src="~/js/animal-world/index.js"></script>
+}
+
+<title>@AnimalWorld.AnimalSpecies</title>
+
+<div class="main-place">
+    <h2 class="green-title">Список видов животных</h2>
+    <div class="green-line mb-4"></div>
+
+    <div class="animal-table">
+        <div class="table-row table-header">
+            <div class="table-cell">Название вида</div>
+            <div class="table-cell">Семейство</div>
+            <div class="table-cell">Среда обитания</div>
+        </div>
+
+        @if (Model.Any())
+        {
+            @foreach (var animal in Model)
+            {
+                <div class="table-row">
+                    <div class="table-cell cell-name" data-label="Вид">
+                        @animal.AnimalSpeciesName
+                    </div>
+                    <div class="table-cell" data-label="Семейство">
+                        @animal.AnimalFamilyName
+                    </div>
+                    <div class="table-cell" data-label="Среда обитания">
+                        @animal.NativeRange
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="table-empty">
+                <span class="empty-list-note">Список животных пока пуст.</span>
+            </div>
+        }
+    </div>
+</div>

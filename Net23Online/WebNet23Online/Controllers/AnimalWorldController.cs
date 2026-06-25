@@ -188,6 +188,11 @@ namespace WebNet23Online.Controllers
             return View(animals);
         }
 
+        public IActionResult AnimalSpeciesInfo()
+        {
+            return View(_animalWorldService.AnimalSpeciesInfo());
+        }
+
         public IActionResult InterestingFacts()
         {
             return View();
