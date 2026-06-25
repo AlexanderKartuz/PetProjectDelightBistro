@@ -85,3 +85,71 @@
         font-size: 18px;
     }
 }
+
+.find-animal-box {
+    background-color: #f1f8f5;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 5px solid #2e7d32;
+    margin-bottom: 20px;
+}
+
+.find-animal-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.search-label {
+    font-size: 14px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.search-select {
+    min-width: 200px !important;
+    width: 200px;
+    padding: 10px;
+}
+
+.input-with-button {
+    display: flex;
+    gap: 10px;
+}
+
+.input-text {
+    height: 44px;
+    box-sizing: border-box;
+}
+
+.find-animal-form .secondary-action {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .find-animal-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-select,
+    .input-text {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    .input-with-button {
+        flex-direction: column;
+    }
+}

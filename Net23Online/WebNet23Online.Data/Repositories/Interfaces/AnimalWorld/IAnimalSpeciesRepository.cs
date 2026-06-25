@@ -6,6 +6,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces.AnimalWorld
     {
         List<string> GetAllAnimalSpeciesNames();
 
-        List<AnimalSpeciesData> GetAllWithFamilies();
+        List<AnimalSpeciesData> GetAllWithFamilies(string? searchCategory, string? searchQuery);
     }
 }

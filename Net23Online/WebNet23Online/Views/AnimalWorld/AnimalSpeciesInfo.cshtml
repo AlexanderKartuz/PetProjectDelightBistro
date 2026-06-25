@@ -1,5 +1,5 @@
 ﻿@using WebNet23Online.Localizations
-@model List<WebNet23Online.Models.AnimalWorld.AnimalSpeciesInfoViewModel>
+@model WebNet23Online.Models.AnimalWorld.AnimalSpeciesPageInfoViewModel
 @{
     Layout = "_LayoutAnimalWorld";
 }
@@ -13,6 +13,27 @@
 <div class="main-place">
     <h2 class="green-title">Список видов животных</h2>
     <div class="green-line mb-4"></div>
+    <div class="find-animal-box">
+        <form method="get" class="find-animal-form">
+            <div class="search-group">
+                <label for="searchCategory" class="search-label">Искать в столбце:</label>
+                <select id="searchCategory" name="searchCategory" class="form-input search-select" asp-for="SearchCategory">
+                    <option value="All">Все столбцы</option>
+                    <option value="Species">Название вида</option>
+                    <option value="Family">Семейство</option>
+                    <option value="Range">Среда обитания</option>
+                </select>
+            </div>
+
+            <div class="search-group">
+                <label for="searchQuery" class="search-label">Поисковый запрос:</label>
+                <div class="input-with-button">
+                    <input type="text" id="searchQuery" name="searchQuery" value="@Model.SearchQuery" class="input-text" placeholder="Введите текст для поиска..." />
+                    <button type="submit" class="find-animal-button">Найти</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="animal-table">
         <div class="table-row table-header">
@@ -21,9 +42,9 @@
             <div class="table-cell">Среда обитания</div>
         </div>
 
-        @if (Model.Any())
+        @if (Model.AnimalSpeciesInfoViewModels.Any())
         {
-            @foreach (var animal in Model)
+            @foreach (var animal in Model.AnimalSpeciesInfoViewModels)
             {
                 <div class="table-row">
                     <div class="table-cell cell-name" data-label="Вид">

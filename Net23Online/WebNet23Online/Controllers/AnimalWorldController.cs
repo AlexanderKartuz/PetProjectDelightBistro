@@ -188,9 +188,9 @@ namespace WebNet23Online.Controllers
             return View(animals);
         }
 
-        public IActionResult AnimalSpeciesInfo()
+        public IActionResult AnimalSpeciesInfo(string? searchCategory = null, string? searchQuery = null)
         {
-            return View(_animalWorldService.AnimalSpeciesInfo());
+            return View(_animalWorldService.AnimalSpeciesInfo(searchCategory, searchQuery));
         }
 
         public IActionResult InterestingFacts()

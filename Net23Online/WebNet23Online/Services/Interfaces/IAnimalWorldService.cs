@@ -26,6 +26,6 @@ namespace WebNet23Online.Services.Interfaces
         string GetAnimalSpeciesName(int animalSpeciesId);
         List<PromotionViewModel> GetAllPromotions();
 
-        List<AnimalSpeciesInfoViewModel> AnimalSpeciesInfo();
+        AnimalSpeciesPageInfoViewModel AnimalSpeciesInfo(string? searchCategory, string? searchQuery);
     }
 }
