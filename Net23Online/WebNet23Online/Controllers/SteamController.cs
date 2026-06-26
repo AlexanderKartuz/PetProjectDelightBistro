@@ -122,6 +122,9 @@ namespace WebNet23Online.Controllers
                 Description = gameData.Description,
                 ImageUrl = gameData.ImageUrl,
                 Price = gameData.Price,
+                AverageRating = gameData.AverageRating,
+                ReviewsCount = gameData.ReviewsCount ?? 0,
+                PositiveReviewsCount = gameData.PositiveReviewsCount ?? 0,
                 Genres = gameData.GameGenres
                     .Select(g => g.Name)
                     .ToList(),

@@ -52,6 +52,24 @@
                     }
                 </div>
 
+                <div class="game-rating-summary">
+                    <div class="game-rating-score">
+                        @if (Model.AverageRating.HasValue)
+                        {
+                            <span>@Model.AverageRating.Value.ToString("0.0")</span>
+                            <small>/10</small>
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </div>
+                    <div class="game-rating-details">
+                        <span>@Model.ReviewsCount reviews</span>
+                        <span>@Model.PositiveReviewsCount positive</span>
+                    </div>
+                </div>
+
                 <div class="game-description">
                     <h3>@GameDetailsPage.About_This_Game_Text</h3>
                     <p>@Model.Description</p>

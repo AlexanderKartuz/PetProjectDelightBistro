@@ -54,6 +54,13 @@ namespace WebNet23Online.Data.Repositories.Steam
             return !_dbSet.Any(x => x.Title == title && x.Id != excludeGameId);
         }
 
+        public List<GameData> GetAllWithReviews()
+        {
+            return _dbSet
+                .Include(g => g.GameReviews)
+                .ToList();
+        }
+
         public PaginatedList<GameData> GetGames(GameFilter filter, int pageIndex, int pageSize)
         {
             var games = _dbSet
