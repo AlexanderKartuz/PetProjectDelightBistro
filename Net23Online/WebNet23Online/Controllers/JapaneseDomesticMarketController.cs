@@ -31,12 +31,13 @@ namespace WebNet23Online.Controllers
         private IJDMCatalogGenerator _jdmCatalogGenerator;
         private IJdmRepository _jdmRepository;
         private IJdmManufacturerRepository _jdmManufacturerRepository;
+        private IJdmPostsRepository _jdmPostsRepository;
+        private readonly IJdmJournalCommentRepository _journalCommentRepository;
         private readonly IAuthService _authService;
         public IWebHostEnvironment _webHostEnvironment;
-        private readonly IJdmJournalCommentRepository _journalCommentRepository;
         private IHubContext<JdmHub, IJdmHub> _jdmHub;
 
-        public JapaneseDomesticMarketController(IJapaneseDomesticMarketGenerator jdmItemGenerator, IJDMCatalogGenerator jdmCatalogGenerator, IJdmRepository jdmRepository, IJdmManufacturerRepository jdmManufacturerRepository, IAuthService authService, IWebHostEnvironment webHostEnvironment, IJdmJournalCommentRepository journalCommentRepository, IHubContext<JdmHub, IJdmHub> jdmHub)
+        public JapaneseDomesticMarketController(IJapaneseDomesticMarketGenerator jdmItemGenerator, IJDMCatalogGenerator jdmCatalogGenerator, IJdmRepository jdmRepository, IJdmManufacturerRepository jdmManufacturerRepository, IAuthService authService, IWebHostEnvironment webHostEnvironment, IJdmJournalCommentRepository journalCommentRepository, IHubContext<JdmHub, IJdmHub> jdmHub, IJdmPostsRepository jdmPostsRepository)
         {
             _jdmItemGenerator = jdmItemGenerator;
             _jdmCatalogGenerator = jdmCatalogGenerator;
@@ -46,6 +47,7 @@ namespace WebNet23Online.Controllers
             _webHostEnvironment = webHostEnvironment;
             _journalCommentRepository = journalCommentRepository;
             _jdmHub = jdmHub;
+            _jdmPostsRepository = jdmPostsRepository;
         }
         public IActionResult Home()
         {
@@ -83,7 +85,7 @@ namespace WebNet23Online.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateCars(JapaneseDomesticMarketViewModels viewModel, IFormFile VehicleInspectionHistoryUrl)
+        public IActionResult CreateCars(JapaneseDomesticMarketViewModels viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -118,8 +120,9 @@ namespace WebNet23Online.Controllers
                     Price = viewModel.Price,
                     Url = viewModel.Url,
                     JdmManufacturerDataId = manufacturer.Id,
-                    ManufacturerType = manufacturer.ManufacturerType
+                    ManufacturerType = manufacturer.ManufacturerType,
                 };
+
                 _jdmRepository.Add(jdmCarsData);
                 _jdmHub.Clients.All.NewJdmCarsCreated(viewModel.Model, viewModel.Price, viewModel.Url);
 
@@ -133,16 +136,14 @@ namespace WebNet23Online.Controllers
 
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
-                        VehicleInspectionHistoryUrl.CopyTo(fileStream);
+                        viewModel.VehicleInspectionHistoryUrl.CopyTo(fileStream);
                     }
                     jdmCarsData.VehicleInspectionHistoryUrl = "/" + Path.Combine(pathToWwwRootFolder, fileName).Replace("/", "\\");
                     _jdmRepository.Update(jdmCarsData);
                 }
-
                 return RedirectToAction(nameof(Catalog));
             }
             return View(viewModel);
-
         }
 
         [HttpGet]
@@ -178,15 +179,26 @@ namespace WebNet23Online.Controllers
 
         public IActionResult Journal()
         {
+            var postFromDb = _jdmPostsRepository.GetPublishedPosts();
             var pageJournal = new JournalPageViewModel
             {
-                Posts = new List<JournalPostViewModel>
-         {
-             new() { PostId = (int)JdmJournalPostId.Welcome },
-             new() { PostId = (int)JdmJournalPostId.Raubichi },
-             new() { PostId = (int)JdmJournalPostId.Lida },
-         }
+                Posts = postFromDb.Select(p => new JournalPostViewModel
+                {
+                    PostId = p.Id,
+                    Title = p.Title,
+                    UrlPicture = p.UrlPicture!,
+                    PublishedDate = p.PublishedDate,
+                    Comments = _journalCommentRepository.GetByPostId(p.Id).Select(c => new JournalCommentsViewModel
+                    {
+                        PostsId = c.Id,
+                        Text = c.Text!,
+                        CreatedDate = c.CreatedDate,
+                        AuthorName = c.User.ToString()!
+                    }).ToList(),
+                    Form = {PostId = p.Id},
+                }).ToList()
             };
+
             foreach (var post in pageJournal.Posts)
             {
                 post.Comments = _journalCommentRepository
@@ -208,7 +220,9 @@ namespace WebNet23Online.Controllers
         public IActionResult AddComment(AddJournalCommentViewModel comment)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Journal));
+            { 
+                return RedirectToAction(nameof(Journal)); 
+            }
             var user = _authService.GetUser()!;
             _journalCommentRepository.Add(new JdmCarsBlogCommentsData
             {
@@ -220,14 +234,18 @@ namespace WebNet23Online.Controllers
             return RedirectToAction(nameof(Journal), null, null, $"post-{comment.PostId}");
         }
 
-        /*public IActionResult LinkJdmQuiz(int manufactureId, int modelId)
-        {
-            _jdmRepository.Link(manufactureId, modelId);
-            return RedirectToAction(nameof(Home));
-        }*/
         [IsJdmOwner]
         public IActionResult DeleteComments()
         {
+            return RedirectToAction(nameof(Journal));
+        }
+
+        [HttpPost]
+        [IsAdmin]
+        [IsJdmOwner]
+        public IActionResult DeleteOldPosts(DateTime oldTimePublished)
+        {
+            _jdmPostsRepository.DeleteOldPosts(oldTimePublished);
             return RedirectToAction(nameof(Journal));
         }
     }

@@ -4,11 +4,70 @@
 @{
     Layout = "_LayoutJapaneseDomesticMarket";
 }
-@section Scripts{
+@section Scripts {
     <script src="~/js/japanese-domestic-market/createJdmMerch.js"></script>
 }
 
-<div class="container">
+<div class="jdm-page-intro">
+    <h1>@JapaneseDomesticMarket.Layout_Advertisements</h1>
+    <p>カタログ — каталог японских автомобилей</p>
+</div>
+
+<div class="container" style="padding-top: 24px;">
+    <div class="one-category-auto">
+        <div class="auto-card-title">
+            Toyota
+        </div>
+        <div class="container-card-box">
+            <div class="cars-card">
+                <div class="card-title">
+                    Chaser
+                </div>
+                <div class="card-photo ">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd89qrsjfzQrUSePJySNibcrxCbUeyxqF49w&s" alt="toyota-chaser" />
+                </div>
+                <div class="auto-card-price">
+                    23000
+                </div>
+                <div><button class="btn-watch ">@JapaneseDomesticMarket.Catalog_Button_More_Details</button></div>
+            </div>
+            <div class="cars-card">
+                <div class="card-title">
+                    Cresta
+                </div>
+                <div class="card-photo ">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0xN68DzipA-tlXG0hR48D7ka71OEg9D239Q&s" alt="toyota-cresta" />
+                </div>
+                <div class="auto-card-price">
+                    17000
+                </div>
+                <div><button class="btn-watch ">@JapaneseDomesticMarket.Catalog_Button_More_Details</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="one-category-auto">
+        <div class="auto-card-title">
+            Nissan
+        </div>
+        <div class="container-card-box">
+            <div class="cars-card">
+                <div class="card-title">
+                    Silvia S13
+                </div>
+                <div class="card-photo ">
+                    <img src="https://buypartsfromjapan.com/cdn/shop/files/SnapInsta.to_511451182_17936428290022744_8454509253930569021_n_1_756915ad-8a62-48ab-9a0a-d65fb0a72a21.jpg?v=1771219620" alt="nissan-silvia" />
+                </div>
+                <div class="auto-card-price">
+                    20000
+                </div>
+                <div><button class="btn-watch ">@JapaneseDomesticMarket.Catalog_Button_More_Details</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding-top: 24px;">
     @foreach (var manufacture in Model.CatalogAuto)
     {
         <div class="one-category-auto">
@@ -38,12 +97,12 @@
 
 @if (Model.CarsWithoutInspection.Any())
 {
-    <section class="container">
+    <section class="container jdm-stats">
         <h2>@JapaneseDomesticMarket.Catalog_Statistics_VehicalHistory</h2>
         <ul>
             @foreach (var row in Model.CarsWithoutInspection)
             {
-                <li>@row.Manufacturer — @row.CountCars</li>
+                <li><strong>@row.Manufacturer</strong> — @row.CountCars</li>
             }
         </ul>
     </section>
@@ -58,7 +117,7 @@
             <input value="" class="new-jdm-card-picture" placeholder="pictureUrl" />
             <button class="button-create-new-jdm-merch">@JapaneseDomesticMarket.Catalog_button_add_merch</button>
         </div>
-</section>
+    </section>
     <section class="jdm-merch-container">
         <div class="jdm-merch">
             <div class="product-card template" id="product-card">

@@ -23,14 +23,6 @@ namespace WebNet23Online.Data.Repositories
                 .ToList();
         }
 
-        /*void Link(int manufactureId, int modelId)
-        {
-            var manufacture = _context.JdmManufacturer.First(x => x.Id == manufactureId);
-            var carsJdm = _context.JdmCars.First(x => x.Id == modelId);
-            manufacture.JdmCarsDatas.Add(carsJdm);
-            _context.SaveChanges();
-        }*/
-
         public List<VehicleInspectionHistoryDataModel> GetCarsNotVehicleInspectionHistory()
         {
             var sql = @"SELECT MIN (JdmCars.ManufacturerType) Manufacturer, COUNT(JdmCars.Id) CountCars

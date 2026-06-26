@@ -1,69 +1,46 @@
 ﻿@using WebNet23Online.Localizations
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebNet23Online</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/japanese-domestic-market/jdm-style.css">
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WebNet23Online.styles.css" asp-append-version="true" />
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <title>Главная</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - JDM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+JP:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/japanese-domestic-market/jdm-style.css" asp-append-version="true" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/japanese-domestic-market/notice.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </head>
-<body>
+<body class="jdm-body">
     <div class="notice-box"></div>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebNet23Online</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+
     <header class="header">
         <div class="container">
             <div class="header_inner">
-                <div class="logo">JDM</div>
-
+                <a class="logo" href="/JapaneseDomesticMarket/Home">JDM</a>
                 <nav class="navigation-menu">
                     <a class="nav-link" href="/JapaneseDomesticMarket/Home">@JapaneseDomesticMarket.Layout_Home</a>
                     <a class="nav-link" href="/JapaneseDomesticMarket/Catalog">@JapaneseDomesticMarket.Layout_Advertisements</a>
                     <a class="nav-link" href="/JapaneseDomesticMarket/CreateCars">@JapaneseDomesticMarket.Layout_Sell_Car</a>
                     <a class="nav-link" href="/JapaneseDomesticMarket/Journal">@JapaneseDomesticMarket.Layout_Journal</a>
                 </nav>
-
             </div>
         </div>
     </header>
-    <div>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="jdm-footer">
         <div class="container">
-            &copy; 2026 - WebNet23Online - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <span class="jdm-footer__brand">JDM</span>
+            <span>&copy; 2026 Japanese Domestic Market</span>
         </div>
     </footer>
 </body>
