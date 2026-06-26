@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.HelperModels.SteamPagination;
@@ -81,13 +82,58 @@ namespace WebNet23Online.Data.Repositories.Steam
             var totalPages = count == 0 ? 1 : (int)Math.Ceiling(count / (double)pageSize);
             var safePageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
 
-            var pageItems = games
-                .OrderBy(g => g.Id)
+            var sortedGames = ApplySorting(games, filter.SortBy, filter.SortDirection);
+
+            var pageItems = sortedGames
                 .Skip((safePageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
             return new PaginatedList<GameData>(pageItems, safePageIndex, totalPages, count);
+        }
+
+        private IQueryable<GameData> ApplySorting(
+            IQueryable<GameData> games,
+            string? sortBy,
+            string? sortDirection)
+        {
+            var allowedSortProperties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["price"] = nameof(GameData.Price),
+                ["reviewsCount"] = nameof(GameData.ReviewsCount),
+                ["averageRating"] = nameof(GameData.AverageRating),
+                ["title"] = nameof(GameData.Title),
+                ["id"] = nameof(GameData.Id),
+            };
+
+            if (string.IsNullOrWhiteSpace(sortBy)
+                || !allowedSortProperties.TryGetValue(sortBy, out var propertyName))
+            {
+                propertyName = nameof(GameData.Id);
+            }
+
+            // GameData game 
+            var parameter = Expression.Parameter(typeof(GameData), "game");
+
+            // game.Price
+            var property = Expression.Property(parameter, propertyName);
+
+            //game => game.Price
+            var lambda = Expression.Lambda(property, parameter);
+
+            // OrderByDescending or OrderBy string
+            var methodName = string.Equals(sortDirection, "desc", StringComparison.OrdinalIgnoreCase)
+                ? nameof(Queryable.OrderByDescending)
+                : nameof(Queryable.OrderBy);
+
+            //Method info
+            var orderByMethod = typeof(Queryable)
+                .GetMethods()
+                .First(method => method.Name == methodName
+                    && method.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(GameData), property.Type);
+
+            return (IQueryable<GameData>)orderByMethod.Invoke(null, [games, lambda])!;
         }
     }
 }

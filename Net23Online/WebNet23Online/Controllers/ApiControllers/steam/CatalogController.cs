@@ -67,6 +67,8 @@ namespace WebNet23Online.Controllers.ApiControllers.steam
                 Description = game.Description,
                 ImageUrl = game.ImageUrl,
                 Price = game.Price,
+                AverageRating = game.AverageRating,
+                ReviewsCount = game.ReviewsCount ?? 0,
                 Genres = game.GameGenres?.Select(g => g.Name).ToList() ?? new(),
             });
         }

@@ -6,6 +6,8 @@ interface GameCardProps {
 }
 
 export const GameCard = function ({ game }: GameCardProps) {
+  const averageRating = game.averageRating?.toFixed(1) ?? "-";
+
   return (
     <article className="game-card">
       <Link to={`/gameCatalog/${game.id}`} className="game-card__media">
@@ -28,7 +30,11 @@ export const GameCard = function ({ game }: GameCardProps) {
             ))}
           </div>
         )}
-        <p className="game-card__price">${game.price.toFixed(2)}</p>
+        <div className="game-card__stats">
+          <span className="game-card__price">${game.price.toFixed(2)}</span>
+          <span>{averageRating}/10</span>
+          <span>{game.reviewsCount} reviews</span>
+        </div>
       </div>
     </article>
   );
