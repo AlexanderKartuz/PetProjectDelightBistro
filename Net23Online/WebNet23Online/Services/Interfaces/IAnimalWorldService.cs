@@ -8,6 +8,8 @@ namespace WebNet23Online.Services.Interfaces
 
         AnimalSpeciesViewModel GetAnimalSpeciesPageInfo();
 
+        PromotionViewModel GetPromotionsPageInfo();
+
         BindZooWithAnimalSpeciesViewModel GetBingZooAndAnimalSpeciesInfo();
 
         bool AddZoo(ZooViewModel viewModel);
@@ -15,10 +17,11 @@ namespace WebNet23Online.Services.Interfaces
         bool AddAnimalFamily(AnimalFamilyViewModel viewModel);
 
         bool AddAnimalSpecies(AnimalSpeciesViewModel viewModel);
+        bool AddPromotion(PromotionViewModel viewModel);
         bool BindZooWithAnimalSpecies(int zooId, int animalSpeciesId);
         List<ZooViewModel> GetAllZoos();
-
         string GetZooName(int zooId);
         string GetAnimalSpeciesName(int animalSpeciesId);
+        List<PromotionViewModel> GetAllPromotions();
     }
 }

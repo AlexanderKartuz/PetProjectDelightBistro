@@ -50,6 +50,7 @@ namespace WebNet23Online.Data
         public DbSet<TicketData> Tickets { get; set; }
         public DbSet<CommentData> Comments { get; set; }
         public DbSet<NotificationData> Notifications { get; set; }
+        public DbSet<PromotionData> Promotions { get; set; }
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -120,6 +121,18 @@ namespace WebNet23Online.Data
                 .WithMany(x => x.Comments)
                 .HasForeignKey(x => x.ZooId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PromotionData>()
+                .HasOne(x => x.Venue)
+                .WithMany(x => x.Promotions)
+                .HasForeignKey(x => x.VenueId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PromotionData>()
+                .HasOne(x => x.Creator)
+                .WithMany(x => x.Promotions)
+                .HasForeignKey(x => x.CreatorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<UserData>()
                 .HasOne(x => x.UserProfile)

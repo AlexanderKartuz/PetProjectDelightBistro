@@ -149,6 +149,40 @@ namespace WebNet23Online.Controllers
             return View(_animalWorldService.GetAllZoos());
         }
 
+        public IActionResult Promotions()
+        {
+            return View(_animalWorldService.GetAllPromotions());
+        }
+
+        [HttpGet]
+        [Authorize]
+        [IsModerator]
+        public IActionResult AddPromotion()
+        {
+            var viewModel = _animalWorldService.GetPromotionsPageInfo();
+            viewModel.EndDate = DateTime.Now;
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [IsModerator]
+        public IActionResult AddPromotion(PromotionViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Zoos = _animalWorldService.GetPromotionsPageInfo().Zoos;
+                return View(viewModel);
+            }
+
+            if (_animalWorldService.AddPromotion(viewModel))
+            {
+                return RedirectToAction("Add");
+            }
+
+            return View();
+        }
+
         public IActionResult InterestingFacts()
         {
             return View();

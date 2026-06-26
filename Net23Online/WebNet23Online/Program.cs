@@ -1,6 +1,7 @@
 using MazeCore;
 using MazeCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Quartz;
 using WebNet23Online.Data;
 using WebNet23Online.Hubs;
 using WebNet23Online.MiddlewareServices;
@@ -10,10 +11,12 @@ using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.BackgroundServices;
 using WebNet23Online.Services.BackgroundServices.steam;
 using WebNet23Online.Services.Apis.steam;
+using WebNet23Online.Services.BackgroundServices;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.LittleLemon;
 using WebNet23Online.Services.Interfaces.Steam;
+using WebNet23Online.Services.Jobs;
 using WebNet23Online.Services.LittleLemon;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,6 +76,15 @@ builder.Services.AddHttpClient<RawgApi>(client =>
     client.BaseAddress = new Uri("https://api.rawg.io/api/");
 });
 
+builder.Services.AddHttpClient<RockApi>(x =>
+{
+    x.BaseAddress = new Uri("https://itunes.apple.com");
+});
+
+builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
+{
+    x.BaseAddress = new Uri("https://fakerestaurantapi.runasp.net");
+});
 // Register Services
 //builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
 //{
@@ -147,6 +159,20 @@ builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey("ZooPromotions");
+    q.AddJob<AnimalWorldPromotionsCheckJob>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithCronSchedule("0 0 9-20 ? * *"));
+});
+
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
+builder.Services.AddHostedService<DelightBistroOrderBackgroundService>();
 builder.Services.AddHostedService<RatingAnalyticsBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
@@ -188,6 +214,7 @@ app.MapHub<AnimeHub>("/my-hub/anime");
 app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
 app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
 app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
+app.MapHub<AnimalWorldNotificationsHub>("/my-hub/animal-world-promotions");
 app.MapHub<JdmHub>("/my-hub/jdm");
 app.MapHub<SteamChatHub>("/steam/community-chat");
 app.MapHub<SteamNotificationHub>("/steam/notification");

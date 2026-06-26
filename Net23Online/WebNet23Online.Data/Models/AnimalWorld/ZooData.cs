@@ -17,5 +17,7 @@
         public virtual List<CommentData> Comments { get; set; }
 
         public virtual UserData Creator { get; set; }
+
+        public virtual List<PromotionData> Promotions { get; set; }
     }
 }
