@@ -4,7 +4,9 @@ namespace WebNet23Online.Services.Interfaces
 {
     public interface IAnimalWorldService
     {
-        Task<StartPageAnimalWorldInfoViewModel> GetStartInfo();
+        StartPageAnimalWorldInfoViewModel GetStartInfo();
+
+        Task<GalleryViewModel> GetRandomAnimalsAsync();
 
         AnimalSpeciesViewModel GetAnimalSpeciesPageInfo();
 
@@ -23,5 +25,7 @@ namespace WebNet23Online.Services.Interfaces
         string GetZooName(int zooId);
         string GetAnimalSpeciesName(int animalSpeciesId);
         List<PromotionViewModel> GetAllPromotions();
+
+        AnimalSpeciesPageInfoViewModel AnimalSpeciesInfo(string? searchCategory, string? searchQuery);
     }
 }
