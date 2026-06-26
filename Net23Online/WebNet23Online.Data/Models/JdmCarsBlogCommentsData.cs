@@ -13,5 +13,6 @@ namespace WebNet23Online.Data.Models
         public DateTime CreatedDate { get; set; }
         public int UserId { get; set; }
         public virtual UserData User { get; set; } = null!;
+        public virtual JdmPostsData Posts { get; set; }
     }
 }

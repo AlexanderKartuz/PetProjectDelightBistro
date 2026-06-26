@@ -315,7 +315,7 @@ namespace WebNet23Online.Data
                  .HasForeignKey(x => x.CreatorId);
 
             modelBuilder.Entity<JdmCarsBlogCommentsData>()
-                .HasOne<JdmPostsData>()
+                .HasOne(x => x.Posts)
                 .WithMany(p => p.Comments)
                 .HasForeignKey(x => x.PostsId);
 

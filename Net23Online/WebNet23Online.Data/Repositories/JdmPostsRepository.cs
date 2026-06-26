@@ -28,6 +28,8 @@ namespace WebNet23Online.Data.Repositories
         public List<JdmPostsData> GetByPostId(int postId)
         {
             return _dbSet
+                .Include(x => x.Title)
+                .Include(x => x.Text)
                 .Include(x => x.Id == postId)
                 .OrderByDescending(x => x.PublishedDate)
                 .ToList();
