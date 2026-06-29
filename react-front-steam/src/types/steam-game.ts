@@ -1,8 +1,10 @@
 export interface SteamGame {
-  id: number
-  title: string
-  imageUrl: string
-  price: number
-  genres: string[]
-  description?: string
+  id: number;
+  title: string;
+  imageUrl: string;
+  price: number;
+  averageRating?: number | null;
+  reviewsCount: number;
+  genres: string[];
+  description?: string;
 }

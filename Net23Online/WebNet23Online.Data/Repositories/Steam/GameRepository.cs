@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Reflection;
 using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models.Steam;
@@ -81,13 +82,49 @@ namespace WebNet23Online.Data.Repositories.Steam
             var totalPages = count == 0 ? 1 : (int)Math.Ceiling(count / (double)pageSize);
             var safePageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
 
-            var pageItems = games
-                .OrderBy(g => g.Id)
+            var sortedGames = ApplySorting(games, filter.SortBy, filter.SortDirection);
+
+            var pageItems = sortedGames
                 .Skip((safePageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
             return new PaginatedList<GameData>(pageItems, safePageIndex, totalPages, count);
+        }
+
+        public IQueryable<T> ApplySorting<T>(
+            IQueryable<T> query,
+            string? sortBy,
+            string? sortDirection)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+            {
+                return query;
+            }
+
+            var propertyInfo = typeof(T).GetProperty(sortBy,
+                BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+            if (propertyInfo == null)
+            {
+                return query;
+            }
+
+            var parameter = Expression.Parameter(typeof(T), "entity");
+            var property = Expression.Property(parameter, propertyInfo);
+            var lambda = Expression.Lambda(property, parameter);
+
+            var methodName = string.Equals(sortDirection, "desc", StringComparison.OrdinalIgnoreCase)
+                ? nameof(Queryable.OrderByDescending)
+                : nameof(Queryable.OrderBy);
+
+            var orderByMethod = typeof(Queryable)
+                .GetMethods()
+                .First(method => method.Name == methodName
+                    && method.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(T), propertyInfo.PropertyType);
+
+            return (IQueryable<T>)orderByMethod.Invoke(null, [query, lambda])!;
         }
     }
 }

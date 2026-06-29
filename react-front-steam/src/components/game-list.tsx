@@ -5,6 +5,17 @@ import { GameCard } from "./game-card";
 import type { PaginatedResponse } from "../types/pagination";
 
 const PAGE_SIZE = 12;
+const DEFAULT_SORT = "id:asc";
+
+const sortOptions = [
+  { value: DEFAULT_SORT, label: "Default" },
+  { value: "price:asc", label: "Price: low to high" },
+  { value: "price:desc", label: "Price: high to low" },
+  { value: "reviewsCount:desc", label: "Most reviewed" },
+  { value: "reviewsCount:asc", label: "Least reviewed" },
+  { value: "averageRating:desc", label: "Best rated" },
+  { value: "averageRating:asc", label: "Lowest rated" },
+];
 
 export const GameList = function () {
   const [pagination, setPagination] =
@@ -13,6 +24,7 @@ export const GameList = function () {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sort, setSort] = useState(DEFAULT_SORT);
 
   useEffect(() => {
     let cancelled = false;
@@ -21,7 +33,13 @@ export const GameList = function () {
       setLoading(true);
 
       try {
-        const data = await getGames({ page, pageSize: PAGE_SIZE });
+        const [sortBy, sortDirection] = sort.split(":");
+        const data = await getGames({
+          page,
+          pageSize: PAGE_SIZE,
+          sortBy,
+          sortDirection,
+        });
 
         if (!cancelled) {
           setGames(data.items);
@@ -48,7 +66,7 @@ export const GameList = function () {
     return () => {
       cancelled = true;
     };
-  }, [currentPage]);
+  }, [currentPage, sort]);
 
   const goToPage = (page: number) => {
     if (!pagination) {
@@ -61,6 +79,11 @@ export const GameList = function () {
 
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const changeSort = (nextSort: string) => {
+    setSort(nextSort);
+    setCurrentPage(1);
   };
 
   if (loading) {
@@ -80,12 +103,31 @@ export const GameList = function () {
   return (
     <section className="game-list">
       <h2 className="game-list__heading">Steam catalog</h2>
-      <p className="game-list__count">
-        {pagination?.totalCount ?? games.length} games total
-        {pagination && pagination.totalPages > 1 && (
-          <> · page {pagination.currentPage} of {pagination.totalPages}</>
-        )}
-      </p>
+      <div className="game-list__toolbar">
+        <p className="game-list__count">
+          {pagination?.totalCount ?? games.length} games total
+          {pagination && pagination.totalPages > 1 && (
+            <>
+              {" "}
+              - page {pagination.currentPage} of {pagination.totalPages}
+            </>
+          )}
+        </p>
+
+        <label className="game-list__sort">
+          <span>Sort</span>
+          <select
+            value={sort}
+            onChange={(event) => changeSort(event.target.value)}
+          >
+            {sortOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
       <div className="game-list__grid">
         {games.map((game) => (
@@ -101,7 +143,7 @@ export const GameList = function () {
             disabled={!pagination.hasPrevious}
             onClick={() => goToPage(currentPage - 1)}
           >
-            ← Back
+            Back
           </button>
 
           <span className="pagination__info">
@@ -114,7 +156,7 @@ export const GameList = function () {
             disabled={!pagination.hasNext}
             onClick={() => goToPage(currentPage + 1)}
           >
-            Next →
+            Next
           </button>
         </nav>
       )}

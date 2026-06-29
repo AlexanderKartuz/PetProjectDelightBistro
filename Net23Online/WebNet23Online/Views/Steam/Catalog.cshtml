@@ -15,7 +15,7 @@
         <div class="catalog-header">
             <h1 class="page-title">Catalog</h1>
             <div class="catalog-actions">
-                <p><a class="btn" href="/Steam/Index">← @CatalogPage.Back_To_Store_Button</a></p>
+                <p><a class="btn" href="/Steam/Index">&larr; @CatalogPage.Back_To_Store_Button</a></p>
                 @if (Model.IsUserAtLeastModerator)
                 {
                     <a class="btn btn-primary add-game-button" href="/Steam/AddGame">+ @CatalogPage.Add_New_Game_Button</a>
@@ -45,6 +45,24 @@
                 <label>@CatalogPage.Max_Price_Filter</label>
                 <input type="number" name="MaxPrice" step="0.01" class="form-control"
                        value="@Model.Filter.MaxPrice" />
+            </div>
+
+            <div class="form-group">
+                <label>Sort by</label>
+                <select name="SortBy" class="form-control">
+                    <option value="">Default</option>
+                    <option value="price" selected="@(Model.Filter.SortBy == "price" ? "selected" : null)">Price</option>
+                    <option value="reviewsCount" selected="@(Model.Filter.SortBy == "reviewsCount" ? "selected" : null)">Reviews count</option>
+                    <option value="averageRating" selected="@(Model.Filter.SortBy == "averageRating" ? "selected" : null)">Average rating</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Direction</label>
+                <select name="SortDirection" class="form-control">
+                    <option value="asc" selected="@(Model.Filter.SortDirection == "asc" ? "selected" : null)">Low to high</option>
+                    <option value="desc" selected="@(Model.Filter.SortDirection == "desc" ? "selected" : null)">High to low</option>
+                </select>
             </div>
 
             <div class="form-actions">
@@ -85,6 +103,7 @@
                         }
                         <div class="card-footer">
                             <span class="price">$@game.Price.ToString("0.00")</span>
+                            <span class="price">@((game.AverageRating?.ToString("0.0") ?? "-"))/10 - @game.ReviewsCount reviews</span>
                             <a class="btn btn--small" href="/Steam/GameDetails/@game.Id">@CatalogPage.View_Button</a>
                         </div>
                     </div>
@@ -102,7 +121,9 @@
                        asp-route-page="@(Model.PaginationMetadata.CurrentPage - 1)"
                        asp-route-pageSize="@Model.Filter.PageSize"
                        asp-route-genreId="@Model.Filter.GenreId"
-                       asp-route-maxPrice="@Model.Filter.MaxPrice">←</a>
+                       asp-route-maxPrice="@Model.Filter.MaxPrice"
+                       asp-route-sortBy="@Model.Filter.SortBy"
+                       asp-route-sortDirection="@Model.Filter.SortDirection">&larr;</a>
                 }
 
                 @{
@@ -117,7 +138,9 @@
                            asp-route-page="1"
                            asp-route-pageSize="@Model.Filter.PageSize"
                            asp-route-genreId="@Model.Filter.GenreId"
-                           asp-route-maxPrice="@Model.Filter.MaxPrice">1</a>
+                           asp-route-maxPrice="@Model.Filter.MaxPrice"
+                           asp-route-sortBy="@Model.Filter.SortBy"
+                           asp-route-sortDirection="@Model.Filter.SortDirection">1</a>
 
                         if (startPageToShow > 2)
                         {
@@ -139,7 +162,9 @@
                                asp-route-page="@i"
                                asp-route-pageSize="@Model.Filter.PageSize"
                                asp-route-genreId="@Model.Filter.GenreId"
-                               asp-route-maxPrice="@Model.Filter.MaxPrice">@i</a>
+                               asp-route-maxPrice="@Model.Filter.MaxPrice"
+                               asp-route-sortBy="@Model.Filter.SortBy"
+                               asp-route-sortDirection="@Model.Filter.SortDirection">@i</a>
                         }
                     }
 
@@ -156,7 +181,9 @@
                            asp-route-page="@Model.PaginationMetadata.TotalPages"
                            asp-route-pageSize="@Model.Filter.PageSize"
                            asp-route-genreId="@Model.Filter.GenreId"
-                           asp-route-maxPrice="@Model.Filter.MaxPrice">@Model.PaginationMetadata.TotalPages</a>
+                           asp-route-maxPrice="@Model.Filter.MaxPrice"
+                           asp-route-sortBy="@Model.Filter.SortBy"
+                           asp-route-sortDirection="@Model.Filter.SortDirection">@Model.PaginationMetadata.TotalPages</a>
                     }
                 }
 
@@ -168,7 +195,9 @@
                        asp-route-page="@(Model.PaginationMetadata.CurrentPage + 1)"
                        asp-route-pageSize="@Model.Filter.PageSize"
                        asp-route-genreId="@Model.Filter.GenreId"
-                       asp-route-maxPrice="@Model.Filter.MaxPrice">→</a>
+                       asp-route-maxPrice="@Model.Filter.MaxPrice"
+                       asp-route-sortBy="@Model.Filter.SortBy"
+                       asp-route-sortDirection="@Model.Filter.SortDirection">&rarr;</a>
                 }
             </nav>
         }

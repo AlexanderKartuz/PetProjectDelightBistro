@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
 using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models.Steam;
 using WebNet23Online.Data.Repositories.Interfaces.Steam;
 using WebNet23Online.Models.Steam;
-
 using WebNet23Online.Services.Interfaces;
 using WebNet23Online.Services.Interfaces.Steam;
 
@@ -15,7 +15,6 @@ namespace WebNet23Online.Services
         private readonly IGameRepository _gameRepository;
         private readonly IPublisherRepository _publisherRepository;
         private readonly IGameGenreRepository _gameGenreRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAuthService _authService;
 
         public CatalogService(IGameRepository gameRepository,
@@ -27,7 +26,6 @@ namespace WebNet23Online.Services
             _gameRepository = gameRepository;
             _publisherRepository = publisherRepository;
             _gameGenreRepository = gameGenreRepository;
-            _httpContextAccessor = httpContextAccessor;
             _authService = authService;
         }
 
@@ -71,6 +69,8 @@ namespace WebNet23Online.Services
             {
                 GenreId = filter.GenreId,
                 MaxPrice = filter.MaxPrice,
+                SortBy = filter.SortBy,
+                SortDirection = filter.SortDirection,
             };
 
             var games = _gameRepository.GetGames(repositoryFilter, filter.Page, filter.PageSize);
@@ -87,6 +87,8 @@ namespace WebNet23Online.Services
                         Description = g.Description,
                         ImageUrl = g.ImageUrl,
                         Price = g.Price,
+                        AverageRating = g.AverageRating,
+                        ReviewsCount = g.ReviewsCount ?? 0,
                         Genres = g.GameGenres.Select(gg => gg.Name).ToList(),
                     })
                     .ToList(),
