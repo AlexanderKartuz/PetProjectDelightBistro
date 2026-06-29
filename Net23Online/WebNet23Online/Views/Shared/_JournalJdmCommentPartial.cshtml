@@ -1,4 +1,4 @@
-﻿@using WebNet23Online.Models.JapaneseDomesticMarket
+﻿@using WebNet23Online.Models.Jdm
 @using WebNet23Online.Localizations
 @using WebNet23Online.Data.Enums
 @using WebNet23Online.Services.Interfaces
@@ -25,7 +25,7 @@
 
     @if (User.Identity?.IsAuthenticated == true && AuthService.IsAuthenticated() && AuthService.GetRole() == UserRole.User)
     {
-        <form asp-controller="JapaneseDomesticMarket" asp-action="AddComment" method="post">
+        <form asp-controller="Jdm" asp-action="AddComment" method="post">
             <input type="hidden" name="PostId" value="@Model.Form.PostId" />
             <textarea name="Text" rows="3" class="text-comment"></textarea>
             <button type="submit">@JapaneseDomesticMarket._JournalPartial_Button_Send</button>

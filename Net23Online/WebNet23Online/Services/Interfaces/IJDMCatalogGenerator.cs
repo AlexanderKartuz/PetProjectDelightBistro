@@ -1,11 +1,11 @@
 ﻿using WebNet23Online.Data.Models;
-using WebNet23Online.Models.JapaneseDomesticMarket;
+using WebNet23Online.Models.Jdm;
 
 namespace WebNet23Online.Services.Interfaces
 {
-    public interface IJDMCatalogGenerator
+    public interface IJdmCatalogGenerator
     {
-        List<JDMCatalogViewModels> GetManufacturerTypeFromJDMItems(List<JapaneseDomesticMarketViewModels> carsJDMItems, string sortManufacturerType);
-        List<JDMCatalogViewModels> GetManufacturerType(List<JdmManufacturerData> manufactureTypes);
+        List<JdmCatalogViewModel> GetManufacturerTypeFromJDMItems(List<JdmViewModels> carsJDMItems, string sortManufacturerType);
+        List<JdmCatalogViewModel> GetManufacturerType(List<JdmManufacturerData> manufactureTypes);
     }
 }

@@ -1,8 +1,8 @@
-﻿@using WebNet23Online.Models.JapaneseDomesticMarket
+﻿@using WebNet23Online.Models.Jdm
 @using WebNet23Online.Localizations
 @model JournalPageViewModel
 @{
-    Layout = "_LayoutJapaneseDomesticMarket";
+    Layout = "_LayoutJdm";
 }
 @section Scripts{
     <script src="~/js/japanese-domestic-market/journal.js"></script>
@@ -29,7 +29,7 @@
             
         </article>
         <article class="content-news">
-            <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_Raubichi
+            <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_Raubichi</div>
             <p class="date">@JapaneseDomesticMarket.Journal_Date_19_April</p>
             <p>
                 @JapaneseDomesticMarket.Journal_Text_Raubichi_1
@@ -43,9 +43,7 @@
                 <img src="~/images/japanese-domestic-market/raubichi-2.JPG" class="img-content" />
             </div>
             @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 2))
-            </div>
         </article>
-
 
         <article class="content-news">
             <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_2</div>

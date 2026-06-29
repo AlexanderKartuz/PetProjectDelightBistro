@@ -146,8 +146,8 @@ builder.Services.AddScoped<IHabitService, HabitService>();
 builder.Services.AddScoped<IHabitStatisticsService, HabitStatisticsService>();
 
 //JapaneseDomesticMarker DI
-builder.Services.AddScoped<IJapaneseDomesticMarketGenerator, JapaneseDomesticMarketGenerator>();
-builder.Services.AddScoped<IJDMCatalogGenerator, JDMCatalogGenerator>();
+builder.Services.AddScoped<IJdmGenerator, JdmGenerator>();
+builder.Services.AddScoped<IJdmCatalogGenerator, JdmCatalogGenerator>();
 
 // Repositories
 builder.Services.ResolveRepositories();

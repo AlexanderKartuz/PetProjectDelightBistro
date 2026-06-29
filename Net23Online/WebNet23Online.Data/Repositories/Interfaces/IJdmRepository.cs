@@ -11,8 +11,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
     public interface IJdmRepository : IBaseRepository<JdmCarsData>
     {
         List<VehicleInspectionHistoryDataModel> GetCarsNotVehicleInspectionHistory();
-
-        //void Link(int manufactureId, int modelId);
         List<JdmCarsData> IncludeManufactureData();
     }
 }

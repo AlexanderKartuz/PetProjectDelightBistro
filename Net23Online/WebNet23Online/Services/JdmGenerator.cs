@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
-using WebNet23Online.Models.JapaneseDomesticMarket;
+using WebNet23Online.Models.Jdm;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Services
 {
-    public class JapaneseDomesticMarketGenerator : IJapaneseDomesticMarketGenerator
+    public class JdmGenerator : IJdmGenerator
     {
-        private List<JapaneseDomesticMarketViewModels> _jdmItems;
+        private List<JdmViewModels> _jdmItems;
         private IJdmManufacturerRepository _jdmManufacturerRepository;
-        public JapaneseDomesticMarketGenerator(IJdmManufacturerRepository jdmManufacturerRepository)
+        public JdmGenerator(IJdmManufacturerRepository jdmManufacturerRepository)
         {
             _jdmManufacturerRepository = jdmManufacturerRepository;
-            _jdmItems = new List<JapaneseDomesticMarketViewModels>
+            _jdmItems = new List<JdmViewModels>
             {
-                new JapaneseDomesticMarketViewModels
+                new JdmViewModels
                  {
                     ManufacturerType="Toyota",
                     Marka = "Toyota",
@@ -24,7 +24,7 @@ namespace WebNet23Online.Services
                     Url = "/images/japanese-domestic-market/toyota-chaser.jpg"
                  },
 
-                 new JapaneseDomesticMarketViewModels
+                 new JdmViewModels
                  {
                     ManufacturerType="Mitsubishi",
                     Marka = "Mitsubishi",
@@ -33,7 +33,7 @@ namespace WebNet23Online.Services
                     Url = "/images/japanese-domestic-market/mitsubishi_evo.jpg"
                  },
 
-                 new JapaneseDomesticMarketViewModels
+                 new JdmViewModels
                  {
                     ManufacturerType="Honda",
                     Marka = "Honda",
@@ -41,7 +41,7 @@ namespace WebNet23Online.Services
                     Price = 150000,
                     Url = "/images/japanese-domestic-market/honda-nsx.jpg"
                  },
-                 new JapaneseDomesticMarketViewModels
+                 new JdmViewModels
                  {
                     ManufacturerType="Nissan",
                     Marka = "Nissan",
@@ -49,7 +49,7 @@ namespace WebNet23Online.Services
                     Price = 27000,
                     Url = "/images/japanese-domestic-market/nissan-370z.jpg"
                  },
-                 new JapaneseDomesticMarketViewModels
+                 new JdmViewModels
                  {
                     ManufacturerType="Acura",
                     Marka = "Acura",
@@ -57,7 +57,7 @@ namespace WebNet23Online.Services
                     Price = 38000,
                     Url = "/images/japanese-domestic-market/acura-rsx.jpg"
                  },
-                 new JapaneseDomesticMarketViewModels
+                 new JdmViewModels
                  {
                     ManufacturerType="Mazda",
                     Marka = "Mazda",
@@ -67,18 +67,18 @@ namespace WebNet23Online.Services
                  }
             };
         }
-        public void AddJDMItem(JapaneseDomesticMarketViewModels jdmItem)
+        public void AddJDMItem(JdmViewModels jdmItem)
         {
             _jdmItems.Add(jdmItem);
         }
 
-        public List<JapaneseDomesticMarketViewModels> GenerateJDMCarsItems()
+        public List<JdmViewModels> GenerateJDMCarsItems()
         {
             return _jdmItems;
         }
-        public List<JapaneseDomesticMarketViewModels> GenerateJDMCarsItems(List<JdmCarsData> japaneseDomesticMarketCarsData)
+        public List<JdmViewModels> GenerateJDMCarsItems(List<JdmCarsData> japaneseDomesticMarketCarsData)
         {
-            var _jdmItems = japaneseDomesticMarketCarsData.Select(x => new JapaneseDomesticMarketViewModels
+            var _jdmItems = japaneseDomesticMarketCarsData.Select(x => new JdmViewModels
             {
                 ManufacturerType = x.ManufacturerType,
                 Marka = x.Marka,

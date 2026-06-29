@@ -1,4 +1,4 @@
-﻿namespace WebNet23Online.Models.JapaneseDomesticMarket
+﻿namespace WebNet23Online.Models.Jdm
 {
     public class VehicleInspectionHistoryItemViewModel
     {
