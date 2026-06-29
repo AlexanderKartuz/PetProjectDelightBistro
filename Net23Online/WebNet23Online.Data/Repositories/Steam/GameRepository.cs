@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-
+using System.Reflection;
 using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models.Steam;
@@ -92,48 +92,39 @@ namespace WebNet23Online.Data.Repositories.Steam
             return new PaginatedList<GameData>(pageItems, safePageIndex, totalPages, count);
         }
 
-        private IQueryable<GameData> ApplySorting(
-            IQueryable<GameData> games,
+        public IQueryable<T> ApplySorting<T>(
+            IQueryable<T> query,
             string? sortBy,
             string? sortDirection)
         {
-            var allowedSortProperties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            if (string.IsNullOrWhiteSpace(sortBy))
             {
-                ["price"] = nameof(GameData.Price),
-                ["reviewsCount"] = nameof(GameData.ReviewsCount),
-                ["averageRating"] = nameof(GameData.AverageRating),
-                ["title"] = nameof(GameData.Title),
-                ["id"] = nameof(GameData.Id),
-            };
-
-            if (string.IsNullOrWhiteSpace(sortBy)
-                || !allowedSortProperties.TryGetValue(sortBy, out var propertyName))
-            {
-                propertyName = nameof(GameData.Id);
+                return query;
             }
 
-            // GameData game 
-            var parameter = Expression.Parameter(typeof(GameData), "game");
+            var propertyInfo = typeof(T).GetProperty(sortBy,
+                BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
-            // game.Price
-            var property = Expression.Property(parameter, propertyName);
+            if (propertyInfo == null)
+            {
+                return query;
+            }
 
-            //game => game.Price
+            var parameter = Expression.Parameter(typeof(T), "entity");
+            var property = Expression.Property(parameter, propertyInfo);
             var lambda = Expression.Lambda(property, parameter);
 
-            // OrderByDescending or OrderBy string
             var methodName = string.Equals(sortDirection, "desc", StringComparison.OrdinalIgnoreCase)
                 ? nameof(Queryable.OrderByDescending)
                 : nameof(Queryable.OrderBy);
 
-            //Method info
             var orderByMethod = typeof(Queryable)
                 .GetMethods()
                 .First(method => method.Name == methodName
                     && method.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(GameData), property.Type);
+                .MakeGenericMethod(typeof(T), propertyInfo.PropertyType);
 
-            return (IQueryable<GameData>)orderByMethod.Invoke(null, [games, lambda])!;
+            return (IQueryable<T>)orderByMethod.Invoke(null, [query, lambda])!;
         }
     }
 }
