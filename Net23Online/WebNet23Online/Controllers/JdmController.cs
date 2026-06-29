@@ -18,17 +18,17 @@ using WebNet23Online.Data.Repositories;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Hubs;
 using WebNet23Online.Hubs.Interfaces;
-using WebNet23Online.Models.JapaneseDomesticMarket;
+using WebNet23Online.Models.Jdm;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace WebNet23Online.Controllers
 {
-    public class JapaneseDomesticMarketController : Controller
+    public class JdmController : Controller
     {
-        private IJapaneseDomesticMarketGenerator _jdmItemGenerator;
-        private IJDMCatalogGenerator _jdmCatalogGenerator;
+        private IJdmGenerator _jdmItemGenerator;
+        private IJdmCatalogGenerator _jdmCatalogGenerator;
         private IJdmRepository _jdmRepository;
         private IJdmManufacturerRepository _jdmManufacturerRepository;
         private IJdmPostsRepository _jdmPostsRepository;
@@ -37,7 +37,7 @@ namespace WebNet23Online.Controllers
         public IWebHostEnvironment _webHostEnvironment;
         private IHubContext<JdmHub, IJdmHub> _jdmHub;
 
-        public JapaneseDomesticMarketController(IJapaneseDomesticMarketGenerator jdmItemGenerator, IJDMCatalogGenerator jdmCatalogGenerator, IJdmRepository jdmRepository, IJdmManufacturerRepository jdmManufacturerRepository, IAuthService authService, IWebHostEnvironment webHostEnvironment, IJdmJournalCommentRepository journalCommentRepository, IHubContext<JdmHub, IJdmHub> jdmHub, IJdmPostsRepository jdmPostsRepository)
+        public JdmController(IJdmGenerator jdmItemGenerator, IJdmCatalogGenerator jdmCatalogGenerator, IJdmRepository jdmRepository, IJdmManufacturerRepository jdmManufacturerRepository, IAuthService authService, IWebHostEnvironment webHostEnvironment, IJdmJournalCommentRepository journalCommentRepository, IHubContext<JdmHub, IJdmHub> jdmHub, IJdmPostsRepository jdmPostsRepository)
         {
             _jdmItemGenerator = jdmItemGenerator;
             _jdmCatalogGenerator = jdmCatalogGenerator;
@@ -76,7 +76,7 @@ namespace WebNet23Online.Controllers
         [Authorize]
         public IActionResult CreateCars()
         {
-            var viewModel = new JapaneseDomesticMarketViewModels
+            var viewModel = new JdmViewModels
             {
                 AllManufacturer = _jdmItemGenerator.GetListItemsJdmCars()
             };
@@ -85,7 +85,7 @@ namespace WebNet23Online.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult CreateCars(JapaneseDomesticMarketViewModels viewModel)
+        public IActionResult CreateCars(JdmViewModels viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -148,11 +148,11 @@ namespace WebNet23Online.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult JDMBuilder()
+        public IActionResult Builder()
         {
             var jdmCars = _jdmRepository.GetAll();
             var carsJdmViewModel = _jdmItemGenerator.GenerateJDMCarsItems(jdmCars);
-            var viewModel = new JDMCatalogViewModels
+            var viewModel = new JdmCatalogViewModel
             {
                 CarsJDMItems = carsJdmViewModel
             };
@@ -161,7 +161,7 @@ namespace WebNet23Online.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult JDMBuilder(JapaneseDomesticMarketViewModels jdmItem)
+        public IActionResult Builder(JdmViewModels jdmItem)
         {
             var jdmCarsData = new JdmCarsData
             {
@@ -247,6 +247,24 @@ namespace WebNet23Online.Controllers
         {
             _jdmPostsRepository.DeleteOldPosts(oldTimePublished);
             return RedirectToAction(nameof(Journal));
+        }
+
+        public IActionResult TableData(string manufacturerType, string? sortBy = null)
+        {
+            var carsWithoutInspection = _jdmRepository.GetCarsNotVehicleInspectionHistory();
+            var jdmCarsData = _jdmRepository.GetAll();
+            var jdmItems = _jdmItemGenerator.GenerateJDMCarsItems(jdmCarsData);
+            var catalogAuto = _jdmCatalogGenerator.GetManufacturerTypeFromJDMItems(jdmItems, manufacturerType);
+            var viewModel = new CatalogCarsPermissionViewModel
+            {
+                CatalogAuto = catalogAuto,
+                CarsWithoutInspection = carsWithoutInspection.Select(x => new VehicleInspectionHistoryItemViewModel
+                {
+                    Manufacturer = x.Manufacturer,
+                    CountCars = x.CountCars
+                }).ToList()
+            };
+            return View(viewModel);
         }
     }
 }

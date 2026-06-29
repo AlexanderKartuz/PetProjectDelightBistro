@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WebNet23Online.Controllers;
 using WebNet23Online.Models.CustomValidatioAttributes;
 
-namespace WebNet23Online.Models.JapaneseDomesticMarket
+namespace WebNet23Online.Models.Jdm
 {
-    public class JapaneseDomesticMarketViewModels
+    public class JdmViewModels
     {
         public int Id { get; set; }
         public string Url { get; set; } = "";

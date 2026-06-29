@@ -1,17 +1,17 @@
-﻿@using WebNet23Online.Models.JapaneseDomesticMarket
+﻿@using WebNet23Online.Models.Jdm
 @using WebNet23Online.Localizations
-@model JapaneseDomesticMarketViewModels
+@model JdmViewModels
 @{
-    Layout = "_LayoutJapaneseDomesticMarket";
+    Layout = "_LayoutJdm";
 }
 @section Scripts{
-    <script src="~/js/japanese-domestic-market/create-cars.js"></script>
+    <script src="~/js/japanese-domestic-market/createCars.js"></script>
 }
 
 <div class="feeadback-container-box">
     <div class="feedback-container">
         <h2 class="title-form">@JapaneseDomesticMarket.Layout_Sell_Car</h2>
-        <form asp-controller="JapaneseDomesticMarket" asp-action="CreateCars" method="post" enctype="multipart/form-data">
+        <form asp-controller="Jdm" asp-action="CreateCars" method="post" enctype="multipart/form-data">
             <div> <label>@JapaneseDomesticMarket.CreateCars_Manufacturer</label></div>
             <div>
                 @Html.DropDownListFor(x => x.ManufactureId, Model.AllManufacturer)

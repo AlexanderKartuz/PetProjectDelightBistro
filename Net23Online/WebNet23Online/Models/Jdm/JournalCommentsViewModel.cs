@@ -1,6 +1,6 @@
 ﻿using WebNet23Online.Data.Models;
 
-namespace WebNet23Online.Models.JapaneseDomesticMarket
+namespace WebNet23Online.Models.Jdm
 {
     public class JournalCommentsViewModel
     {
