@@ -79,6 +79,33 @@ namespace WebNet23Online.Localizations {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Interested in the ad? Call the number.
+        /// </summary>
+        public static string Button_Call_The_Number {
+            get {
+                return ResourceManager.GetString("Button_Call_The_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на The seller did not provide a phone number..
+        /// </summary>
+        public static string Button_Call_The_Number_NoPhone {
+            get {
+                return ResourceManager.GetString("Button_Call_The_Number_NoPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Close.
+        /// </summary>
+        public static string Button_Close {
+            get {
+                return ResourceManager.GetString("Button_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Add merch.
         /// </summary>
         public static string Catalog_button_add_merch {

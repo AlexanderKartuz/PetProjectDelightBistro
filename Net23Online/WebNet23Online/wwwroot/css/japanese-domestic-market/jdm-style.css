@@ -392,6 +392,116 @@ main {
     font-size: 1rem;
 }
 
+.jdm-contact-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+    .jdm-contact-modal.is-open {
+        display: flex;
+    }
+
+.jdm-contact-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(2px);
+}
+
+.jdm-contact-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 28px 28px;
+    background: var(--jdm-paper);
+    border: 2px solid var(--jdm-black);
+    box-shadow: 8px 8px 0 var(--jdm-red);
+    text-align: center;
+}
+
+    .jdm-contact-modal__dialog::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--jdm-red);
+    }
+
+.jdm-contact-modal__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: var(--jdm-black);
+    color: var(--jdm-white);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 36px;
+    text-align: center;
+    border: 2px solid var(--jdm-red);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+    .jdm-contact-modal__close:hover {
+        background: var(--jdm-red);
+        color: var(--jdm-white);
+    }
+
+.jdm-contact-modal__message {
+    font-family: var(--jdm-font-serif);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--jdm-ink);
+    margin: 8px 0 20px;
+    letter-spacing: 0.03em;
+}
+
+.jdm-contact-modal__phone {
+    display: inline-block;
+    font-family: var(--jdm-font-display);
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+    letter-spacing: 0.08em;
+    color: var(--jdm-red-dark);
+    text-decoration: none;
+    padding: 12px 20px;
+    border: 2px solid var(--jdm-black);
+    background: var(--jdm-white);
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+    .jdm-contact-modal__phone:hover {
+        background: var(--jdm-red);
+        color: var(--jdm-white);
+        transform: translateY(-2px);
+    }
+
+    .jdm-contact-modal__phone:active {
+        transform: translateY(0);
+    }
+
+.jdm-contact-modal__hint {
+    font-size: 0.9rem;
+    color: var(--jdm-stone);
+    margin: 16px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--jdm-paper-dark);
+}
+
+.jdm-contact-modal.is-open .jdm-contact-modal__dialog {
+    animation: jdm-modal-in 0.25s ease-out;
+}
+
 .btn-watch {
     width: 100%;
     padding: 10px 8px;
@@ -869,13 +979,158 @@ section.comments button[type="submit"]:hover,
 }
 
 .notice-box {
-    width: 340px;
-    max-height: 300px;
-    overflow-y: auto;
     position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 300;
+    bottom: 20px;
+    right: 20px;
+    z-index: 400;
+    width: min(360px, calc(100vw - 32px));
+    max-height: 70vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+    .notice-box .notice {
+        pointer-events: auto;
+        position: relative;
+        background: var(--jdm-paper);
+        border: 2px solid var(--jdm-black);
+        border-left: 5px solid var(--jdm-red);
+        box-shadow: 6px 6px 0 var(--jdm-red);
+        padding: 0;
+        overflow: hidden;
+        cursor: pointer;
+        font-family: var(--jdm-font-body);
+        animation: jdm-notice-in 0.35s ease-out;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .notice-box .notice::before {
+            content: "新着";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            padding: 3px 8px;
+            background: var(--jdm-red);
+            color: var(--jdm-white);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border: 1px solid var(--jdm-black);
+        }
+
+        .notice-box .notice:hover {
+            transform: translateX(-6px) translateY(-2px);
+            box-shadow: 8px 8px 0 var(--jdm-black);
+        }
+    .notice-box .notice {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .notice-box .notice {
+        padding-top: 14px;
+        padding-bottom: 12px;
+        font-size: 0;
+    }
+
+        .notice-box .notice img.preview {
+            display: block;
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-top: 2px solid var(--jdm-black);
+            border-bottom: 2px solid var(--jdm-black);
+            margin: 0;
+        }
+.notice__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--jdm-paper-dark);
+}
+
+.notice__icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--jdm-black);
+    color: var(--jdm-red-light);
+    font-family: var(--jdm-font-display);
+    font-size: 1.1rem;
+    line-height: 36px;
+    text-align: center;
+    border: 2px solid var(--jdm-red);
+}
+
+.notice__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notice__title {
+    font-family: var(--jdm-font-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--jdm-ink);
+    margin: 0 0 4px;
+    letter-spacing: 0.02em;
+}
+
+.notice__subtitle {
+    font-size: 0.78rem;
+    color: var(--jdm-stone);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.notice__price {
+    padding: 8px 16px 12px;
+    font-family: var(--jdm-font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--jdm-red-dark);
+    background: linear-gradient(180deg, #fff 0%, var(--jdm-paper) 100%);
+    border-top: 1px solid var(--jdm-paper-dark);
+}
+
+    .notice__price::before {
+        content: "¥ ";
+        color: var(--jdm-red);
+        font-size: 0.95rem;
+    }
+
+.notice__close {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 3;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid var(--jdm-black);
+    background: var(--jdm-white);
+    color: var(--jdm-ink);
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.notice-box .notice:hover .notice__close {
+    opacity: 1;
+}
+
+.notice__close:hover {
+    background: var(--jdm-red);
+    color: var(--jdm-white);
 }
 
 .notice {
@@ -999,5 +1254,57 @@ output {
 
     .merch-container {
         flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .jdm-contact-modal__dialog {
+        padding: 28px 20px 24px;
+        box-shadow: 4px 4px 0 var(--jdm-red);
+    }
+
+    .jdm-contact-modal__phone {
+        width: 100%;
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .notice-box {
+        right: 12px;
+        bottom: 12px;
+        width: calc(100vw - 24px);
+    }
+
+        .notice-box .notice {
+            box-shadow: 4px 4px 0 var(--jdm-red);
+        }
+
+            .notice-box .notice img.preview {
+                height: 100px;
+            }
+}
+
+@keyframes jdm-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes jdm-notice-in {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }

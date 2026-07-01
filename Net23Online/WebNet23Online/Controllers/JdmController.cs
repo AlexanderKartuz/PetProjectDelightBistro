@@ -18,6 +18,7 @@ using WebNet23Online.Data.Repositories;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Hubs;
 using WebNet23Online.Hubs.Interfaces;
+using WebNet23Online.Localizations;
 using WebNet23Online.Models.Jdm;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Interfaces;
@@ -249,22 +250,22 @@ namespace WebNet23Online.Controllers
             return RedirectToAction(nameof(Journal));
         }
 
-        public IActionResult TableData(string manufacturerType, string? sortBy = null)
+        public IActionResult GetJdmCarsContact(int id)
         {
-            var carsWithoutInspection = _jdmRepository.GetCarsNotVehicleInspectionHistory();
-            var jdmCarsData = _jdmRepository.GetAll();
-            var jdmItems = _jdmItemGenerator.GenerateJDMCarsItems(jdmCarsData);
-            var catalogAuto = _jdmCatalogGenerator.GetManufacturerTypeFromJDMItems(jdmItems, manufacturerType);
-            var viewModel = new CatalogCarsPermissionViewModel
+            var cars = _jdmRepository.GetCarsCreator(id);
+            if (cars is null)
             {
-                CatalogAuto = catalogAuto,
-                CarsWithoutInspection = carsWithoutInspection.Select(x => new VehicleInspectionHistoryItemViewModel
-                {
-                    Manufacturer = x.Manufacturer,
-                    CountCars = x.CountCars
-                }).ToList()
+                return NotFound();
+            }
+
+            var mobilePhone = cars.Creator?.Mobilephone;
+            var viewModel = new JdmCarsContactViewModel
+            {
+                Message = JapaneseDomesticMarket.Button_Call_The_Number,
+                MobilePhone = mobilePhone,
+                HasPhone = !string.IsNullOrEmpty(mobilePhone),
             };
-            return View(viewModel);
+            return Json(viewModel);
         }
     }
 }

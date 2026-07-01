@@ -17,11 +17,9 @@
 
         $('.notice-box').append(newNotificationDiv);
 
-       // setTimeout(() => {
-       //     newNotificationDiv.hide(500);
-      //  }, 5000);
-
-        //newNotificationDiv.click(hidenNotification);
+        setTimeout(() => {
+            card.fadeOut(400, function () { $(this).remove(); });
+        }, 8000);
     })
 
     function hidenNotification() {
