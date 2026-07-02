@@ -36,5 +36,12 @@ namespace WebNet23Online.Data.Repositories
                   .ToList();
             return results;
         }
+
+        public JdmCarsData? GetCarsCreator(int carsId)
+        {
+            return _dbSet
+                .Include(x => x.Creator)
+                .FirstOrDefault(x => x.Id == carsId);
+        }
     }
 }

@@ -80,12 +80,12 @@ namespace WebNet23Online.Services
         {
             var _jdmItems = japaneseDomesticMarketCarsData.Select(x => new JdmViewModels
             {
+                Id = x.Id,
                 ManufacturerType = x.ManufacturerType,
                 Marka = x.Marka,
                 Model = x.Model,
                 Price = x.Price,
                 Url = x.Url,
-                // ConnectedJdmTitles = string.Join(",", x.JdmManufacturerData.JapaneseDomesticMarketCarsDatas.Select(a => a.ManufacturerType!))
             });
             return _jdmItems.ToList();
         }

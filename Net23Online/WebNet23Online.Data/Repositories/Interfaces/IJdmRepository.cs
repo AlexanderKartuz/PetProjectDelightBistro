@@ -10,6 +10,7 @@ namespace WebNet23Online.Data.Repositories.Interfaces
 {
     public interface IJdmRepository : IBaseRepository<JdmCarsData>
     {
+        JdmCarsData? GetCarsCreator(int carsId);
         List<VehicleInspectionHistoryDataModel> GetCarsNotVehicleInspectionHistory();
         List<JdmCarsData> IncludeManufactureData();
     }

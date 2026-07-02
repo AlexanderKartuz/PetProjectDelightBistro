@@ -6,6 +6,7 @@
 }
 @section Scripts {
     <script src="~/js/japanese-domestic-market/createJdmMerch.js"></script>
+    <script src="~/js/japanese-domestic-market/catalogContact.js"></script>
 }
 
 <div class="jdm-page-intro">
@@ -86,12 +87,22 @@
                         <div class="auto-card-price">
                             @jdmItem.Price
                         </div>
-                        <div><button class="btn-watch ">@JapaneseDomesticMarket.Catalog_Button_More_Details</button></div>
+                        <div><button type="button" class="btn-watch btn-more-details" data-car-id="@jdmItem.Id">@JapaneseDomesticMarket.Catalog_Button_More_Details</button></div>
                     </div>
                 }
             </div>
         </div>
     }
+</div>
+
+<div class="jdm-contact-modal" id="jdm-contact-modal" hidden>
+    <div class="jdm-contact-modal__overlay"></div>
+    <div class="jdm-contact-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="jdm-contact-title">
+        <button type="button" class="jdm-contact-modal__close" aria-label="@JapaneseDomesticMarket.Button_Close">&times;</button>
+        <p class="jdm-contact-modal__message" id="jdm-contact-message"></p>
+        <p id="jdm-contact-phone" class="jdm-contact-modal__phone" href="tel:"></p>
+        <p class="jdm-contact-modal__hint" id="jdm-contact-no-phone" hidden>@JapaneseDomesticMarket.Button_Call_The_Number_NoPhone</p>
+    </div>
 </div>
 
 @if (Model.CarsWithoutInspection.Any())
@@ -123,7 +134,7 @@
                 <div class="product-card-title" id="product-card-title">***</div>
                 <div class="product-card-description" id="product-card-description">***</div>
                 <div class="product-card-price" id="product-card-price">***</div>
-                <div class="product-card-picture" id="product-card-picture"><img src="***" class="product-card-picture" /></div>
+                <div class="product-card-picture" id="product-card-picture"><img src="" class="product-card-picture" /></div>
             </div>
         </div>
     </section>
