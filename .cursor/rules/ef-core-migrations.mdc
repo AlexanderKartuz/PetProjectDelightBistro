@@ -1,0 +1,61 @@
+---
+description: EF Core — не применять миграции; создавать только через dotnet ef migrations add
+alwaysApply: true
+---
+
+# Миграции EF Core
+
+## НИКОГДА не применять миграции
+
+Агент **не запускает** команды применения миграций к базе данных. Применять миграцию может **только человек**.
+
+Запрещено (и аналоги):
+
+- `dotnet ef database update`
+- `Update-Database` (Package Manager Console)
+- любые скрипты/SQL, которые меняют схему или данные в БД «от имени миграции»
+
+Если для задачи нужны изменения в БД:
+
+1. Создай миграцию (см. ниже).
+2. Сообщи человеку **имя миграции** и **точную команду** для применения.
+3. Дождись, пока человек применит миграцию сам.
+
+Пример текста для человека:
+
+```text
+Создана миграция AddAnimeGirlChat. Примените её вручную:
+
+dotnet ef database update --project Net23Online/WebNet23Online.Data --startup-project Net23Online/WebNet23Online
+```
+
+## НИКОГДА не создавать миграции вручную
+
+Не создавать и не править файлы в `Migrations/` напрямую: ни `.cs` с `Up`/`Down`, ни `.Designer.cs`, ни `*ModelSnapshot.cs`.
+
+Миграцию создавать **только** через CLI EF Core:
+
+```bash
+dotnet ef migrations add <MigrationName> --project <ProjectWithDbContext> --startup-project <StartupProject>
+```
+
+Для основного контекста `WebContext`:
+
+```bash
+dotnet ef migrations add <MigrationName> --project Net23Online/WebNet23Online.Data --startup-project Net23Online/WebNet23Online
+```
+
+Для других DbContext в решении подставляй соответствующие `--project` и `--startup-project` (MinimalApi и т.д.).
+
+После изменения моделей: сначала `migrations add`, затем просьба человеку применить `database update`.
+
+## Что можно делать
+
+- Менять сущности, конфигурацию EF, `DbContext`.
+- Запускать `dotnet ef migrations add` для генерации миграции.
+- Проверять сборку проекта (`dotnet build`).
+
+## Что нельзя делать
+
+- Применять миграции к БД.
+- Писать или редактировать файлы миграций руками вместо `dotnet ef migrations add`.

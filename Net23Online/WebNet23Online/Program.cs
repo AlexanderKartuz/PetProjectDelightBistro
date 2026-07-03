@@ -115,6 +115,8 @@ builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
 
 builder.Services.AddScoped<IAnimeGirlService, AnimeGirlGenerator>();
 builder.Services.AddScoped<IEpicMeanlessPhraseGenerator, EpicMeanlessPhraseGenerator>();
+builder.Services.AddSingleton<IAnimeGirlChatService, AnimeGirlChatService>();
+builder.Services.AddScoped<IAnimeGirlChatNicknameService, AnimeGirlChatNicknameService>();
 //builder.Services.AddScoped<IRandomBuilder, RandomBuilder>();
 //builder.Services.AddScoped<IAuthService, AuthService>();
 

@@ -58,6 +58,19 @@ namespace WebNet23Online.Data.Repositories
             return !_dbSet.Any(x => x.Name == name);
         }
 
+        public List<AnimeGirlData> GetByIds(IEnumerable<int> ids)
+        {
+            var idList = ids.Distinct().ToList();
+            if (idList.Count == 0)
+            {
+                return new List<AnimeGirlData>();
+            }
+
+            return _dbSet
+                .Where(x => idList.Contains(x.Id))
+                .ToList();
+        }
+
         public void Link(int animeId, int heroId)
         {
             var anime = _context.Animes.First(x => x.Id == animeId);

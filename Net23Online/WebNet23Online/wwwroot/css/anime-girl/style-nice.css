@@ -296,6 +296,13 @@ main {
     color: var(--text-soft);
 }
 
+.media-card__likes {
+    margin: 0.35rem 0 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-deep);
+}
+
 .fun-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));

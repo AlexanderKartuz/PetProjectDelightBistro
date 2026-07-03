@@ -6,5 +6,6 @@
         public string Url { get; set; }
         public string Title { get; set; }
         public string ConnectedAnimeTitles { get; set; } = string.Empty;
+        public int Likes { get; set; }
     }
 }

@@ -16,13 +16,18 @@
 
         self.toggleClass('active');
 
-        const atLeastOneItemForRemove = $('article.media-card.active').length > 0
+        const activeCount = $('article.media-card.active').length;
+        const atLeastOneItemForRemove = activeCount > 0;
 
         if (atLeastOneItemForRemove) {
             $('.section-heroes .remove-image').removeAttr('disabled');
         } else {
             $('.section-heroes .remove-image').attr('disabled', 'disabled');
         }
+
+        window.dispatchEvent(new CustomEvent('animeGirlSelectionChanged', {
+            detail: { count: activeCount }
+        }));
     });
 
     $('.section-heroes .remove-image').click(function () {

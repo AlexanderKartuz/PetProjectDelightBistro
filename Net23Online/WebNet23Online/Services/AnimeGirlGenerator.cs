@@ -30,7 +30,8 @@ namespace WebNet23Online.Services
                     Id = x.Id,
                     Url = x.Url,
                     Title = x.Name,
-                    ConnectedAnimeTitles = string.Join(", ", x.Animes.Select(a => a.Name!))
+                    ConnectedAnimeTitles = string.Join(", ", x.Animes.Select(a => a.Name!)),
+                    Likes = x.Likes
                 });
 
             return viewModels

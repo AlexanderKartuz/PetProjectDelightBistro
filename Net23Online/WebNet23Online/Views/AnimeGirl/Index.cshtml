@@ -6,6 +6,7 @@
 }
 
 @section Scripts {
+    <script src="/js/anime-girl/anime-girl-chat.js"></script>
     <script src="/js/anime-girl/index.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -194,12 +195,13 @@
         <div class="card-grid">
             @foreach (var girl in Model.AnimeGirls)
             {
-                <article class="media-card" data-id="@girl.Id">
+                <article class="media-card" data-id="@girl.Id" data-likes="@girl.Likes">
                     <div class="media-card__img-wrap">
                         <img src="@girl.Url" alt="Персонаж @girl.Title" width="400" height="500" loading="lazy" decoding="async">
                     </div>
                     <div class="media-card__text">
                         <p class="media-card__name">@girl.Title</p>
+                        <p class="media-card__likes">Лайки: @girl.Likes</p>
                         @if (!string.IsNullOrEmpty(girl.ConnectedAnimeTitles))
                         {
                             <p class="media-card__animes">@girl.ConnectedAnimeTitles</p>
@@ -234,3 +236,50 @@
 <footer class="site-footer">
     <p>Сделано с теплом · 2026</p>
 </footer>
+
+<button type="button"
+        class="anime-chat-toggle"
+        aria-label="Открыть чат"
+        aria-expanded="false"
+        aria-controls="anime-chat-panel">
+    💬
+</button>
+
+<aside id="anime-chat-panel" class="anime-chat-panel" aria-label="Чат">
+    <div class="anime-chat-panel__header">
+        <div>
+            <h2 class="anime-chat-panel__title">Чат</h2>
+            <span class="anime-chat-panel__user">Вы: …</span>
+        </div>
+        <button type="button" class="anime-chat-panel__close" aria-label="Закрыть чат">&times;</button>
+    </div>
+    <div class="anime-chat-messages" aria-live="polite"></div>
+    <div class="anime-chat-toolbar">
+        <button type="button" class="anime-chat-share" disabled>Поделиться</button>
+    </div>
+    <div class="anime-chat-input-box">
+        <input type="text"
+               class="anime-chat-input"
+               placeholder="Сообщение…"
+               maxlength="500"
+               autocomplete="off">
+        <button type="button" class="anime-chat-send">Отправить</button>
+    </div>
+</aside>
+
+<template id="anime-chat-message-template">
+    <div class="anime-chat-message">
+        <div class="anime-chat-message__sender"></div>
+        <div class="anime-chat-message__text"></div>
+    </div>
+</template>
+
+<template id="anime-chat-share-card-template">
+    <article class="anime-chat-share-card">
+        <div class="anime-chat-share-card__img-wrap">
+            <img class="anime-chat-share-card__img" alt="" width="120" height="150" loading="lazy" decoding="async">
+        </div>
+        <p class="anime-chat-share-card__title"></p>
+        <p class="anime-chat-share-card__likes"></p>
+    </article>
+</template>

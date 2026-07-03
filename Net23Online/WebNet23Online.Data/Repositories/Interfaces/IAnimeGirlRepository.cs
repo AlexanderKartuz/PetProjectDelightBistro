@@ -8,5 +8,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         void Link(int animeId, int heroId);
         List<AnimeGirlData> GetAllIncludeAnime();
         List<AnimeGirlData> GetAllIncludeAnime(string? sortBy);
+        List<AnimeGirlData> GetByIds(IEnumerable<int> ids);
     }
 }
