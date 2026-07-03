@@ -1,0 +1,58 @@
+---
+description: Структура и формат документации Net23Online solution (Net23Online/docs/)
+globs: Net23Online/docs/**
+alwaysApply: false
+---
+
+# Документация Net23Online
+
+## Расположение
+
+Корень: `Net23Online/docs/`. Вся проектная документация — только здесь.
+
+## Категории
+
+| Категория | Папка | Тип документа |
+|-----------|-------|---------------|
+| Web MVC | `web-net23-online/modules/` | web-module |
+| Minimal API | `minimal-apis/` | minimal-api |
+| Libraries | `libraries/` | shared-library |
+
+## Шаблоны
+
+- Web-модуль → `_templates/web-module.md`
+- Minimal API → `_templates/minimal-api.md`
+- Библиотека → `_templates/shared-library.md`
+
+## Язык и именование
+
+- Текст документации — **русский**
+- Идентификаторы, URL, имена файлов — **как в коде** (английский)
+- Папки — **kebab-case**: `anime-girl`, `delight-bistro`, `slay-the-spire-2`
+- Главный файл — всегда `README.md`
+
+## Индексные файлы (обновлять при добавлении проекта)
+
+- `docs/README.md` — оглавление solution
+- `docs/integration-map.md` — связи MVC ↔ API
+- `docs/web-net23-online/README.md` — модули MVC
+- `docs/minimal-apis/README.md` — индекс API
+
+## Новый MVC-модуль
+
+1. Папка `web-net23-online/modules/{kebab-name}/`
+2. `README.md` по шаблону `web-module.md`
+3. Строка в `web-net23-online/README.md` и `docs/README.md`
+
+## Новый Minimal API
+
+1. Папка `minimal-apis/{kebab-name}/`
+2. `README.md` по шаблону `minimal-api.md`
+3. Строка в `minimal-apis/README.md`, `docs/README.md`
+4. Связь в `integration-map.md` + cross-link в MVC-модуле-потребителе
+
+## Запреты
+
+- Не дублировать код целиком — описывать поведение, ссылаться на файлы
+- Не создавать doc вне `Net23Online/docs/` без явной просьбы
+- Не документировать тестовые проекты и `wwwroot/lib/`
