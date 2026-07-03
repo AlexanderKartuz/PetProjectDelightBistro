@@ -14,6 +14,9 @@
 </div>
 
 <div class="container-content">
+    <form asp-action="DeleteOldPosts" method="post">
+        <button type="submit" class="delete-comments">@JapaneseDomesticMarket.Journal_button_delete_post</button>
+    </form>
     <div class="container-content">
         <article class="content-news">
             <div class="title-form">@JapaneseDomesticMarket.Journal_Header</div>
@@ -27,35 +30,6 @@
                 </div>
             </p>
             
-        </article>
-        <article class="content-news">
-            <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_Raubichi</div>
-            <p class="date">@JapaneseDomesticMarket.Journal_Date_19_April</p>
-            <p>
-                @JapaneseDomesticMarket.Journal_Text_Raubichi_1
-                <br>@JapaneseDomesticMarket.Journal_Text_Raubichi_2
-            </p>
-            <p>
-                @JapaneseDomesticMarket.Journal_Text_Raubichi_3
-            </p>
-            <div class="container-content">
-                <img src="~/images/japanese-domestic-market/raubichi-1.JPG" class="img-content" />
-                <img src="~/images/japanese-domestic-market/raubichi-2.JPG" class="img-content" />
-            </div>
-            @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 2))
-        </article>
-
-        <article class="content-news">
-            <div class="title-form">@JapaneseDomesticMarket.Journal_Title_Header_2</div>
-            <p class="date">@JapaneseDomesticMarket.Journal_Date_30_August</p>
-            <p>
-                @JapaneseDomesticMarket.Journal_Text_Lida_1
-            </p>
-        <div class="container-content">
-            <img src="~/images/japanese-domestic-market/lida-1.jpg" class="img-content" />
-            <img src="~/images/japanese-domestic-market/lida-3.jpg" class="img-content" />
-        </div>
-        @await Html.PartialAsync("_JournalJdmCommentPartial", Model.Posts.First(p => p.PostId == 3))
         </article>
     </div>
 
@@ -79,11 +53,6 @@
             </article>
         }
     </div>
-
-<form asp-action="DeleteOldPosts" method="post">
-    <button type="submit" class="delete-comments">@JapaneseDomesticMarket.Journal_button_delete_post</button>
-</form>
-
 
     <div class="pop-up">
         <span>&times;</span>
