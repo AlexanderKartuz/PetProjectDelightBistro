@@ -1,4 +1,5 @@
 ﻿@using WebNet23Online.Models.AnimeGirl
+@using WebNet23Online.Localizations
 @model CreateAnimeGirlViewModel
 @{
     Layout = "_LayoutAnime";
@@ -16,15 +17,15 @@
     <div class="data">
         <form method="post" enctype="multipart/form-data">
             <div>
-                @Html.TextBoxFor(x => x.Name, new { placeholder = "Name" })
+                @Html.TextBoxFor(x => x.Name, new { placeholder = AnimeGirl.CreateGirl_NamePlaceholder })
                 @Html.ValidationMessageFor(x => x.Name)
             </div>
             <div>
-                @Html.TextBoxFor(x => x.DoubleCheckName, new { placeholder = "Name again" })
+                @Html.TextBoxFor(x => x.DoubleCheckName, new { placeholder = AnimeGirl.CreateGirl_NameAgainPlaceholder })
                 @Html.ValidationMessageFor(x => x.DoubleCheckName)
             </div>
             <div>
-                @Html.TextBoxFor(x => x.Description, new { placeholder = "Description" })
+                @Html.TextBoxFor(x => x.Description, new { placeholder = AnimeGirl.CreateGirl_DescriptionPlaceholder })
                 @Html.ValidationMessageFor(x => x.Description)
             </div>
             <div>
@@ -32,26 +33,26 @@
                 
             </div>
             <div>
-                или
-                @Html.TextBoxFor(x => x.Url, new { placeholder = "Url" })
+                @AnimeGirl.CreateGirl_Or
+                @Html.TextBoxFor(x => x.Url, new { placeholder = AnimeGirl.CreateGirl_UrlPlaceholder })
                 @Html.ValidationMessageFor(x => x.Url)
             </div>
             <div>
-                @Html.TextBoxFor(x => x.Size, new { placeholder = "Szie", type = "number" })
+                @Html.TextBoxFor(x => x.Size, new { placeholder = AnimeGirl.CreateGirl_SizePlaceholder, type = "number" })
                 @Html.ValidationMessageFor(x => x.Size)
             </div>
             <div>
                 @Html.DropDownListFor(x => x.AnimeId, Model.Animes)
             </div>
             <div>
-                <button type="submit">Save</button>
+                <button type="submit">@AnimeGirl.CreateGirl_Save</button>
             </div>
         </form>
     </div>
     <div class="preview">
         <article class="media-card">
             <div class="media-card__img-wrap">
-                <img src="" alt="Персонаж " width="400" height="500" loading="lazy" decoding="async">
+                <img src="" alt="@AnimeGirl.CreateGirl_CharacterAlt" width="400" height="500" loading="lazy" decoding="async">
             </div>
             <div class="media-card__text">
                 <p class="media-card__name">***</p>

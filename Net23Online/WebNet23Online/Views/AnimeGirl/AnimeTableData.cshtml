@@ -1,13 +1,14 @@
 ﻿@using WebNet23Online.Models.AnimeGirl
+@using WebNet23Online.Localizations
 @model List<IndexAnimeViewModel>
 @{
     Layout = "_LayoutAnime";
 }
 <div class="anime-grils">
     <div class="girl-row header">
-        <div class="girl-cell"><a href="/AnimeGirl/AnimeTableData?sortBy=Id">Id</a></div>
-        <div class="girl-cell"><a href="/AnimeGirl/AnimeTableData?sortBy=Name">Name</a></div>
-        <div class="girl-cell"><a href="/AnimeGirl/AnimeTableData?sortBy=CoverUrl">Url</a></div>
+        <div class="girl-cell"><a href="/AnimeGirl/AnimeTableData?sortBy=Id">@AnimeGirl.AnimeTableData_ColumnId</a></div>
+        <div class="girl-cell"><a href="/AnimeGirl/AnimeTableData?sortBy=Name">@AnimeGirl.AnimeTableData_ColumnName</a></div>
+        <div class="girl-cell"><a href="/AnimeGirl/AnimeTableData?sortBy=CoverUrl">@AnimeGirl.AnimeTableData_ColumnUrl</a></div>
     </div>
     @foreach (var item in Model)
     {

@@ -17,7 +17,7 @@ namespace WebNet23Online.Models.CustomValidatioAttributes
             var repository = validationContext.GetRequiredService<IAnimeGirlRepository>();
             if (!repository.IsNameFree(name))
             {
-                return new ValidationResult("Name is already used");
+                return new ValidationResult(Localizations.AnimeGirl.Validation_NameAlreadyUsed);
             }
 
             return ValidationResult.Success;

@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    const l10nEl = document.getElementById('anime-girl-l10n');
+    const newAnimeLabel = l10nEl?.dataset.notificationNewAnime || 'New anime name:';
     const { hub, ready } = window.animeGirlSignalR;
 
     ready.then(function () {
@@ -7,7 +9,7 @@
 
             const newNotificationDiv = $('<div>');
             newNotificationDiv.addClass('notification');
-            newNotificationDiv.text(`New anime name: ${name}`);
+            newNotificationDiv.text(`${newAnimeLabel} ${name}`);
 
             const img = $('<img>');
             img.attr('src', url);

@@ -9,5 +9,6 @@ namespace WebNet23Online.Data.Repositories.Interfaces
         List<AnimeGirlData> GetAllIncludeAnime();
         List<AnimeGirlData> GetAllIncludeAnime(string? sortBy);
         List<AnimeGirlData> GetByIds(IEnumerable<int> ids);
+        List<AnimeGirlData> IncrementLikes(IEnumerable<int> ids);
     }
 }

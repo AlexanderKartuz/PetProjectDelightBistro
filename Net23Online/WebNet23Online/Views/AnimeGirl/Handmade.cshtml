@@ -1,82 +1,82 @@
-﻿@model WebNet23Online.Models.AnimeGirl.HandMadeViewModel
+﻿@using WebNet23Online.Localizations
+@model WebNet23Online.Models.AnimeGirl.HandMadeViewModel
 
 @{
     Layout = "_LayoutAnime";
 }
 <link rel="stylesheet" href="/css/anime-girl/handmade.css">
 <div>
-    Привет @Model.Name Now is @Model.Minutes : @Model.Seconds
+    @string.Format(AnimeGirl.Handmade_Hello, Model.Name, Model.Minutes, Model.Seconds)
 </div>
 <div class="info">
-    <img src="/images/anime-girl/logo.jpg" />
-    <a href="/animeGirl/Index">Nice</a>
-    <span>Smile Generator 1</span>
-    <span>Smile Generator 2</span>
-    <span>Smile Generator 3</span>
+    <img src="/images/anime-girl/logo.jpg" alt="" />
+    <a href="/animeGirl/Index">@AnimeGirl.Handmade_Nice</a>
+    <span>@AnimeGirl.Handmade_SmileGenerator1</span>
+    <span>@AnimeGirl.Handmade_SmileGenerator2</span>
+    <span>@AnimeGirl.Handmade_SmileGenerator3</span>
 </div>
 <div class="games">
     <form>
-        <input maxlength="5" type="text" placeholder="Game Name" />
+        <input maxlength="5" type="text" placeholder="@AnimeGirl.Handmade_GameNamePlaceholder" />
         <div>
             <label>
-                <input type="checkbox" name="game-features" value="грабить коро" placeholder="Game Features" />
-                грабить коро
+                <input type="checkbox" name="game-features" value="@AnimeGirl.Handmade_FeatureRobKing" />
+                @AnimeGirl.Handmade_FeatureRobKing
             </label>
             <label>
-                <input type="checkbox" name="game-features" value="грабить магазины" placeholder="Game Features" />
-                грабить магазины
+                <input type="checkbox" name="game-features" value="@AnimeGirl.Handmade_FeatureRobShops" />
+                @AnimeGirl.Handmade_FeatureRobShops
             </label>
             <label>
-                <input type="checkbox" name="game-features" value="грабить банки" placeholder="Game Features" />
-                грабить
-                банки
+                <input type="checkbox" name="game-features" value="@AnimeGirl.Handmade_FeatureRobBanks" />
+                @AnimeGirl.Handmade_FeatureRobBanks
             </label>
         </div>
         <div>
             <label>
-                <input type="radio" name="main-character" value="грабить банки" placeholder="Game Type" />
-                Мал
+                <input type="radio" name="main-character" value="male" />
+                @AnimeGirl.Handmade_CharacterMale
             </label>
             <label>
-                <input type="radio" name="main-character" value="грабить магазины" placeholder="Game Type" />
-                Дев
+                <input type="radio" name="main-character" value="female" />
+                @AnimeGirl.Handmade_CharacterFemale
             </label>
         </div>
         <input type="color" />
         <input type="number" />
         <input type="range" />
         <div>
-            <button type="submit">Add Game</button>
+            <button type="submit">@AnimeGirl.Handmade_AddGame</button>
         </div>
     </form>
 </div>
 <div class="animes">
     <div class="anime">
         <div class="image-container">
-            <img src="/images/anime-girl/girl1.jpg" />
+            <img src="/images/anime-girl/girl1.jpg" alt="@AnimeGirl.Handmade_AnimeSample" />
         </div>
-        <div class="anime-name">Anime 1</div>
+        <div class="anime-name">@AnimeGirl.Handmade_AnimeSample</div>
     </div>
     <div class="anime">
         <div class="image-container">
-            <img src="/images/anime-girl/girl2.jpg" />
+            <img src="/images/anime-girl/girl2.jpg" alt="@AnimeGirl.Handmade_AnimeSample" />
         </div>
-        <div class="anime-name">Anime 1</div>
+        <div class="anime-name">@AnimeGirl.Handmade_AnimeSample</div>
     </div>
     <div class="anime">
         <div class="image-container">
-            <img src="/images/anime-girl/girl3.jpg" />
+            <img src="/images/anime-girl/girl3.jpg" alt="@AnimeGirl.Handmade_AnimeSample" />
         </div>
-        <div class="anime-name">Anime 1</div>
+        <div class="anime-name">@AnimeGirl.Handmade_AnimeSample</div>
     </div>
     <div class="anime">
         <div class="image-container">
-            <img src="/images/anime-girl/girl4.jpg" />
+            <img src="/images/anime-girl/girl4.jpg" alt="@AnimeGirl.Handmade_AnimeSample" />
         </div>
-        <div class="anime-name">Anime 1</div>
+        <div class="anime-name">@AnimeGirl.Handmade_AnimeSample</div>
     </div>
 </div>
 
 <div class="books">
-    books info
+    @AnimeGirl.Handmade_BooksInfo
 </div>

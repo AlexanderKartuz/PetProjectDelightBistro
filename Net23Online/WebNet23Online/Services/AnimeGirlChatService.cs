@@ -105,8 +105,9 @@ public class AnimeGirlChatService : IAnimeGirlChatService
         using var scope = _scopeFactory.CreateScope();
         var animeGirlRepository = scope.ServiceProvider.GetRequiredService<IAnimeGirlRepository>();
 
-        var characters = animeGirlRepository
-            .GetByIds(characterIds)
+        var updatedCharacters = animeGirlRepository.IncrementLikes(characterIds);
+
+        var characters = updatedCharacters
             .Select(x => new SharedCharacterChatItem
             {
                 Id = x.Id,

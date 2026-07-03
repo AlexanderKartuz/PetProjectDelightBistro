@@ -7,7 +7,9 @@ namespace WebNet23Online.Models.AnimeGirl
     public class CreateAnimeGirlViewModel
     {
         [IsUniqGirlName]
-        [Required(ErrorMessage = "Name can not be empty")]
+        [Required(
+            ErrorMessageResourceType = typeof(Localizations.AnimeGirl),
+            ErrorMessageResourceName = "Validation_NameRequired")]
         public string Name { get; set; }
         
         [DoubleCheck]
@@ -18,7 +20,9 @@ namespace WebNet23Online.Models.AnimeGirl
         public IFormFile? Image { get; set; }
         public string? Url { get; set; }
 
-        [MinMaxCheck(1, 5)]
+        [MinMaxCheck(1, 5,
+            ErrorMessageResourceType = typeof(Localizations.AnimeGirl),
+            ErrorMessageResourceName = "Validation_SizeRange")]
         public int Size { get; set; }
 
         public int? AnimeId { get; set; }

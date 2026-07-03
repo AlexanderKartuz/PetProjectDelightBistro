@@ -18,7 +18,7 @@ namespace WebNet23Online.Models.CustomValidatioAttributes
                 return ValidationResult.Success;
             }
 
-            return new ValidationResult("Name and DoubleCheckName must be the same");
+            return new ValidationResult(Localizations.AnimeGirl.Validation_NamesMustMatch);
         }
     }
 }

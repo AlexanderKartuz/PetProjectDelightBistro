@@ -15,23 +15,34 @@
     <link rel="stylesheet" href="/css/anime-girl/style-nice.css">
 }
 
-<title>Мои увлечения — аниме, игры, книги</title>
+<title>@AnimeGirl.Index_PageTitle</title>
+<div id="anime-girl-l10n" hidden
+     data-chat-user-label="@AnimeGirl.Index_Chat_UserLabel"
+     data-chat-user-joined="@AnimeGirl.Chat_UserJoined"
+     data-chat-user-left="@AnimeGirl.Chat_UserLeft"
+     data-chat-me="@AnimeGirl.Chat_Me"
+     data-chat-select-characters="@AnimeGirl.Chat_SelectCharactersFirst"
+     data-chat-shared-by-you="@AnimeGirl.Chat_SharedByYou"
+     data-chat-shared-by-user="@AnimeGirl.Chat_SharedByUser"
+     data-hero-likes="@AnimeGirl.Index_Heroes_Likes"
+     data-hero-alt="@AnimeGirl.Index_Hero_Alt"
+     data-notification-new-anime="@AnimeGirl.Notification_NewAnime"></div>
 <div class="bg-blobs" aria-hidden="true"></div>
 <header class="site-header">
     <p class="tagline">@AnimeGirl.Index_Header_TagLine</p>
     <h1>@AnimeGirl.Index_Header</h1>
-    <p class="lead">Здесь собираю то, что нравится: пока подробно про аниме — игры и книги добавлю позже.</p>
-    <a href="/AnimeGirl/Index?count=1">The only one</a>
-    <a href="/AnimeGirl/Index?count=2">Two is enought</a>
-    <a href="/AnimeGirl/Index?count=3">MORE</a>
+    <p class="lead">@AnimeGirl.Index_Lead</p>
+    <a href="/AnimeGirl/Index?count=1">@AnimeGirl.Index_LinkOnlyOne</a>
+    <a href="/AnimeGirl/Index?count=2">@AnimeGirl.Index_LinkTwoEnough</a>
+    <a href="/AnimeGirl/Index?count=3">@AnimeGirl.Index_LinkMore</a>
 </header>
 
 <main>
     @if (Model.Joke != null || Model.Waifu?.items?.Count > 0 || Model.Cats?.Count > 0)
     {
         <section class="section section-fun" id="fun-stuff" aria-labelledby="fun-stuff-title">
-            <h2 class="section-title" id="fun-stuff-title">Немного позитива</h2>
-            <p class="section-intro">Случайная шутка, waifu и котики — подгружаются при каждом открытии страницы.</p>
+            <h2 class="section-title" id="fun-stuff-title">@AnimeGirl.Index_FunSection_Title</h2>
+            <p class="section-intro">@AnimeGirl.Index_FunSection_Intro</p>
 
             <div class="fun-grid">
                 @if (Model.Joke != null)
@@ -39,7 +50,7 @@
                     <article class="fun-card fun-card--joke" aria-labelledby="joke-title">
                         <div class="fun-card__header">
                             <span class="fun-card__icon" aria-hidden="true">😄</span>
-                            <h3 class="fun-card__title" id="joke-title">Шутка дня</h3>
+                            <h3 class="fun-card__title" id="joke-title">@AnimeGirl.Index_Joke_Title</h3>
                             @if (!string.IsNullOrEmpty(Model.Joke.type))
                             {
                                 <span class="fun-card__badge">@Model.Joke.type</span>
@@ -58,18 +69,18 @@
                     <article class="fun-card fun-card--waifu" aria-labelledby="waifu-title">
                         <div class="fun-card__header">
                             <span class="fun-card__icon" aria-hidden="true">🌸</span>
-                            <h3 class="fun-card__title" id="waifu-title">Waifu</h3>
+                            <h3 class="fun-card__title" id="waifu-title">@AnimeGirl.Index_Waifu_Title</h3>
                         </div>
                         <div class="fun-card__img-wrap fun-card__img-wrap--waifu">
                             <img src="@waifuImage.url"
-                                 alt="Waifu illustration"
+                                 alt="@AnimeGirl.Index_Waifu_Alt"
                                  width="@(waifuImage.width > 0 ? waifuImage.width : 480)"
                                  height="@(waifuImage.height > 0 ? waifuImage.height : 720)"
                                  loading="lazy"
                                  decoding="async">
                         </div>
                         <p class="fun-card__link-wrap">
-                            <a class="fun-card__link" href="@waifuImage.url" target="_blank" rel="noopener noreferrer">Открыть оригинал</a>
+                            <a class="fun-card__link" href="@waifuImage.url" target="_blank" rel="noopener noreferrer">@AnimeGirl.Index_Waifu_OpenOriginal</a>
                         </p>
                     </article>
                 }
@@ -80,17 +91,18 @@
                 <div class="fun-cats">
                     <div class="fun-cats__header">
                         <span class="fun-card__icon" aria-hidden="true">🐱</span>
-                        <h3 class="fun-card__title">Котики</h3>
+                        <h3 class="fun-card__title">@AnimeGirl.Index_Cats_Title</h3>
                     </div>
                     <div class="fun-cats-grid">
                         @foreach (var cat in Model.Cats)
                         {
                             var catUrl = $"https://cataas.com/cat/{cat.id}";
+                            var catLabel = $"{AnimeGirl.Index_Cat_Alt} {cat.id}";
                             <article class="fun-cat-card">
-                                <a class="fun-cat-card__link" href="@catUrl" target="_blank" rel="noopener noreferrer" title="Кот @cat.id">
+                                <a class="fun-cat-card__link" href="@catUrl" target="_blank" rel="noopener noreferrer" title="@catLabel">
                                     <div class="fun-cat-card__img-wrap">
                                         <img src="@catUrl"
-                                             alt="Кот @cat.id"
+                                             alt="@catLabel"
                                              width="320"
                                              height="320"
                                              loading="lazy"
@@ -106,14 +118,14 @@
     }
 
     <section class="section section-link" id="link-anime-hero" aria-labelledby="link-anime-hero-title">
-        <h2 class="section-title" id="link-anime-hero-title">Связать персонажа с аниме</h2>
-        <p class="section-intro">Выберите аниме и персонажа — сохранение связи подключим позже.</p>
+        <h2 class="section-title" id="link-anime-hero-title">@AnimeGirl.Index_LinkSection_Title</h2>
+        <p class="section-intro">@AnimeGirl.Index_LinkSection_Intro</p>
         <form action="/AnimeGirl/LinkAnimeAndGirl" method="post">
-            <div class="link-toolbar" role="group" aria-label="Выбор аниме и персонажа">
+            <div class="link-toolbar" role="group" aria-label="@AnimeGirl.Index_LinkSection_GroupLabel">
                 <div class="link-field">
-                    <label class="link-label" for="select-anime">Аниме</label>
+                    <label class="link-label" for="select-anime">@AnimeGirl.Index_LinkSection_AnimeLabel</label>
                     <select id="select-anime" class="link-select" name="animeId">
-                        <option value="">Выберите аниме</option>
+                        <option value="">@AnimeGirl.Index_LinkSection_SelectAnime</option>
                         @foreach (var anime in Model.Animes)
                         {
                             <option value="@anime.Id">@anime.Name</option>
@@ -121,9 +133,9 @@
                     </select>
                 </div>
                 <div class="link-field">
-                    <label class="link-label" for="select-hero">Персонаж</label>
+                    <label class="link-label" for="select-hero">@AnimeGirl.Index_LinkSection_HeroLabel</label>
                     <select id="select-hero" class="link-select" name="heroId">
-                        <option value="">Выберите персонажа</option>
+                        <option value="">@AnimeGirl.Index_LinkSection_SelectHero</option>
                         @foreach (var girl in Model.AnimeGirls)
                         {
                             var optLabel = string.IsNullOrEmpty(girl.ConnectedAnimeTitles)
@@ -133,20 +145,20 @@
                         }
                     </select>
                 </div>
-                <button type="submit" class="link-button">Связать</button>
+                <button type="submit" class="link-button">@AnimeGirl.Index_LinkSection_Button</button>
             </div>
         </form>
     </section>
 
     <section class="section section-anime-catalog" id="anime-catalog" aria-labelledby="anime-catalog-title">
-        <h2 class="section-title" id="anime-catalog-title">Каталог аниме</h2>
-        <p class="section-intro">Обложки и названия — то, что уже в коллекции.</p>
+        <h2 class="section-title" id="anime-catalog-title">@AnimeGirl.Index_AnimeCatalog_Title</h2>
+        <p class="section-intro">@AnimeGirl.Index_AnimeCatalog_Intro</p>
         <div class="anime-catalog-grid">
             @foreach (var anime in Model.Animes)
             {
                 <article class="anime-catalog-card" data-id="@anime.Id">
                     <div class="anime-catalog-card__cover">
-                        <img src="@anime.Url" alt="Обложка: @anime.Name" width="480" height="720" loading="lazy" decoding="async">
+                        <img src="@anime.Url" alt="@($"{AnimeGirl.Index_AnimeCatalog_CoverAlt} {anime.Name}")" width="480" height="720" loading="lazy" decoding="async">
                     </div>
                     <div class="anime-catalog-card__body">
                         <h3 class="mode-view anime-catalog-card__title">@anime.Name</h3>
@@ -158,25 +170,25 @@
     </section>
 
 
-    <section class="section section-anime-catalog section-movie-catalog" id="anime-catalog" aria-labelledby="anime-catalog-title">
-        <h2 class="section-title" id="anime-catalog-title">Каталог Фильмов</h2>
-        <p class="section-intro">Обложки и названия — то, что уже в коллекции.</p>
+    <section class="section section-anime-catalog section-movie-catalog" id="movie-catalog" aria-labelledby="movie-catalog-title">
+        <h2 class="section-title" id="movie-catalog-title">@AnimeGirl.Index_MovieCatalog_Title</h2>
+        <p class="section-intro">@AnimeGirl.Index_MovieCatalog_Intro</p>
         <div class="anime-catalog-grid">
 
             <article class="anime-catalog-card create-new-film" data-id="***">
                 <div class="anime-catalog-card__cover">
-                    <img src="***" alt="Обложка: ***" width="480" height="720" loading="lazy" decoding="async">
+                    <img src="***" alt="***" width="480" height="720" loading="lazy" decoding="async">
                 </div>
                 <div class="anime-catalog-card__body">
-                    <input value="" class="movie-name-input link-select" placeholder="Movie name">
-                    <input value="" class="movie-url-input link-select" placeholder="Movie cover url">
-                    <button class="create-movie-button link-select">Create Movie</button>
+                    <input value="" class="movie-name-input link-select" placeholder="@AnimeGirl.Index_MovieCatalog_NamePlaceholder">
+                    <input value="" class="movie-url-input link-select" placeholder="@AnimeGirl.Index_MovieCatalog_UrlPlaceholder">
+                    <button class="create-movie-button link-select">@AnimeGirl.Index_MovieCatalog_CreateButton</button>
                 </div>
             </article>
             
             <article class="anime-catalog-card template" data-id="***">
                 <div class="anime-catalog-card__cover">
-                    <img src="***" alt="Обложка: ***" width="480" height="720" loading="lazy" decoding="async">
+                    <img src="***" alt="***" width="480" height="720" loading="lazy" decoding="async">
                 </div>
                 <div class="anime-catalog-card__body">
                     <h3 class="mode-view anime-catalog-card__title">***</h3>
@@ -188,27 +200,27 @@
     </section>
 
     <section class="section section-heroes" id="heroes" aria-labelledby="heroes-title">
-        <h2 class="section-title" id="heroes-title">Персонажи</h2>
-        <p class="section-intro">Иллюстрации и аниме, где персонаж числится в списке героев.</p>
-        <p class="section-intro"><button class="remove-image link-button" disabled>remove</button></p>
+        <h2 class="section-title" id="heroes-title">@AnimeGirl.Index_Heroes_Title</h2>
+        <p class="section-intro">@AnimeGirl.Index_Heroes_Intro</p>
+        <p class="section-intro"><button class="remove-image link-button" disabled>@AnimeGirl.Index_Heroes_Remove</button></p>
 
         <div class="card-grid">
             @foreach (var girl in Model.AnimeGirls)
             {
                 <article class="media-card" data-id="@girl.Id" data-likes="@girl.Likes">
                     <div class="media-card__img-wrap">
-                        <img src="@girl.Url" alt="Персонаж @girl.Title" width="400" height="500" loading="lazy" decoding="async">
+                        <img src="@girl.Url" alt="@($"{AnimeGirl.Index_Hero_Alt} {girl.Title}")" width="400" height="500" loading="lazy" decoding="async">
                     </div>
                     <div class="media-card__text">
                         <p class="media-card__name">@girl.Title</p>
-                        <p class="media-card__likes">Лайки: @girl.Likes</p>
+                        <p class="media-card__likes">@($"{AnimeGirl.Index_Heroes_Likes} {girl.Likes}")</p>
                         @if (!string.IsNullOrEmpty(girl.ConnectedAnimeTitles))
                         {
                             <p class="media-card__animes">@girl.ConnectedAnimeTitles</p>
                         }
                         @if (Model.CanDeleteGirl)
                         {
-                            <p class="media-card__animes"><a class="delete-girl-link" href="/AnimeGirl/Delete?id=@girl.Id">Delete</a></p>
+                            <p class="media-card__animes"><a class="delete-girl-link" href="/AnimeGirl/Delete?id=@girl.Id">@AnimeGirl.Index_Heroes_Delete</a></p>
                         }
                     </div>
                 </article>
@@ -217,53 +229,53 @@
     </section>
 
     <section class="section section-placeholder" id="games">
-        <h2 class="section-title">Игры</h2>
+        <h2 class="section-title">@AnimeGirl.Index_Games_Title</h2>
         <div class="placeholder-box">
             <span class="placeholder-icon" aria-hidden="true">🎮</span>
-            <p>Скоро добавлю список любимых игр и, может, пару скриншотов.</p>
+            <p>@AnimeGirl.Index_Games_Placeholder</p>
         </div>
     </section>
 
     <section class="section section-placeholder" id="books">
-        <h2 class="section-title">Книги</h2>
+        <h2 class="section-title">@AnimeGirl.Index_Books_Title</h2>
         <div class="placeholder-box">
             <span class="placeholder-icon" aria-hidden="true">📚</span>
-            <p>Здесь появятся книги, которые хочется перечитывать и рекомендовать.</p>
+            <p>@AnimeGirl.Index_Books_Placeholder</p>
         </div>
     </section>
 </main>
 
 <footer class="site-footer">
-    <p>Сделано с теплом · 2026</p>
+    <p>@AnimeGirl.Index_Footer</p>
 </footer>
 
 <button type="button"
         class="anime-chat-toggle"
-        aria-label="Открыть чат"
+        aria-label="@AnimeGirl.Index_Chat_OpenAria"
         aria-expanded="false"
         aria-controls="anime-chat-panel">
     💬
 </button>
 
-<aside id="anime-chat-panel" class="anime-chat-panel" aria-label="Чат">
+<aside id="anime-chat-panel" class="anime-chat-panel" aria-label="@AnimeGirl.Index_Chat_PanelAria">
     <div class="anime-chat-panel__header">
         <div>
-            <h2 class="anime-chat-panel__title">Чат</h2>
-            <span class="anime-chat-panel__user">Вы: …</span>
+            <h2 class="anime-chat-panel__title">@AnimeGirl.Index_Chat_Title</h2>
+            <span class="anime-chat-panel__user">@($"{AnimeGirl.Index_Chat_UserLabel} …")</span>
         </div>
-        <button type="button" class="anime-chat-panel__close" aria-label="Закрыть чат">&times;</button>
+        <button type="button" class="anime-chat-panel__close" aria-label="@AnimeGirl.Index_Chat_CloseAria">&times;</button>
     </div>
     <div class="anime-chat-messages" aria-live="polite"></div>
     <div class="anime-chat-toolbar">
-        <button type="button" class="anime-chat-share" disabled>Поделиться</button>
+        <button type="button" class="anime-chat-share" disabled>@AnimeGirl.Index_Chat_Share</button>
     </div>
     <div class="anime-chat-input-box">
         <input type="text"
                class="anime-chat-input"
-               placeholder="Сообщение…"
+               placeholder="@AnimeGirl.Index_Chat_MessagePlaceholder"
                maxlength="500"
                autocomplete="off">
-        <button type="button" class="anime-chat-send">Отправить</button>
+        <button type="button" class="anime-chat-send">@AnimeGirl.Index_Chat_Send</button>
     </div>
 </aside>
 

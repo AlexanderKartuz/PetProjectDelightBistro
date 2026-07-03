@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using WebNet23Online.Localizations
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,31 +30,31 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebNet23Online</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="@AnimeGirl.Nav_ToggleNavigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/">Home</a>
+                            <a class="nav-link text-dark" href="/">@AnimeGirl.Nav_Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/AnimeGirl/Index">Nice</a>
+                            <a class="nav-link text-dark" href="/AnimeGirl/Index">@AnimeGirl.Nav_Nice</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark create-gilr-link" href="/AnimeGirl/CreateGirl">CreateGirl</a>
+                            <a class="nav-link text-dark create-gilr-link" href="/AnimeGirl/CreateGirl">@AnimeGirl.Nav_CreateGirl</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/AnimeGirl/CreateAnime">CreateAnime</a>
+                            <a class="nav-link text-dark" href="/AnimeGirl/CreateAnime">@AnimeGirl.Nav_CreateAnime</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/AnimeGirl/HandMade">HandMade</a>
+                            <a class="nav-link text-dark" href="/AnimeGirl/HandMade">@AnimeGirl.Nav_HandMade</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/AnimeGirl/TableData">TableData</a>
+                            <a class="nav-link text-dark" href="/AnimeGirl/TableData">@AnimeGirl.Nav_TableData</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/AnimeGirl/AnimeTableData">AnimeTableData</a>
+                            <a class="nav-link text-dark" href="/AnimeGirl/AnimeTableData">@AnimeGirl.Nav_AnimeTableData</a>
                         </li>
                     </ul>
                 </div>

@@ -71,6 +71,27 @@ namespace WebNet23Online.Data.Repositories
                 .ToList();
         }
 
+        public List<AnimeGirlData> IncrementLikes(IEnumerable<int> ids)
+        {
+            var idList = ids.Distinct().ToList();
+            if (idList.Count == 0)
+            {
+                return new List<AnimeGirlData>();
+            }
+
+            var characters = _dbSet
+                .Where(x => idList.Contains(x.Id))
+                .ToList();
+
+            foreach (var character in characters)
+            {
+                character.Likes++;
+            }
+
+            _context.SaveChanges();
+            return characters;
+        }
+
         public void Link(int animeId, int heroId)
         {
             var anime = _context.Animes.First(x => x.Id == animeId);
