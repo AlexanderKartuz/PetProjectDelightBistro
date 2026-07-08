@@ -200,8 +200,8 @@ namespace WebNet23Online.Services
                 PromotionName = viewModel.PromotionName,
                 Description = viewModel.Description,
                 EndDate = viewModel.EndDate,
-                CreatorId = user.Id,
-                VenueId = viewModel.ZooId,
+                UserId = user.Id,
+                ZooId = viewModel.ZooId,
             };
             _promotionRepository.Add(promotionData);
             return true;

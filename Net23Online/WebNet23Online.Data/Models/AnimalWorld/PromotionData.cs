@@ -8,9 +8,9 @@
 
         public DateTime EndDate { get; set; }
 
-        public int VenueId { get; set; }
+        public int ZooId { get; set; }
 
-        public int CreatorId { get; set; }
+        public int UserId { get; set; }
 
         public virtual ZooData Venue { get; set; }
 

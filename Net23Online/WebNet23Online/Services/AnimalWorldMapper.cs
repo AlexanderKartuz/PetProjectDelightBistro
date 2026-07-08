@@ -60,7 +60,7 @@ namespace WebNet23Online.Services
                 Description = promotion.Description,
                 Place = promotion.Venue.ZooName,
                 EndDate = promotion.EndDate,
-                ZooId = promotion.VenueId,
+                ZooId = promotion.ZooId,
             });
             return promotions.ToList();
         }

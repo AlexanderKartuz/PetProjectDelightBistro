@@ -126,13 +126,13 @@ namespace WebNet23Online.Data
             modelBuilder.Entity<PromotionData>()
                 .HasOne(x => x.Venue)
                 .WithMany(x => x.Promotions)
-                .HasForeignKey(x => x.VenueId)
+                .HasForeignKey(x => x.ZooId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PromotionData>()
                 .HasOne(x => x.Creator)
                 .WithMany(x => x.Promotions)
-                .HasForeignKey(x => x.CreatorId)
+                .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<UserData>()
