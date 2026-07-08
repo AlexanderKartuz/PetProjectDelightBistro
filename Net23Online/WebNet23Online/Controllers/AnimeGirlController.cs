@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 using WebNet23Online.Hubs;
@@ -12,6 +13,9 @@ namespace WebNet23Online.Controllers;
 
 public class AnimeGirlController : Controller
 {
+    private const int HeroesDefaultPageSize = 3;
+    private static readonly int[] AllowedHeroesPageSizes = { 0, 1, 2, 3, 6, 12 };
+
     private IAnimeGirlService _animeGirlService;
     private IAnimeGirlRepository _animeGirlRepository;
     private IAnimeRepository _animeRepository;
@@ -44,12 +48,32 @@ public class AnimeGirlController : Controller
     }
 
     //    /AnimeGirl/Index
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int page = 1, int pageSize = HeroesDefaultPageSize)
     {
-        var animeGirlDatas = _animeGirlRepository.GetAllIncludeAnime(); // Get From DB
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        if (!AllowedHeroesPageSizes.Contains(pageSize))
+        {
+            pageSize = HeroesDefaultPageSize;
+        }
+
+        var heroesFilter = new AnimeGirlHeroesPaginationFilterViewModel
+        {
+            Page = page,
+            PageSize = pageSize
+        };
+
+        var pagedHeroes = _animeGirlRepository.GetPagedIncludeAnime(page, pageSize);
+        heroesFilter.Page = pagedHeroes.PageIndex;
+
+        var allAnimeGirlDatas = _animeGirlRepository.GetAllIncludeAnime();
         var animeDatas = _animeRepository.GetAll();
 
-        var viewModels = _animeGirlService.GenerateList(animeGirlDatas);
+        var viewModels = _animeGirlService.GenerateList(pagedHeroes.Items);
+        var allViewModels = _animeGirlService.GenerateList(allAnimeGirlDatas);
         var animeViewModels = _animeGirlService.AnimeMap(animeDatas);
 
         var jokeDtoTask = _jokeApi.GetJoke();
@@ -65,7 +89,18 @@ public class AnimeGirlController : Controller
         var mainViewModel = new MainIndexViewModel
         {
             AnimeGirls = viewModels,
+            AllAnimeGirls = allViewModels,
             Animes = animeViewModels,
+            HeroesFilter = heroesFilter,
+            HeroesPagination = new PaginationMetadataViewModel
+            {
+                CurrentPage = pagedHeroes.PageIndex,
+                PageSize = pageSize,
+                TotalCount = pagedHeroes.TotalCount,
+                TotalPages = pagedHeroes.TotalPages,
+                HasPreviousPage = pagedHeroes.HasPreviousPage,
+                HasNextPage = pagedHeroes.HasNextPage,
+            },
             CanDeleteGirl = _authService.AtLeastModerator(),
             Cats = catDtos,
             Joke = jokeDto,

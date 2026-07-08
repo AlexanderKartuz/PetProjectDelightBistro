@@ -228,6 +228,24 @@
   <data name="Index_Heroes_Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="Index_Heroes_Pagination_Aria" xml:space="preserve">
+    <value>Страницы героинь</value>
+  </data>
+  <data name="Index_Heroes_PageSize_Aria" xml:space="preserve">
+    <value>Количество героинь на странице</value>
+  </data>
+  <data name="Index_Heroes_PageSize_All" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="Index_Heroes_PageSize_Label" xml:space="preserve">
+    <value>Показывать по:</value>
+  </data>
+  <data name="Index_Heroes_Prev" xml:space="preserve">
+    <value>Предыдущая страница</value>
+  </data>
+  <data name="Index_Heroes_Next" xml:space="preserve">
+    <value>Следующая страница</value>
+  </data>
   <data name="Index_Games_Title" xml:space="preserve">
     <value>Игры</value>
   </data>

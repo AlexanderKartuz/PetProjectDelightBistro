@@ -228,6 +228,24 @@
   <data name="Index_Heroes_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Index_Heroes_Pagination_Aria" xml:space="preserve">
+    <value>Character pages</value>
+  </data>
+  <data name="Index_Heroes_PageSize_Aria" xml:space="preserve">
+    <value>Characters per page</value>
+  </data>
+  <data name="Index_Heroes_PageSize_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Index_Heroes_PageSize_Label" xml:space="preserve">
+    <value>Show per page:</value>
+  </data>
+  <data name="Index_Heroes_Prev" xml:space="preserve">
+    <value>Previous page</value>
+  </data>
+  <data name="Index_Heroes_Next" xml:space="preserve">
+    <value>Next page</value>
+  </data>
   <data name="Index_Games_Title" xml:space="preserve">
     <value>Games</value>
   </data>

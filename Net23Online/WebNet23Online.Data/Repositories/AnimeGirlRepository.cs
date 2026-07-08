@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
+using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces;
 
@@ -41,6 +42,31 @@ namespace WebNet23Online.Data.Repositories
             }
 
             return dataSource.ToList();
+        }
+
+        public PaginatedList<AnimeGirlData> GetPagedIncludeAnime(int pageIndex, int pageSize)
+        {
+            var query = _dbSet
+                .Include(g => g.Animes)
+                .OrderByDescending(x => x.Id);
+
+            var count = query.Count();
+
+            if (pageSize == 0)
+            {
+                var allItems = query.ToList();
+                return new PaginatedList<AnimeGirlData>(allItems, 1, 1, count);
+            }
+
+            var totalPages = count == 0 ? 1 : (int)Math.Ceiling(count / (double)pageSize);
+            var safePageIndex = Math.Min(Math.Max(1, pageIndex), totalPages);
+
+            var pageItems = query
+                .Skip((safePageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PaginatedList<AnimeGirlData>(pageItems, safePageIndex, totalPages, count);
         }
 
         public override void Add(AnimeGirlData model)

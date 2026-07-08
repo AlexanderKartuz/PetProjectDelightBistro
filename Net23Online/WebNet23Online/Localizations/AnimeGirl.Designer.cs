@@ -577,6 +577,60 @@ namespace WebNet23Online.Localizations {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Next page.
+        /// </summary>
+        public static string Index_Heroes_Next {
+            get {
+                return ResourceManager.GetString("Index_Heroes_Next", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string Index_Heroes_PageSize_All {
+            get {
+                return ResourceManager.GetString("Index_Heroes_PageSize_All", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show per page:.
+        /// </summary>
+        public static string Index_Heroes_PageSize_Label {
+            get {
+                return ResourceManager.GetString("Index_Heroes_PageSize_Label", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Characters per page.
+        /// </summary>
+        public static string Index_Heroes_PageSize_Aria {
+            get {
+                return ResourceManager.GetString("Index_Heroes_PageSize_Aria", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Character pages.
+        /// </summary>
+        public static string Index_Heroes_Pagination_Aria {
+            get {
+                return ResourceManager.GetString("Index_Heroes_Pagination_Aria", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Previous page.
+        /// </summary>
+        public static string Index_Heroes_Prev {
+            get {
+                return ResourceManager.GetString("Index_Heroes_Prev", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string Index_Heroes_Remove {

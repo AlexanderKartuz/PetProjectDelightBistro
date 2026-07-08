@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-
 using WebNet23Online.Data.HelperModels;
 using WebNet23Online.Data.HelperModels.SteamPagination;
 using WebNet23Online.Data.Models.Steam;

@@ -49,15 +49,17 @@ namespace WebNet23Online.Tests.E2E.Tests
             _webDriver.FindElement(AnimeGirlCreateGirlPage.SubmitButton)
                 .Click();
 
+            _webDriver.Navigate().GoToUrl($"{GlobalConstants.BASE_URL}/AnimeGirl/Index?pageSize=0");
+
             var allGirlBlocks = _webDriver.FindElements(AnimeGirlIndexPage.GirlBlocks);
             
             _waiter.Until(d => allGirlBlocks.Any());
 
-            var lastGirlBlock = allGirlBlocks.Last();
-            var lastGirlName = lastGirlBlock.FindElement(AnimeGirlIndexPage.NameIntoGirlBlocks).Text;
-            Assert.That(newGirlName == lastGirlName);
+            var firstGirlBlock = allGirlBlocks.First();
+            var firstGirlName = firstGirlBlock.FindElement(AnimeGirlIndexPage.NameIntoGirlBlocks).Text;
+            Assert.That(newGirlName == firstGirlName);
 
-            var deleteLink = lastGirlBlock.FindElement(AnimeGirlIndexPage.DeleteGilrLinkIntoGirlBlocks);
+            var deleteLink = firstGirlBlock.FindElement(AnimeGirlIndexPage.DeleteGilrLinkIntoGirlBlocks);
             new Actions(_webDriver)
                .ScrollToElement(deleteLink)
                .Perform();

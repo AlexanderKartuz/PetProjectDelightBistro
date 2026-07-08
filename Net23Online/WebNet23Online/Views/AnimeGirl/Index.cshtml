@@ -32,9 +32,44 @@
     <p class="tagline">@AnimeGirl.Index_Header_TagLine</p>
     <h1>@AnimeGirl.Index_Header</h1>
     <p class="lead">@AnimeGirl.Index_Lead</p>
-    <a href="/AnimeGirl/Index?count=1">@AnimeGirl.Index_LinkOnlyOne</a>
-    <a href="/AnimeGirl/Index?count=2">@AnimeGirl.Index_LinkTwoEnough</a>
-    <a href="/AnimeGirl/Index?count=3">@AnimeGirl.Index_LinkMore</a>
+    <nav class="page-size-links" aria-label="@AnimeGirl.Index_Heroes_PageSize_Aria">
+        <a class="page-size-link @(Model.HeroesFilter.PageSize == 1 ? "active" : "")"
+           asp-controller="AnimeGirl"
+           asp-action="Index"
+           asp-route-page="1"
+           asp-route-pageSize="1"
+           asp-fragment="heroes">@AnimeGirl.Index_LinkOnlyOne</a>
+        <a class="page-size-link @(Model.HeroesFilter.PageSize == 2 ? "active" : "")"
+           asp-controller="AnimeGirl"
+           asp-action="Index"
+           asp-route-page="1"
+           asp-route-pageSize="2"
+           asp-fragment="heroes">@AnimeGirl.Index_LinkTwoEnough</a>
+        <a class="page-size-link @(Model.HeroesFilter.PageSize == 3 ? "active" : "")"
+           asp-controller="AnimeGirl"
+           asp-action="Index"
+           asp-route-page="1"
+           asp-route-pageSize="3"
+           asp-fragment="heroes">@AnimeGirl.Index_LinkMore</a>
+        <a class="page-size-link @(Model.HeroesFilter.PageSize == 6 ? "active" : "")"
+           asp-controller="AnimeGirl"
+           asp-action="Index"
+           asp-route-page="1"
+           asp-route-pageSize="6"
+           asp-fragment="heroes">6</a>
+        <a class="page-size-link @(Model.HeroesFilter.PageSize == 12 ? "active" : "")"
+           asp-controller="AnimeGirl"
+           asp-action="Index"
+           asp-route-page="1"
+           asp-route-pageSize="12"
+           asp-fragment="heroes">12</a>
+        <a class="page-size-link @(Model.HeroesFilter.PageSize == 0 ? "active" : "")"
+           asp-controller="AnimeGirl"
+           asp-action="Index"
+           asp-route-page="1"
+           asp-route-pageSize="0"
+           asp-fragment="heroes">@AnimeGirl.Index_Heroes_PageSize_All</a>
+    </nav>
 </header>
 
 <main>
@@ -136,7 +171,7 @@
                     <label class="link-label" for="select-hero">@AnimeGirl.Index_LinkSection_HeroLabel</label>
                     <select id="select-hero" class="link-select" name="heroId">
                         <option value="">@AnimeGirl.Index_LinkSection_SelectHero</option>
-                        @foreach (var girl in Model.AnimeGirls)
+                        @foreach (var girl in Model.AllAnimeGirls)
                         {
                             var optLabel = string.IsNullOrEmpty(girl.ConnectedAnimeTitles)
                             ? girl.Title
@@ -202,7 +237,46 @@
     <section class="section section-heroes" id="heroes" aria-labelledby="heroes-title">
         <h2 class="section-title" id="heroes-title">@AnimeGirl.Index_Heroes_Title</h2>
         <p class="section-intro">@AnimeGirl.Index_Heroes_Intro</p>
-        <p class="section-intro"><button class="remove-image link-button" disabled>@AnimeGirl.Index_Heroes_Remove</button></p>
+        <div class="heroes-toolbar">
+            <p class="heroes-toolbar__actions">
+                <button class="remove-image link-button" disabled>@AnimeGirl.Index_Heroes_Remove</button>
+            </p>
+            <form asp-controller="AnimeGirl"
+                  asp-action="Index"
+                  asp-fragment="heroes"
+                  method="get"
+                  class="heroes-page-size-form">
+                <label class="heroes-page-size-label" for="heroes-page-size">@AnimeGirl.Index_Heroes_PageSize_Label</label>
+                <select id="heroes-page-size"
+                        name="pageSize"
+                        class="link-select heroes-page-size-select"
+                        onchange="this.form.submit()">
+                    @{
+                        var heroesPageSizeOptions = new (int Value, string Label)[]
+                        {
+                            (1, "1"),
+                            (2, "2"),
+                            (3, "3"),
+                            (6, "6"),
+                            (12, "12"),
+                            (0, AnimeGirl.Index_Heroes_PageSize_All)
+                        };
+                    }
+                    @foreach (var option in heroesPageSizeOptions)
+                    {
+                        if (Model.HeroesFilter.PageSize == option.Value)
+                        {
+                            <option value="@option.Value" selected="selected">@option.Label</option>
+                        }
+                        else
+                        {
+                            <option value="@option.Value">@option.Label</option>
+                        }
+                    }
+                </select>
+                <input type="hidden" name="page" value="1">
+            </form>
+        </div>
 
         <div class="card-grid">
             @foreach (var girl in Model.AnimeGirls)
@@ -226,6 +300,85 @@
                 </article>
             }
         </div>
+
+        @if (Model.HeroesFilter.PageSize != 0 && Model.HeroesPagination.TotalPages > 1)
+        {
+            <nav class="heroes-pagination" aria-label="@AnimeGirl.Index_Heroes_Pagination_Aria">
+                @if (Model.HeroesPagination.HasPreviousPage)
+                {
+                    <a class="heroes-pagination__btn"
+                       asp-controller="AnimeGirl"
+                       asp-action="Index"
+                       asp-route-page="@(Model.HeroesPagination.CurrentPage - 1)"
+                       asp-route-pageSize="@Model.HeroesFilter.PageSize"
+                       asp-fragment="heroes"
+                       aria-label="@AnimeGirl.Index_Heroes_Prev">&larr;</a>
+                }
+
+                @{
+                    var startPageToShow = Math.Max(1, Model.HeroesPagination.CurrentPage - 2);
+                    var endPageToShow = Math.Min(Model.HeroesPagination.TotalPages, startPageToShow + 4);
+
+                    if (startPageToShow > 1)
+                    {
+                        <a class="heroes-pagination__btn"
+                           asp-controller="AnimeGirl"
+                           asp-action="Index"
+                           asp-route-page="1"
+                           asp-route-pageSize="@Model.HeroesFilter.PageSize"
+                           asp-fragment="heroes">1</a>
+
+                        if (startPageToShow > 2)
+                        {
+                            <span class="heroes-pagination__btn heroes-pagination__btn--disabled">...</span>
+                        }
+                    }
+
+                    for (int i = startPageToShow; i <= endPageToShow; i++)
+                    {
+                        if (i == Model.HeroesPagination.CurrentPage)
+                        {
+                            <span class="heroes-pagination__btn heroes-pagination__btn--active">@i</span>
+                        }
+                        else
+                        {
+                            <a class="heroes-pagination__btn"
+                               asp-controller="AnimeGirl"
+                               asp-action="Index"
+                               asp-route-page="@i"
+                               asp-route-pageSize="@Model.HeroesFilter.PageSize"
+                               asp-fragment="heroes">@i</a>
+                        }
+                    }
+
+                    if (endPageToShow < Model.HeroesPagination.TotalPages)
+                    {
+                        if (endPageToShow < Model.HeroesPagination.TotalPages - 1)
+                        {
+                            <span class="heroes-pagination__btn heroes-pagination__btn--disabled">...</span>
+                        }
+
+                        <a class="heroes-pagination__btn"
+                           asp-controller="AnimeGirl"
+                           asp-action="Index"
+                           asp-route-page="@Model.HeroesPagination.TotalPages"
+                           asp-route-pageSize="@Model.HeroesFilter.PageSize"
+                           asp-fragment="heroes">@Model.HeroesPagination.TotalPages</a>
+                    }
+                }
+
+                @if (Model.HeroesPagination.HasNextPage)
+                {
+                    <a class="heroes-pagination__btn"
+                       asp-controller="AnimeGirl"
+                       asp-action="Index"
+                       asp-route-page="@(Model.HeroesPagination.CurrentPage + 1)"
+                       asp-route-pageSize="@Model.HeroesFilter.PageSize"
+                       asp-fragment="heroes"
+                       aria-label="@AnimeGirl.Index_Heroes_Next">&rarr;</a>
+                }
+            </nav>
+        }
     </section>
 
     <section class="section section-placeholder" id="games">

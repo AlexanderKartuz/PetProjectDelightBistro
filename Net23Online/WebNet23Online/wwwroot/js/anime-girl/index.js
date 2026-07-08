@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
 
+    scrollToHeroesSection();
     init();
 
     $('article.media-card').click(function () {
@@ -109,6 +110,21 @@
         divForMovie.find('.anime-catalog-card__title').text(movie.name);
         divForMovie.find('.anime-catalog-card__cover img').attr('src', movie.url);
         movieContainer.append(divForMovie);
+    }
+
+    function scrollToHeroesSection() {
+        const params = new URLSearchParams(window.location.search);
+        const hasPaginationParams = params.has('page') || params.has('pageSize');
+        const hasHeroesHash = window.location.hash === '#heroes';
+
+        if (!hasPaginationParams && !hasHeroesHash) {
+            return;
+        }
+
+        const heroesSection = document.getElementById('heroes');
+        if (heroesSection) {
+            heroesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
 });
