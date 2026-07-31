@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using WebNet23Online.Data.Models;
-using WebNet23Online.Data.Repositories.Interfaces;
+using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Models.Auth;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Interfaces;
@@ -13,7 +13,7 @@ namespace WebNet23Online.Controllers
         private IUserRepository _userRepository;
         private IAuthService _authService;
 
-        public AuthController(IUserRepository userRepository, 
+        public AuthController(IUserRepository userRepository,
             IAuthService authService)
         {
             _userRepository = userRepository;

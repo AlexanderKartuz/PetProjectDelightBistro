@@ -1,5 +1,3 @@
-using MazeCore;
-using MazeCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using WebNet23Online.Data;
@@ -9,15 +7,9 @@ using WebNet23Online.RelfectionTools;
 using WebNet23Online.Services;
 using WebNet23Online.Services.Apis;
 using WebNet23Online.Services.BackgroundServices;
-using WebNet23Online.Services.BackgroundServices.steam;
-using WebNet23Online.Services.Apis.steam;
-using WebNet23Online.Services.BackgroundServices;
 using WebNet23Online.Services.DelightBistro;
 using WebNet23Online.Services.Interfaces;
-using WebNet23Online.Services.Interfaces.LittleLemon;
-using WebNet23Online.Services.Interfaces.Steam;
-using WebNet23Online.Services.Jobs;
-using WebNet23Online.Services.LittleLemon;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,30 +31,9 @@ builder.Services
     });
 
 
-builder.Services.AddScoped<ILittleLemonMenuService, LittleLemonMenuService>();
-builder.Services.AddScoped<ILittleLemonTestimonialService, LittleLemonTestimonialService>();
-builder.Services.AddScoped<ILittleLemonSubscribeService, LittleLemonSubscribeService>();
-builder.Services.AddScoped<ILittleLemonReservationService, LittleLemonReservationService>();
-builder.Services.AddScoped<ILittleLemonChatService, LittleLemonChatService>();
-
 builder.Services.AddHttpClient<JokeApi>(x =>
 {
     x.BaseAddress = new Uri("https://official-joke-api.appspot.com");
-});
-
-builder.Services.AddHttpClient<WaifuApi>(x =>
-{
-    x.BaseAddress = new Uri("https://api.waifu.im");
-});
-
-builder.Services.AddHttpClient<CatApi>(x =>
-{
-    x.BaseAddress = new Uri("https://cataas.com");
-});
-
-builder.Services.AddHttpClient<AnimalWorldRandomAnimalApi>(x =>
-{
-    x.BaseAddress = new Uri("https://api.some-random-api.com");
 });
 
 builder.Services.AddHttpClient<CatFactApi>(x =>
@@ -71,111 +42,24 @@ x.BaseAddress = new Uri("https://catfact.ninja"));
 builder.Services.AddHttpClient<DogApi>(x =>
 x.BaseAddress = new Uri("https://dog.ceo"));
 
-builder.Services.AddHttpClient<RawgApi>(client =>
-{
-    client.BaseAddress = new Uri("https://api.rawg.io/api/");
-});
-
-builder.Services.AddHttpClient<RockApi>(x =>
-{
-    x.BaseAddress = new Uri("https://itunes.apple.com");
-});
-
-builder.Services.AddHttpClient<FakeRestaurantApi>(x =>
-{
-    x.BaseAddress = new Uri("https://fakerestaurantapi.runasp.net");
-});
-// Register Services
-//builder.Services.AddScoped<IAnimeGirlGenerator, AnimeGirlGenerator>(diContainer =>
-//{
-//    var randomBuilderAAAA = diContainer.GetService<IRandomBuilder>(); // 24
-//    var epicMeanlessPhraseGenerator = diContainer.GetService<IEpicMeanlessPhraseGenerator>(); // 17
-//    var animeGirlGenerator = new AnimeGirlGenerator(epicMeanlessPhraseGenerator, randomBuilderAAAA);
-
-//    return animeGirlGenerator;
-//});
-//builder.Services.AddScoped<IEpicMeanlessPhraseGenerator, EpicMeanlessPhraseGenerator>(diContainer =>
-//{
-//    var randomBuilderBBBB = diContainer.GetService<IRandomBuilder>(); // 24
-//    var epicMeanlessPhraseGenerator = new EpicMeanlessPhraseGenerator(randomBuilderBBBB);
-//    return epicMeanlessPhraseGenerator;
-//});
-
-//builder.Services.AddScoped<IRandomBuilder, RandomBuilder>(diContainer =>
-//{
-//    var randomBuilder = new RandomBuilder();
-//    return randomBuilder;
-//});
-//builder.Services.AddTransient<IRandomBuilder, RandomBuilder>(); // One for each Call
-//builder.Services.AddScoped<IRandomBuilder, RandomBuilder>();    // One for each Request (user)
-//builder.Services.AddSingleton<IRandomBuilder, RandomBuilder>(); // One.
-
-//             Life Time
-// Transient < Scoped < Singleton
-
-builder.Services.AddScoped<IAnimeGirlService, AnimeGirlGenerator>();
-builder.Services.AddScoped<IEpicMeanlessPhraseGenerator, EpicMeanlessPhraseGenerator>();
-builder.Services.AddSingleton<IAnimeGirlChatService, AnimeGirlChatService>();
-builder.Services.AddScoped<IAnimeGirlChatNicknameService, AnimeGirlChatNicknameService>();
-//builder.Services.AddScoped<IRandomBuilder, RandomBuilder>();
-//builder.Services.AddScoped<IAuthService, AuthService>();
-
-builder.Services.AddSingleton<IMazeBuilder, MazeBuilder>();
-builder.Services.AddSingleton<IMazeService, MazeService>();
-
-//AnimalWorld DI
-builder.Services.AddScoped<IAnimalWorldService, AnimalWorldService>();
-builder.Services.AddScoped<IAnimalWorldMapper, AnimalWorldMapper>();
-
-builder.Services.AddScoped<IRockBandsService, RockBandsService>();
-
-builder.Services.AddSingleton<IRockLegendsPick, RockLegendsPick>();
-
-builder.Services.AddSingleton<ISlayTheSpire2RewardImageService, SlayTheSpire2RewardImageService>();
-builder.Services.AddSingleton<ISlayTheSpire2CardOptionsService, SlayTheSpire2CardOptionsService>();
-
-builder.Services.AddScoped<ICatalogService, CatalogService>();
-builder.Services.AddScoped<IChatService, ChatService>();
-
 //DelightBistro DI
 builder.Services.AddScoped<IFoodItemGenerator, FoodItemGenerator>();
 builder.Services.AddScoped<IMenuTypeGenerator, MenuTypeGenerator>();
 builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
 builder.Services.AddScoped<IDelightBistroMainIndexGenerator, DelightBistroMainIndexGenerator>();
 
-//HabitTracker DI
-builder.Services.AddScoped<IHabitService, HabitService>();
-builder.Services.AddScoped<IHabitStatisticsService, HabitStatisticsService>();
-
-//JapaneseDomesticMarker DI
-builder.Services.AddScoped<IJdmGenerator, JdmGenerator>();
-builder.Services.AddScoped<IJdmCatalogGenerator, JdmCatalogGenerator>();
-
 // Repositories
 builder.Services.ResolveRepositories();
 builder.Services.ResolveByAttribute();
 
-builder.Services.AddScoped<ITicketService, TicketService>();
-
-builder.Services.AddScoped<ICommentsService, CommentsService>();
-builder.Services.AddScoped<ICommentsMapper, CommentMapper>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
-builder.Services.AddQuartz(q =>
-{
-    var jobKey = new JobKey("ZooPromotions");
-    q.AddJob<AnimalWorldPromotionsCheckJob>(opts => opts.WithIdentity(jobKey));
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithCronSchedule("0 0 9-20 ? * *"));
-});
 
 builder.Services.AddQuartzHostedService(options =>
 {
     options.WaitForJobsToComplete = true;
 });
 builder.Services.AddHostedService<DelightBistroOrderBackgroundService>();
-builder.Services.AddHostedService<RatingAnalyticsBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -212,15 +96,7 @@ app.UseAuthorization();     // May I?
 
 app.UseMiddleware<MyLocalizationMiddleware>();
 
-app.MapHub<AnimeHub>("/my-hub/anime");
 app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
-app.MapHub<RockLegendsHub>("/my-hub/rock-legends");
-app.MapHub<AnimalWorldHub>("/my-hub/animal-world");
-app.MapHub<AnimalWorldNotificationsHub>("/my-hub/animal-world-promotions");
-app.MapHub<JdmHub>("/my-hub/jdm");
-app.MapHub<SteamChatHub>("/steam/community-chat");
-app.MapHub<SteamNotificationHub>("/steam/notification");
-app.MapHub<LittleLemonHub>("/my-hub/little-lemon");
 app.MapHub<NotificationHub>("/my-hub/notification");
 
 app.MapControllerRoute(

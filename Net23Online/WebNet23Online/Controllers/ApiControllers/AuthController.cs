@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebNet23Online.Data.Repositories.Interfaces;
+using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 
 namespace WebNet23Online.Controllers.ApiControllers
 {

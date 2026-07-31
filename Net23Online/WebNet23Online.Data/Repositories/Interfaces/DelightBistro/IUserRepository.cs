@@ -1,7 +1,7 @@
 ﻿using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 
-namespace WebNet23Online.Data.Repositories.Interfaces
+namespace WebNet23Online.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IUserRepository : IBaseRepository<UserData>
     {

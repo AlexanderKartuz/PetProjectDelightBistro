@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 using WebNet23Online.Controllers.CustomAuthAttribute;
 using WebNet23Online.Data.Enums;
-using WebNet23Online.Data.Repositories.Interfaces;
-using WebNet23Online.Models.Steam;
+using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
 using WebNet23Online.Models.User;
+using WebNet23Online.Services;
 using WebNet23Online.Services.Interfaces;
 
 namespace WebNet23Online.Controllers
@@ -142,95 +142,6 @@ namespace WebNet23Online.Controllers
             return File(fileStrem, "text/csv");
         }
 
-        [HttpGet]
-        public IActionResult SteamProfile()
-        {
-            var user = _authService.GetUser();
-            var currentUserLanguage = _authService.GetLanguage();
-            var allLanguagesList = Enum
-                .GetNames<Language>()
-                .Select(x => new SelectListItem
-                {
-                    Text = x,
-                    Value = x,
-                    Selected = x == currentUserLanguage.ToString()
-                })
-                .ToList();
-
-            var viewModel = new SteamUserProfileViewModel
-            {
-                UserId = _authService.GetUserId(),
-                UserName = _authService.GetUserName() ?? "unnamed",
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Mobilephone = user.Mobilephone,
-                Language = currentUserLanguage,
-                Languages = allLanguagesList,
-                AvatarUrl = user.AvatarUrl
-            };
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult UpdateSteamProfile(SteamUserProfileViewModel viewModel)
-        {
-            var user = _authService.GetUser();
-            user.FirstName = viewModel.FirstName;
-            user.LastName = viewModel.LastName;
-            user.Mobilephone = viewModel.Mobilephone;
-
-            _userRepository.UpdateProfile(user);
-
-            HttpContext.SignOutAsync().Wait();
-            _authService.SignIn(user);
-
-            return RedirectToAction(nameof(SteamProfile));
-        }
-
-        [HttpPost]
-        public IActionResult ChangeLanguageInSteam(int userId, Language language)
-        {
-            _userRepository.UpdateLanguage(userId, language);
-            var user = _authService.GetUser();
-
-            HttpContext.SignOutAsync().Wait();
-            _authService.SignIn(user);
-
-            return RedirectToAction(nameof(SteamProfile));
-        }
-
-        [HttpPost]
-        public IActionResult UpdateSteamAvatar(IFormFile avatar)
-        {
-            if (avatar == null || avatar.Length == 0)
-            {
-                return RedirectToAction(nameof(SteamProfile));
-            }
-
-            var user = _authService.GetUser()!;
-            var userId = user.Id;
-            var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
-            var pathToFolder = Path.Combine("images", "steam", "avatars");
-            var fullPath = Path.Combine(pathToWwwRootFolder, pathToFolder);
-
-            if (!Directory.Exists(fullPath))
-            {
-                Directory.CreateDirectory(fullPath);
-            }
-
-            var fileName = $"avatar-{userId}.jpg";
-            var path = Path.Combine(fullPath, fileName);
-
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                avatar.CopyTo(fileStream);
-            }
-
-            user.AvatarUrl = $"/{pathToFolder.Replace("\\", "/")}/{fileName}";
-            _userRepository.Update(user);
-
-            return RedirectToAction(nameof(SteamProfile));
-        }
 
         [HttpPost]
         public IActionResult DeleteAccount(int userId)
@@ -255,7 +166,7 @@ namespace WebNet23Online.Controllers
             _userRepository.Delete(userId);
             HttpContext.SignOutAsync().Wait();
 
-            return RedirectToAction(nameof(SteamController.Index), "Steam");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

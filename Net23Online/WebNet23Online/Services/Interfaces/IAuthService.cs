@@ -16,5 +16,4 @@ public interface IAuthService
     bool IsUser();
     Language GetLanguage();
     void SignIn(UserData user);
-    bool IsBlockedInTracker();
 }
