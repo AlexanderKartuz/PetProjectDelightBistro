@@ -1,6 +1,4 @@
 using WebNet23Online.Data.Enums;
-using WebNet23Online.Data.Models.AnimalWorld;
-using WebNet23Online.Data.Models.Steam;
 
 namespace WebNet23Online.Data.Models
 {
@@ -24,32 +22,8 @@ namespace WebNet23Online.Data.Models
         public virtual List<FoodItemData> CreatedFoodItems { get; set; } = new();
         public virtual List<MenuData> CreatedMenus { get; set; } = new();
         public virtual List<OrderData> Orders { get; set; } = new();
-        public virtual List<ZooData> CreatedByMeZoos { get; set; }
-        public virtual List<AnimalFamilyData> CreatedByMeAnimalFamilies { get; set; }
-        public virtual List<AnimalSpeciesData> CreatedByMeAnimalSpecies { get; set; }
 
-        public virtual List<RockBandsData>? RockBand { get; set; }
-
-        public virtual HabitTrackerProfileData? HabitTrackerProfile { get; set; }
-        public virtual List<HabitData> Habits { get; set; }
-        public virtual List<HabitTrackerDiaryData> DiaryEntries { get; set; }
-
-        public virtual List<GameData> CreatedGames { get; set; }
-        public virtual List<GameData> ModifiedGames { get; set; }
-        public virtual List<CommunityChatMessageData> CommunityChatMessages { get; set; }
-
-        public virtual List<SlayTheSpire2HeroesCards>? CreatedSlayTheSpire2HeroesCards { get; set; }
-        public virtual List<SlayTheSpire2HeroesCards>? ModifiedSlayTheSpire2HeroesCards { get; set; }
-        public virtual List<GameReviewData> Reviews { get; set; }
-        public virtual List<LittleLemonData> UserAccountLittleLemonReservations { get; set; }
-        public virtual List<JdmCarsData> CreatedByCarsJdm { get; set; }
-        public virtual List<JdmCarsBlogCommentsData> JournalComments { get; set; }
-        public virtual List<RockBandLikeData> RockBandLikes { get; set; }
-
-        public virtual List<TicketData> MyTickets { get; set; }
-        public virtual List<CommentData> MyComments { get; set;    }
         public virtual List<NotificationData> Notifications { get; set; }
-        public virtual List<PromotionData> Promotions { get; set; }
         
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//service and appsetings
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Tea;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
 builder.Services.AddScoped<TeaCacheService>();
@@ -61,6 +62,7 @@ app.UseCustomRequestLogging();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+//service
 app.MapGet("/", () => "Hello World!");
 
 app.MapGet("GetTeas", (TeaRepository teaRepository, IMemoryCache memoryCache) =>
@@ -151,6 +153,8 @@ app.MapDelete("DeleteDrink",
 
 app.MapGet("Exception", () => { throw new Exception(); });
 
+
+//service
 // When Redis is on
 app.MapGet("redis-test", async (IDistributedCache cache) =>
 {

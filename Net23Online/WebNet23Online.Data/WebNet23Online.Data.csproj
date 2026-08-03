@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Enums\Steam\**" />
+    <EmbeddedResource Remove="Enums\Steam\**" />
+    <None Remove="Enums\Steam\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -26,10 +32,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Enums\Steam\" />
   </ItemGroup>
 
 </Project>
