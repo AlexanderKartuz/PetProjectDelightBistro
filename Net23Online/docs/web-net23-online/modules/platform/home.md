@@ -1,6 +1,6 @@
 # Home
 
-> Главная страница с приветствием пользователя и ссылками на все модули сайта.
+> Главная страница с приветствием пользователя и ссылкой на Delight Bistro.
 
 **Контроллер:** `HomeController`  
 **Layout:** `_Layout.cshtml`  
@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Landing page solution Net23Online. Показывает имя и роль текущего пользователя (или гостя) и список ссылок на feature-модули: AnimeGirl, Maze, Steam, AnimalWorld и др.
+Landing page solution Net23Online. Показывает имя и роль текущего пользователя (или гостя) и ссылку на модуль DelightBistro.
 
 ---
 
@@ -44,6 +44,8 @@ Landing page solution Net23Online. Показывает имя и роль те�
 | `IUserRepository` | Инжектирован, в actions не используется |
 | `ILogger<HomeController>` | Логирование |
 
+**Внешние HTTP API:** нет
+
 ---
 
 ## Модель данных
@@ -62,11 +64,8 @@ Landing page solution Net23Online. Показывает имя и роль те�
 
 ## Локализация
 
-| Файл | Языки | Где используется |
-|------|-------|------------------|
-| `Localizations/Home.resx` | EN | Навигация в `_Layout.cshtml` |
-| `Home.Ru.resx` | RU | |
-| `Home.De.resx` | DE | |
+- **Файлы:** `Localizations/Home.resx`, `Home.Ru.resx`, `Home.De.resx`
+- **Языки:** EN, Ru, De
 
 Ключи: `Index_Home`, `Index_Login`, `Index_Logout`, `Index_Profile`, `Index_Registration`.
 
@@ -83,6 +82,12 @@ Landing page solution Net23Online. Показывает имя и роль те�
 ## Внешние API-проекты
 
 Нет.
+
+---
+
+## Связанные модули
+
+- [DelightBistro](../delight-bistro/README.md) — ссылка с Index
 
 ---
 
