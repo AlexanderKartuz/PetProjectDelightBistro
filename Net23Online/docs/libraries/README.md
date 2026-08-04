@@ -7,4 +7,4 @@
 | Библиотека | Папка | Используют |
 |------------|-------|------------|
 | WebNet23Online.Data | [web-net23-online-data/](web-net23-online-data/) | WebNet23Online |
-| MazeCore | [maze-core/](maze-core/) | WebNet23Online, FirstConsoleApp |
+| MazeCore | [maze-core/](maze-core/) | FirstConsoleApp |

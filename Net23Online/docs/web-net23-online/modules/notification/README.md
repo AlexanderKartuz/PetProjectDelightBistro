@@ -17,8 +17,8 @@
 
 ## Маршруты и страницы
 
-| URL | Action | View / результат | Авторизация |
-|-----|--------|------------------|-------------|
+| URL | Action | View | Авторизация |
+|-----|--------|------|-------------|
 | `/Notification/Index` | `Index` GET | `Views/Notification/Index.cshtml` | Admin |
 | `/Notification/SendInstantNotification` | POST | SignalR broadcast → redirect Index | Admin |
 | `/Notification/SavePreparedNotification` | POST | Сохранение в БД → redirect Index | Admin |
@@ -55,7 +55,7 @@ Hub-класс пустой — серверных методов от клие�
 | `INotificationRepository` | CRUD отложенных уведомлений |
 | `IAuthService` | Автор отложенного уведомления |
 
-**Фоновый сервис:** `NotificationBackgroundService` — опрос каждые 30 сек, отправка просроченных уведомлений.
+**Внешние HTTP API:** нет
 
 ---
 
@@ -69,14 +69,18 @@ Hub-класс пустой — серверных методов от клие�
 
 ## Frontend
 
-- **View:** `Views/Notification/Index.cshtml` — две POST-формы
-- **Глобальный клиент:** `wwwroot/js/commonNotification.js`, `wwwroot/css/site.css` (`.notifications`)
+- **Layout:** `_Layout.cshtml`
+- **CSS:** `wwwroot/css/site.css` (`.notifications`)
+- **JS:** `wwwroot/js/commonNotification.js`
+
+View: `Views/Notification/Index.cshtml` — две POST-формы.
 
 ---
 
 ## Локализация
 
-Отдельных `.resx` нет. UI на английском.
+- **Файлы:** отдельных `.resx` нет
+- **Языки:** UI на английском
 
 ---
 
@@ -85,6 +89,18 @@ Hub-класс пустой — серверных методов от клие�
 | Сервис | Интервал | Назначение |
 |--------|----------|------------|
 | `NotificationBackgroundService` | 30 сек | `GetByLastNotifications()` → broadcast → `IsActive = false` |
+
+---
+
+## Внешние API-проекты
+
+Нет.
+
+---
+
+## Связанные модули
+
+- [Platform](../platform/README.md) — глобальный клиент в `_Layout`
 
 ---
 

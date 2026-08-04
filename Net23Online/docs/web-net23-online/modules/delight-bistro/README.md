@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Часть данных (чай) вынесена в отдельный Minimal API.
+Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Часть данных (чай) вынесена в отдельный Minimal API. На Index подгружаются факты о котах и фото собак через внешние HTTP API.
 
 ---
 
@@ -59,13 +59,13 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 | Сервис | Назначение |
 |--------|------------|
-| `IFoodItemGenerator` | Генерация блюд |
+| `IFoodItemGenerator` | Генерация / CRUD блюд |
 | `IMenuTypeGenerator` | Типы меню |
 | `IIngredientGenerator` | Ингредиенты |
-| `IDelightBistroMainIndexGenerator` | Главная страница |
+| `IDelightBistroMainIndexGenerator` | Главная страница (+ CatFact/Dog) |
 | `IFoodItemRepository`, `IMenuRepository`, `IIngredientsRepository`, `IOrderRepository` | Data access |
 
-**Фоновый сервис:** `DelightBistroOrderBackgroundService` — удаление просроченных заказов (интервал 24ч).
+**Внешние HTTP API:** `CatFactApi`, `DogApi` (Index)
 
 ---
 
@@ -83,20 +83,16 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 ## Frontend
 
-- **Layouts:** `_LayoutDelightBistro.cshtml`, `_LayoutimagesDelightBistro.cshtml`
-- **CSS:** `style.css`, `chat.css`, `delight-bistro-hub.css`
-- **JS:** `delight-bistro-signalr.js`, `delight-bistro-hub.js`, `delight-bistro-chat-hub.js`, `buy-button.js`, `all-foods.js`, `tea.js`, `preview-food-item.js`
-- **Images:** `wwwroot/images/delight-bistro/`
+- **Layout:** `_LayoutDelightBistro.cshtml`, `_LayoutimagesDelightBistro.cshtml`
+- **CSS:** `wwwroot/css/delight-bistro/` — `style.css`, `chat.css`, `delight-bistro-hub.css`
+- **JS:** `wwwroot/js/delight-bistro/` — `delight-bistro-signalr.js`, `delight-bistro-hub.js`, `delight-bistro-chat-hub.js`, `buy-button.js`, `all-foods.js`, `tea.js`, `preview-food-item.js`
 
 ---
 
 ## Локализация
 
-| Файл | Языки |
-|------|-------|
-| `Localizations/DelightBistro.resx` | EN |
-| `DelightBistro.Ru.resx` | RU |
-| `DelightBistro.De.resx` | DE |
+- **Файлы:** `Localizations/DelightBistro.resx`, `DelightBistro.Ru.resx`, `DelightBistro.De.resx`
+- **Языки:** EN, Ru, De
 
 Ключи: `Index_Create_menu`, `Index_Create_ingredient`, `Index_Create_dish`, `Index_All_menu`, `Index_All_dish`, `Index_Cuisine`.
 
@@ -115,6 +111,13 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 | API | Порт | JS-файл |
 |-----|------|---------|
 | [DelightBistroMinimalApi](../../../minimal-apis/delight-bistro/README.md) | 7090 | `tea.js` |
+
+---
+
+## Связанные модули
+
+- [Platform / Auth](../platform/auth.md) — заказ требует авторизации
+- [Notification](../notification/README.md) — глобальные уведомления на layout сайта
 
 ---
 

@@ -1,41 +1,22 @@
 # Кастомные атрибуты авторизации
 
-Атрибуты из `Controllers/CustomAuthAttribute/`. Все MVC-атрибуты при отказе redirect на `/Auth/Deny` (кроме указанных).
+Атрибуты из `Controllers/CustomAuthAttribute/`. При отказе — redirect на `/Auth/Deny`.
 
-**UserRole enum:** `User=1`, `RockBandOwner=6`, `Employee=9`, `Moderator=10`, `Admin=99`, `JdmOwner=626`.
+**UserRole enum:** `User=1`, `Employee=9`, `Moderator=10`, `Admin=99`.
 
 ---
 
-## Общие (MVC)
+## MVC-атрибуты
 
 | Атрибут | Проверка | Модули |
 |---------|----------|--------|
-| `IsAdminAttribute` | `UserRole.Admin` | User, JDM, Notification |
-| `IsModeratorAttribute` | `AtLeastModerator()` | AnimalWorld, DelightBistro, Steam, HabitTrackerAdmin, RockLegendsPortal |
-| `IsEmployeeAttribute` | `IsCurrentUserAtLeastEmployee()` | DelightBistro |
-| `IsNotBlockedInTrackerAttribute` | authenticated + not blocked in tracker | HabitTracker |
-| `IsJdmOwnerAttribute` | `UserRole.JdmOwner` | JDM |
-| `IsRockLegendsModeratorAttribute` | Moderator or Admin | RockLegendsPortal |
-| `IsRockBandOwnerAttribute` | `UserRole.RockBandOwner` → `ForbidResult` | RockBands |
-| `IsSlayTheSpire2CreatorOrAdminAttribute` | card creator or Admin (by CardId) | SlayTheSpire2 |
-| `CanReserveZooVisitAttribute` | FirstName + LastName + Mobilephone filled | Tickets |
-| `CanAccessLittleLemonReservationAttribute` | authenticated + Admin or User | LittleLemon |
-
----
-
-## Steam (API и MVC)
-
-| Атрибут | Поведение при отказе | Использование |
-|---------|---------------------|---------------|
-| `IsAdminApiAttribute` | 403 JSON | Catalog delete |
-| `IsAuthenticatedApiAttribute` | 401 JSON | Не используется |
-| `EditForCreatorWithRequiredRoleAttribute` | Redirect Deny | Steam EditGame (Admin or owner + RequiredRole) |
-| `DeleteWithRoleAndTimeRestrictionAttribute` | Redirect Deny | Steam DeleteGame (Admin or owner ≤3 days) |
+| `IsAdminAttribute` | `UserRole.Admin` | Notification, User (`DeleteUser`) |
+| `IsModeratorAttribute` | `AtLeastModerator()` | DelightBistro (создание), User (`Index`) |
+| `IsEmployeeAttribute` | `IsCurrentUserAtLeastEmployee()` | DelightBistro (`AllFoodItems`, удаление) |
 
 ---
 
 ## Источники в коде
 
-- `Controllers/CustomAuthAttribute/` — все атрибуты
-- `Controllers/CustomAuthAttribute/Steam/` — Steam-specific
+- `Controllers/CustomAuthAttribute/`
 - `WebNet23Online.Data/Enums/UserRole.cs`

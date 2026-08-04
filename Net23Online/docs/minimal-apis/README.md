@@ -8,5 +8,4 @@
 |-----|-------|------|-----|-------------|
 | DelightBistroMinimalApi | [delight-bistro/](delight-bistro/) | 7090 | WebNet23Tea | DelightBistro |
 
-
 **Карта связей:** [integration-map.md](../integration-map.md)
