@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebNet23Online.Tests.E2E", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelightBistroMinimalApi", "DelightBistroMinimalApi\DelightBistroMinimalApi.csproj", "{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelightBistro.Sevices", "DelightBistro.Sevices\DelightBistro.Sevices.csproj", "{B0773C49-A907-4199-B4E3-A49B849A9A2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A7E5AB2-D5BB-DC7F-C2D5-F5A9ED49745E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0773C49-A907-4199-B4E3-A49B849A9A2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0773C49-A907-4199-B4E3-A49B849A9A2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0773C49-A907-4199-B4E3-A49B849A9A2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0773C49-A907-4199-B4E3-A49B849A9A2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

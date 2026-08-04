@@ -2,7 +2,7 @@ using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
 using DelightBistroMinimalApi.Middlewares.RateLimit;
-using DelightBistroMinimalApi.Services;
+using DelightBistroMinimalApi.Services.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
