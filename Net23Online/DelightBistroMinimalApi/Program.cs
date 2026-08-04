@@ -1,3 +1,4 @@
+using DelightBistro.Sevices.Logging;
 using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
@@ -16,6 +17,9 @@ var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebN
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
 builder.Services.AddScoped<TeaCacheService>();
 builder.Services.AddScoped<TeaRepository>();
+
+builder.Services.AddScoped(typeof(IAppLoging<>), typeof(AppLogging<>));
+builder.ConfigureSeriLog();
 
 builder.AddCustomRateLimiter();
 

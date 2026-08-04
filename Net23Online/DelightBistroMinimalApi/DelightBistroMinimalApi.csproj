@@ -36,4 +36,8 @@
     <Folder Include="Новая папка\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DelightBistro.Sevices\DelightBistro.Sevices.csproj" />
+  </ItemGroup>
+
 </Project>
