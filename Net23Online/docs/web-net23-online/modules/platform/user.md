@@ -1,9 +1,9 @@
 # User
 
-> Профили пользователей: редактирование, аватар, язык, список пользователей (модератор), Steam-профиль, удаление аккаунта.
+> Профили пользователей: редактирование, аватар, язык, список пользователей (модератор), удаление аккаунта.
 
 **Контроллер:** `UserController`  
-**Layout:** `_Layout.cshtml` / `_LayoutSteam.cshtml` (SteamProfile)  
+**Layout:** `_Layout.cshtml`  
 **Точка входа:** `/User/Profile`  
 **Авторизация:** `[Authorize]` на классе
 
@@ -11,26 +11,22 @@
 
 ## Назначение
 
-Личный кабинет пользователя и административные функции: смена языка, загрузка аватара, CSV-отчёт по пользователям, отдельный Steam-профиль с возможностью удаления аккаунта.
+Личный кабинет пользователя и административные функции: смена языка, загрузка аватара, CSV-отчёт по пользователям, удаление собственного аккаунта.
 
 ---
 
 ## Маршруты и страницы
 
-| URL | Action | View / результат | Авторизация |
-|-----|--------|------------------|-------------|
+| URL | Action | View | Авторизация |
+|-----|--------|------|-------------|
 | `/User/Index?cardId=` | `Index` | `Views/User/Index.cshtml` | `[IsModerator]` |
 | `/User/Profile` | `Profile` GET | `Views/User/Profile.cshtml` | Authenticated |
 | `/User/ChangeLanguage` | POST | Redirect → Profile | Authenticated |
 | `/User/UpdateAvatar` | POST | Redirect → Profile | Authenticated |
 | `/User/UpdateProfile` | POST | Redirect → Profile | Authenticated |
-| `/User/DeleteUser?id=` | GET | Redirect → Index | `[IsAdmin]` (заглушка) |
+| `/User/DeleteUser` | GET | Redirect → Index | `[IsAdmin]` (заглушка) |
 | `/User/GenerateReport` | GET | CSV-файл | Authenticated |
-| `/User/SteamProfile` | GET | `Views/User/SteamProfile.cshtml` | Authenticated |
-| `/User/UpdateSteamProfile` | POST | Redirect → SteamProfile | Authenticated |
-| `/User/ChangeLanguageInSteam` | POST | Redirect → SteamProfile | Authenticated |
-| `/User/UpdateSteamAvatar` | POST | Redirect → SteamProfile | Authenticated |
-| `/User/DeleteAccount` | POST | Redirect → `Steam/Index` | Authenticated (только свой аккаунт) |
+| `/User/DeleteAccount` | POST | Redirect → `Home/Index` | Authenticated (только свой аккаунт) |
 
 ---
 
@@ -54,31 +50,32 @@
 | `IUserRepository` | CRUD пользователей, язык, профиль, удаление |
 | `IWebHostEnvironment` | Пути к `wwwroot` для загрузки аватаров |
 
+**Внешние HTTP API:** нет
+
 ---
 
 ## Модель данных
 
-- `UserData` — профиль, роль, язык, Steam-поля
+- `UserData` — профиль, роль, язык, аватар
+- `UserProfileData` — дополнительные поля профиля
 
 ---
 
 ## Frontend
 
-| View | Upload-путь |
-|------|-------------|
-| `Profile.cshtml` | `/images/avatars/avatar-{userId}.jpg` |
-| `SteamProfile.cshtml` | `/images/steam/avatars/avatar-{userId}.jpg` |
+- **Layout:** `_Layout.cshtml`
+- **CSS:** общий `site.css`
+- **JS:** нет отдельной папки
+- **Upload:** `/images/avatars/avatar-{userId}.jpg`
+
+Views: `Profile.cshtml`, `Index.cshtml`.
 
 ---
 
 ## Локализация
 
-| Область | Файлы |
-|---------|-------|
-| SteamProfile | `Localizations/Steam/ProfilePage.resx`, `ProfilePage.Ru.resx` |
-| Навигация | `Localizations/Home.*.resx` через layout |
-
-Profile и Index — тексты захардкожены на английском.
+- **Файлы:** навигация через `Localizations/Home.*.resx`
+- **Языки:** Profile и Index — тексты захардкожены на английском
 
 ---
 
@@ -88,13 +85,20 @@ Profile и Index — тексты захардкожены на английск
 
 ---
 
+## Внешние API-проекты
+
+Нет.
+
+---
+
 ## Связанные модули
 
-- [Steam](../steam/README.md) — SteamProfile, DeleteAccount → redirect на Steam/Index
+- [Auth](auth.md) — вход перед доступом к профилю
+- [Home](home.md) — redirect после `DeleteAccount`
 
 ---
 
 ## Источники в коде
 
 - `Controllers/UserController.cs`
-- `Views/User/Profile.cshtml`, `Index.cshtml`, `SteamProfile.cshtml`
+- `Views/User/Profile.cshtml`, `Index.cshtml`

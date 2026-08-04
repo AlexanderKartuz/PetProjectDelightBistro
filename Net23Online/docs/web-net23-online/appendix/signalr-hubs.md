@@ -26,13 +26,16 @@ app.MapHub<NotificationHub>("/my-hub/notification");
 
 - **JS:** `wwwroot/js/commonNotification.js`
 - **Hub:** `/my-hub/notification`
-- **Подключение:** `_Layout.cshtml` (все страницы с default layout)
+- **Подключение:** `_Layout.cshtml` (страницы с default layout)
 - **URL:** `https://localhost:7284/my-hub/notification` (hardcoded)
+
+Клиент DelightBistro: `wwwroot/js/delight-bistro/delight-bistro-signalr.js`.
 
 ---
 
 ## Источники в коде
 
-- `Hubs/` — все hub-классы и интерфейсы
+- `Hubs/` — hub-классы и интерфейсы
 - `Program.cs` — `MapHub` registrations
-- `wwwroot/js/*/ *-signalr.js`, `notification.js` — клиенты
+- `wwwroot/js/commonNotification.js`
+- `wwwroot/js/delight-bistro/delight-bistro-signalr.js`

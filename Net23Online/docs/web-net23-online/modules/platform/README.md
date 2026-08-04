@@ -9,7 +9,7 @@
 
 ## Назначение
 
-Platform объединяет базовые функции, доступные на всём сайте: точку входа с навигацией по модулям, cookie-based аутентификацию и управление профилем пользователя (общий и Steam-вариант).
+Platform объединяет базовые функции, доступные на всём сайте: точку входа с навигацией к модулям, cookie-based аутентификацию и управление профилем пользователя.
 
 ---
 
@@ -32,6 +32,13 @@ Cookie-схема `AuthService.AUTH_KEY` (`Program.cs`):
 | LoginPath | `/Auth/Login` |
 | AccessDeniedPath | `/Auth/Deny` |
 | ExpireTimeSpan | 13 минут |
+
+---
+
+## Связанные модули
+
+- [Notification](../notification/README.md) — глобальные уведомления через `_Layout`
+- [DelightBistro](../delight-bistro/README.md) — основной feature-модуль, ссылка с Home
 
 ---
 

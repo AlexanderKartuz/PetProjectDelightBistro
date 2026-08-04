@@ -16,8 +16,8 @@
 
 ## Маршруты и страницы
 
-| URL | Action | View / результат | Авторизация |
-|-----|--------|------------------|-------------|
+| URL | Action | View | Авторизация |
+|-----|--------|------|-------------|
 | `/Auth/Login` | `Login` GET | `Views/Auth/Login.cshtml` | — |
 | `/Auth/Login` | `Login` POST | Redirect → `Home/Index` или View с ошибкой | — |
 | `/Auth/Registration` | `Registration` GET | `Views/Auth/Registration.cshtml` | — |
@@ -29,9 +29,9 @@
 
 ## Встроенное API
 
-| Метод | Путь | Описание | Auth |
-|-------|------|----------|------|
-| GET/POST | `/api/Auth/IsLoginFree?login=` | Проверка уникальности логина (`bool`) | — |
+| Метод | Путь | Описание |
+|-------|------|----------|
+| GET/POST | `/api/Auth/IsLoginFree?login=` | Проверка уникальности логина (`bool`) |
 
 > Искусственная задержка 1 сек перед проверкой. Используется `registration.js`.
 
@@ -50,6 +50,8 @@
 | `IUserRepository` | Поиск пользователя, регистрация, `IsNameUniq` |
 | `IAuthService` | `SignIn(user)` после успешного логина |
 
+**Внешние HTTP API:** нет
+
 ---
 
 ## Модель данных
@@ -60,21 +62,34 @@
 
 ## Frontend
 
+- **Layout:** `_Layout.cshtml`
 - **CSS:** `wwwroot/css/auth/style.css`
 - **JS:** `wwwroot/js/auth/registration.js` — AJAX к `/api/Auth/IsLoginFree`
-- **Images:** `wwwroot/icons/waiter.gif`, `ok.png`, `deny.jpg`
 
 ---
 
 ## Локализация
 
-Отдельных `.resx` для Auth нет. Тексты форм — английский. `Deny.cshtml` — русский захардкожен.
+- **Файлы:** отдельных `.resx` для Auth нет
+- **Языки:** тексты форм — английский; `Deny.cshtml` — русский захардкожен
 
 ---
 
 ## Фоновые задачи
 
 Нет.
+
+---
+
+## Внешние API-проекты
+
+Нет.
+
+---
+
+## Связанные модули
+
+- [User](user.md) — профиль после входа
 
 ---
 
