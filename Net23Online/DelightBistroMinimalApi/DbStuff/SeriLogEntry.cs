@@ -16,7 +16,7 @@ namespace DelightBistroMinimalApi.DbStuff
         [MaxLength(180)]
         public string? Level { get; set; }
         [DataType(DataType.DateTime)]
-        public DateTime? TimeSpan { get; set; }
+        public DateTime? TimeStamp { get; set; }
         public string? Exception { get; set; }
         public string? Properties { get; set; }
         public string? LogEvent { get; set; }

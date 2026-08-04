@@ -13,12 +13,12 @@ using Microsoft.Extensions.Caching.Memory;
 var builder = WebApplication.CreateBuilder(args);
 
 //service and appsetings
-var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Tea;Integrated Security=True;Connect Timeout=30;";
+var connectionString = builder.Configuration.GetConnectionString("Drinks");
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
 builder.Services.AddScoped<TeaCacheService>();
 builder.Services.AddScoped<TeaRepository>();
 
-builder.Services.AddScoped(typeof(IAppLoging<>), typeof(AppLogging<>));
+builder.Services.AddScoped(typeof(IAppLogging<>), typeof(AppLogging<>));
 builder.ConfigureSeriLog();
 
 builder.AddCustomRateLimiter();

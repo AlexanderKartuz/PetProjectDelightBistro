@@ -1,0 +1,18 @@
+[ 26-Aug-04 22:45:28 Warning :
+            Microsoft.EntityFrameworkCore.Model.Validation 
+ Message: No store type was specified for the decimal property '"Price"' on entity type '"Tea"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'. 
+ in method
+             at  :  
+  
+[ 26-Aug-04 22:45:28 Warning :
+            Microsoft.EntityFrameworkCore.Model.Validation 
+ Message: No store type was specified for the decimal property '"Price"' on entity type '"Tea"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'. 
+ in method
+             at  :  
+  
+[ 26-Aug-04 22:46:32 Warning :
+            Microsoft.EntityFrameworkCore.Model.Validation 
+ Message: No store type was specified for the decimal property '"Price"' on entity type '"Tea"'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'. 
+ in method
+             at  :  
+  

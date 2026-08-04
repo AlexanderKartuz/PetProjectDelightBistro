@@ -35,7 +35,7 @@ namespace DelightBistro.Sevices.Logging
             builder.Host.UseSerilog((context, loggerConfiguration) =>
             {
                 var config = builder.Configuration;
-                var connectionString = config.GetConnectionString("AutoLot");
+                var connectionString = config.GetConnectionString("Drinks");
                 var tableName = config["Logging:MSSqlServer:tableName"] ?? "SeriLogs";
                 var schema = config["Logging:MSSqlServer:schema"] ?? "dbo";
                 var restrictedToMinimumLevel = config["Logging:MSSqlServer:restrictedToMinimumLevel"] ?? "Warning";

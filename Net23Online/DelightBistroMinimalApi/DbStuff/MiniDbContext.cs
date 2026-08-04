@@ -13,7 +13,7 @@ namespace DelightBistroMinimalApi.DbStuff
             modelBuilder.Entity<SeriLogEntry>(entity =>
             {
                 entity.Property(e => e.Properties).HasColumnType("Xml");
-                entity.Property(e => e.TimeSpan).HasDefaultValueSql("GetDate()");
+                entity.Property(e => e.TimeStamp).HasDefaultValueSql("GetDate()");
             });
 
             base.OnModelCreating(modelBuilder);

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace DelightBistro.Sevices.Logging
 {
-    public class AppLogging<T> : IAppLoging<T>
+    public class AppLogging<T> : IAppLogging<T>
     {
         private readonly ILogger<T> _logger;
         private readonly IConfiguration _configuration;

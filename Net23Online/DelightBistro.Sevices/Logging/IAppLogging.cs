@@ -2,7 +2,7 @@
 
 namespace DelightBistro.Sevices.Logging
 {
-    public interface IAppLoging<T>
+    public interface IAppLogging<T>
     {
         void LogAppError(Exception exception, string message,
             [CallerMemberName] string memberName = "",
