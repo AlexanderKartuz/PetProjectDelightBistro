@@ -3,7 +3,7 @@ using DelightBistroMinimalApi.DbStuff;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
-namespace DelightBistroMinimalApi.Services
+namespace DelightBistroMinimalApi.Services.Database
 {
     public class TeaCacheService
     {
