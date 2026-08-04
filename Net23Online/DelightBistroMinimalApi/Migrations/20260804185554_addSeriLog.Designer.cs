@@ -4,6 +4,7 @@ using DelightBistroMinimalApi.DbStuff;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DelightBistroMinimalApi.Migrations
 {
     [DbContext(typeof(MiniDbContext))]
-    partial class MiniDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260804185554_addSeriLog")]
+    partial class addSeriLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
