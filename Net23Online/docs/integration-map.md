@@ -7,6 +7,7 @@
 - **WebNet23Online** использует `WebContext` ([WebNet23Online.Data](../WebNet23Online.Data/)) — основная БД сайта.
 - **Minimal API** используют **отдельные DbContext и БД** (LocalDB), не `WebContext`.
 - Модуль DelightBistro вызывает Minimal API из JavaScript (`wwwroot/js/delight-bistro/tea.js`) по HTTPS.
+- Логирование DelightBistro API — библиотека [DelightBistro.Services](libraries/delight-bistro-services/README.md); SQL-логи пишутся в ту же БД API (`ConnectionStrings:Logging`), уровни sink’ов — в `appsettings`.
 
 ---
 
@@ -36,6 +37,7 @@
 |------------|------------|
 | WebNet23Online.Data | WebNet23Online |
 | MazeCore | FirstConsoleApp |
+| DelightBistro.Services | DelightBistroMinimalApi |
 
 ---
 
@@ -67,6 +69,7 @@ flowchart LR
 
     subgraph libs [Libraries]
         MazeCore
+        SerilogLib[DelightBistro.Services]
     end
 
     subgraph console [Console]
@@ -74,6 +77,7 @@ flowchart LR
     end
 
     DelightBistro -->|"7090"| TeaAPI
+    TeaAPI --> SerilogLib
     web --> WebContext
     FirstConsoleApp --> MazeCore
 ```

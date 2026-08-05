@@ -10,7 +10,7 @@
 |-----------|-------|----------|
 | Web (MVC) | [web-net23-online/](web-net23-online/) | Основное приложение WebNet23Online и его модули |
 | Minimal API | [minimal-apis/](minimal-apis/) | Отдельные API-проекты |
-| Libraries | [libraries/](libraries/) | Общие библиотеки (Data, MazeCore) |
+| Libraries | [libraries/](libraries/) | Общие библиотеки (Data, MazeCore, DelightBistro.Services) |
 | Console / examples | [other/](other/) | Учебные и консольные проекты (опционально) |
 
 **Карта связей:** [integration-map.md](integration-map.md)
@@ -49,6 +49,7 @@ ASP.NET Core MVC-приложение с модулями — отдельным
 |------------|-------|------------|
 | WebNet23Online.Data | [libraries/web-net23-online-data/](libraries/web-net23-online-data/) | WebNet23Online |
 | MazeCore | [libraries/maze-core/](libraries/maze-core/) | FirstConsoleApp |
+| DelightBistro.Services | [libraries/delight-bistro-services/](libraries/delight-bistro-services/) | DelightBistroMinimalApi |
 
 → [libraries/README.md](libraries/README.md)
 
