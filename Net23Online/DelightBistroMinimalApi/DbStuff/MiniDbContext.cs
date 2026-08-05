@@ -16,6 +16,11 @@ namespace DelightBistroMinimalApi.DbStuff
                 entity.Property(e => e.TimeStamp).HasDefaultValueSql("GetDate()");
             });
 
+            modelBuilder.Entity<Tea>(entity =>
+            {
+                entity.Property(e => e.Price).HasPrecision(18, 2);
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }
