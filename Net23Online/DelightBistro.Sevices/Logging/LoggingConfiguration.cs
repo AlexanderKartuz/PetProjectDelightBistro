@@ -38,15 +38,15 @@ namespace DelightBistro.Sevices.Logging
                 var connectionString = config.GetConnectionString("Logging");
                 var tableName = config["Logging:MSSqlServer:tableName"] ?? "SeriLogs";
                 var schema = config["Logging:MSSqlServer:schema"] ?? "Logging";
-                var restrictedToMinimumLevel = config["Logging:MSSqlServer:restrictedToMinimumLevel"] ?? "Warning";
 
-                if (!Enum.TryParse<LogEventLevel>(restrictedToMinimumLevel,
-                    out var logLevel))
-                {
-                    logLevel = LogEventLevel.Debug;
-                }
+                // Уровень для каждого sink читаем отдельно из appsettings
+                var consoleLevel = ParseLogLevel(
+                    config["Logging:Console:restrictedToMinimumLevel"], LogEventLevel.Information);
+                var fileLevel = ParseLogLevel(
+                    config["Logging:File:restrictedToMinimumLevel"], LogEventLevel.Warning);
+                var sqlLevel = ParseLogLevel(
+                    config["Logging:MSSqlServer:restrictedToMinimumLevel"], LogEventLevel.Warning);
 
-                // SQL Server sink
                 var sqlOptions = new MSSqlServerSinkOptions
                 {
                     AutoCreateSqlTable = false,
@@ -66,16 +66,26 @@ namespace DelightBistro.Sevices.Logging
                     .WriteTo.File(
                         path: "ErrorLog.txt",
                         rollingInterval: RollingInterval.Day,
-                        restrictedToMinimumLevel: logLevel,
+                        restrictedToMinimumLevel: fileLevel,
                         outputTemplate: OutPutTemplate)
-                    .WriteTo.Console(restrictedToMinimumLevel: logLevel)
+                    .WriteTo.Console(restrictedToMinimumLevel: consoleLevel)
                     .WriteTo.MSSqlServer(connectionString: connectionString,
                         sqlOptions,
-                        restrictedToMinimumLevel: logLevel,
+                        restrictedToMinimumLevel: sqlLevel,
                         columnOptions: ColumnOptions);
             });
 
             return builder;
+        }
+
+        private static LogEventLevel ParseLogLevel(string? value, LogEventLevel fallback)
+        {
+            if (Enum.TryParse<LogEventLevel>(value, out var level))
+            {
+                return level;
+            }
+
+            return fallback;
         }
     }
 }
