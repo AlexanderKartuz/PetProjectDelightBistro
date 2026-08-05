@@ -106,6 +106,8 @@ StyleCopReport.xml
 *_wpftmp.csproj
 *.log
 *.tlog
+# Serilog file sink (DelightBistroMinimalApi / LoggingConfiguration)
+ErrorLog*.txt
 *.vspscc
 *.vssscc
 .builds

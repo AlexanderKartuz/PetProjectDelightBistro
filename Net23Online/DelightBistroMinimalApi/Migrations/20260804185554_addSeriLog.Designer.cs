@@ -4,6 +4,7 @@ using DelightBistroMinimalApi.DbStuff;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DelightBistroMinimalApi.Migrations
 {
     [DbContext(typeof(MiniDbContext))]
-    partial class MiniDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260804185554_addSeriLog")]
+    partial class addSeriLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace DelightBistroMinimalApi.Migrations
                     b.Property<string>("SourceContext")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("TimeStamp")
+                    b.Property<DateTime?>("TimeSpan")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GetDate()");
@@ -102,7 +105,6 @@ namespace DelightBistroMinimalApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
