@@ -2,7 +2,7 @@
 {
     public static class CacheTags
     {
-        public const string TEAS = "teas";
-        public const string TEA = "tea";
+        public const string DRINKS = "drinks";
+        public const string DRINK = "drink";
     }
 }
