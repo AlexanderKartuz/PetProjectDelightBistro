@@ -2,10 +2,10 @@
 {
     public interface IDrinkRepository
     {
-        Task<Tea?> ChangeDrinkAsync(int id, Tea tea);
-        Task CreateDrinkAsync(Tea tea);
+        Task<Drink?> ChangeDrinkAsync(int id, Drink tea);
+        Task CreateDrinkAsync(Drink tea);
         Task<bool> DeleteDrinkAsync(int id);
-        Task<Tea?> GetDrinkAsync(int id);
-        Task<List<Tea>> GetDrinksAsync();
+        Task<Drink?> GetDrinkAsync(int id);
+        Task<List<Drink>> GetDrinksAsync();
     }
 }

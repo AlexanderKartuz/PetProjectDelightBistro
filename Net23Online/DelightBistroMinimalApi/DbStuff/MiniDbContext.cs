@@ -4,7 +4,7 @@ namespace DelightBistroMinimalApi.DbStuff
 {
     public class MiniDbContext : DbContext
     {
-        public DbSet<Tea> Teas { get; set; }
+        public DbSet<Drink> Drinks { get; set; }
         public DbSet<SeriLogEntry>? LogEntries { get; set; }
         public MiniDbContext(DbContextOptions<MiniDbContext> options) : base(options) { }
 
@@ -16,7 +16,7 @@ namespace DelightBistroMinimalApi.DbStuff
                 entity.Property(e => e.TimeStamp).HasDefaultValueSql("GetDate()");
             });
 
-            modelBuilder.Entity<Tea>(entity =>
+            modelBuilder.Entity<Drink>(entity =>
             {
                 entity.Property(e => e.Price).HasPrecision(18, 2);
             });

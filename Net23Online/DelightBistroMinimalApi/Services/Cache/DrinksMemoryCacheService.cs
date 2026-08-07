@@ -16,7 +16,7 @@ namespace DelightBistroMinimalApi.Services.Cache
             _cache = cache;
         }
 
-        public async Task<Tea?> ChangeDrinkAsync(int id, Tea drink)
+        public async Task<Drink?> ChangeDrinkAsync(int id, Drink drink)
         {
             var changedDrink = await _drinkRepository.ChangeDrinkAsync(id, drink);
 
@@ -28,7 +28,7 @@ namespace DelightBistroMinimalApi.Services.Cache
             return changedDrink;
         }
 
-        public async Task CreateDrinkAsync(Tea drink)
+        public async Task CreateDrinkAsync(Drink drink)
         {
             await _drinkRepository.CreateDrinkAsync(drink);
             _cache.Remove(CacheKeys.DRINKS);
@@ -46,11 +46,11 @@ namespace DelightBistroMinimalApi.Services.Cache
             return true;
         }
 
-        public async Task<Tea?> GetDrinkAsync(int id)
+        public async Task<Drink?> GetDrinkAsync(int id)
         {
             var cacheKey = $"{CacheKeys.DRINK}:{id}";
 
-            if (!_cache.TryGetValue(cacheKey, out Tea? drink))
+            if (!_cache.TryGetValue(cacheKey, out Drink? drink))
             {
                 drink = await _drinkRepository.GetDrinkAsync(id);
 
@@ -66,7 +66,7 @@ namespace DelightBistroMinimalApi.Services.Cache
             return drink;
         }
 
-        public async Task<List<Tea>> GetDrinksAsync()
+        public async Task<List<Drink>> GetDrinksAsync()
         {
             var dinks = await _cache.GetOrCreateAsync(CacheKeys.DRINKS, async entry =>
             {
@@ -75,7 +75,7 @@ namespace DelightBistroMinimalApi.Services.Cache
 
                 var result = await _drinkRepository.GetDrinksAsync();
 
-                return result ?? new List<Tea>();
+                return result ?? new List<Drink>();
             });
             return dinks;
         }

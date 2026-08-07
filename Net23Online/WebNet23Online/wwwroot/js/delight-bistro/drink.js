@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    const urlGet = 'https://localhost:7090/GetTeas';
-    const urlPost = 'https://localhost:7090/CreateTea';
+    const urlGet = 'https://localhost:7090/GetDrinks';
+    const urlPost = 'https://localhost:7090/CreateDrink';
 
     const teasCatalogDiv = document.querySelector('.teas-catalog');
     const createButton = document.querySelector('.create-button');
     const createTeaForm = document.querySelector('.create-tea-form');
     const teaFormToggle = document.querySelector('.tea-form-toggle');
 
-    getAllTeas();
+    getAllDrinks();
 
     createButton.addEventListener('click', createTea);
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         createTeaForm.classList.toggle('hidden');
     });
 
-    function getAllTeas() {
+    function getAllDrinks() {
         fetch(urlGet)
             .then(function (response) {
                 if (!response.ok) {
@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 return response.json();
             })
-            .then(function (teas) {
+            .then(function (drink) {
                 teasCatalogDiv.innerHTML = '';
 
-                teas.forEach(function (tea) {
+                drink.forEach(function (tea) {
                     drawTeaCard(tea);
                 });
-                console.log('Все чаев: ' + teas.length);
+                console.log('Все чаев: ' + drink.length);
             })
             .catch((error) => {
                 console.error('Ошибка загрузки', error);
