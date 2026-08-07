@@ -4,17 +4,17 @@ using DelightBistroMinimalApi.Services.Cache.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
-namespace DelightBistroMinimalApi.Services.Database
+namespace DelightBistroMinimalApi.Services.Cache
 {
     public class DrinksRedisCacheService : IDrinksCacheService
     {
-        private DrinkRepository _teaRepository;
+        private IDrinkRepository _teaRepository;
         private IDistributedCache _cache;
 
-        public DrinksRedisCacheService(DrinkRepository teaRepository, IDistributedCache cache)
+        public DrinksRedisCacheService(IDrinkRepository drinkRepository, IDistributedCache cache)
         {
             _cache = cache;
-            _teaRepository = teaRepository;
+            _teaRepository = drinkRepository;
         }
 
         public async Task<List<Tea>> GetDrinksAsync()
@@ -30,10 +30,10 @@ namespace DelightBistroMinimalApi.Services.Database
                     return result;
                 }
 
-                _cache.Remove(key);
+                await _cache.RemoveAsync(key);
             }
 
-            var teasDb = await _teaRepository.GetDrinksAsync();
+            var drinkDb = await _teaRepository.GetDrinksAsync();
 
             var options = new DistributedCacheEntryOptions
             {
@@ -41,22 +41,22 @@ namespace DelightBistroMinimalApi.Services.Database
                 SlidingExpiration = TimeSpan.FromMinutes(2),
             };
 
-            var teasJson = JsonSerializer.Serialize(teasDb);
+            var drinkJson = JsonSerializer.Serialize(drinkDb);
 
-            await _cache.SetStringAsync(key, teasJson, options);
+            await _cache.SetStringAsync(key, drinkJson, options);
 
-            return teasDb;
+            return drinkDb;
         }
 
         public async Task<Tea?> GetDrinkAsync(int id)
         {
             var key = $"{CacheKeys.DRINK}:{id}";
 
-            var teaCached = await _cache.GetStringAsync(key);
+            var drinkCached = await _cache.GetStringAsync(key);
 
-            if (teaCached != null)
+            if (drinkCached != null)
             {
-                var result = JsonSerializer.Deserialize<Tea>(teaCached);
+                var result = JsonSerializer.Deserialize<Tea>(drinkCached);
 
                 if (result != null)
                 {
@@ -66,8 +66,8 @@ namespace DelightBistroMinimalApi.Services.Database
                 await _cache.RemoveAsync(key);
             }
 
-            var teaDb = await _teaRepository.GetDrinkAsync(id);
-            if (teaDb != null)
+            var drinkDb = await _teaRepository.GetDrinkAsync(id);
+            if (drinkDb != null)
             {
                 var options = new DistributedCacheEntryOptions
                 {
@@ -75,28 +75,32 @@ namespace DelightBistroMinimalApi.Services.Database
                     SlidingExpiration = TimeSpan.FromMinutes(3),
                 };
 
-                var teaJson = JsonSerializer.Serialize(teaDb);
-                await _cache.SetStringAsync(key, teaJson, options);
+                var drinkJson = JsonSerializer.Serialize(drinkDb);
+                await _cache.SetStringAsync(key, drinkJson, options);
             }
 
-            return teaDb;
+            return drinkDb;
         }
 
         public async Task CreateDrinkAsync(Tea tea)
         {
-            await _teaRepository.CreateDrinkAsync(tea);
-            await _cache.RemoveAsync(CacheKeys.DRINKS);
+            var task1 = _teaRepository.CreateDrinkAsync(tea);
+            var task2 = _cache.RemoveAsync(CacheKeys.DRINKS);
+
+            await Task.WhenAll(task1, task2);
         }
 
         public async Task<Tea?> ChangeDrinkAsync(int id, Tea tea)
         {
-            var changedTea = await _teaRepository.ChangeDrinkAsync(id, tea);
-            if (changedTea != null)
+            var changedDrink = await _teaRepository.ChangeDrinkAsync(id, tea);
+            if (changedDrink != null)
             {
-                await _cache.RemoveAsync(CacheKeys.DRINKS);
-                await _cache.RemoveAsync($"{CacheKeys.DRINK}:{id}");
+                var task1 = _cache.RemoveAsync(CacheKeys.DRINKS);
+                var task2 = _cache.RemoveAsync($"{CacheKeys.DRINK}:{id}");
+                await Task.WhenAll(task1, task2);
+
             }
-            return changedTea;
+            return changedDrink;
         }
 
         public async Task<bool> DeleteDrinkAsync(int id)
@@ -106,8 +110,10 @@ namespace DelightBistroMinimalApi.Services.Database
             {
                 return false;
             }
-            await _cache.RemoveAsync(CacheKeys.DRINKS);
-            await _cache.RemoveAsync($"{CacheKeys.DRINK}:{id}");
+            var task1 = _cache.RemoveAsync(CacheKeys.DRINKS);
+            var task2 = _cache.RemoveAsync($"{CacheKeys.DRINK}:{id}");
+            await Task.WhenAll(task1, task2);
+
             return true;
         }
 

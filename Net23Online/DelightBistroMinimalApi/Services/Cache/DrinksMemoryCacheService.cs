@@ -10,20 +10,20 @@ namespace DelightBistroMinimalApi.Services.Cache
         private readonly IDrinkRepository _drinkRepository;
         private readonly IMemoryCache _cache;
 
-        public DrinksMemoryCacheService(IDrinkRepository teaRepository, IMemoryCache cache)
+        public DrinksMemoryCacheService(IDrinkRepository drinkRepository, IMemoryCache cache)
         {
-            _drinkRepository = teaRepository;
+            _drinkRepository = drinkRepository;
             _cache = cache;
         }
 
-        public Task<Tea?> ChangeDrinkAsync(int id, Tea drink)
+        public async Task<Tea?> ChangeDrinkAsync(int id, Tea drink)
         {
-            var changedDrink = _drinkRepository.ChangeDrinkAsync(id, drink);
+            var changedDrink = await _drinkRepository.ChangeDrinkAsync(id, drink);
 
             if (changedDrink != null)
             {
                 _cache.Remove(CacheKeys.DRINKS);
-                _cache.Remove($"CacheKeys.DRINK:{id}");
+                _cache.Remove($"{CacheKeys.DRINK}:{id}");
             }
             return changedDrink;
         }
@@ -42,7 +42,7 @@ namespace DelightBistroMinimalApi.Services.Cache
             }
 
             _cache.Remove(CacheKeys.DRINKS);
-            _cache.Remove($"CacheKeys.DRINK:{id}");
+            _cache.Remove($"{CacheKeys.DRINK}:{id}");
             return true;
         }
 
