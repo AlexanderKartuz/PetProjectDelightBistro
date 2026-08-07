@@ -65,15 +65,15 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-app.MapGet("GetTeas", async (IDrinksCacheService drinksCache) =>
+app.MapGet("GetDrinks", async (IDrinksCacheService drinksCache) =>
 {
-    var teas = await drinksCache.GetDrinksAsync();
+    var drinks = await drinksCache.GetDrinksAsync();
 
-    return Results.Ok(teas);
+    return Results.Ok(drinks);
 
 }).CacheOutput(o => o.Tag(CacheTags.DRINKS));
 
-app.MapGet("GetTea/{id}",
+app.MapGet("GetDrink/{id}",
     async (IDrinksCacheService drinksCache, int id) =>
 {
     var drink = await drinksCache.GetDrinkAsync(id);
@@ -90,24 +90,24 @@ app.MapGet("GetTea/{id}",
 .SetVaryByRouteValue("id")
 .Expire(TimeSpan.FromMinutes(1)));
 
-app.MapPost("CreateTea",
+app.MapPost("CreateDrink",
     async (IDrinksCacheService drinksCache,
-    [FromBody] Tea tea,
+    [FromBody] Drink drink,
     IOutputCacheStore outputCache) =>
 {
-    var task1 = drinksCache.CreateDrinkAsync(tea);
+    var task1 = drinksCache.CreateDrinkAsync(drink);
     var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
     await Task.WhenAll(task1, task2);
 
-    return Results.Ok(tea);
+    return Results.Ok(drink);
 });
 
 app.MapPut("ChangeDrink/{id}",
    async (IDrinksCacheService drinksCache,
-   int id, [FromBody] Tea tea,
+   int id, [FromBody] Drink drink,
    IOutputCacheStore outputCache) =>
 {
-    var changedDrink = await drinksCache.ChangeDrinkAsync(id, tea);
+    var changedDrink = await drinksCache.ChangeDrinkAsync(id, drink);
 
     if (changedDrink == null)
     {
@@ -115,7 +115,7 @@ app.MapPut("ChangeDrink/{id}",
     }
 
     // from SetVaryByRouteValue
-    var cacheKey = $"GET:/GetTea/{id}:routeId={id}";
+    var cacheKey = $"GET:/ChangeDrink/{id}:routeId={id}";
     var task1 = outputCache.EvictByTagAsync(cacheKey, default).AsTask();
     var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
     await Task.WhenAll(task1, task2);
@@ -134,12 +134,11 @@ app.MapDelete("DeleteDrink",
         return Results.NotFound();
     }
 
-    var cacheKey = $"GET:/GetTea/{id}:routeId={id}";
-
-
+    var cacheKey = $"GET:/DeleteDrink/{id}:routeId={id}";
 
     var task1 = outputCache.EvictByTagAsync(cacheKey, default).AsTask();
     var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
+    await Task.WhenAll(task1, task2);
     await Task.WhenAll(task1, task2);
     return Results.NoContent();
 });

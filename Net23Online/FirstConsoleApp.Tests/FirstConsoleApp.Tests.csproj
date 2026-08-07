@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -19,11 +19,5 @@
   </ItemGroup>
 
   <!-- Same layout as MazeCore output so cells that call MazeSoundPlayer find files under test host BaseDirectory -->
-  <ItemGroup>
-    <Content Include="..\MazeCore\Sounds\**\*">
-      <Link>Sounds\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 
 </Project>

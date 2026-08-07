@@ -11,27 +11,27 @@ namespace DelightBistroMinimalApi.DbStuff
             _dbContext = dbContext;
         }
 
-        public async Task<List<Tea>> GetDrinksAsync()
+        public async Task<List<Drink>> GetDrinksAsync()
         {
-            var drink = _dbContext.Teas.ToListAsync();
+            var drink = _dbContext.Drinks.ToListAsync();
             return await drink;
         }
 
-        public async Task<Tea?> GetDrinkAsync(int id)
+        public async Task<Drink?> GetDrinkAsync(int id)
         {
-            var drink = _dbContext.Teas.FirstOrDefaultAsync(t => t.Id == id);
+            var drink = _dbContext.Drinks.FirstOrDefaultAsync(t => t.Id == id);
             return await drink;
         }
 
-        public async Task CreateDrinkAsync(Tea tea)
+        public async Task CreateDrinkAsync(Drink tea)
         {
-            await _dbContext.Teas.AddAsync(tea);
+            await _dbContext.Drinks.AddAsync(tea);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Tea?> ChangeDrinkAsync(int id, Tea tea)
+        public async Task<Drink?> ChangeDrinkAsync(int id, Drink tea)
         {
-            var changedDrink = await _dbContext.Teas.FirstOrDefaultAsync(t => t.Id == id);
+            var changedDrink = await _dbContext.Drinks.FirstOrDefaultAsync(t => t.Id == id);
 
             if (changedDrink == null)
             {
@@ -49,13 +49,13 @@ namespace DelightBistroMinimalApi.DbStuff
 
         public async Task<bool> DeleteDrinkAsync(int id)
         {
-            var tea = await _dbContext.Teas.FirstOrDefaultAsync(i => i.Id == id);
+            var tea = await _dbContext.Drinks.FirstOrDefaultAsync(i => i.Id == id);
 
             if (tea == null)
             {
                 return false;
             }
-            _dbContext.Teas.Remove(tea);
+            _dbContext.Drinks.Remove(tea);
             await _dbContext.SaveChangesAsync();
             return true;
         }
