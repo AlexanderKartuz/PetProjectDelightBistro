@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DelightBistro — презентация решения</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a222c;
+      --surface2: #243040;
+      --text: #e8eef4;
+      --muted: #9aabbc;
+      --accent: #c4a574;
+      --accent-dim: #8a7350;
+      --line: #2e3d4d;
+      --ok: #6fbf8a;
+      --warn: #d4a84b;
+      --danger: #d44a4a;
+      --info: #6ba3c9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+    }
+
+    header.top {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 20px;
+      margin-bottom: 28px;
+    }
+
+    header.top .eyebrow {
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    header.top h1 {
+      font-size: 1.85rem;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+
+    header.top p {
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    nav.toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0 8px;
+    }
+
+    nav.toc a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+    }
+
+    nav.toc a:hover {
+      color: var(--text);
+      border-color: var(--accent-dim);
+    }
+
+    section.slide {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px 28px 32px;
+      margin: 20px 0;
+      scroll-margin-top: 16px;
+    }
+
+    section.slide h2 {
+      font-size: 1.35rem;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    section.slide .num {
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    section.slide h3 {
+      font-size: 1.05rem;
+      margin: 20px 0 10px;
+      color: var(--accent);
+    }
+
+    p { margin: 10px 0; color: var(--muted); }
+    p.lead { color: var(--text); font-size: 1.05rem; }
+
+    ul, ol {
+      margin: 10px 0 10px 1.25rem;
+      color: var(--muted);
+    }
+
+    li { margin: 6px 0; }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    @media (max-width: 720px) {
+      .grid.cols-2, .grid.cols-3, .grid.cols-4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .card strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 16px 8px;
+    }
+
+    .stat .v {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat .l {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td { color: var(--text); }
+    td.muted { color: var(--muted); }
+
+    code {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.85em;
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+    }
+
+    .flow {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.82rem;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--muted);
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 14px 0;
+    }
+
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--bg);
+      padding: 12px 16px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .callout.warn { border-left-color: var(--warn); }
+    .callout.ok { border-left-color: var(--ok); }
+    .callout.info { border-left-color: var(--info); }
+
+    .callout .t {
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      margin: 2px 4px 2px 0;
+    }
+
+    .pill.accent { color: var(--accent); border-color: var(--accent-dim); }
+
+    footer {
+      margin-top: 36px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .print-hint {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      section.slide {
+        break-inside: avoid;
+        border-color: #ccc;
+        background: #fff;
+      }
+      .print-hint, nav.toc { display: none; }
+      p, li, td, th { color: #222; }
+      header.top p { color: #444; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="eyebrow">MyProject · учебный обзор</div>
+      <h1>DelightBistro — сеть ресторанов и IT-решение</h1>
+      <p>
+        Документ для открытия в браузере: бизнес-контекст сети DelightBistro
+        и техническая архитектура (MVC, Minimal API, React, кэш). Лабиринт и
+        прочие учебные проекты вне контура ресторана не включены.
+      </p>
+      <p class="print-hint">Откройте файл двойным кликом или через «Open with Live Server». Печать → PDF: Ctrl+P.</p>
+    </header>
+
+    <nav class="toc">
+      <a href="#s1">1. Сеть</a>
+      <a href="#s2">2. Цели</a>
+      <a href="#s3">3. Архитектура</a>
+      <a href="#s4">4. MVC</a>
+      <a href="#s5">5. API</a>
+      <a href="#s6">6. React</a>
+      <a href="#s7">7. Данные</a>
+      <a href="#s8">8. Кэш</a>
+      <a href="#s9">9. Роли</a>
+      <a href="#s10">10. Ревью</a>
+      <a href="#s11">11. Итог</a>
+    </nav>
+
+    <!-- 1 -->
+    <section class="slide" id="s1">
+      <div class="num">Слайд 01</div>
+      <h2>Сеть ресторанов DelightBistro</h2>
+      <p class="lead">
+        DelightBistro — учебная модель сети кафе и бистро с акцентом на
+        чайную карту, конструктор блюд и работу персонала в реальном времени.
+      </p>
+      <div class="grid cols-2">
+        <div class="card">
+          <strong>Концепция</strong>
+          Гостевой зал и кухня в одном digital-контуре: меню по типам,
+          ингредиенты, сборка блюд, заказы, чат смены, статистика продаж.
+        </div>
+        <div class="card">
+          <strong>Чай как отдельный продукт</strong>
+          Каталог напитков вынесен в отдельный сервис (API) — как будто
+          центральный «чайный склад» сети, к которому подключаются витрины
+          (сайт MVC и React-приложение).
+        </div>
+        <div class="card">
+          <strong>Зачем сеть</strong>
+          Одна логика меню и заказов для точки; общий каталог чая для всех
+          клиентских приложений; уведомления и чат для персонала филиала.
+        </div>
+        <div class="card">
+          <strong>Учебный статус</strong>
+          Pet-project на ASP.NET Core 8 + React: демонстрирует слои,
+          auth, SignalR, кэширование Memory/Redis/OutputCache.
+        </div>
+      </div>
+      <div class="grid cols-4">
+        <div class="card stat"><div class="v">MVC</div><div class="l">точка / филиал</div></div>
+        <div class="card stat"><div class="v">API</div><div class="l">каталог чая</div></div>
+        <div class="card stat"><div class="v">React</div><div class="l">витрина напитков</div></div>
+        <div class="card stat"><div class="v">2 БД</div><div class="l">ресторан + чай</div></div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" id="s2">
+      <div class="num">Слайд 02</div>
+      <h2>Бизнес-цели и сценарии</h2>
+      <h3>Для гостя</h3>
+      <ul>
+        <li>Смотреть меню и типы блюд на сайте филиала</li>
+        <li>Оформлять заказ (авторизованный пользователь)</li>
+        <li>Изучать чайную карту (страница MVC или React SPA)</li>
+      </ul>
+      <h3>Для персонала и модераторов</h3>
+      <ul>
+        <li>Создавать меню, ингредиенты, собирать блюда</li>
+        <li>Вести чат смены (SignalR)</li>
+        <li>Смотреть статистику, выгружать CSV</li>
+        <li>Получать уведомления о событиях</li>
+      </ul>
+      <h3>Для разработки / DevOps (учебно)</h3>
+      <ul>
+        <li>Масштабировать чтение каталога чая через кэш</li>
+        <li>Переключать Memory ↔ Redis без смены URL API</li>
+        <li>Держать два клиента (Razor JS и React) на одном контракте API</li>
+      </ul>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" id="s3">
+      <div class="num">Слайд 03</div>
+      <h2>Архитектура решения</h2>
+      <table>
+        <thead>
+          <tr><th>Часть</th><th>Путь / порт</th><th>Роль в сети</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>WebNet23Online (MVC)</td>
+            <td class="muted">:7284</td>
+            <td>Сайт филиала: меню, заказы, auth, чат</td>
+          </tr>
+          <tr>
+            <td>DelightBistroMinimalApi</td>
+            <td class="muted">:7090</td>
+            <td>Центральный каталог чая + кэш</td>
+          </tr>
+          <tr>
+            <td>react-delight-bistro-app</td>
+            <td class="muted">Vite / React 19</td>
+            <td>Отдельная витрина напитков</td>
+          </tr>
+          <tr>
+            <td>WebNet23Online.Data</td>
+            <td class="muted">EF Core</td>
+            <td>БД ресторана</td>
+          </tr>
+          <tr>
+            <td>DelightBistro.Services</td>
+            <td class="muted">Serilog</td>
+            <td>Общее логирование API</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="flow">Браузер (гость / персонал)
+  ├─ https://localhost:7284  →  MVC  →  БД WebNet23Online
+  │     └─ tea.js  ─────────→  API :7090  →  БД WebNet23Tea
+  └─ React SPA  ────────────→  API :7090  →  БД WebNet23Tea</div>
+      <div class="callout info">
+        <div class="t">Важно</div>
+        Сервер MVC не вызывает API через HttpClient. К API ходит браузер
+        (нужен CORS). Это имитация «витрина ↔ общий сервис каталога».
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" id="s4">
+      <div class="num">Слайд 04</div>
+      <h2>MVC — сайт филиала</h2>
+      <p>
+        Модуль <code>DelightBistroController</code>, layout
+        <code>_LayoutDelightBistro.cshtml</code>, точка входа
+        <code>/DelightBistro/Index</code>.
+      </p>
+      <div class="grid cols-2">
+        <div class="card">
+          <strong>Функции</strong>
+          Меню по типам, конструктор блюд, ингредиенты, список блюд,
+          заказы, stats, CSV, чат.
+        </div>
+        <div class="card">
+          <strong>Auth</strong>
+          Cookie <code>AuthNameSmile</code>, ~13 мин.
+          Роли: User, Employee, Moderator, Admin.
+        </div>
+      </div>
+      <h3>SignalR</h3>
+      <table>
+        <thead><tr><th>Hub</th><th>URL</th><th>Назначение</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>DeligtBistroHub</td>
+            <td class="muted">/my-hub/delightbistro</td>
+            <td>Чат смены, push о новом блюде</td>
+          </tr>
+          <tr>
+            <td>NotificationHub</td>
+            <td class="muted">/my-hub/notification</td>
+            <td>Уведомления персоналу / админам</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        JS: <code>wwwroot/js/delight-bistro/*</code> — заказы, удаление блюд,
+        SignalR, <code>tea.js</code> (каталог чая с API).
+      </p>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" id="s5">
+      <div class="num">Слайд 05</div>
+      <h2>Minimal API — каталог чая сети</h2>
+      <p>
+        Отдельный хост «центрального» каталога напитков. Swagger открывается с
+        корня (<code>/</code> → <code>/swagger</code>).
+      </p>
+      <span class="pill accent">OutputCache</span>
+      <span class="pill">Rate limit</span>
+      <span class="pill">Serilog</span>
+      <span class="pill">CORS</span>
+      <span class="pill accent">Memory | Redis</span>
+      <table>
+        <thead><tr><th>Method</th><th>Route</th><th>Смысл для сети</th></tr></thead>
+        <tbody>
+          <tr><td>GET</td><td>GetTeas</td><td>Вся чайная карта</td></tr>
+          <tr><td>GET</td><td>GetTea/{id}</td><td>Карточка напитка</td></tr>
+          <tr><td>POST</td><td>CreateTea</td><td>Добавить позицию в каталог</td></tr>
+          <tr><td>PUT</td><td>ChangeDrink/{id}</td><td>Обновить цену / описание</td></tr>
+          <tr><td>DELETE</td><td>DeleteDrink</td><td>Снять с карты (204)</td></tr>
+          <tr><td>GET</td><td>redis-test</td><td>Проверка Redis (если включён)</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <div class="t">Единый CRUD</div>
+        Логика кэша в <code>IDrinksCacheService</code>. Провайдер:
+        <code>Caching:Provider = Memory | Redis</code> в appsettings.
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" id="s6">
+      <div class="num">Слайд 06</div>
+      <h2>React — витрина напитков</h2>
+      <p>
+        Папка <code>react-delight-bistro-app</code> (вне .sln, рядом в MyProject):
+        React 19, Vite 8, react-router 7.
+      </p>
+      <table>
+        <thead><tr><th>Маршрут</th><th>Экран</th><th>API</th></tr></thead>
+        <tbody>
+          <tr><td>/</td><td>Список напитков</td><td>GET GetTeas</td></tr>
+          <tr><td>/drink/create</td><td>Создание</td><td>POST CreateTea</td></tr>
+          <tr><td>/drink/:id</td><td>Карточка</td><td>GET GetTea/{id}</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Сервис: <code>src/services/drinks-service.ts</code> —
+        get / create / change / delete. База:
+        <code>https://localhost:7090</code>.
+      </p>
+      <div class="callout info">
+        <div class="t">Два клиента к одному каталогу</div>
+        MVC <code>tea.js</code> и React SPA — разные витрины одной чайной карты.
+        Еда и заказы остаются только в MVC.
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" id="s7">
+      <div class="num">Слайд 07</div>
+      <h2>Данные — две базы под сеть</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <strong>WebNet23Online · WebContext</strong>
+          Филиал: пользователи, меню, блюда, ингредиенты, заказы, уведомления.
+        </div>
+        <div class="card">
+          <strong>WebNet23Tea · MiniDbContext</strong>
+          Общий каталог: Tea + таблица логов Serilog (Logging.SeriLogs).
+        </div>
+      </div>
+      <p>
+        Разделение учебное: «операционка ресторана» и «центральный каталог чая»
+        как у сети с общим меню напитков и локальными заказами.
+      </p>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide" id="s8">
+      <div class="num">Слайд 08</div>
+      <h2>Кэширование каталога</h2>
+      <p>
+        Чтобы витрины (MVC + React) не били в БД на каждый просмотр карты.
+      </p>
+      <table>
+        <thead><tr><th>Слой</th><th>Где</th><th>Инвалидация</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>HTTP Cache-Control</td>
+            <td>ResponseHeaderMiddleware</td>
+            <td>max-age=10</td>
+          </tr>
+          <tr>
+            <td>Output Cache</td>
+            <td>.CacheOutput + теги</td>
+            <td>EvictByTagAsync</td>
+          </tr>
+          <tr>
+            <td>Application</td>
+            <td>IDrinksCacheService</td>
+            <td>Remove ключей drink:all / drink:id</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="grid cols-2">
+        <div class="card">
+          <strong>Memory</strong>
+          Один процесс API — удобно для локальной разработки.
+        </div>
+        <div class="card">
+          <strong>Redis</strong>
+          Общий кэш между инстансами API (префикс DelightBistro_).
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide" id="s9">
+      <div class="num">Слайд 09</div>
+      <h2>Роли в сети (модель доступа)</h2>
+      <table>
+        <thead><tr><th>Роль</th><th>Примеры возможностей</th></tr></thead>
+        <tbody>
+          <tr><td>User</td><td>Профиль, заказ (где требуется Authorize)</td></tr>
+          <tr><td>Employee</td><td>Список блюд, рабочие операции филиала</td></tr>
+          <tr><td>Moderator</td><td>Создание меню, ингредиентов, конструктор</td></tr>
+          <tr><td>Admin</td><td>Уведомления, расширенное управление</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Атрибуты: <code>IsEmployee</code>, <code>IsModerator</code>,
+        <code>IsAdmin</code> на MVC-actions.
+      </p>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide" id="s10">
+      <div class="num">Слайд 10</div>
+      <h2>Ревью и риски</h2>
+      <h3>Сильные стороны</h3>
+      <ul>
+        <li>Понятное разделение: филиал (MVC) / каталог (API) / витрина (React)</li>
+        <li>Кэш через интерфейс и конфиг Provider</li>
+        <li>SignalR для операций смены</li>
+        <li>Не кэшировать «пустые» ответы; NotFound по id</li>
+      </ul>
+      <h3>Что улучшить</h3>
+      <table>
+        <thead><tr><th>Приоритет</th><th>Находка</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Высокий</td>
+            <td>Update/Delete: Evict по тегу <code>CacheTags.DRINK</code>, не по строке ключа Output Cache</td>
+          </tr>
+          <tr>
+            <td>Средний</td>
+            <td>Хардкод <code>localhost:7090</code> в tea.js и drinks-service.ts</td>
+          </tr>
+          <tr>
+            <td>Средний</td>
+            <td>Два клиента чая (дублирование UX) — осознанно или свести</td>
+          </tr>
+          <tr>
+            <td>Низкий</td>
+            <td>Опечатки в именах: Constans, Exeption, DeligtBistroHub, CreteDrinkForm</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide" id="s11">
+      <div class="num">Слайд 11</div>
+      <h2>Итог</h2>
+      <p class="lead">
+        DelightBistro в MyProject моделирует сеть: локальный сайт филиала
+        (еда, заказы, персонал), общий API чайного каталога с кэшем и React
+        как вторая витрина напитков.
+      </p>
+      <div class="grid cols-3">
+        <div class="card stat"><div class="v">MVC</div><div class="l">филиал</div></div>
+        <div class="card stat"><div class="v">API</div><div class="l">каталог + кэш</div></div>
+        <div class="card stat"><div class="v">React</div><div class="l">витрина чая</div></div>
+      </div>
+      <div class="callout ok">
+        <div class="t">Следующие шаги</div>
+        Исправить Evict по тегу DRINK; вынести базовый URL API в конфиг/env;
+        прогнать сценарии Memory → Redis со Swagger и React.
+      </div>
+    </section>
+
+    <footer>
+      MyProject · Net23Online + react-delight-bistro-app · август 2026<br />
+      Файл: <code>Net23Online/docs/web-net23-online/modules/delight-bistro/presentation.html</code>
+    </footer>
+  </div>
+</body>
+</html>
