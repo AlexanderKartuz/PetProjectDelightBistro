@@ -2,7 +2,7 @@
 {
     public static class CacheKeys
     {
-        public const string TEAS = "teas:all";
-        public const string TEA = "teas";
+        public const string DRINKS = "drink:all";
+        public const string DRINK = "drink";
     }
 }

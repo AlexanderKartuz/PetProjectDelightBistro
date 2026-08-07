@@ -3,7 +3,8 @@ using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
 using DelightBistroMinimalApi.Middlewares.RateLimit;
-using DelightBistroMinimalApi.Services.Database;
+using DelightBistroMinimalApi.Services.Cache;
+using DelightBistroMinimalApi.Services.Cache.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 //service and appsetings
 var connectionString = builder.Configuration.GetConnectionString("Drinks");
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
-builder.Services.AddScoped<TeaCacheService>();
-builder.Services.AddScoped<TeaRepository>();
+builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
+
+
+var cachingOptions = builder.Services.AddDelightBistroCaching(builder.Configuration);
 
 builder.Services.AddScoped(typeof(IAppLogging<>), typeof(AppLogging<>));
 builder.ConfigureSeriLog();
@@ -32,14 +35,6 @@ builder.Services.AddOutputCache(options =>
     options.MaximumBodySize = 64 * 1024;
     options.SizeLimit = 100 * 1024 * 1024;
 });
-
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = "localhost:6379";
-    options.InstanceName = "DelightBistro_";
-});
-
-builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(o =>
 {
@@ -67,177 +62,112 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 //service
-app.MapGet("/", () => "Hello World!");
 
-app.MapGet("GetTeas", (TeaRepository teaRepository, IMemoryCache memoryCache) =>
+app.MapGet("/", () => Results.Redirect("/swagger"));
+
+app.MapGet("GetTeas", async (IDrinksCacheService drinksCache) =>
 {
-    var teas = memoryCache.GetOrCreate(CacheKeys.TEAS, entry =>
-    {
-        entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(5);
-        entry.SlidingExpiration = TimeSpan.FromMinutes(2);
-
-        return teaRepository.GetTeas();
-    });
+    var teas = await drinksCache.GetDrinksAsync();
 
     return Results.Ok(teas);
-}).CacheOutput(o => o.Tag(CacheTags.TEAS));
 
-app.MapGet("GetTea/{id}", (TeaRepository teaRepository, int id, IMemoryCache memoryCache) =>
+}).CacheOutput(o => o.Tag(CacheTags.DRINKS));
+
+app.MapGet("GetTea/{id}",
+    async (IDrinksCacheService drinksCache, int id) =>
 {
-    var cacheKey = $"{CacheKeys.TEA}:{id}";
+    var drink = await drinksCache.GetDrinkAsync(id);
 
-    var tea = memoryCache.GetOrCreate(cacheKey, entry =>
-    {
-        entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(10);
-        entry.SlidingExpiration = TimeSpan.FromMinutes(5);
-
-        return teaRepository.GetTea(id);
-    });
-
-    if (tea == null)
+    if (drink == null)
     {
         return Results.NotFound();
     }
 
-    return Results.Ok(tea);
+    return Results.Ok(drink);
+
 }).CacheOutput(o => o
-.Tag(CacheTags.TEA)
+.Tag(CacheTags.DRINK)
 .SetVaryByRouteValue("id")
-.Expire(TimeSpan.FromMinutes(2)));
+.Expire(TimeSpan.FromMinutes(1)));
 
-app.MapPost("CreateTea", async (TeaRepository teaRepository, [FromBody] Tea tea, IOutputCacheStore outputCache,
-   IMemoryCache memoryCache) =>
+app.MapPost("CreateTea",
+    async (IDrinksCacheService drinksCache,
+    [FromBody] Tea tea,
+    IOutputCacheStore outputCache) =>
 {
-    teaRepository.CreateTea(tea);
-
-    memoryCache.Remove(CacheKeys.TEAS);
-    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
+    var task1 = drinksCache.CreateDrinkAsync(tea);
+    var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
+    await Task.WhenAll(task1, task2);
 
     return Results.Ok(tea);
 });
 
 app.MapPut("ChangeDrink/{id}",
-   async (TeaRepository teaRepository,
+   async (IDrinksCacheService drinksCache,
    int id, [FromBody] Tea tea,
-   IOutputCacheStore outputCache,
-   IMemoryCache memoryCache) =>
+   IOutputCacheStore outputCache) =>
 {
-    var changedTea = teaRepository.ChangeTea(id, tea);
+    var changedDrink = await drinksCache.ChangeDrinkAsync(id, tea);
 
-    if (changedTea == null)
+    if (changedDrink == null)
     {
         return Results.NotFound();
     }
 
-    memoryCache.Remove(CacheKeys.TEAS);
-    memoryCache.Remove($"{CacheKeys.TEA}:{id}");
-    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
+    // from SetVaryByRouteValue
+    var cacheKey = $"GET:/GetTea/{id}:routeId={id}";
+    var task1 = outputCache.EvictByTagAsync(cacheKey, default).AsTask();
+    var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
+    await Task.WhenAll(task1, task2);
 
-    return Results.Ok(changedTea);
+    return Results.Ok(changedDrink);
 });
 
 app.MapDelete("DeleteDrink",
-    async (TeaRepository teaRepository,
+    async (IDrinksCacheService drinksCache,
     [FromBody] int id,
-    IOutputCacheStore outputCache,
-    IMemoryCache memoryCache) =>
+    IOutputCacheStore outputCache) =>
 {
-    var canDelete = teaRepository.DeleteTea(id);
+    var canDelete = await drinksCache.DeleteDrinkAsync(id);
     if (!canDelete)
     {
-        return false;
+        return Results.NotFound();
     }
 
-    memoryCache.Remove(CacheKeys.TEAS);
-    memoryCache.Remove($"{CacheKeys.TEA}:{id}");
-    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
+    var cacheKey = $"GET:/GetTea/{id}:routeId={id}";
 
-    return true;
+
+
+    var task1 = outputCache.EvictByTagAsync(cacheKey, default).AsTask();
+    var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
+    await Task.WhenAll(task1, task2);
+    return Results.NoContent();
 });
 
 app.MapGet("Exception", () => { throw new Exception(); });
 
-
-//service
-// When Redis is on
-app.MapGet("redis-test", async (IDistributedCache cache) =>
+// Redis-эндпоинты только при Caching:Provider = Redis
+if (cachingOptions.UseRedis)
 {
-    var value = await cache.GetStringAsync("test");
-
-    if (value == null)
+    app.MapGet("redis-test", async (IDistributedCache cache) =>
     {
-        // TTL
-        var options = new DistributedCacheEntryOptions
+        var value = await cache.GetStringAsync("test");
+
+        if (value == null)
         {
-            AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1),
-        };
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1),
+            };
 
-        var initValue = "Redis is working!";
-        await cache.SetStringAsync("test", initValue, options);
+            var initValue = "Redis is working!";
+            await cache.SetStringAsync("test", initValue, options);
 
-        return Results.Ok(initValue);
-    }
-
-    return Results.Ok(value);
-});
-
-
-app.MapGet("GetTeasRedis", (TeaCacheService teaService) =>
-{
-    var teas = teaService.GetTeas();
-
-    return Results.Ok(teas);
-}).CacheOutput(o => o.Tag(CacheTags.TEAS));
-
-app.MapGet("GetTeaRedis/{id}", (TeaCacheService teaService, int id) =>
-{
-    var tea = teaService.GetTea(id);
-
-    return Results.Ok(tea);
-}).CacheOutput(o => o.Tag(CacheTags.TEA)
-.SetVaryByRouteValue("id")
-.Expire(TimeSpan.FromMinutes(2)));
-
-app.MapPost("CreateTeaRedis", async (TeaCacheService teaService, [FromBody] Tea tea, IOutputCacheStore outputCache) =>
-{
-    teaService.CreateTea(tea);
-
-    await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
-
-    return Results.Ok(tea);
-});
-
-app.MapPut("ChangeDrinkRedis/{id}",
-   async (TeaCacheService teaService,
-   int id, [FromBody] Tea tea,
-   IOutputCacheStore outputCache) =>
-   {
-       var changedTea = teaService.ChangeTea(id, tea);
-
-       if (changedTea == null)
-       {
-           return Results.NotFound();
-       }
-
-       await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
-
-       return Results.Ok(changedTea);
-   });
-
-app.MapDelete("DeleteDrinkRedis",
-    async (TeaCacheService teaService,
-    [FromBody] int id,
-    IOutputCacheStore outputCache) =>
-    {
-        var canDelete = teaService.DeleteTea(id);
-        if (!canDelete)
-        {
-            return false;
+            return Results.Ok(initValue);
         }
 
-        await outputCache.EvictByTagAsync(CacheTags.TEAS, default);
-
-        return true;
+        return Results.Ok(value);
     });
+}
 
 app.Run();
