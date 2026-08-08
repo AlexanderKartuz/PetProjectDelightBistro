@@ -27,7 +27,7 @@ builder.Services
     {
         option.LoginPath = "/Auth/Login";
         option.AccessDeniedPath = "/Auth/Deny";
-        option.ExpireTimeSpan = TimeSpan.FromMinutes(13);
+        option.ExpireTimeSpan = TimeSpan.FromHours(2);
     });
 
 
@@ -91,8 +91,8 @@ app.UseRouting();
 
 app.UseCors();
 
-app.UseAuthentication();    // Who Am I?
-app.UseAuthorization();     // May I?
+app.UseAuthentication();    
+app.UseAuthorization();     
 
 app.UseMiddleware<MyLocalizationMiddleware>();
 
@@ -101,6 +101,6 @@ app.MapHub<NotificationHub>("/my-hub/notification");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=DelightBistro}/{action=Index}/{id?}");
 
 app.Run();
