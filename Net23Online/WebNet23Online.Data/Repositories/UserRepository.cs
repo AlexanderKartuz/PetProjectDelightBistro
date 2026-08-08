@@ -10,7 +10,8 @@ namespace WebNet23Online.Data.Repositories
     {
         private readonly IPasswordHasher _passwordHasher;
 
-        public UserRepository(WebContext context, IPasswordHasher passwordHasher) : base(context)
+        public UserRepository(WebContext context,
+            IPasswordHasher passwordHasher) : base(context)
         {
             _passwordHasher = passwordHasher;
             _passwordHasher = passwordHasher;

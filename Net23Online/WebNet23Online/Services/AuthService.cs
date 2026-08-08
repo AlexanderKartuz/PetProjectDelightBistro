@@ -109,7 +109,7 @@ namespace WebNet23Online.Services
             return language;
         }
 
-        public void SignIn(UserData user)
+        public async Task SignIn(UserData user)
         {
             var claims = new List<Claim>
             {
@@ -124,10 +124,9 @@ namespace WebNet23Online.Services
 
             var principal = new ClaimsPrincipal(identity);
 
-            _httpContextAccessor
-                .HttpContext!
-                .SignInAsync(AUTH_KEY, principal)
-                .Wait();
+            await _httpContextAccessor
+                 .HttpContext!
+                 .SignInAsync(AUTH_KEY, principal);
         }
 
         public bool IsCurrentUserAtLeastEmployee()
@@ -137,20 +136,20 @@ namespace WebNet23Online.Services
                 return false;
             }
             var role = GetRole();
-            return role == UserRole.Admin 
-                || role == UserRole.Moderator 
+            return role == UserRole.Admin
+                || role == UserRole.Moderator
                 || role == UserRole.Employee;
         }
-        
+
         public bool IsUser()
         {
             if (!IsAuthenticated() || GetRole() != UserRole.User)
             {
                 return false;
             }
-            
+
             return true;
         }
-               
+
     }
 }

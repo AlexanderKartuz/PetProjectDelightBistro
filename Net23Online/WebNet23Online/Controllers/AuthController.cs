@@ -27,7 +27,7 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel viewModel)
+        public async Task<IActionResult> LoginAsync(LoginViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace WebNet23Online.Controllers
                 return View(viewModel);
             }
 
-            _authService.SignIn(user);
+            await _authService.SignIn(user);
 
             return RedirectToAction("Index", "DelightBistro");
         }

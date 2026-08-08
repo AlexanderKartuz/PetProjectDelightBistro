@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Quartz;
 using WebNet23Online.Data;
 using WebNet23Online.Data.Services.PasswordHasher;
@@ -19,7 +20,6 @@ builder.Services.AddSignalR();
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Online;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<WebContext>(op => op.UseSqlServer(connectionString));
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
@@ -31,10 +31,10 @@ builder.Services
         option.AccessDeniedPath = "/Auth/Deny";
         option.ExpireTimeSpan = TimeSpan.FromHours(2);
 
+        option.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         option.Cookie.HttpOnly = true;
         option.SlidingExpiration = true; // Продлить срок жизни при активности
     });
-
 
 builder.Services.AddHttpClient<JokeApi>(x =>
 {

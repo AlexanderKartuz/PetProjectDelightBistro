@@ -15,5 +15,5 @@ public interface IAuthService
     bool IsCurrentUserAtLeastEmployee();
     bool IsUser();
     Language GetLanguage();
-    void SignIn(UserData user);
+    Task SignIn(UserData user);
 }
