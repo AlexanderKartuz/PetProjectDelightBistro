@@ -10,7 +10,7 @@ namespace WebNet23Online.Services
 {
     public class AuthService : IAuthService
     {
-        public const string AUTH_KEY = "AuthNameSmile";
+        public const string AUTH_KEY = "AuthDelightBistro";
         public const string COOCKIE_ID_KEY = "Id";
         public const string COOCKIE_ROLE_KEY = "Role";
         public const string COOCKIE_NAME_KEY = "UserName";

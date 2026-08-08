@@ -2,17 +2,23 @@
 using WebNet23Online.Data.Enums;
 using WebNet23Online.Data.Models;
 using WebNet23Online.Data.Repositories.Interfaces.DelightBistro;
+using WebNet23Online.Data.Services.PasswordHasher;
 
 namespace WebNet23Online.Data.Repositories
 {
     public class UserRepository : BaseRepository<UserData>, IUserRepository
     {
-        public UserRepository(WebContext context) : base(context) { }
+        private readonly IPasswordHasher _passwordHasher;
+
+        public UserRepository(WebContext context, IPasswordHasher passwordHasher) : base(context)
+        {
+            _passwordHasher = passwordHasher;
+            _passwordHasher = passwordHasher;
+        }
 
         public UserData GetFirst()
         {
-            return _dbSet
-                .First();
+            return _dbSet.First();
         }
 
         public override void Add(UserData model)
@@ -22,9 +28,14 @@ namespace WebNet23Online.Data.Repositories
 
         public UserData? GetByNameAndPassword(string login, string password)
         {
-            var hash = GetHashOfPassword(password);
-            return _dbSet
-                .FirstOrDefault(x => x.Name == login && x.Password == hash);
+            var user = _dbSet.FirstOrDefault(x => x.Name == login);
+            if (user == null)
+            {
+                return null;
+            }
+            var isValid = _passwordHasher.VerifyPassword(password, user.PasswordHash);
+
+            return isValid ? user : null;
         }
 
         public bool IsNameUniq(string login)
@@ -34,23 +45,13 @@ namespace WebNet23Online.Data.Repositories
 
         public void Registration(UserData user)
         {
-            var hash = GetHashOfPassword(user.Password);
-            user.Password = hash;
+            user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash);
+
             user.Role = Enums.UserRole.User;
             user.Language = Enums.Language.English;
 
             _dbSet.Add(user);
             _context.SaveChanges();
-        }
-
-        private string GetHashOfPassword(string password)
-        {
-            // "Password"
-            // "Possword"
-            // "Posswor"
-
-            password = password.Replace("a", "o");
-            return password.Substring(0, password.Length - 1);
         }
 
         public void UpdateLanguage(int userId, Language language)

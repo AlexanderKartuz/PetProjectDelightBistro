@@ -8,7 +8,8 @@ namespace WebNet23Online.Data.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Mobilephone { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
+
         public UserRole Role { get; set; }
         public Language Language { get; set; }
         public string? AvatarUrl { get; set; }
@@ -24,6 +25,6 @@ namespace WebNet23Online.Data.Models
         public virtual List<OrderData> Orders { get; set; } = new();
 
         public virtual List<NotificationData> Notifications { get; set; }
-        
+
     }
 }

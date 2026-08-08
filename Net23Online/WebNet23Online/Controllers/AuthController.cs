@@ -45,7 +45,7 @@ namespace WebNet23Online.Controllers
 
             _authService.SignIn(user);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "DelightBistro");
         }
 
         [HttpGet]
@@ -66,18 +66,18 @@ namespace WebNet23Online.Controllers
             var user = new UserData
             {
                 Name = viewModel.Login,
-                Password = viewModel.Password,
+                PasswordHash = viewModel.Password,
             };
 
             _userRepository.Registration(user);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "DelightBistro");
         }
 
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync().Wait();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "DelightBistro");
         }
 
         public IActionResult Deny()
