@@ -55,11 +55,16 @@ namespace WebNet23Online.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registration(LoginViewModel viewModel)
+        public async Task<IActionResult> RegistrationAsync(RegisterViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
             if (!_userRepository.IsNameUniq(viewModel.Login))
             {
-                ModelState.AddModelError(nameof(LoginViewModel.Login), "Name is already used");
+                ModelState.AddModelError(nameof(LoginViewModel.Login),
+                    "Name is already used");
                 return View(viewModel);
             }
 
@@ -67,16 +72,22 @@ namespace WebNet23Online.Controllers
             {
                 Name = viewModel.Login,
                 PasswordHash = viewModel.Password,
+
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                Mobilephone = viewModel.Mobilephone,
             };
 
             _userRepository.Registration(user);
 
+            await _authService.SignIn(user);
+
             return RedirectToAction("Index", "DelightBistro");
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
-            HttpContext.SignOutAsync().Wait();
+            await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "DelightBistro");
         }
 

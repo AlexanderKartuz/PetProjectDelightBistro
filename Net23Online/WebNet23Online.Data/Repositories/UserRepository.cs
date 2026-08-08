@@ -46,6 +46,11 @@ namespace WebNet23Online.Data.Repositories
 
         public void Registration(UserData user)
         {
+            if (!IsNameUniq(user.Name))
+            {
+                throw new InvalidOperationException($"Пользователь с имененм {user.Name} существует");
+            }
+
             user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash);
 
             user.Role = Enums.UserRole.User;

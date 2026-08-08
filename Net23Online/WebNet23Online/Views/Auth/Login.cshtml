@@ -2,18 +2,30 @@
 
 @model LoginViewModel
 
-<div>
-    <form method="post">
-        <div>
-            @Html.TextBoxFor(x => x.Login, new { placeholder = "Login" })
-            @Html.ValidationMessageFor(x => x.Login)
+@section Scripts {
+    <link rel="stylesheet" href="/css/auth/style.css">
+}
+
+<div class="registration-container">
+    <form method="post" asp-action="Login" asp-controller="Auth">
+        @Html.AntiForgeryToken()
+        <div class="registration-header">Вход</div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-5">
+            <label asp-for="Login" class="form-label"></label>
+            <input asp-for="Login" class="form-control" placeholder="Введите логин" />
+            <span asp-validation-for="Login" class="text-danger"></span>
         </div>
-        <div>
-            @Html.TextBoxFor(x => x.Password, new { placeholder = "Password" })
-            @Html.ValidationMessageFor(x => x.Password)
+
+        <div class="mb-5">
+            <label asp-for="Password" class="form-label"></label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Введите пароль" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
-        <div>
-            <button type="submit">Login</button>
+
+        <div class="mb-5">
+            <button type="submit" class="btn btn-primary w-100">Login</button>
         </div>
     </form>
 </div>
