@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DelightBistro.Sevices.Logging
+namespace DelightBistro.Services.Logging
 {
     public interface IAppLogging<T>
     {

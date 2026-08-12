@@ -1,4 +1,4 @@
-using DelightBistro.Sevices.Logging;
+using DelightBistro.Services.Logging;
 using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
