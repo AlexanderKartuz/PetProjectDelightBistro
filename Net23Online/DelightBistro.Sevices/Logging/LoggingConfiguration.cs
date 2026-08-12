@@ -6,7 +6,7 @@ using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
 using System.Data;
 
-namespace DelightBistro.Sevices.Logging
+namespace DelightBistro.Services.Logging
 {
     public static class LoggingConfiguration
     {
