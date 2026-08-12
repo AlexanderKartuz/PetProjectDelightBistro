@@ -51,7 +51,7 @@ namespace DelightBistro.Tests.Services
             var result = _ingredientGenerator
                 .GetSelectedCreateIngredientViewModelFromIngredientsList(new List<CreateIngredientViewModel>());
 
-            Assert.That(result, Is.Empty);
+            Assert.That(result, Is.Empty);//
         }
 
         [Test]
