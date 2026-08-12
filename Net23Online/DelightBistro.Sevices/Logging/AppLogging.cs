@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using System.Runtime.CompilerServices;
 
-namespace DelightBistro.Sevices.Logging
+namespace DelightBistro.Services.Logging
 {
     public class AppLogging<T> : IAppLogging<T>
     {
