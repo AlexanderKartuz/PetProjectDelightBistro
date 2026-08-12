@@ -1,0 +1,186 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using DelightBistroMvc.Controllers.CustomAuthAttribute;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
+using DelightBistroMvc.Hubs;
+using DelightBistroMvc.Hubs.Interfaces;
+using DelightBistroMvc.Models.DelightBistro;
+using DelightBistroMvc.Services.Interfaces;
+
+
+namespace DelightBistroMvc.Controllers
+{
+    public class DelightBistroController : Controller
+    {
+        private IDelightBistroMainIndexGenerator _delightBistroMainIndexGenerator;
+        private IFoodItemGenerator _foodItemGenerator;
+        private IMenuTypeGenerator _menuTypeGenerator;
+        private IIngredientGenerator _ingredientGenerator;
+
+        private IFoodItemRepository _foodItemRepository;
+        private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
+
+
+        public DelightBistroController(IFoodItemGenerator foodItemGenerator,
+            IMenuTypeGenerator menuTypeGenerator,
+            IFoodItemRepository foodItemRepository,
+            IIngredientGenerator ingredientGenerator,
+            IHubContext<DeligtBistroHub,
+            IDeligtBistroHub> deligtBistroHub,
+            IDelightBistroMainIndexGenerator delightBistroMainIndexGenerator)
+        {
+            _foodItemRepository = foodItemRepository;
+
+            _foodItemGenerator = foodItemGenerator;
+            _menuTypeGenerator = menuTypeGenerator;
+            _ingredientGenerator = ingredientGenerator;
+
+            _deligtBistroHub = deligtBistroHub;
+            _delightBistroMainIndexGenerator = delightBistroMainIndexGenerator;
+        }
+
+        public IActionResult Index(string menuType)
+        {
+            _foodItemGenerator.FeelDataBase();
+            _ingredientGenerator.FeelDataBase();
+            _menuTypeGenerator.FeelDataBase();
+
+            //var viewModel = _menuTypeGenerator.GetAllMenuViewModel(menuType);
+            var viewModel = _delightBistroMainIndexGenerator.GetMainIndexViewModel(menuType);
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [IsModerator]
+        public IActionResult CreateMenu()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [IsModerator]
+        public IActionResult CreateMenu(CreateMenuViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+            _menuTypeGenerator.CreateMenuData(viewModel);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        [Authorize]
+        [IsModerator]
+        public IActionResult CreateIngredient()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [IsModerator]
+        public IActionResult CreateIngredient(CreateIngredientViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            _ingredientGenerator.CreateIngredientData(viewModel);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        [Authorize]
+        [IsModerator]
+        public IActionResult FoodBuilderData(int id)
+        {
+            if (id > 0)
+            {
+                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(id);
+
+                var viewModel = _foodItemGenerator.ConvertToCreateFoodItemVM(changedFoodItemData);
+                return View(viewModel);
+
+            }
+            var createFoodItemVM = _foodItemGenerator.ConvertToCreateFoodItemVM();
+
+            return View(createFoodItemVM);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [IsModerator]
+        public IActionResult FoodBuilderData(CreateFoodItemViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Menus = _foodItemGenerator.SelectMenuList();
+                viewModel.IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData();
+                return View(viewModel);
+            }
+
+            if (viewModel.Id == 0)
+            {
+                _foodItemGenerator.CreateFoodItemData(viewModel);
+
+                _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
+
+                return RedirectToAction(nameof(Index));
+            }
+            _foodItemGenerator.ChangeFoodItemData(viewModel);
+
+            _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
+
+            return RedirectToAction(nameof(AllFoodItems));
+        }
+
+        [Authorize]
+        [IsEmployee]
+        public IActionResult AllFoodItems()
+        {
+            var foodItemsData = _foodItemRepository.GetAllIncludeMenuAndIngredients();
+            var foodItemsViewModel = foodItemsData.Select(_foodItemGenerator.ConvertToFoodItemVM).ToList();
+
+            var viewModel = _foodItemGenerator.GetFoodsWithPermission(foodItemsViewModel);
+
+            return View(viewModel);
+        }
+
+        [Authorize]
+        [IsEmployee]
+        [HttpPost]
+        public IActionResult DeleteFoodItem(int id = 0)
+        {
+            _foodItemGenerator.DeleteFoodItem(id);
+
+            return RedirectToAction(nameof(AllFoodItems));
+        }
+
+        public IActionResult GenerateTable()
+        {
+            var fileStream = _foodItemGenerator.GenerateTable();
+
+            return File(fileStream, "text/csv");
+        }
+        public IActionResult Stats()
+        {
+            var viewModels = _foodItemGenerator.GetFoodItemStatsViewModels();
+
+            return View(viewModels);
+        }
+
+        public IActionResult Chat()
+        {
+            return View();
+        }
+
+    }
+}

@@ -1,0 +1,16 @@
+﻿@using DelightBistroMvc.Models.User
+@model UserIndexViewModel
+
+<div>
+    <a href="/User/GenerateReport">Download report</a>
+</div>
+@foreach (var user in Model.Users)
+{
+    <div>
+        @user.Name 
+        @if (Model.IsCurrentUserAdmin)
+        {
+            <a href="/User/DeleteUser?id=@user.Id">X</a>
+        }
+    </div>
+}
