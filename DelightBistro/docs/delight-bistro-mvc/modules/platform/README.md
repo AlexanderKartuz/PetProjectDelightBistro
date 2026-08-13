@@ -36,6 +36,8 @@ Cookie-схема `AuthService.AUTH_KEY` = `AuthDelightBistro` (`Program.cs`):
 | Cookie.HttpOnly | true |
 | SlidingExpiration | true |
 
+Claims: `Id`, `Role`, `UserName`, `Language`. Пароли не кладутся в cookie — только `PasswordHash` в БД (BCrypt). Подробности входа — [auth.md](auth.md).
+
 ---
 
 ## Связанные модули
@@ -52,4 +54,5 @@ Cookie-схема `AuthService.AUTH_KEY` = `AuthDelightBistro` (`Program.cs`):
 - `Controllers/UserController.cs`
 - `Controllers/ApiControllers/AuthController.cs`
 - `Services/AuthService.cs`
+- `Program.cs` — cookie-схема, `IPasswordHasher`
 - `Views/Shared/_Layout.cshtml`

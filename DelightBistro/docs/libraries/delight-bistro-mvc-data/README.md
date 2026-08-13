@@ -8,9 +8,9 @@
 
 ## Назначение
 
-Библиотека данных основного сайта: `WebContext`, сущности, репозитории, хэширование паролей и EF Core миграции. DelightBistroMvc подключает её как ProjectReference и не держит DbContext у себя.
+Библиотека данных основного сайта: `WebContext`, сущности ресторана и пользователей, репозитории, BCrypt-хэширование паролей и EF Core миграции. DelightBistroMvc подключает её как ProjectReference и не держит DbContext у себя.
 
-Имя БД в connection string по-прежнему `WebNet23Online` (LocalDB).
+**БД (LocalDB):** каталог `WebNet23Online`. Runtime MVC задаёт строку в `Program.cs` (hardcoded). Design-time (`WebContextFactory`) читает `ConnectionStrings:DefaultDbConnection` из `DelightBistroMvc.Data/appsettings.json` — тот же каталог. Актуальная схема — только сущности текущего сайта (лишние таблицы старых модулей сняты миграцией вместе с переименованием `Password` → `PasswordHash`).
 
 ---
 
@@ -28,12 +28,12 @@
 | Interface / Class | `IIngredientsRepository` / `IngredientsRepository` | Ингредиенты |
 | Interface / Class | `IOrderRepository` / `OrderRepository` | Заказы |
 | Interface / Class | `INotificationRepository` / `NotificationRepository` | Уведомления |
-| Interface / Class | `IPasswordHasher` / `BCryptPasswordHasher` | Хэш и проверка пароля |
+| Interface / Class | `IPasswordHasher` / `BCryptPasswordHasher` | BCrypt, work factor 11; хэш при `Registration`, проверка при логине |
 | Enum | `UserRole` | `User`, `Employee`, `Moderator`, `Admin` |
 
 **DbSet в `WebContext`:**
 
-- `Users` → `UserData` (+ `UserProfileData`)
+- `Users` → `UserData` (`PasswordHash`, роль, язык, аватар; + `UserProfileData`)
 - `FoodItems` → `FoodItemData`
 - `Ingredients` → `IngredientData`
 - `Menus` → `MenuData`
