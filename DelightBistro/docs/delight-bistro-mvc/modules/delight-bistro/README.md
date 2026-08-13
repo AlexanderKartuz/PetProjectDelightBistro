@@ -112,7 +112,7 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 | API | Порт | JS-файл |
 |-----|------|---------|
-| [DelightBistroMinimalApi](../../../minimal-apis/delight-bistro/README.md) | 7090 | `drink.js` |
+| [DelightBistroMinimalApi](../../../minimal-apis/delight-bistro/README.md) | 7090 | `drink.js` — кэш Memory/Redis на стороне API |
 
 Также каталог пьёт [react-delight-bistro-app](../../../../../react-delight-bistro-app/) (`src/services/drinks-service.ts`).
 

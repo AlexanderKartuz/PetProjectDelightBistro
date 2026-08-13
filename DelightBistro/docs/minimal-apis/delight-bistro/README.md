@@ -10,7 +10,9 @@
 
 ## Назначение
 
-Отдельный Minimal API для каталога напитков. Вынесен из DelightBistroMvc, чтобы демонстрировать кэш, Redis, rate limiting и централизованное логирование (Serilog) на независимой БД `WebNet23Tea`. Потребители — JS модуля DelightBistro (`drink.js`) и React-приложение `react-delight-bistro-app`.
+Отдельный Minimal API для каталога напитков. Вынесен из DelightBistroMvc, чтобы кэш, Redis, rate limiting и Serilog жили на независимой БД `WebNet23Tea`. Потребители — JS модуля DelightBistro (`drink.js`) и `react-delight-bistro-app`.
+
+CRUD всегда идёт через `IDrinksCacheService`. Провайдер выбирается конфигом `Caching:Provider` (`Memory` | `Redis`) в `AddDelightBistroCaching` — отдельных `*Redis` URL нет.
 
 ---
 
@@ -20,24 +22,24 @@
 |----------|----------|
 | HTTPS | `https://localhost:7090` |
 | HTTP | `http://localhost:5047` |
-| Swagger | `/swagger` (корень `/` редиректит сюда) |
+| Swagger | `/swagger` |
+
+Корень `/` редиректит на `/swagger`.
 
 ---
 
 ## Эндпоинты
 
-CRUD идёт через `IDrinksCacheService`. Реализация зависит от `Caching:Provider` (`Memory` по умолчанию, `Redis` — `DrinksRedisCacheService`). Отдельных `*Redis` URL больше нет.
-
 | Метод | Путь | Описание | Request | Response |
 |-------|------|----------|---------|----------|
 | GET | `/` | Redirect на Swagger | — | 302 |
-| GET | `/GetDrinks` | Список напитков (кэш + OutputCache, тег `DRINKS`) | — | `Drink[]` |
-| GET | `/GetDrink/{id}` | Напиток по id (vary by route, expire 1 мин) | route `id` | `Drink` / 404 |
-| POST | `/CreateDrink` | Создать напиток, инвалидация тега `DRINKS` | body `Drink` | `Drink` |
-| PUT | `/ChangeDrink/{id}` | Изменить напиток | route `id`, body `Drink` | `Drink` / 404 |
-| DELETE | `/DeleteDrink` | Удалить напиток | body `int id` | 204 / 404 |
+| GET | `/GetDrinks` | Список (IDrinksCacheService + OutputCache, тег `drinks`) | — | `Drink[]` |
+| GET | `/GetDrink/{id}` | По id (vary by route, OutputCache 1 мин, тег `drink`) | route `id` | `Drink` / 404 |
+| POST | `/CreateDrink` | Создать, сброс тега `drinks` | body `Drink` | `Drink` |
+| PUT | `/ChangeDrink/{id}` | Изменить | route `id`, body `Drink` | `Drink` / 404 |
+| DELETE | `/DeleteDrink` | Удалить | body `int id` | 204 / 404 |
 | GET | `/Exception` | Тест exception middleware | — | error |
-| GET | `/redis-test` | Тест Redis | — | string |
+| GET | `/redis-test` | Проверка Redis | — | string |
 
 `/redis-test` регистрируется **только** при `Caching:Provider = Redis`.
 
@@ -53,40 +55,33 @@ CRUD идёт через `IDrinksCacheService`. Реализация завис�
 
 **Сущности:**
 
-- `Drink` — напиток (`Name`, `Price`, `Description`, `ImgUrl`)
-- `SeriLogEntry` — чтение таблицы `Logging.SeriLogs` (запись идёт через Serilog sink, не через EF)
-
----
-
-## Логирование (Serilog)
-
-Подключается из библиотеки [DelightBistro.Services](../../libraries/delight-bistro-services/README.md): `ConfigureSeriLog()`, регистрация `IAppLogging<>`.
-
-| Параметр | Значение |
-|----------|----------|
-| Connection | `ConnectionStrings:Logging` (пока та же БД `WebNet23Tea`) |
-| Таблица | `Logging.SeriLogs` |
-| Файл | `ErrorLog.txt` (в `.gitignore` как `ErrorLog*.txt`) |
-
-Уровни sink’ов задаются в `appsettings` (`Logging:Console` / `File` / `MSSqlServer`):
-
-| Sink | Ключ | Типичный уровень |
-|------|------|------------------|
-| Console | `Logging:Console:restrictedToMinimumLevel` | `Information` |
-| File | `Logging:File:restrictedToMinimumLevel` | `Warning` |
-| MSSqlServer | `Logging:MSSqlServer:restrictedToMinimumLevel` | `Warning` |
-
-Обычный `ILogger<>` в middleware уже пишет в Serilog. `IAppLogging<>` — опциональная обёртка с `MemberName` / `FilePath` / `ApplicationName`.
+- `Drink` — таблица `Drinks` (`Name`, `Price`, `Description`, `ImgUrl`); раньше была `Tea` / `Teas`
+- `SeriLogEntry` — чтение `Logging.SeriLogs` (запись через Serilog sink, не через EF)
 
 ---
 
 ## Middleware и инфраструктура
 
 - **CORS:** default policy — any header/method, credentials, any origin
-- **Кэш:** `AddDelightBistroCaching` — MemoryCache всегда; Redis (`localhost:6379`, instance `DelightBistro_`) при `Caching:Provider=Redis`; OutputCache (60 сек default)
+- **Кэш / Redis:** см. ниже
 - **Rate limiting:** `AddCustomRateLimiter` — chained sliding window (IP + global), 429. Лимиты: `GlobalRateLimitingOptions`, `IpRateLimitingOptions`
-- **Прочее:** `UseCustomExeptionHandling`, `UseResponseHeader`, `UseCustomRequestLogging`
-- **Serilog:** `builder.ConfigureSeriLog()` в `Program.cs`
+- **Прочее:** `UseCustomExeptionHandling`, `UseResponseHeader` (`Cache-Control: public, max-age=10` на успешные GET), `UseCustomRequestLogging`
+- **Serilog:** `builder.ConfigureSeriLog()` + DI `IAppLogging<>` ([DelightBistro.Services](../../libraries/delight-bistro-services/README.md)); SQL — `ConnectionStrings:Logging`, таблица `Logging.SeriLogs`
+
+### Кэш приложения (`IDrinksCacheService`)
+
+Регистрация: `AddDelightBistroCaching` (`Caching:Provider`, `Caching:InstanceName`).
+
+| `Caching:Provider` | Реализация | Хранилище |
+|--------------------|------------|-----------|
+| `Memory` (по умолчанию) | `DrinksMemoryCacheService` | `IMemoryCache` |
+| `Redis` | `DrinksRedisCacheService` | StackExchange Redis (`ConnectionStrings:Redis`, prefix `DelightBistro_`) |
+
+Ключи (`CacheKeys`): список `drink:all`, карточка `drink:{id}`. TTL: absolute 5 мин, sliding 2 мин (у Redis GetDrink sliding 3 мин). Пустой GetDrink в кэш не кладётся. Create/Change/Delete снимают соответствующие ключи.
+
+### OutputCache
+
+Default expiration 60 сек. GET-список — тег `CacheTags.DRINKS` (`drinks`); GET по id — тег `drink`, `SetVaryByRouteValue("id")`, expire 1 мин. Create сбрасывает тег `drinks`. Change/Delete сейчас вызывают `EvictByTagAsync` со строкой-ключом, а не с тегом `CacheTags.DRINK`.
 
 ---
 
@@ -107,11 +102,7 @@ CRUD идёт через `IDrinksCacheService`. Реализация завис�
 dotnet ef migrations add {MigrationName} --project DelightBistro/DelightBistroMinimalApi --startup-project DelightBistro/DelightBistroMinimalApi
 ```
 
-Применение миграции — **только вручную** человеком:
-
-```bash
-dotnet ef database update --project DelightBistro/DelightBistroMinimalApi --startup-project DelightBistro/DelightBistroMinimalApi
-```
+Применение миграции — **только вручную** человеком.
 
 ---
 
@@ -121,6 +112,7 @@ dotnet ef database update --project DelightBistro/DelightBistroMinimalApi --star
 - `Properties/launchSettings.json`
 - `appsettings.json` / `appsettings.Development.json`
 - `DbStuff/` — `MiniDbContext`, `Drink`, `SeriLogEntry`, `DrinkRepository`
-- `Services/Cache/` — `IDrinksCacheService`, `DrinksMemoryCacheService`, `DrinksRedisCacheService`
+- `Services/Cache/` — `CachingServiceCollectionExtensions`, `IDrinksCacheService`, Memory/Redis реализации
+- `Constans/CacheKeys.cs`, `Constans/CacheTags.cs`
 - `Middlewares/`
 - ProjectReference → `DelightBistro.Sevices/DelightBistro.Services.csproj`

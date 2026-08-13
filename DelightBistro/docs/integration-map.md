@@ -4,11 +4,11 @@
 
 ## Архитектурный паттерн
 
-- **DelightBistroMvc** использует `WebContext` ([DelightBistroMvc.Data](../DelightBistroMvc.Data/)) — основная БД сайта (`WebNet23Online`).
+- **DelightBistroMvc** использует `WebContext` ([DelightBistroMvc.Data](../DelightBistroMvc.Data/)) — БД `WebNet23Online` (LocalDB). Пароли — `UserData.PasswordHash` (BCrypt).
 - **Minimal API** использует **отдельный** `MiniDbContext` и БД `WebNet23Tea` (LocalDB), не `WebContext`.
 - Модуль DelightBistro вызывает Minimal API из JavaScript (`wwwroot/js/delight-bistro/drink.js`) по HTTPS. Сервер MVC API через HttpClient не вызывает.
 - Отдельная витрина [react-delight-bistro-app](../../react-delight-bistro-app/) (вне `.sln`) ходит в тот же API (`https://localhost:7090`).
-- Логирование DelightBistro API — библиотека [DelightBistro.Services](libraries/delight-bistro-services/README.md); SQL-логи пишутся в ту же БД API (`ConnectionStrings:Logging`), уровни sink’ов — в `appsettings`.
+- Кэш каталога напитков — `IDrinksCacheService` (Memory или Redis по `Caching:Provider`) плюс OutputCache; логирование API — [DelightBistro.Services](libraries/delight-bistro-services/README.md) (`ConnectionStrings:Logging`).
 - У DelightBistroMvc есть ProjectReference на DelightBistroMinimalApi (сборка в одном решении); runtime-вызовы идут из браузера.
 
 ---
