@@ -4,13 +4,13 @@
 
 **Контроллер:** `HomeController`  
 **Layout:** `_Layout.cshtml`  
-**Точка входа:** `/`
+**Точка входа:** `/Home/Index`
 
 ---
 
 ## Назначение
 
-Landing page solution Net23Online. Показывает имя и роль текущего пользователя (или гостя) и ссылку на модуль DelightBistro.
+Лендинг DelightBistroMvc. Показывает имя и роль текущего пользователя (или гостя) и ссылку на модуль DelightBistro. Корневой URL `/` открывает не Home, а DelightBistro (маршрут по умолчанию).
 
 ---
 
@@ -18,7 +18,7 @@ Landing page solution Net23Online. Показывает имя и роль те�
 
 | URL | Action | View | Авторизация |
 |-----|--------|------|-------------|
-| `/`, `/Home/Index` | `Index` | `Views/Home/Index.cshtml` | — |
+| `/Home/Index` | `Index` | `Views/Home/Index.cshtml` | — |
 | `/Home/Privacy` | `Privacy` | `Views/Home/Privacy.cshtml` | — |
 | `/Home/Error` | `Error` | `Views/Shared/Error.cshtml` | — |
 
@@ -87,7 +87,7 @@ Landing page solution Net23Online. Показывает имя и роль те�
 
 ## Связанные модули
 
-- [DelightBistro](../delight-bistro/README.md) — ссылка с Index
+- [DelightBistro](../delight-bistro/README.md) — ссылка с Index (`/DelightBistro/Index`)
 
 ---
 

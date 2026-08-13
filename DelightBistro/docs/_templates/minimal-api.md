@@ -10,7 +10,7 @@
 
 ## Назначение
 
-{Что делает API, зачем вынесен отдельно от WebNet23Online.}
+{Что делает API, зачем вынесен отдельно от DelightBistroMvc.}
 
 ---
 
@@ -59,14 +59,14 @@
 |-------------|------|---------|
 | | | |
 
-{Или: «Standalone — потребителей в WebNet23Online нет.»}
+{Или: «Standalone — потребителей в DelightBistroMvc нет.»}
 
 ---
 
 ## Миграции
 
 ```bash
-dotnet ef migrations add {MigrationName} --project Net23Online/{ProjectFolder} --startup-project Net23Online/{ProjectFolder}
+dotnet ef migrations add {MigrationName} --project DelightBistro/{ProjectFolder} --startup-project DelightBistro/{ProjectFolder}
 ```
 
 Применение миграции — **только вручную** человеком.

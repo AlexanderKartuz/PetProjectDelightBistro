@@ -374,7 +374,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>WebNet23Online (MVC)</td>
+            <td>DelightBistroMvc</td>
             <td class="muted">:7284</td>
             <td>Сайт филиала: меню, заказы, auth, чат</td>
           </tr>
@@ -389,7 +389,7 @@
             <td>Отдельная витрина напитков</td>
           </tr>
           <tr>
-            <td>WebNet23Online.Data</td>
+            <td>DelightBistroMvc.Data</td>
             <td class="muted">EF Core</td>
             <td>БД ресторана</td>
           </tr>
@@ -402,7 +402,7 @@
       </table>
       <div class="flow">Браузер (гость / персонал)
   ├─ https://localhost:7284  →  MVC  →  БД WebNet23Online
-  │     └─ tea.js  ─────────→  API :7090  →  БД WebNet23Tea
+  │     └─ drink.js  ───────→  API :7090  →  БД WebNet23Tea
   └─ React SPA  ────────────→  API :7090  →  БД WebNet23Tea</div>
       <div class="callout info">
         <div class="t">Важно</div>
@@ -418,7 +418,7 @@
       <p>
         Модуль <code>DelightBistroController</code>, layout
         <code>_LayoutDelightBistro.cshtml</code>, точка входа
-        <code>/DelightBistro/Index</code>.
+        <code>/</code> и <code>/DelightBistro/Index</code>.
       </p>
       <div class="grid cols-2">
         <div class="card">
@@ -428,7 +428,7 @@
         </div>
         <div class="card">
           <strong>Auth</strong>
-          Cookie <code>AuthNameSmile</code>, ~13 мин.
+          Cookie <code>AuthDelightBistro</code>, 2 часа.
           Роли: User, Employee, Moderator, Admin.
         </div>
       </div>
@@ -450,7 +450,7 @@
       </table>
       <p>
         JS: <code>wwwroot/js/delight-bistro/*</code> — заказы, удаление блюд,
-        SignalR, <code>tea.js</code> (каталог чая с API).
+        SignalR, <code>drink.js</code> (каталог напитков с API).
       </p>
     </section>
 
@@ -470,9 +470,9 @@
       <table>
         <thead><tr><th>Method</th><th>Route</th><th>Смысл для сети</th></tr></thead>
         <tbody>
-          <tr><td>GET</td><td>GetTeas</td><td>Вся чайная карта</td></tr>
-          <tr><td>GET</td><td>GetTea/{id}</td><td>Карточка напитка</td></tr>
-          <tr><td>POST</td><td>CreateTea</td><td>Добавить позицию в каталог</td></tr>
+          <tr><td>GET</td><td>GetDrinks</td><td>Вся карта напитков</td></tr>
+          <tr><td>GET</td><td>GetDrink/{id}</td><td>Карточка напитка</td></tr>
+          <tr><td>POST</td><td>CreateDrink</td><td>Добавить позицию в каталог</td></tr>
           <tr><td>PUT</td><td>ChangeDrink/{id}</td><td>Обновить цену / описание</td></tr>
           <tr><td>DELETE</td><td>DeleteDrink</td><td>Снять с карты (204)</td></tr>
           <tr><td>GET</td><td>redis-test</td><td>Проверка Redis (если включён)</td></tr>
@@ -496,9 +496,9 @@
       <table>
         <thead><tr><th>Маршрут</th><th>Экран</th><th>API</th></tr></thead>
         <tbody>
-          <tr><td>/</td><td>Список напитков</td><td>GET GetTeas</td></tr>
-          <tr><td>/drink/create</td><td>Создание</td><td>POST CreateTea</td></tr>
-          <tr><td>/drink/:id</td><td>Карточка</td><td>GET GetTea/{id}</td></tr>
+          <tr><td>/</td><td>Список напитков</td><td>GET GetDrinks</td></tr>
+          <tr><td>/drink/create</td><td>Создание</td><td>POST CreateDrink</td></tr>
+          <tr><td>/drink/:id</td><td>Карточка</td><td>GET GetDrink/{id}</td></tr>
         </tbody>
       </table>
       <p>
@@ -508,7 +508,7 @@
       </p>
       <div class="callout info">
         <div class="t">Два клиента к одному каталогу</div>
-        MVC <code>tea.js</code> и React SPA — разные витрины одной чайной карты.
+        MVC <code>drink.js</code> и React SPA — разные витрины одной карты напитков.
         Еда и заказы остаются только в MVC.
       </div>
     </section>
@@ -519,12 +519,12 @@
       <h2>Данные — две базы под сеть</h2>
       <div class="grid cols-2">
         <div class="card">
-          <strong>WebNet23Online · WebContext</strong>
+          <strong>DelightBistroMvc.Data · WebContext</strong>
           Филиал: пользователи, меню, блюда, ингредиенты, заказы, уведомления.
         </div>
         <div class="card">
           <strong>WebNet23Tea · MiniDbContext</strong>
-          Общий каталог: Tea + таблица логов Serilog (Logging.SeriLogs).
+          Общий каталог: Drink + таблица логов Serilog (Logging.SeriLogs).
         </div>
       </div>
       <p>
@@ -612,7 +612,7 @@
           </tr>
           <tr>
             <td>Средний</td>
-            <td>Хардкод <code>localhost:7090</code> в tea.js и drinks-service.ts</td>
+            <td>Хардкод <code>localhost:7090</code> в drink.js и drinks-service.ts</td>
           </tr>
           <tr>
             <td>Средний</td>
@@ -648,8 +648,8 @@
     </section>
 
     <footer>
-      MyProject · Net23Online + react-delight-bistro-app · август 2026<br />
-      Файл: <code>Net23Online/docs/web-net23-online/modules/delight-bistro/presentation.html</code>
+      MyProject · DelightBistro + react-delight-bistro-app · август 2026<br />
+      Файл: <code>DelightBistro/docs/delight-bistro-mvc/modules/delight-bistro/presentation.html</code>
     </footer>
   </div>
 </body>

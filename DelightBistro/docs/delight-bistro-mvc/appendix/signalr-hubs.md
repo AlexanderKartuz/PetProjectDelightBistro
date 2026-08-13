@@ -1,4 +1,4 @@
-# SignalR-хабы WebNet23Online
+# SignalR-хабы DelightBistroMvc
 
 Все SignalR-хабы, зарегистрированные в `Program.cs`.
 

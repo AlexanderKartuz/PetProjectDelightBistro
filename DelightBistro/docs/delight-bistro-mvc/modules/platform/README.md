@@ -9,7 +9,7 @@
 
 ## Назначение
 
-Platform объединяет базовые функции, доступные на всём сайте: точку входа с навигацией к модулям, cookie-based аутентификацию и управление профилем пользователя.
+Platform объединяет базовые функции, доступные на всём сайте: лендинг с навигацией к модулю DelightBistro, cookie-based аутентификацию и управление профилем пользователя.
 
 ---
 
@@ -17,7 +17,7 @@ Platform объединяет базовые функции, доступные 
 
 | Подмодуль | Документ | Точка входа |
 |-----------|----------|-------------|
-| Home | [home.md](home.md) | `/` |
+| Home | [home.md](home.md) | `/Home/Index` |
 | Auth | [auth.md](auth.md) | `/Auth/Login` |
 | User | [user.md](user.md) | `/User/Profile` |
 
@@ -25,20 +25,23 @@ Platform объединяет базовые функции, доступные 
 
 ## Общие настройки auth
 
-Cookie-схема `AuthService.AUTH_KEY` (`Program.cs`):
+Cookie-схема `AuthService.AUTH_KEY` = `AuthDelightBistro` (`Program.cs`):
 
 | Параметр | Значение |
 |----------|----------|
 | LoginPath | `/Auth/Login` |
 | AccessDeniedPath | `/Auth/Deny` |
-| ExpireTimeSpan | 13 минут |
+| ExpireTimeSpan | 2 часа |
+| Cookie.SecurePolicy | Always |
+| Cookie.HttpOnly | true |
+| SlidingExpiration | true |
 
 ---
 
 ## Связанные модули
 
 - [Notification](../notification/README.md) — глобальные уведомления через `_Layout`
-- [DelightBistro](../delight-bistro/README.md) — основной feature-модуль, ссылка с Home
+- [DelightBistro](../delight-bistro/README.md) — основной feature-модуль, ссылка с Home; редирект после Login/Logout/Registration
 
 ---
 

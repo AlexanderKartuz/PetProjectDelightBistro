@@ -1,14 +1,16 @@
-# WebNet23Online.Data
+# DelightBistroMvc.Data
 
-> Общий слой данных: WebContext, репозитории, EF-модели и миграции для WebNet23Online.
+> Общий слой данных: WebContext, репозитории, EF-модели и миграции для DelightBistroMvc.
 
-**Проект:** `WebNet23Online.Data/WebNet23Online.Data.csproj`
+**Проект:** `DelightBistroMvc.Data/DelightBistroMvc.Data.csproj`
 
 ---
 
 ## Назначение
 
-Библиотека данных основного сайта: `WebContext`, сущности, репозитории и EF Core миграции. WebNet23Online подключает её как ProjectReference и не держит DbContext у себя.
+Библиотека данных основного сайта: `WebContext`, сущности, репозитории, хэширование паролей и EF Core миграции. DelightBistroMvc подключает её как ProjectReference и не держит DbContext у себя.
+
+Имя БД в connection string по-прежнему `WebNet23Online` (LocalDB).
 
 ---
 
@@ -17,14 +19,16 @@
 | Тип | Имя | Назначение |
 |-----|-----|------------|
 | Class | `WebContext` | DbContext основной БД |
-| Class | `WebContextFactory` | Design-time factory для миграций |
+| Class | `WebContextFactory` | Design-time factory для миграций (`DefaultDbConnection`) |
 | Interface / Class | `IBaseRepository` / `BaseRepository` | Базовый CRUD |
+| Interface | `IDelightBistroRepository<T>` | Проверка уникальности имени |
 | Interface / Class | `IUserRepository` / `UserRepository` | Пользователи |
 | Interface / Class | `IFoodItemRepository` / `FoodItemRepository` | Блюда |
 | Interface / Class | `IMenuRepository` / `MenuRepository` | Меню |
 | Interface / Class | `IIngredientsRepository` / `IngredientsRepository` | Ингредиенты |
 | Interface / Class | `IOrderRepository` / `OrderRepository` | Заказы |
 | Interface / Class | `INotificationRepository` / `NotificationRepository` | Уведомления |
+| Interface / Class | `IPasswordHasher` / `BCryptPasswordHasher` | Хэш и проверка пароля |
 | Enum | `UserRole` | `User`, `Employee`, `Moderator`, `Admin` |
 
 **DbSet в `WebContext`:**
@@ -45,6 +49,7 @@
 |----------------|------------|
 | `Microsoft.EntityFrameworkCore.SqlServer` | SQL Server / LocalDB |
 | `Microsoft.EntityFrameworkCore.Tools` | Миграции |
+| `BCrypt.Net-Next` | Хэширование паролей |
 
 ---
 
@@ -52,28 +57,29 @@
 
 | Проект | Как использует |
 |--------|----------------|
-| WebNet23Online | DI `WebContext`, репозитории, модели ViewModels |
+| DelightBistroMvc | DI `WebContext`, репозитории, `IPasswordHasher`, модели ViewModels |
 
 ---
 
 ## Миграции
 
 ```bash
-dotnet ef migrations add {MigrationName} --project Net23Online/WebNet23Online.Data --startup-project Net23Online/WebNet23Online
+dotnet ef migrations add {MigrationName} --project DelightBistro/DelightBistroMvc.Data --startup-project DelightBistro/DelightBistroMvc
 ```
 
 Применение — **только вручную**:
 
 ```bash
-dotnet ef database update --project Net23Online/WebNet23Online.Data --startup-project Net23Online/WebNet23Online
+dotnet ef database update --project DelightBistro/DelightBistroMvc.Data --startup-project DelightBistro/DelightBistroMvc
 ```
 
 ---
 
 ## Источники в коде
 
-- `WebNet23Online.Data/`
+- `DelightBistroMvc.Data/`
 - `WebContext.cs`
 - `Models/`, `DataModels/`
 - `Repositories/`
+- `Services/PasswordHasher/`
 - `Migrations/`
