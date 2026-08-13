@@ -18,7 +18,9 @@ HttpClient-сервисы, зарегистрированные в `Program.cs`,
 
 | API | Порт | JS-файл | Модуль |
 |-----|------|---------|--------|
-| DelightBistroMinimalApi | 7090 | `delight-bistro/tea.js` | DelightBistro |
+| DelightBistroMinimalApi | 7090 | `delight-bistro/drink.js` | DelightBistro |
+
+Вне solution: `react-delight-bistro-app/src/services/drinks-service.ts` — тот же порт и эндпоинты `GetDrinks` / `CreateDrink` / `ChangeDrink` / `DeleteDrink` / `GetDrink/{id}`.
 
 → Подробнее: [integration-map.md](../../integration-map.md), [minimal-apis/README.md](../../minimal-apis/README.md)
 
@@ -28,4 +30,4 @@ HttpClient-сервисы, зарегистрированные в `Program.cs`,
 
 - `Program.cs` — `AddHttpClient<T>()`
 - `Services/Apis/` — client classes
-- `wwwroot/js/delight-bistro/tea.js` — frontend consumer
+- `wwwroot/js/delight-bistro/drink.js` — frontend consumer

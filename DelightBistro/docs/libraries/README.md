@@ -1,11 +1,11 @@
 # Libraries
 
-Общие библиотеки solution Net23Online.
+Общие библиотеки solution DelightBistro.
 
 → Шаблон: [_templates/shared-library.md](../_templates/shared-library.md)
 
 | Библиотека | Папка | Используют |
 |------------|-------|------------|
-| WebNet23Online.Data | [web-net23-online-data/](web-net23-online-data/) | WebNet23Online |
+| DelightBistroMvc.Data | [delight-bistro-mvc-data/](delight-bistro-mvc-data/) | DelightBistroMvc |
 | MazeCore | [maze-core/](maze-core/) | FirstConsoleApp |
 | DelightBistro.Services | [delight-bistro-services/](delight-bistro-services/) | DelightBistroMinimalApi |

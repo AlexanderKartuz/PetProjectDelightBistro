@@ -1,14 +1,14 @@
 # MazeCore
 
-> Библиотека игрового движка лабиринта: клетки, герой, туман войны, звуки.
+> Библиотека игрового движка лабиринта: клетки, герой, туман войны, звуки, магазин.
 
-> TODO: наполнить по шаблону [_templates/shared-library.md](../../_templates/shared-library.md).
+**Проект:** `MazeCore/MazeCore.csproj`
 
 ---
 
 ## Назначение
 
-Переиспользуемый движок консольного лабиринта: генерация карты, персонажи, клетки (стены, ловушки, магазин и т.д.), отрисовка и звук. Используется учебным проектом FirstConsoleApp. MVC-модуль Maze из WebNet23Online удалён.
+Переиспользуемый движок консольного лабиринта: генерация карты, персонажи, клетки (стены, ловушки, магазин и т.д.), отрисовка и звук. Используется учебным проектом FirstConsoleApp. MVC-модуль Maze удалён; DelightBistroMvc на MazeCore не ссылается.
 
 ---
 
@@ -16,14 +16,17 @@
 
 | Тип | Имя | Назначение |
 |-----|-----|------------|
-| Class | `Maze` / `IMaze` | Модель лабиринта |
-| Class | `MazeBuilder` / `IMazeBuilder` | Построение карты |
-| Class | `MazeController` / `IMazeController` | Игровой цикл |
+| Interface / Class | `IMaze` / `Maze` | Модель лабиринта |
+| Interface / Class | `IMazeBuilder` / `MazeBuilder` | Построение карты |
+| Interface / Class | `IMazeController` / `MazeController` | Игровой цикл (`Play`) |
 | Class | `MazeDrawer` | Отрисовка в консоль |
 | Class | `MazeFogOfWar` | Туман войны |
-| Class | `MazeSoundPlayer` / `IMazeSoundPlayer` | Звуки |
+| Interface / Class | `IMazeSoundPlayer` / `MazeSoundPlayer` | Звуки (NAudio) |
 | Class | `Hero` / `BaseCharacter` | Персонажи |
-| Class / Interface | `BaseCell` / `IBaseCell` | Клетки карты |
+| Interface / Class | `IBaseCell` / `BaseCell` | Клетки карты |
+| Class | `Shopkeeper`, `ShopMenuController` | Магазин на карте |
+
+Примеры клеток: `Wall`, `Ground`, `Trap`, `Coin`, `Key`, `Doors`, `Portal`, `Lava`, `Ice`, `Ghost`, `Mimic`, `Rest`, `SecretRoom`.
 
 ---
 
@@ -31,7 +34,7 @@
 
 | Пакет / проект | Назначение |
 |----------------|------------|
-| — | Стандартная библиотека .NET, без внешних пакетов данных |
+| `NAudio` | Воспроизведение звуков из `Sounds/` |
 
 ---
 
@@ -39,9 +42,7 @@
 
 | Проект | Как использует |
 |--------|----------------|
-| FirstConsoleApp | Консольная игра «лабиринт» (`MazeStuff/`) |
-
-> В `WebNet23Online.csproj` может оставаться ProjectReference на MazeCore без использования в коде.
+| FirstConsoleApp | Консольная игра «лабиринт» (`MazeStuff/`, `Program.cs`) |
 
 ---
 

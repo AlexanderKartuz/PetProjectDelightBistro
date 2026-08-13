@@ -1,13 +1,15 @@
-# Карта интеграций Net23Online
+# Карта интеграций DelightBistro
 
-Связи между WebNet23Online (MVC), Minimal API и общими библиотеками.
+Связи между DelightBistroMvc (MVC), Minimal API, React-витриной и общими библиотеками.
 
 ## Архитектурный паттерн
 
-- **WebNet23Online** использует `WebContext` ([WebNet23Online.Data](../WebNet23Online.Data/)) — основная БД сайта.
-- **Minimal API** используют **отдельные DbContext и БД** (LocalDB), не `WebContext`.
-- Модуль DelightBistro вызывает Minimal API из JavaScript (`wwwroot/js/delight-bistro/tea.js`) по HTTPS.
+- **DelightBistroMvc** использует `WebContext` ([DelightBistroMvc.Data](../DelightBistroMvc.Data/)) — основная БД сайта (`WebNet23Online`).
+- **Minimal API** использует **отдельный** `MiniDbContext` и БД `WebNet23Tea` (LocalDB), не `WebContext`.
+- Модуль DelightBistro вызывает Minimal API из JavaScript (`wwwroot/js/delight-bistro/drink.js`) по HTTPS. Сервер MVC API через HttpClient не вызывает.
+- Отдельная витрина [react-delight-bistro-app](../../react-delight-bistro-app/) (вне `.sln`) ходит в тот же API (`https://localhost:7090`).
 - Логирование DelightBistro API — библиотека [DelightBistro.Services](libraries/delight-bistro-services/README.md); SQL-логи пишутся в ту же БД API (`ConnectionStrings:Logging`), уровни sink’ов — в `appsettings`.
+- У DelightBistroMvc есть ProjectReference на DelightBistroMinimalApi (сборка в одном решении); runtime-вызовы идут из браузера.
 
 ---
 
@@ -15,19 +17,27 @@
 
 | MVC-модуль | JS-файл | API | Порт | Назначение |
 |------------|---------|-----|------|------------|
-| DelightBistro | `wwwroot/js/delight-bistro/tea.js` | DelightBistroMinimalApi | 7090 | Каталог чая/напитков |
+| DelightBistro | `wwwroot/js/delight-bistro/drink.js` | DelightBistroMinimalApi | 7090 | Каталог напитков (`GetDrinks` / `CreateDrink`) |
 
 ---
 
-## MVC → WebNet23Online.Data
+## React → Minimal API
 
-Бизнес-данные WebNet23Online работают через `WebContext`:
+| Клиент | Файл | API | Назначение |
+|--------|------|-----|------------|
+| react-delight-bistro-app | `src/services/drinks-service.ts` | DelightBistroMinimalApi :7090 | Список / карточка / CRUD напитков |
+
+---
+
+## MVC → DelightBistroMvc.Data
+
+Бизнес-данные DelightBistroMvc работают через `WebContext`:
 
 - Platform (пользователи, профили)
 - Notification (отложенные уведомления)
 - DelightBistro (меню, блюда, ингредиенты, заказы)
 
-→ [libraries/web-net23-online-data/README.md](libraries/web-net23-online-data/README.md)
+→ [libraries/delight-bistro-mvc-data/README.md](libraries/delight-bistro-mvc-data/README.md)
 
 ---
 
@@ -35,17 +45,17 @@
 
 | Библиотека | Используют |
 |------------|------------|
-| WebNet23Online.Data | WebNet23Online |
+| DelightBistroMvc.Data | DelightBistroMvc |
 | MazeCore | FirstConsoleApp |
 | DelightBistro.Services | DelightBistroMinimalApi |
 
 ---
 
-## SignalR (внутри WebNet23Online)
+## SignalR (внутри DelightBistroMvc)
 
 Real-time функции реализованы внутри MVC, не через Minimal API.
 
-→ [web-net23-online/appendix/signalr-hubs.md](web-net23-online/appendix/signalr-hubs.md)
+→ [delight-bistro-mvc/appendix/signalr-hubs.md](delight-bistro-mvc/appendix/signalr-hubs.md)
 
 ---
 
@@ -53,18 +63,18 @@ Real-time функции реализованы внутри MVC, не чере�
 
 ```mermaid
 flowchart LR
-    subgraph web [WebNet23Online]
+    subgraph web [DelightBistroMvc]
         Platform
         Notification
         DelightBistro
     end
 
     subgraph apis [MinimalAPIs]
-        TeaAPI[DelightBistroMinimalApi]
+        DrinksAPI[DelightBistroMinimalApi]
     end
 
     subgraph data [SharedData]
-        WebContext[WebNet23Online.Data]
+        WebContext[DelightBistroMvc.Data]
     end
 
     subgraph libs [Libraries]
@@ -76,8 +86,13 @@ flowchart LR
         FirstConsoleApp
     end
 
-    DelightBistro -->|"7090"| TeaAPI
-    TeaAPI --> SerilogLib
+    subgraph spa [External]
+        ReactApp[react-delight-bistro-app]
+    end
+
+    DelightBistro -->|"7090 drink.js"| DrinksAPI
+    ReactApp -->|"7090"| DrinksAPI
+    DrinksAPI --> SerilogLib
     web --> WebContext
     FirstConsoleApp --> MazeCore
 ```

@@ -1,6 +1,6 @@
 # Фоновые задачи
 
-Hosted services WebNet23Online.
+Hosted services DelightBistroMvc.
 
 ---
 

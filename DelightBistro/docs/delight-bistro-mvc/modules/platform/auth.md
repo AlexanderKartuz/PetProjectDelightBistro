@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Управление учётными записями: регистрация новых пользователей, вход по логину/паролю, выход из системы. При отказе в доступе — редирект на `/Auth/Deny`.
+Управление учётными записями: регистрация новых пользователей, вход по логину/паролю, выход из системы. При отказе в доступе — редирект на `/Auth/Deny`. После успешного входа, регистрации и выхода пользователь попадает на `DelightBistro/Index`.
 
 ---
 
@@ -19,10 +19,10 @@
 | URL | Action | View | Авторизация |
 |-----|--------|------|-------------|
 | `/Auth/Login` | `Login` GET | `Views/Auth/Login.cshtml` | — |
-| `/Auth/Login` | `Login` POST | Redirect → `Home/Index` или View с ошибкой | — |
+| `/Auth/Login` | `Login` POST (`LoginAsync`) | Redirect → `DelightBistro/Index` или View с ошибкой | — |
 | `/Auth/Registration` | `Registration` GET | `Views/Auth/Registration.cshtml` | — |
-| `/Auth/Registration` | `Registration` POST | Redirect → Home или View с ошибкой | — |
-| `/Auth/Logout` | `Logout` | Redirect → `Home/Index` | — |
+| `/Auth/Registration` | `Registration` POST | Redirect → DelightBistro или View с ошибкой | — |
+| `/Auth/Logout` | `LogoutAsync` | Redirect → `DelightBistro/Index` | — |
 | `/Auth/Deny` | `Deny` | `Views/Auth/Deny.cshtml` | — |
 
 ---
@@ -49,6 +49,7 @@
 |--------|------------|
 | `IUserRepository` | Поиск пользователя, регистрация, `IsNameUniq` |
 | `IAuthService` | `SignIn(user)` после успешного логина |
+| `IPasswordHasher` | Хэш пароля (регистрируется в `Program.cs` из DelightBistroMvc.Data) |
 
 **Внешние HTTP API:** нет
 
@@ -90,6 +91,7 @@
 ## Связанные модули
 
 - [User](user.md) — профиль после входа
+- [DelightBistro](../delight-bistro/README.md) — редирект после Login / Registration / Logout
 
 ---
 

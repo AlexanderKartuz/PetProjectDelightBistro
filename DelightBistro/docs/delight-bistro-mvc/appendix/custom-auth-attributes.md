@@ -19,4 +19,4 @@
 ## Источники в коде
 
 - `Controllers/CustomAuthAttribute/`
-- `WebNet23Online.Data/Enums/UserRole.cs`
+- `DelightBistroMvc.Data/Enums/UserRole.cs`
