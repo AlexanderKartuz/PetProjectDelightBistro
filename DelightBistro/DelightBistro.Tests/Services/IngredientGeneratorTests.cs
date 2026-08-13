@@ -27,14 +27,14 @@ namespace DelightBistro.Tests.Services
         }
 
         [Test]
-        public void GetSelectedIngredient_ReturnOnlySelected()
+        public void GetSelected_ReturnOnlySelected()
         {
             // Prepare
             var ingredients = new List<CreateIngredientViewModel>
             {
                 new CreateIngredientViewModel(){Id=1, Name="Lime", IsSelected=true},
-                new CreateIngredientViewModel(){Id=1, Name="Lime", IsSelected=false},
-                new CreateIngredientViewModel(){Id=1, Name="Lime", IsSelected=true},
+                new CreateIngredientViewModel(){Id=2, Name="Lime", IsSelected=false},
+                new CreateIngredientViewModel(){Id=3, Name="Lime", IsSelected=true},
             };
 
             // Act
@@ -94,6 +94,9 @@ namespace DelightBistro.Tests.Services
             };
 
             // Act
+            _ingredientGenerator.CreateIngredientData(createIngredientVm);
+
+            // Verify
             _ingredientRepositoryMock.Verify(x =>
                 x.Add(It.Is<IngredientData>(i =>
                     i.Name == "Cheese"
@@ -101,7 +104,5 @@ namespace DelightBistro.Tests.Services
                     && i.Creator == user)),
                 Times.Once);
         }
-
-
     }
 }
