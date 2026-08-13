@@ -1,6 +1,6 @@
-# Документация Net23Online
+# Документация DelightBistro
 
-Центральное хранилище документации solution [Net23Online](../Net23Online.sln).
+Центральное хранилище документации solution [DelightBistro](../DelightBistro.sln).
 
 **Язык:** русский. Идентификаторы, URL и имена файлов — как в коде (английский).
 
@@ -8,7 +8,7 @@
 
 | Категория | Папка | Описание |
 |-----------|-------|----------|
-| Web (MVC) | [web-net23-online/](web-net23-online/) | Основное приложение WebNet23Online и его модули |
+| Web (MVC) | [delight-bistro-mvc/](delight-bistro-mvc/) | Основное приложение DelightBistroMvc и его модули |
 | Minimal API | [minimal-apis/](minimal-apis/) | Отдельные API-проекты |
 | Libraries | [libraries/](libraries/) | Общие библиотеки (Data, MazeCore, DelightBistro.Services) |
 | Console / examples | [other/](other/) | Учебные и консольные проекты (опционально) |
@@ -19,17 +19,17 @@
 
 ---
 
-## WebNet23Online
+## DelightBistroMvc
 
-ASP.NET Core MVC-приложение с модулями — отдельными областями сайта.
+ASP.NET Core MVC-приложение с модулями — отдельными областями сайта. Маршрут по умолчанию: `DelightBistro/Index` (точка входа `/`).
 
-→ [web-net23-online/README.md](web-net23-online/README.md) — полный список модулей
+→ [delight-bistro-mvc/README.md](delight-bistro-mvc/README.md) — полный список модулей
 
 | Модуль | Папка | Точка входа |
 |--------|-------|-------------|
-| Platform (Home, Auth, User) | [modules/platform/](web-net23-online/modules/platform/) | `/` |
-| Notification | [modules/notification/](web-net23-online/modules/notification/) | `/Notification/Index` |
-| DelightBistro | [modules/delight-bistro/](web-net23-online/modules/delight-bistro/) | `/DelightBistro/Index` |
+| Platform (Home, Auth, User) | [modules/platform/](delight-bistro-mvc/modules/platform/) | `/Home/Index` |
+| Notification | [modules/notification/](delight-bistro-mvc/modules/notification/) | `/Notification/Index` |
+| DelightBistro | [modules/delight-bistro/](delight-bistro-mvc/modules/delight-bistro/) | `/` |
 
 ---
 
@@ -37,7 +37,7 @@ ASP.NET Core MVC-приложение с модулями — отдельным
 
 | API | Папка | Порт | БД | Потребитель |
 |-----|-------|------|-----|-------------|
-| DelightBistroMinimalApi | [minimal-apis/delight-bistro/](minimal-apis/delight-bistro/) | 7090 | WebNet23Tea | DelightBistro |
+| DelightBistroMinimalApi | [minimal-apis/delight-bistro/](minimal-apis/delight-bistro/) | 7090 | WebNet23Tea | DelightBistro MVC, [react-delight-bistro-app](../../react-delight-bistro-app/) |
 
 → [minimal-apis/README.md](minimal-apis/README.md)
 
@@ -47,7 +47,7 @@ ASP.NET Core MVC-приложение с модулями — отдельным
 
 | Библиотека | Папка | Используют |
 |------------|-------|------------|
-| WebNet23Online.Data | [libraries/web-net23-online-data/](libraries/web-net23-online-data/) | WebNet23Online |
+| DelightBistroMvc.Data | [libraries/delight-bistro-mvc-data/](libraries/delight-bistro-mvc-data/) | DelightBistroMvc |
 | MazeCore | [libraries/maze-core/](libraries/maze-core/) | FirstConsoleApp |
 | DelightBistro.Services | [libraries/delight-bistro-services/](libraries/delight-bistro-services/) | DelightBistroMinimalApi |
 

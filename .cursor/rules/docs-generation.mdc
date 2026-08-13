@@ -1,23 +1,23 @@
 ---
-description: Как генерировать и обновлять документацию проектов Net23Online
-globs: Net23Online/**/*
+description: Как генерировать и обновлять документацию проектов DelightBistro
+globs: DelightBistro/**/*
 alwaysApply: false
 ---
 
-# Генерация документации Net23Online
+# Генерация документации DelightBistro
 
 ## Определение типа проекта
 
 | Путь в коде | Шаблон | Папка doc |
 |-------------|--------|-----------|
 | `*MinimalApi/` | `minimal-api.md` | `docs/minimal-apis/{name}/` |
-| `WebNet23Online/Controllers/` | `web-module.md` | `docs/web-net23-online/modules/{name}/` |
-| `MazeCore/`, `WebNet23Online.Data/` | `shared-library.md` | `docs/libraries/{name}/` |
+| `DelightBistroMvc/Controllers/` | `web-module.md` | `docs/delight-bistro-mvc/modules/{name}/` |
+| `MazeCore/`, `DelightBistroMvc.Data/` | `shared-library.md` | `docs/libraries/{name}/` |
 
 ## Алгоритм: Minimal API
 
 1. Прочитать `Program.cs`, endpoint-файлы, `DbContext`, `launchSettings.json`
-2. Найти потребителей: grep `localhost:{port}` в `WebNet23Online/wwwroot/js`
+2. Найти потребителей: grep `localhost:{port}` в `DelightBistroMvc/wwwroot/js` и внешних клиентах
 3. Заполнить шаблон → `minimal-apis/{name}/README.md`
 4. Обновить `minimal-apis/README.md`, `integration-map.md`
 5. Добавить cross-link в MVC-модуль-потребитель (секция «Внешние API»)
@@ -26,10 +26,10 @@ alwaysApply: false
 
 1. Определить модуль по контроллеру / views / services
 2. Прочитать: Controller, Views, Services, Hub, ApiControllers, CustomAuthAttribute, `.resx`, `Program.cs`
-3. Проверить `WebNet23Online.Data` на сущности модуля
-4. Заполнить шаблон → `web-net23-online/modules/{name}/README.md`
-5. Обновить `web-net23-online/README.md`
-6. SignalR / auth / external API → дополнить `web-net23-online/appendix/`
+3. Проверить `DelightBistroMvc.Data` на сущности модуля
+4. Заполнить шаблон → `delight-bistro-mvc/modules/{name}/README.md`
+5. Обновить `delight-bistro-mvc/README.md`
+6. SignalR / auth / external API → дополнить `delight-bistro-mvc/appendix/`
 
 ## Алгоритм: библиотека
 
@@ -61,9 +61,9 @@ alwaysApply: false
 
 | Изменение | Документ |
 |-----------|----------|
-| `AnimeGirlController.cs` | `modules/anime-girl/README.md` |
-| `MovieMinimalApi/Program.cs` | `minimal-apis/movie/README.md` |
+| `DelightBistroController.cs` | `modules/delight-bistro/README.md` |
+| `DelightBistroMinimalApi/Program.cs` | `minimal-apis/delight-bistro/README.md` |
 | JS вызывает новый порт | `integration-map.md` + оба README |
 | Новый Minimal API | новая папка + 3 index-файла |
-| `WebContext` / сущность | `libraries/web-net23-online-data/` + модуль |
+| `WebContext` / сущность | `libraries/delight-bistro-mvc-data/` + модуль |
 | `Hubs/*.cs` | модуль + `appendix/signalr-hubs.md` |

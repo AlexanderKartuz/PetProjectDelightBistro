@@ -1,16 +1,16 @@
 # DelightBistro
 
-> Ресторан: меню по типам, конструктор блюд, заказы, статистика, real-time чат и каталог чая.
+> Ресторан: меню по типам, конструктор блюд, заказы, статистика, real-time чат и каталог напитков.
 
 **Контроллер:** `DelightBistroController`  
 **Layout:** `_LayoutDelightBistro.cshtml`  
-**Точка входа:** `/DelightBistro/Index`
+**Точка входа:** `/` и `/DelightBistro/Index`
 
 ---
 
 ## Назначение
 
-Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Часть данных (чай) вынесена в отдельный Minimal API. На Index подгружаются факты о котах и фото собак через внешние HTTP API.
+Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index подгружаются факты о котах и фото собак через внешние HTTP API.
 
 ---
 
@@ -18,7 +18,7 @@
 
 | URL | Action | View | Авторизация |
 |-----|--------|------|-------------|
-| `/DelightBistro/Index?menuType=` | `Index` | `Index.cshtml` | — |
+| `/`, `/DelightBistro/Index?menuType=` | `Index` | `Index.cshtml` | — |
 | `/DelightBistro/CreateMenu` | GET/POST | `CreateMenu.cshtml` | `[Authorize]` + `[IsModerator]` |
 | `/DelightBistro/CreateIngredient` | GET/POST | `CreateIngredient.cshtml` | Moderator |
 | `/DelightBistro/FoodBuilderData?id=` | GET/POST | `FoodBuilderData.cshtml` | Moderator |
@@ -83,9 +83,11 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 ## Frontend
 
-- **Layout:** `_LayoutDelightBistro.cshtml`, `_LayoutimagesDelightBistro.cshtml`
+- **Layout:** `_LayoutDelightBistro.cshtml`
 - **CSS:** `wwwroot/css/delight-bistro/` — `style.css`, `chat.css`, `delight-bistro-hub.css`
-- **JS:** `wwwroot/js/delight-bistro/` — `delight-bistro-signalr.js`, `delight-bistro-hub.js`, `delight-bistro-chat-hub.js`, `buy-button.js`, `all-foods.js`, `tea.js`, `preview-food-item.js`
+- **JS:** `wwwroot/js/delight-bistro/` — `delight-bistro-signalr.js`, `delight-bistro-hub.js`, `delight-bistro-chat-hub.js`, `buy-button.js`, `all-foods.js`, `drink.js`, `preview-food-item.js`
+
+> `Index.cshtml` всё ещё подключает `/js/delight-bistro/tea.js`. Файл переименован в `drink.js` — скрипт в view нужно поправить.
 
 ---
 
@@ -110,7 +112,11 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 | API | Порт | JS-файл |
 |-----|------|---------|
-| [DelightBistroMinimalApi](../../../minimal-apis/delight-bistro/README.md) | 7090 | `tea.js` |
+| [DelightBistroMinimalApi](../../../minimal-apis/delight-bistro/README.md) | 7090 | `drink.js` — кэш Memory/Redis на стороне API |
+
+Также каталог пьёт [react-delight-bistro-app](../../../../../react-delight-bistro-app/) (`src/services/drinks-service.ts`).
+
+Презентация модуля: [presentation.html](presentation.html).
 
 ---
 

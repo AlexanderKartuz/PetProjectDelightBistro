@@ -26,7 +26,7 @@ alwaysApply: true
 ```text
 Создана миграция AddAnimeGirlChat. Примените её вручную:
 
-dotnet ef database update --project Net23Online/WebNet23Online.Data --startup-project Net23Online/WebNet23Online
+dotnet ef database update --project DelightBistro/DelightBistroMvc.Data --startup-project DelightBistro/DelightBistroMvc
 ```
 
 ## НИКОГДА не создавать миграции вручную
@@ -42,7 +42,7 @@ dotnet ef migrations add <MigrationName> --project <ProjectWithDbContext> --star
 Для основного контекста `WebContext`:
 
 ```bash
-dotnet ef migrations add <MigrationName> --project Net23Online/WebNet23Online.Data --startup-project Net23Online/WebNet23Online
+dotnet ef migrations add <MigrationName> --project DelightBistro/DelightBistroMvc.Data --startup-project DelightBistro/DelightBistroMvc
 ```
 
 Для других DbContext в решении подставляй соответствующие `--project` и `--startup-project` (MinimalApi и т.д.).
