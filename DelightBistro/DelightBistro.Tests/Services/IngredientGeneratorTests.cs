@@ -1,11 +1,13 @@
-using Moq;
-using Newtonsoft.Json.Bson;
-using NUnit.Framework.Internal;
+using DelightBistroMvc.Data.DataModels;
 using DelightBistroMvc.Data.Models;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
+using Moq;
+using Newtonsoft.Json.Bson;
+using NUnit.Framework.Internal;
+using NUnit.Framework.Internal.ExecutionHooks;
 
 namespace DelightBistro.Tests.Services
 {
@@ -66,7 +68,7 @@ namespace DelightBistro.Tests.Services
                 IngredientsList =
                 {
                     new(){ Id=1, IsSelected=true, Quantity=quantity},
-                    new(){ Id=1, IsSelected=false, Quantity=100}, // not selected
+                    new(){ Id=2, IsSelected=false, Quantity=100}, // not selected
                 }
             };
 
@@ -103,6 +105,68 @@ namespace DelightBistro.Tests.Services
                     && i.Price == 20
                     && i.Creator == user)),
                 Times.Once);
+        }
+
+        // make 3 small tests
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void GenerateIngredientsViewModelFromFoodItemData_RepositoryMap(bool isFoodDataExist)
+        {
+            var ingredientDatas = new List<IngredientData>
+            {
+                new IngredientData() {Id = 1, Name = "ingredient1",},
+                new IngredientData() {Id = 2, Name="ingredient2",},
+                new IngredientData() {Id = 3, Name="ingredient3",},
+            };
+
+            _ingredientRepositoryMock.Setup(ir => ir.GetAll())
+                .Returns(ingredientDatas);
+
+            FoodItemData? foodData = null;
+            if (isFoodDataExist)
+            {
+                foodData = new FoodItemData
+                {
+                    Id = 5,
+                    Name = "Food1",
+
+                    IngredientsList = new List<IngredientData>()
+                    {
+                        ingredientDatas[0],
+                        ingredientDatas[1],
+                    },
+
+                    FoodItemIngredientDatas = new List<FoodItemIngredientData>
+                    {
+                        new FoodItemIngredientData(){IngredientDataId = 1, QuantityOfIngredients = 20,},
+                        new FoodItemIngredientData(){IngredientDataId = 2, QuantityOfIngredients = 30,},
+                    }
+                };
+
+            }
+
+            var result = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodData);
+
+            if (!isFoodDataExist)
+            {
+                Assert.That(result, Has.Count.EqualTo(3));
+                Assert.That(result.All(i => i.IsSelected == false), Is.True);
+                Assert.That(result.All(i => i.Quantity == 10), Is.True);
+                Assert.That(result[0].Name, Is.EqualTo("ingredient1"));
+                Assert.That(result[1].Name, Is.EqualTo("ingredient2"));
+            }
+            else
+            {
+                Assert.That(result[0].IsSelected, Is.True);
+                Assert.That(result[0].Quantity, Is.EqualTo(20));
+
+                Assert.That(result[1].IsSelected, Is.True);
+                Assert.That(result[1].Quantity, Is.EqualTo(30));
+
+                Assert.That(result[2].IsSelected, Is.False);
+                Assert.That(result[2].Quantity, Is.EqualTo(10));
+            }
         }
     }
 }
