@@ -18,18 +18,6 @@ namespace DelightBistroMvc.Services.DelightBistro
             _authService = authService;
         }
 
-        public void FeelDataBase()
-        {
-            if (_menuRepository.Any())
-            {
-                return;
-            }
-
-            _menuRepository.Add(new MenuData { Name = "Soups" });
-            _menuRepository.Add(new MenuData { Name = "Hot" });
-            _menuRepository.Add(new MenuData { Name = "Salads" });
-        }
-
         public void CreateMenuData(CreateMenuViewModel viewModel)
         {
             var menuData = new MenuData

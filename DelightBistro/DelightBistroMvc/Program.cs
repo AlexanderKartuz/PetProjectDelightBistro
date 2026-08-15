@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Quartz;
 using DelightBistroMvc.Data;
 using DelightBistroMvc.Data.Services.PasswordHasher;
@@ -54,6 +53,9 @@ builder.Services.AddScoped<IMenuTypeGenerator, MenuTypeGenerator>();
 builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
 builder.Services.AddScoped<IDelightBistroMainIndexGenerator, DelightBistroMainIndexGenerator>();
 
+// DataSeed
+builder.Services.AddScoped<IDelightBistroSeedService, DelightBistroSeedService>();
+
 // Repositories
 builder.Services.ResolveRepositories();
 builder.Services.ResolveByAttribute();
@@ -88,6 +90,14 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+
+// DataSeed
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider
+        .GetRequiredService<IDelightBistroSeedService>()
+        .EnsureSeed();
 }
 
 app.UseHttpsRedirection();

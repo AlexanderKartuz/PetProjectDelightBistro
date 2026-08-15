@@ -16,18 +16,6 @@ namespace DelightBistroMvc.Services.DelightBistro
             _ingredientsRepository = ingredientsRepository;
             _authService = authService;
         }
-        public void FeelDataBase()
-        {
-            if (_ingredientsRepository.Any())
-            {
-                return;
-            }
-            _ingredientsRepository.Add(new IngredientData { Name = "Креветки", Price = 40 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Шампиньоны", Price = 12 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Лайм", Price = 9 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Паста", Price = 8 });
-        }
-
 
         public void CreateIngredientData(CreateIngredientViewModel ingredient)
         {
@@ -49,16 +37,12 @@ namespace DelightBistroMvc.Services.DelightBistro
             {
                 Id = i.Id,
                 Name = i.Name,
-
-                //IsSelected = foodItemData != null && foodItemData.IngredientsList.Any(i => i.Id == x.Id),
                 IsSelected = foodItemData != null
                     && foodItemData.FoodItemIngredientDatas
                         .Any(links => links.IngredientDataId == i.Id),
-
                 Quantity = foodItemData?.FoodItemIngredientDatas
                     .FirstOrDefault(fi => fi.IngredientDataId == i.Id)?
                     .QuantityOfIngredients ?? 10
-
             }).ToList();
 
             return ingredientsViewModel;
@@ -66,9 +50,7 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         public List<CreateIngredientViewModel> GetSelectedCreateIngredientViewModelFromIngredientsList(List<CreateIngredientViewModel> ingredientsViewModel)
         {
-            var selectedIngredientsViewModel = ingredientsViewModel.Where(x => x.IsSelected).ToList();
-
-            return selectedIngredientsViewModel;
+            return ingredientsViewModel.Where(x => x.IsSelected).ToList();
         }
 
         public List<FoodItemIngredientData> GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(CreateFoodItemViewModel viewModel)
@@ -85,9 +67,12 @@ namespace DelightBistroMvc.Services.DelightBistro
             return links;
         }
 
+        /// <summary>
+        /// Карточки Index/AllFoodItems: только выбранные ингредиенты из уже загруженных FoodItemIngredientDatas.
+        /// </summary>
         public List<CreateIngredientViewModel> MapSelectedIngredients(FoodItemData foodItemData)
         {
-            var ingredientsVM = foodItemData.FoodItemIngredientDatas
+            return foodItemData.FoodItemIngredientDatas
                 .Select(links => new CreateIngredientViewModel
                 {
                     Id = links.IngredientDataId,
@@ -96,8 +81,6 @@ namespace DelightBistroMvc.Services.DelightBistro
                     Quantity = links.QuantityOfIngredients,
                 })
                 .ToList();
-
-            return ingredientsVM;
         }
     }
 }
