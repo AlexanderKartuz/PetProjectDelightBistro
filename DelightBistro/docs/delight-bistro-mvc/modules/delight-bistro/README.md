@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index подгружаются факты о котах и фото собак через внешние HTTP API.
+Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index асинхронно подгружаются факты о котах и фото собак (`GetMainIndexViewModelAsync`); при недоступности API меню всё равно отдаётся. Сид меню/ингредиентов/блюд — `IDelightBistroSeedService.EnsureSeeded()` при старте приложения (`Program.cs`), не на каждый Index.
 
 ---
 
@@ -18,7 +18,7 @@
 
 | URL | Action | View | Авторизация |
 |-----|--------|------|-------------|
-| `/`, `/DelightBistro/Index?menuType=` | `Index` | `Index.cshtml` | — |
+| `/`, `/DelightBistro/Index?menuType=` | `Index` (async) | `Index.cshtml` | — |
 | `/DelightBistro/CreateMenu` | GET/POST | `CreateMenu.cshtml` | `[Authorize]` + `[IsModerator]` |
 | `/DelightBistro/CreateIngredient` | GET/POST | `CreateIngredient.cshtml` | Moderator |
 | `/DelightBistro/FoodBuilderData?id=` | GET/POST | `FoodBuilderData.cshtml` | Moderator |
@@ -59,10 +59,11 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 | Сервис | Назначение |
 |--------|------------|
-| `IFoodItemGenerator` | Генерация / CRUD блюд |
-| `IMenuTypeGenerator` | Типы меню |
-| `IIngredientGenerator` | Ингредиенты |
-| `IDelightBistroMainIndexGenerator` | Главная страница (+ CatFact/Dog) |
+| `IFoodItemGenerator` | CRUD блюд, CSV/stats, фасады `GetAllFoodItemWithPermission` / `GetCreateFoodItemViewModel` |
+| `IMenuTypeGenerator` | Типы меню; Index — `GetAllMenuViewModel` через Include `FoodItemIngredientDatas` |
+| `IIngredientGenerator` | Форма: полный справочник; карточки: `MapSelectedIngredients` (join-сущность) |
+| `IDelightBistroMainIndexGenerator` | `GetMainIndexViewModelAsync` (+ CatFact/Dog) |
+| `IDelightBistroSeedService` | Сид при старте: меню → ингредиенты → блюда |
 | `IFoodItemRepository`, `IMenuRepository`, `IIngredientsRepository`, `IOrderRepository` | Data access |
 
 **Внешние HTTP API:** `CatFactApi`, `DogApi` (Index)
@@ -76,7 +77,7 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 | `FoodItemData` | Блюда |
 | `MenuData` | Меню |
 | `IngredientData` | Ингредиенты |
-| `FoodItemIngredientData` | M:M join с quantity |
+| `FoodItemIngredientData` | M:M join с quantity — источник правды для состава блюда |
 | `OrderData` | Заказы, M:M с FoodItem, FK UserId |
 
 ---
@@ -104,7 +105,7 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 | Сервис | Интервал | Назначение |
 |--------|----------|------------|
-| `DelightBistroOrderBackgroundService` | 24ч | Удаление expired orders |
+| `DelightBistroOrderBackgroundService` | 24ч | `ExecuteDelete` просроченных заказов |
 
 ---
 

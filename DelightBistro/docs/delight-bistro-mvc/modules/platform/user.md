@@ -47,7 +47,8 @@
 | Сервис | Назначение |
 |--------|------------|
 | `IAuthService` | Текущий пользователь, язык, роль, re-sign |
-| `IUserRepository` | CRUD пользователей, язык, профиль, удаление |
+| `IUserDataService` | `UpdateLanguage`, `UpdateProfile` |
+| `IUserRepository` | Список, аватар (`Update`), удаление |
 | `IWebHostEnvironment` | Пути к `wwwroot` для загрузки аватаров |
 
 **Внешние HTTP API:** нет

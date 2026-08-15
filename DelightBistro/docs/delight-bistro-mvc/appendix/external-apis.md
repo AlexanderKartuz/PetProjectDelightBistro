@@ -8,8 +8,8 @@ HttpClient-сервисы, зарегистрированные в `Program.cs`,
 
 | Client | Base URL | Модуль | Использование |
 |--------|----------|--------|---------------|
-| `CatFactApi` | `https://catfact.ninja` | DelightBistro | Факт о котах на Index |
-| `DogApi` | `https://dog.ceo` | DelightBistro | Случайное фото собаки на Index |
+| `CatFactApi` | `https://catfact.ninja` | DelightBistro | Index через `GetMainIndexViewModelAsync` (fallback при ошибке) |
+| `DogApi` | `https://dog.ceo` | DelightBistro | Index через `GetMainIndexViewModelAsync` (fallback при ошибке) |
 | `JokeApi` | `https://official-joke-api.appspot.com` | — | Зарегистрирован, **не используется** |
 
 ---

@@ -8,7 +8,7 @@
 
 ## Назначение
 
-Библиотека данных основного сайта: `WebContext`, сущности ресторана и пользователей, репозитории, BCrypt-хэширование паролей и EF Core миграции. DelightBistroMvc подключает её как ProjectReference и не держит DbContext у себя.
+Библиотека данных основного сайта: `WebContext`, сущности ресторана и пользователей, репозитории, `IUserDataService` / BCrypt и EF Core миграции. DelightBistroMvc подключает её как ProjectReference и не держит DbContext у себя.
 
 **БД (LocalDB):** каталог `WebNet23Online`. Runtime MVC задаёт строку в `Program.cs` (hardcoded). Design-time (`WebContextFactory`) читает `ConnectionStrings:DefaultDbConnection` из `DelightBistroMvc.Data/appsettings.json` — тот же каталог. Актуальная схема — только сущности текущего сайта (лишние таблицы старых модулей сняты миграцией вместе с переименованием `Password` → `PasswordHash`).
 
@@ -22,13 +22,14 @@
 | Class | `WebContextFactory` | Design-time factory для миграций (`DefaultDbConnection`) |
 | Interface / Class | `IBaseRepository` / `BaseRepository` | Базовый CRUD |
 | Interface | `IDelightBistroRepository<T>` | Проверка уникальности имени |
-| Interface / Class | `IUserRepository` / `UserRepository` | Пользователи |
-| Interface / Class | `IFoodItemRepository` / `FoodItemRepository` | Блюда |
-| Interface / Class | `IMenuRepository` / `MenuRepository` | Меню |
+| Interface / Class | `IUserRepository` / `UserRepository` | `GetByName`, `IsNameUniq`, CRUD |
+| Interface / Class | `IUserDataService` / `UserDataService` | Регистрация, проверка пароля, язык/профиль |
+| Interface / Class | `IFoodItemRepository` / `FoodItemRepository` | Блюда; Include через `FoodItemIngredientDatas` |
+| Interface / Class | `IMenuRepository` / `MenuRepository` | Меню + граф блюд/ингредиентов (`AsNoTracking` на чтении) |
 | Interface / Class | `IIngredientsRepository` / `IngredientsRepository` | Ингредиенты |
-| Interface / Class | `IOrderRepository` / `OrderRepository` | Заказы |
-| Interface / Class | `INotificationRepository` / `NotificationRepository` | Уведомления |
-| Interface / Class | `IPasswordHasher` / `BCryptPasswordHasher` | BCrypt, work factor 11; хэш при `Registration`, проверка при логине |
+| Interface / Class | `IOrderRepository` / `OrderRepository` | Заказы; `DeleteExpiredOrders` (`ExecuteDelete`) |
+| Interface / Class | `INotificationRepository` / `NotificationRepository` | Уведомления; индекс `(IsActive, TimeToPublish)` |
+| Interface / Class | `IPasswordHasher` / `BCryptPasswordHasher` | BCrypt, work factor 11 |
 | Enum | `UserRole` | `User`, `Employee`, `Moderator`, `Admin` |
 
 **DbSet в `WebContext`:**
@@ -39,7 +40,8 @@
 - `Menus` → `MenuData`
 - `Orders` → `OrderData`
 - `Notifications` → `NotificationData`
-- Join: `FoodItemIngredientData` (M:M блюдо ↔ ингредиент с quantity)
+- Join: `FoodItemIngredientData` (M:M блюдо ↔ ингредиент с quantity; `HasPrecision` на quantity)
+- Индексы: `Orders.CreatedDateTime`; `Notifications (IsActive, TimeToPublish)`
 
 ---
 
@@ -57,7 +59,7 @@
 
 | Проект | Как использует |
 |--------|----------------|
-| DelightBistroMvc | DI `WebContext`, репозитории, `IPasswordHasher`, модели ViewModels |
+| DelightBistroMvc | DI `WebContext`, репозитории, `IUserDataService`, `IPasswordHasher` |
 
 ---
 
@@ -81,5 +83,6 @@ dotnet ef database update --project DelightBistro/DelightBistroMvc.Data --startu
 - `WebContext.cs`
 - `Models/`, `DataModels/`
 - `Repositories/`
+- `Services/UserService/`
 - `Services/PasswordHasher/`
 - `Migrations/`
