@@ -5,9 +5,6 @@ using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
 using Moq;
-using Newtonsoft.Json.Bson;
-using NUnit.Framework.Internal;
-using NUnit.Framework.Internal.ExecutionHooks;
 
 namespace DelightBistro.Tests.Services
 {
@@ -53,7 +50,7 @@ namespace DelightBistro.Tests.Services
             var result = _ingredientGenerator
                 .GetSelectedCreateIngredientViewModelFromIngredientsList(new List<CreateIngredientViewModel>());
 
-            Assert.That(result, Is.Empty);//
+            Assert.That(result, Is.Empty);
         }
 
         [Test]
@@ -107,73 +104,6 @@ namespace DelightBistro.Tests.Services
                 Times.Once);
         }
 
-        //// make 3 small tests
-        //[Test]
-        //[TestCase(true)]
-        //[TestCase(false)]
-        //public void GenerateIngredientsViewModelFromFoodItemData_RepositoryMap(bool isFoodDataExist)
-        //{
-        //    var ingredientDatas = new List<IngredientData>
-        //    {
-        //        new IngredientData() {Id = 1, Name = "ingredient1",},
-        //        new IngredientData() {Id = 2, Name = "ingredient2",},
-        //        new IngredientData() {Id = 3, Name = "ingredient3",},
-        //    };
-
-        //    _ingredientRepositoryMock.Setup(ir => ir.GetAll())
-        //        .Returns(ingredientDatas);
-
-        //    FoodItemData? foodData = null;
-        //    if (isFoodDataExist)
-        //    {
-        //        foodData = new FoodItemData
-        //        {
-        //            Id = 5,
-        //            Name = "Food1",
-
-        //            IngredientsList = new List<IngredientData>()
-        //            {
-        //                ingredientDatas[0],
-        //                ingredientDatas[1],
-        //            },
-
-        //            FoodItemIngredientDatas = new List<FoodItemIngredientData>
-        //            {
-        //                new FoodItemIngredientData(){IngredientDataId = 1, QuantityOfIngredients = 20,},
-        //                new FoodItemIngredientData(){IngredientDataId = 2, QuantityOfIngredients = 30,},
-        //            }
-        //        };
-        //    }
-
-        //    var result = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodData);
-
-        //    if (!isFoodDataExist)
-        //    {
-        //        Assert.Multiple(new Action(() =>
-        //        {
-        //            Assert.That(result, Has.Count.EqualTo(3));
-        //            Assert.That(result.All(i => i.IsSelected == false), Is.True);
-        //            Assert.That(result.All(i => i.Quantity == 10), Is.True);
-        //            Assert.That(result[0].Name, Is.EqualTo("ingredient1"));
-        //            Assert.That(result[1].Name, Is.EqualTo("ingredient2"));
-        //        }));
-        //    }
-        //    else
-        //    {
-        //        Assert.Multiple(new Action(() =>
-        //        {
-        //            Assert.That(result[0].IsSelected, Is.True);
-        //            Assert.That(result[0].Quantity, Is.EqualTo(20));
-
-        //            Assert.That(result[1].IsSelected, Is.True);
-        //            Assert.That(result[1].Quantity, Is.EqualTo(30));
-
-        //            Assert.That(result[2].IsSelected, Is.False);
-        //            Assert.That(result[2].Quantity, Is.EqualTo(10));
-        //        }));
-        //    }
-        //}
-
         [Test]
         public void GenerateIngredientsViewModelFromFoodItemData_WhenFoodItemIsNool()
         {
@@ -213,25 +143,23 @@ namespace DelightBistro.Tests.Services
                 .Setup(ir => ir.GetAll())
                 .Returns(ingredientDatas);
 
+            // IsSelected только из FoodItemIngredientDatas (IngredientsList не учитывается)
             var foodData = new FoodItemData
             {
                 Id = 5,
                 Name = "Food1",
-
-                IngredientsList = new List<IngredientData>()
-                    {
-                        ingredientDatas[0],
-                        ingredientDatas[1],
-                    },
-
+                IngredientsList = new List<IngredientData>
+                {
+                    ingredientDatas[0],
+                    ingredientDatas[1],
+                },
                 FoodItemIngredientDatas = new List<FoodItemIngredientData>
-                    {
-                        new FoodItemIngredientData(){IngredientDataId = 1, QuantityOfIngredients = 20,},
-                    }
+                {
+                    new FoodItemIngredientData(){IngredientDataId = 1, QuantityOfIngredients = 20,},
+                }
             };
 
             var result = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodData);
-
 
             Assert.Multiple(new Action(() =>
             {
@@ -243,7 +171,7 @@ namespace DelightBistro.Tests.Services
                 Assert.That(ingredient1.Name, Is.EqualTo("ingredient1"));
 
                 var ingredient2 = result.Single(i => i.Id == 2);
-                Assert.That(ingredient2.IsSelected, Is.True);
+                Assert.That(ingredient2.IsSelected, Is.False);
                 Assert.That(ingredient2.Quantity, Is.EqualTo(10));
                 Assert.That(ingredient2.Name, Is.EqualTo("ingredient2"));
 
@@ -255,9 +183,49 @@ namespace DelightBistro.Tests.Services
         }
 
         [Test]
+        public void MapSelectedIngredients_ReturnsOnlyLinks()
+        {
+            var shrimp = new IngredientData { Id = 1, Name = "Креветки" };
+            var lime = new IngredientData { Id = 2, Name = "Лайм" };
+
+            var foodData = new FoodItemData
+            {
+                Id = 5,
+                FoodItemIngredientDatas = new List<FoodItemIngredientData>
+                {
+                    new()
+                    {
+                        IngredientDataId = 1,
+                        IngredientData = shrimp,
+                        QuantityOfIngredients = 50,
+                    },
+                    new()
+                    {
+                        IngredientDataId = 2,
+                        IngredientData = lime,
+                        QuantityOfIngredients = 10,
+                    },
+                }
+            };
+
+            var result = _ingredientGenerator.MapSelectedIngredients(foodData);
+
+            Assert.Multiple(new Action(() =>
+            {
+                Assert.That(result, Has.Count.EqualTo(2));
+                Assert.That(result.All(i => i.IsSelected), Is.True);
+                Assert.That(result[0].Name, Is.EqualTo("Креветки"));
+                Assert.That(result[0].Quantity, Is.EqualTo(50));
+                Assert.That(result[1].Name, Is.EqualTo("Лайм"));
+                Assert.That(result[1].Quantity, Is.EqualTo(10));
+            }));
+
+            _ingredientRepositoryMock.Verify(r => r.GetAll(), Times.Never);
+        }
+
+        [Test]
         public void GenerateIngredientsViewModel_WhenIngredientsListIsEmpty_ReturnEmptyList()
         {
-
             _ingredientRepositoryMock
                 .Setup(ir => ir.GetAll())
                 .Returns(new List<IngredientData>());
