@@ -10,6 +10,8 @@
 
 Библиотека данных основного сайта: `WebContext`, сущности ресторана и пользователей, репозитории, `IUserDataService` / BCrypt и EF Core миграции. DelightBistroMvc подключает её как ProjectReference и не держит DbContext у себя.
 
+**DelightBistroMinimalApi** тоже ссылается на эту библиотеку: для JWT login регистрирует `WebContext` на `ConnectionStrings:Users` (каталог `WebNet23Online`) и использует `IUserDataService` / `IPasswordHasher` / `UserRole`. Каталог напитков API остаётся на своём `MiniDbContext` / `WebNet23Tea`. → [jwt-auth.md](../../minimal-apis/delight-bistro/jwt-auth.md)
+
 **БД (LocalDB):** каталог `WebNet23Online`. Runtime MVC задаёт строку в `Program.cs` (hardcoded). Design-time (`WebContextFactory`) читает `ConnectionStrings:DefaultDbConnection` из `DelightBistroMvc.Data/appsettings.json` — тот же каталог. Актуальная схема — только сущности текущего сайта (лишние таблицы старых модулей сняты миграцией вместе с переименованием `Password` → `PasswordHash`).
 
 ---
@@ -60,6 +62,7 @@
 | Проект | Как использует |
 |--------|----------------|
 | DelightBistroMvc | DI `WebContext`, репозитории, `IUserDataService`, `IPasswordHasher` |
+| DelightBistroMinimalApi | JWT login: `WebContext` (`Users`), `IUserDataService`, `IPasswordHasher`, `UserRole` — [jwt-auth.md](../../minimal-apis/delight-bistro/jwt-auth.md) |
 
 ---
 

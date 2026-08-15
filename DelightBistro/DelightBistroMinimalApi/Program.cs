@@ -3,12 +3,19 @@ using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
 using DelightBistroMinimalApi.Middlewares;
 using DelightBistroMinimalApi.Middlewares.RateLimit;
+using DelightBistroMinimalApi.ModelsDto;
+using DelightBistroMinimalApi.Services.Auth;
+using DelightBistroMinimalApi.Services.Auth.Interfaces;
+using DelightBistroMinimalApi.Services.Auth.Options;
 using DelightBistroMinimalApi.Services.Cache;
 using DelightBistroMinimalApi.Services.Cache.Interfaces;
+using DelightBistroMvc.Data.Enums;
+using DelightBistroMvc.Data.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +32,10 @@ builder.ConfigureSeriLog();
 
 builder.AddCustomRateLimiter();
 
+builder.Services.AddDelightBistroJwtAuth(builder.Configuration);
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddDelightBistroSwaggerWithJwt();
 
 builder.Services.AddOutputCache(options =>
 {
@@ -51,6 +60,10 @@ var app = builder.Build();
 app.UseCustomExeptionHandling();
 
 app.UseCors();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseRateLimiter();
 
 app.UseResponseHeader();
@@ -63,6 +76,27 @@ app.UseSwaggerUI();
 //service
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
+
+app.MapPost("login", (
+    LoginRequest request,
+    IUserDataService userDataService,
+    IJwtTokenService jwtTokenService,
+    IOptions<JwtOptions> options) =>
+{
+    var user = userDataService.ValidateCredetials(request.Login, request.Password);
+    if (user is null)
+    {
+        return Results.Unauthorized();
+    }
+
+    var token = jwtTokenService.CreateToken(user);
+    return Results.Ok(new LoginResponse
+    {
+        AccessToken = token,
+        ExpiresInMinutes = options.Value.ExpireMinutes,
+    });
+});
+
 
 app.MapGet("GetDrinks", async (IDrinksCacheService drinksCache) =>
 {
@@ -140,7 +174,8 @@ app.MapDelete("DeleteDrink",
     await Task.WhenAll(task1, task2);
     await Task.WhenAll(task1, task2);
     return Results.NoContent();
-});
+})
+    .RequireAuthorization(policy => policy.RequireRole(nameof(UserRole.Admin)));
 
 app.MapGet("Exception", () => { throw new Exception(); });
 
