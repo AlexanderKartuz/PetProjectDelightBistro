@@ -17,25 +17,28 @@ namespace DelightBistroMvc.Services.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using var di = _serviceProvider.CreateScope();
-            var notificationRepository = di.ServiceProvider.GetService<INotificationRepository>();
-            var hub = di.ServiceProvider.GetService<IHubContext<NotificationHub, INotificationHub>>();
-            
-            
-            while (true)
+            while (!stoppingToken.IsCancellationRequested)
             {
+                using var di = _serviceProvider.CreateScope();
+                var notificationRepository = di.ServiceProvider.GetRequiredService<INotificationRepository>();
+                var hub = di.ServiceProvider.GetRequiredService<IHubContext<NotificationHub, INotificationHub>>();
+
                 // var span = new TimeSpan(DELAY_BETWEEN_NOTIFICATION_CHECK * 10 * 1000 * 1000);
                 var notificationsToShow = notificationRepository.GetByLastNotifications();
 
-                foreach (var notification in notificationsToShow)
+                if (notificationsToShow.Count > 0)
                 {
-                    hub.Clients.All.NewMessage(notification.Text);
-                    notification.IsActive = false;
+
+                    foreach (var notification in notificationsToShow)
+                    {
+                        await hub.Clients.All.NewMessage(notification.Text);
+                        notification.IsActive = false;
+                    }
+
+                    notificationRepository.Update(notificationsToShow);
                 }
 
-                notificationRepository.Update(notificationsToShow);
-
-                await Task.Delay(DELAY_BETWEEN_NOTIFICATION_CHECK * 1000);
+                await Task.Delay(DELAY_BETWEEN_NOTIFICATION_CHECK * 1000, stoppingToken);
             }
         }
     }

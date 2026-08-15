@@ -58,12 +58,12 @@ namespace DelightBistroMvc.Data.Repositories
             }
 
             // goal
-            // dataSource = dataSource.OrderBy(girl => girl.Id);
+            // dataSource = dataSource.OrderBy(entity => entity.Id);
 
-            // girl
-            var parameter = Expression.Parameter(typeof(DataModel), "girl");
+            // entity
+            var parameter = Expression.Parameter(typeof(DataModel), "entity");
 
-            // girl.Id
+            // entity.Id
             var field = Expression.Property(parameter, sortBy);
 
             // int
@@ -71,7 +71,7 @@ namespace DelightBistroMvc.Data.Repositories
                 .GetProperty(sortBy)!
                 .PropertyType;
 
-            // girl => girl.Id
+            // entity => entity.Id
             var lambdaForOrder = Expression.Lambda(field, parameter);
 
             var methodName = direction is null
@@ -79,7 +79,7 @@ namespace DelightBistroMvc.Data.Repositories
                 ? "OrderBy"
                 : "OrderByDescending";
 
-            // dataSource.OrderBy<DataModel, int>(girl => girl.Id);
+            // dataSource.OrderBy<DataModel, int>(entity => entity.Id);
             var orderByMethod = typeof(Queryable)
                 .GetMethods()
                 .First(x => x.Name == methodName
@@ -93,11 +93,11 @@ namespace DelightBistroMvc.Data.Repositories
                 return sortedSource.ToList();
             }
 
-            // dataSource.Where<DataModel>(girl => girl.Id > 50);
+            // dataSource.Where<DataModel>(entity => entity.Id > 50);
             var convertedSortValue = Convert.ChangeType(sortValue, sortPropertyType);
             var constSortValue = Expression.Constant(convertedSortValue);
             Expression filterExpression;
-            //  girl.Id > 50
+            //  entity.Id > 50
             if (sortType == "more")
             {
                 filterExpression = Expression.GreaterThan(field, constSortValue);
@@ -112,10 +112,10 @@ namespace DelightBistroMvc.Data.Repositories
             }
             else
             {
-                throw new Exception($"Unkonw filter type: {sortType}");
+                throw new Exception($"Unknown filter type: {sortType}");
             }
 
-            // girl => girl.id > 50
+            // entity => entity.id > 50
             var lambdaForWhere = Expression.Lambda(filterExpression, parameter);
 
             var whereMethod = typeof(Queryable)

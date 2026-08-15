@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using DelightBistroMvc.Data.DataModels;
+﻿using DelightBistroMvc.Data.DataModels;
 using DelightBistroMvc.Data.Models;
 
 namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro

@@ -5,11 +5,7 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IUserRepository : IBaseRepository<UserData>
     {
-        UserData GetFirst();
-        UserData? GetByNameAndPassword(string login, string password);
+        UserData? GetByName(string login);
         bool IsNameUniq(string login);
-        void Registration(UserData user);
-        void UpdateLanguage(int userId, Language language);
-        void UpdateProfile(UserData userData);
     }
 }

@@ -5,19 +5,21 @@ using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.Auth;
 using DelightBistroMvc.Services;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Data.Services.UserService;
 
 namespace DelightBistroMvc.Controllers
 {
     public class AuthController : Controller
     {
-        private IUserRepository _userRepository;
         private IAuthService _authService;
+        private readonly IUserDataService _userDataService;
 
-        public AuthController(IUserRepository userRepository,
-            IAuthService authService)
+        public AuthController(
+            IAuthService authService,
+            IUserDataService userDataService)
         {
-            _userRepository = userRepository;
             _authService = authService;
+            _userDataService = userDataService;
         }
 
         [HttpGet]
@@ -34,7 +36,7 @@ namespace DelightBistroMvc.Controllers
                 return View(viewModel);
             }
 
-            var user = _userRepository.GetByNameAndPassword(viewModel.Login, viewModel.Password);
+            var user = _userDataService.ValidateCredetials(viewModel.Login, viewModel.Password);
             if (user == null)
             {
                 ModelState.AddModelError(
@@ -61,7 +63,7 @@ namespace DelightBistroMvc.Controllers
             {
                 return View(viewModel);
             }
-            if (!_userRepository.IsNameUniq(viewModel.Login))
+            if (!_userDataService.IsNameUniq(viewModel.Login))
             {
                 ModelState.AddModelError(nameof(LoginViewModel.Login),
                     "Name is already used");
@@ -78,7 +80,7 @@ namespace DelightBistroMvc.Controllers
                 Mobilephone = viewModel.Mobilephone,
             };
 
-            _userRepository.Registration(user);
+            _userDataService.Register(user);
 
             await _authService.SignIn(user);
 

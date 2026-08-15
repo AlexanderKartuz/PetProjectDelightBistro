@@ -18,18 +18,6 @@ namespace DelightBistroMvc.Services.DelightBistro
             _authService = authService;
         }
 
-        public void FeelDataBase()
-        {
-            if (_menuRepository.Any())
-            {
-                return;
-            }
-
-            _menuRepository.Add(new MenuData { Name = "Soups" });
-            _menuRepository.Add(new MenuData { Name = "Hot" });
-            _menuRepository.Add(new MenuData { Name = "Salads" });
-        }
-
         public void CreateMenuData(CreateMenuViewModel viewModel)
         {
             var menuData = new MenuData
@@ -57,7 +45,7 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         public List<MenuTypeViewModel> GetAllMenuViewModel(string filterName)
         {
-            var menuListDatas = _menuRepository.GetAllIncludeFoodItemsWithIngredients(filterName);
+            var menuListDatas = _menuRepository.GetAllIncludeFoodItemsWithIngredientsLinks(filterName);
             var menuVMList = menuListDatas.Select(ConvertMenuDataToViewModel).ToList();
 
             return menuVMList;

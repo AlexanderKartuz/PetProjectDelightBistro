@@ -8,18 +8,17 @@ namespace DelightBistroMvc.Data.Repositories
     {
         public MenuRepository(WebContext webContext) : base(webContext) { }
 
-        public List<MenuData> GetAllIncludeFoodItemsWithIngredients(string filterMenuName)
+        public List<MenuData> GetAllIncludeFoodItemsWithIngredientsLinks(string filterMenuName)
         {
             var allMenus = _dbSet
-           .Include(x => x.Creator)
-           .Include(x => x.FoodItems)
-               .ThenInclude(f => f.Creator)
-           .Include(x => x.FoodItems) // delete?
-               .ThenInclude(x => x.IngredientsList) // delete?
-           .Include(x => x.FoodItems)
-               .ThenInclude(x => x.FoodItemIngredientDatas)
-                   .ThenInclude(x => x.IngredientData);
-
+            .AsNoTracking()
+            .Include(x => x.Creator)
+            .Include(x => x.FoodItems)
+                .ThenInclude(f => f.Creator)
+            .Include(x => x.FoodItems)
+                .ThenInclude(x => x.FoodItemIngredientDatas)
+                    .ThenInclude(x => x.IngredientData);
+            
             if (!string.IsNullOrEmpty(filterMenuName))
             {
                 var filterMenu = allMenus.Where(x => x.Name == filterMenuName).ToList();

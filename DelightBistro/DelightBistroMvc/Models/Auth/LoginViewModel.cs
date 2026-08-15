@@ -10,6 +10,7 @@ namespace DelightBistroMvc.Models.Auth
 
         [Required(ErrorMessage = "Введите пароль")]
         [MinLength(3, ErrorMessage = "Пароль должен быть минимум 3 символа")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

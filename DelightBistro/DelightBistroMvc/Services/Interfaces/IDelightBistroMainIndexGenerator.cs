@@ -4,6 +4,6 @@ namespace DelightBistroMvc.Services.Interfaces
 {
     public interface IDelightBistroMainIndexGenerator
     {
-        MainIndexViewModel GetMainIndexViewModel(string menuType);
+        Task<MainIndexViewModel> GetMainIndexViewModelAsync(string menuType);
     }
 }

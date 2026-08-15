@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Управление учётными записями: регистрация, вход по логину и паролю, выход. Пароль в БД хранится как `UserData.PasswordHash` (BCrypt, work factor 11): при регистрации `UserRepository.Registration` хэширует значение, при входе `GetByNameAndPassword` проверяет через `IPasswordHasher.VerifyPassword`. Cookie-схема `AuthDelightBistro` — в [Platform](README.md). После Login / Registration / Logout — редирект на `DelightBistro/Index`; отказ в доступе — `/Auth/Deny`.
+Управление учётными записями: регистрация, вход по логину и паролю, выход. Пароль в БД — `UserData.PasswordHash` (BCrypt, work factor 11) через `IUserDataService` (`Register`, `ValidateCredetials`) и `IPasswordHasher`. Cookie-схема `AuthDelightBistro` — в [Platform](README.md). После Login / Registration / Logout — редирект на `DelightBistro/Index`; отказ в доступе — `/Auth/Deny`.
 
 ---
 
@@ -31,9 +31,9 @@
 
 | Метод | Путь | Описание |
 |-------|------|----------|
-| GET/POST | `/api/Auth/IsLoginFree?login=` | Проверка уникальности логина (`bool`) |
+| GET/POST | `/api/Auth/IsLoginFree?login=` | Проверка уникальности логина (`bool`, `IUserRepository.IsNameUniq`) |
 
-> Искусственная задержка 1 сек перед проверкой. Используется `registration.js`.
+> Используется `registration.js`.
 
 ---
 
@@ -47,7 +47,8 @@
 
 | Сервис | Назначение |
 |--------|------------|
-| `IUserRepository` | `GetByNameAndPassword`, `Registration`, `IsNameUniq` |
+| `IUserDataService` | `ValidateCredetials`, `Register`, `IsNameUniq` |
+| `IUserRepository` | `GetByName`, `IsNameUniq`, CRUD |
 | `IAuthService` | Claims cookie, `SignIn(user)` |
 | `IPasswordHasher` / `BCryptPasswordHasher` | Хэш и проверка пароля (DI в `Program.cs`) |
 
@@ -102,6 +103,7 @@
 - `Controllers/AuthController.cs`
 - `Controllers/ApiControllers/AuthController.cs`
 - `Services/AuthService.cs`
+- `DelightBistroMvc.Data/Services/UserService/`
 - `DelightBistroMvc.Data/Repositories/UserRepository.cs`
 - `DelightBistroMvc.Data/Services/PasswordHasher/`
 - `Views/Auth/Login.cshtml`, `Registration.cshtml`, `Deny.cshtml`

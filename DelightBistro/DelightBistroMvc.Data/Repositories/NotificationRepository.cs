@@ -19,7 +19,7 @@ public class NotificationRepository : BaseRepository<NotificationData>,
     public List<NotificationData> GetByLastNotifications()
     {
         return _dbSet
-            .Where(x => x.TimeToPublish < DateTime.Now
+            .Where(x => x.TimeToPublish < DateTime.UtcNow
                 && x.IsActive)
             .ToList();
     }

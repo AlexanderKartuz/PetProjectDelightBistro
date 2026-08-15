@@ -18,19 +18,16 @@ namespace DelightBistroMvc.Controllers
         private IMenuTypeGenerator _menuTypeGenerator;
         private IIngredientGenerator _ingredientGenerator;
 
-        private IFoodItemRepository _foodItemRepository;
         private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
 
 
         public DelightBistroController(IFoodItemGenerator foodItemGenerator,
             IMenuTypeGenerator menuTypeGenerator,
-            IFoodItemRepository foodItemRepository,
             IIngredientGenerator ingredientGenerator,
             IHubContext<DeligtBistroHub,
             IDeligtBistroHub> deligtBistroHub,
             IDelightBistroMainIndexGenerator delightBistroMainIndexGenerator)
         {
-            _foodItemRepository = foodItemRepository;
 
             _foodItemGenerator = foodItemGenerator;
             _menuTypeGenerator = menuTypeGenerator;
@@ -40,14 +37,9 @@ namespace DelightBistroMvc.Controllers
             _delightBistroMainIndexGenerator = delightBistroMainIndexGenerator;
         }
 
-        public IActionResult Index(string menuType)
+        public async Task<IActionResult> Index(string menuType)
         {
-            _foodItemGenerator.FeelDataBase();
-            _ingredientGenerator.FeelDataBase();
-            _menuTypeGenerator.FeelDataBase();
-
-            //var viewModel = _menuTypeGenerator.GetAllMenuViewModel(menuType);
-            var viewModel = _delightBistroMainIndexGenerator.GetMainIndexViewModel(menuType);
+            var viewModel = await _delightBistroMainIndexGenerator.GetMainIndexViewModelAsync(menuType);
 
             return View(viewModel);
         }
@@ -102,15 +94,7 @@ namespace DelightBistroMvc.Controllers
         [IsModerator]
         public IActionResult FoodBuilderData(int id)
         {
-            if (id > 0)
-            {
-                var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(id);
-
-                var viewModel = _foodItemGenerator.ConvertToCreateFoodItemVM(changedFoodItemData);
-                return View(viewModel);
-
-            }
-            var createFoodItemVM = _foodItemGenerator.ConvertToCreateFoodItemVM();
+            var createFoodItemVM = _foodItemGenerator.GetCreateFoodItemViewModel(id > 0 ? id : null);
 
             return View(createFoodItemVM);
         }
@@ -146,12 +130,9 @@ namespace DelightBistroMvc.Controllers
         [IsEmployee]
         public IActionResult AllFoodItems()
         {
-            var foodItemsData = _foodItemRepository.GetAllIncludeMenuAndIngredients();
-            var foodItemsViewModel = foodItemsData.Select(_foodItemGenerator.ConvertToFoodItemVM).ToList();
+            var foodItemsWithPermissionVM = _foodItemGenerator.GetAllFoodItemWithPermission();
 
-            var viewModel = _foodItemGenerator.GetFoodsWithPermission(foodItemsViewModel);
-
-            return View(viewModel);
+            return View(foodItemsWithPermissionVM);
         }
 
         [Authorize]

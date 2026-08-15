@@ -11,12 +11,14 @@ namespace DelightBistroMvc.Services.Interfaces
         void ChangeFoodItemData(CreateFoodItemViewModel foodItem);
 
         FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData);
-        void FeelDataBase();
         CreateFoodItemViewModel ConvertToCreateFoodItemVM(FoodItemData? foodItemData = null);
         List<SelectListItem> SelectMenuList();
         AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel);
         void DeleteFoodItem(int id);
         FileStream GenerateTable();
         List<FoodItemStatsViewModel> GetFoodItemStatsViewModels();
+
+        AllFoodItemWithPermissionViewModel GetAllFoodItemWithPermission();
+        CreateFoodItemViewModel GetCreateFoodItemViewModel(int? id = null);
     }
 }

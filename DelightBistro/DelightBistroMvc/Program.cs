@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Quartz;
 using DelightBistroMvc.Data;
 using DelightBistroMvc.Data.Services.PasswordHasher;
+using DelightBistroMvc.Data.Services.UserService;
 using DelightBistroMvc.Hubs;
 using DelightBistroMvc.MiddlewareServices;
 using DelightBistroMvc.RelfectionTools;
@@ -21,7 +21,7 @@ var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebN
 builder.Services.AddDbContext<WebContext>(op => op.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<IUserDataService, UserDataService>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services
     .AddAuthentication(AuthService.AUTH_KEY)
@@ -52,6 +52,9 @@ builder.Services.AddScoped<IFoodItemGenerator, FoodItemGenerator>();
 builder.Services.AddScoped<IMenuTypeGenerator, MenuTypeGenerator>();
 builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
 builder.Services.AddScoped<IDelightBistroMainIndexGenerator, DelightBistroMainIndexGenerator>();
+
+// DataSeed
+builder.Services.AddScoped<IDelightBistroSeedService, DelightBistroSeedService>();
 
 // Repositories
 builder.Services.ResolveRepositories();
@@ -87,6 +90,14 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+
+// DataSeed
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider
+        .GetRequiredService<IDelightBistroSeedService>()
+        .EnsureSeed();
 }
 
 app.UseHttpsRedirection();

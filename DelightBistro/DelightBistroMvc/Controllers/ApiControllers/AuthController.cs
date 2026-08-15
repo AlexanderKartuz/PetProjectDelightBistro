@@ -17,7 +17,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
 
         public bool IsLoginFree(string login)
         {
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
             return _userRepository.IsNameUniq(login);
         }
     }

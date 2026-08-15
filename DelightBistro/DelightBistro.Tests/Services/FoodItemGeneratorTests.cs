@@ -89,41 +89,15 @@ namespace DelightBistro.Tests.Services
         }
 
         [Test]
-        [TestCase(10, true)]
-        [TestCase(100, false)]
-        public void DeleteFoodItem_CallsRemove(int id, bool isExist)
+        public void DeleteFoodItem_CallsDelete()
         {
-            // Prepare
-            FoodItemData? foodItemData = isExist ? new FoodItemData() { Id = id } : null;
-            //var foodItem = new FoodItemData { Id = id };
-            _foodItemRepositoryMock.Setup(r => r.Get(id)).Returns(foodItemData);
+            const int id = 10;
 
-            // Act
             _foodItemGenerator.DeleteFoodItem(id);
 
-            // Assert
-            if (isExist)
-            {
-                _foodItemRepositoryMock.Verify(r => r.Remove(foodItemData), Times.Once());
-            }
-            else
-            {
-                _foodItemRepositoryMock.Verify(r => r.Remove(It.IsAny<FoodItemData>()), Times.Never());
-            }
-        }
-
-        [Test]
-        public void DeleteFoodItem_CallsRemove()
-        {
-            // Prepare
-            var foodItem = new FoodItemData { Id = 10 };
-            _foodItemRepositoryMock.Setup(r => r.Get(foodItem.Id)).Returns(foodItem);
-
-            // Act
-            _foodItemGenerator.DeleteFoodItem(foodItem.Id);
-
-            // Assert
-            _foodItemRepositoryMock.Verify(r => r.Remove(foodItem), Times.Once());
+            _foodItemRepositoryMock.Verify(r => r.Delete(id), Times.Once());
+            _foodItemRepositoryMock.Verify(r => r.Remove(It.IsAny<FoodItemData>()), Times.Never());
+            _foodItemRepositoryMock.Verify(r => r.Get(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
@@ -163,21 +137,11 @@ namespace DelightBistro.Tests.Services
             };
 
             _ingredientGeneratorMock.Setup(ig =>
-            ig.GenerateIngredientsViewModelFromFoodItemData(foodData))
+                ig.MapSelectedIngredients(foodData))
                 .Returns(new List<CreateIngredientViewModel>
                 {
-                    new CreateIngredientViewModel(){ Id =1, IsSelected=true},
-                    new CreateIngredientViewModel(){ Id =2, IsSelected=false},
-                    new CreateIngredientViewModel(){ Id =3, IsSelected=false},
-
-                });
-
-            _ingredientGeneratorMock.Setup(ig =>
-            ig.GetSelectedCreateIngredientViewModelFromIngredientsList((It.IsAny<List<CreateIngredientViewModel>>())))
-                .Returns(new List<CreateIngredientViewModel>
-                {
-                    new CreateIngredientViewModel(){ Id=1, IsSelected=true},
-                    new CreateIngredientViewModel(){Id=3, IsSelected=true},
+                    new CreateIngredientViewModel(){ Id = 1, IsSelected = true},
+                    new CreateIngredientViewModel(){ Id = 3, IsSelected = true},
                 });
 
             // Act
@@ -187,6 +151,10 @@ namespace DelightBistro.Tests.Services
             Assert.That(result.Id, Is.EqualTo(10));
             Assert.That(result.MenuType, Is.EqualTo("Общее меню"));
             Assert.That(result.IngredientsList, Has.Count.EqualTo(2));
+            _ingredientGeneratorMock.Verify(ig => ig.MapSelectedIngredients(foodData), Times.Once);
+            _ingredientGeneratorMock.Verify(
+                ig => ig.GenerateIngredientsViewModelFromFoodItemData(It.IsAny<FoodItemData>()),
+                Times.Never);
         }
 
         [Test]
