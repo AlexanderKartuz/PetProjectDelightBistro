@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Quartz;
 using DelightBistroMvc.Data;
 using DelightBistroMvc.Data.Services.PasswordHasher;
+using DelightBistroMvc.Data.Services.UserService;
 using DelightBistroMvc.Hubs;
 using DelightBistroMvc.MiddlewareServices;
 using DelightBistroMvc.RelfectionTools;
@@ -21,7 +22,7 @@ var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebN
 builder.Services.AddDbContext<WebContext>(op => op.UseSqlServer(connectionString));
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddScoped<IUserDataService, UserDataService>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services
     .AddAuthentication(AuthService.AUTH_KEY)

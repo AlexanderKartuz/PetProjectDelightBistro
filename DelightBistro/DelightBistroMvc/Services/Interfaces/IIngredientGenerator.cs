@@ -11,5 +11,6 @@ namespace DelightBistroMvc.Services.Interfaces
         List<CreateIngredientViewModel> GenerateIngredientsViewModelFromFoodItemData(FoodItemData? foodItemData = null);
         List<CreateIngredientViewModel> GetSelectedCreateIngredientViewModelFromIngredientsList(List<CreateIngredientViewModel> ingredientsViewModel);
         List<FoodItemIngredientData> GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(CreateFoodItemViewModel viewModel);
+        List<CreateIngredientViewModel> MapSelectedIngredients(FoodItemData foodItemData);
     }
 }

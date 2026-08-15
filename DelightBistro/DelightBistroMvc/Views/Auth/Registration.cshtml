@@ -8,7 +8,7 @@
 }
 
 <div class="registration-container">
-    <form method="post" asp-action="Register" asp-controller="Auth">
+    <form method="post" asp-action="Registration" asp-controller="Auth">
         @Html.AntiForgeryToken()
         <div class="registration-header">Регситрация</div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

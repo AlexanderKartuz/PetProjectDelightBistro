@@ -21,6 +21,9 @@ namespace DelightBistroMvc.Data
              .HasOne(x => x.Author)
              .WithMany(x => x.Notifications);
 
+            modelBuilder.Entity<NotificationData>()
+                .HasIndex(n => new { n.IsActive, n.TimeToPublish });
+
             modelBuilder.Entity<UserData>()
               .HasOne(x => x.UserProfile)
               .WithOne(x => x.User)
@@ -46,9 +49,17 @@ namespace DelightBistroMvc.Data
                 .HasForeignKey(x => x.CreatorId);
 
             modelBuilder.Entity<FoodItemData>()
+                .Property(f => f.Price)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<FoodItemData>()
                .HasOne(x => x.Creator)
                .WithMany(x => x.CreatedFoodItems)
                .HasForeignKey(x => x.CreatorId);
+
+            modelBuilder.Entity<IngredientData>()
+                .Property(f => f.Price)
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<IngredientData>()
                .HasOne(x => x.Creator)
@@ -68,10 +79,20 @@ namespace DelightBistroMvc.Data
                     .HasForeignKey(y => y.FoodItemDataId),
                 j =>
                 {
-                    j.Property(y => y.QuantityOfIngredients).HasDefaultValue(10);
+                    j.Property(y => y.QuantityOfIngredients)
+                    .HasPrecision(18, 2)
+                    .HasDefaultValue(10);
+
                     j.HasKey(t => new { t.FoodItemDataId, t.IngredientDataId });
                     j.ToTable("FoodItemIngredientDatas");
                 });
+
+            modelBuilder.Entity<OrderData>()
+                .Property(od => od.TotalPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<OrderData>()
+                .HasIndex(o => o.CreatedDateTime);
 
             modelBuilder.Entity<OrderData>()
                 .HasOne(x => x.User)

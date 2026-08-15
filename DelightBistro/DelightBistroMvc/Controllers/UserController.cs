@@ -9,6 +9,7 @@ using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.User;
 using DelightBistroMvc.Services;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Data.Services.UserService;
 
 namespace DelightBistroMvc.Controllers
 {
@@ -18,14 +19,17 @@ namespace DelightBistroMvc.Controllers
         public IAuthService _authService;
         public IUserRepository _userRepository;
         public IWebHostEnvironment _webHostEnvironment;
+        private IUserDataService _userDataService;
 
         public UserController(IAuthService authService,
             IUserRepository userRepository,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IUserDataService userDataService)
         {
             _authService = authService;
             _userRepository = userRepository;
             _webHostEnvironment = webHostEnvironment;
+            _userDataService = userDataService;
         }
 
         [IsModerator]
@@ -72,14 +76,14 @@ namespace DelightBistroMvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangeLanguage(int userId, Language language)
+        public async Task<IActionResult> ChangeLanguageAsync(int userId, Language language)
         {
-            _userRepository.UpdateLanguage(userId, language);
+            _userDataService.UpdateLanguage(userId, language);
             var user = _authService.GetUser();
 
-            HttpContext.SignOutAsync().Wait();
+            await HttpContext.SignOutAsync();
 
-            _authService.SignIn(user);
+            await _authService.SignIn(user);
 
             return RedirectToAction(nameof(Profile));
         }
@@ -107,15 +111,15 @@ namespace DelightBistroMvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateProfile(UserProfileViewModel viewModel)
+        public async Task<IActionResult> UpdateProfileAsync(UserProfileViewModel viewModel)
         {
             var user = _authService.GetUser();
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;
             user.Mobilephone = viewModel.Mobilephone;
-            _userRepository.UpdateProfile(user);
-            HttpContext.SignOutAsync().Wait();
-            _authService.SignIn(user);
+            _userDataService.UpdateProfile(user);
+            await HttpContext.SignOutAsync();
+            await _authService.SignIn(user);
             return RedirectToAction(nameof(Profile));
         }
 
@@ -144,7 +148,7 @@ namespace DelightBistroMvc.Controllers
 
 
         [HttpPost]
-        public IActionResult DeleteAccount(int userId)
+        public async Task<IActionResult> DeleteAccountAsync(int userId)
         {
             var currentUserId = _authService.GetUserId();
             if (currentUserId != userId)
@@ -164,7 +168,7 @@ namespace DelightBistroMvc.Controllers
             }
 
             _userRepository.Delete(userId);
-            HttpContext.SignOutAsync().Wait();
+            await HttpContext.SignOutAsync();
 
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }

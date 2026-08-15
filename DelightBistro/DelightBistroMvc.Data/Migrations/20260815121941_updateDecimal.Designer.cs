@@ -4,6 +4,7 @@ using DelightBistroMvc.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DelightBistroMvc.Data.Migrations
 {
     [DbContext(typeof(WebContext))]
-    partial class WebContextModelSnapshot : ModelSnapshot
+    [Migration("20260815121941_updateDecimal")]
+    partial class updateDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,8 +153,6 @@ namespace DelightBistroMvc.Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("IsActive", "TimeToPublish");
-
                     b.ToTable("Notifications");
                 });
 
@@ -174,8 +175,6 @@ namespace DelightBistroMvc.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedDateTime");
 
                     b.HasIndex("UserId");
 

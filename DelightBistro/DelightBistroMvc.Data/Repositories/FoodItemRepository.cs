@@ -12,8 +12,11 @@ namespace DelightBistroMvc.Data.Repositories
         public List<FoodItemData> GetAllIncludeMenuAndIngredients()
         {
             var allFoods = _dbSet
+                .AsNoTracking()
                 .Include(x => x.MenuData)
-                .Include(x => x.IngredientsList);
+                .Include(x => x.Creator)
+                .Include(x => x.FoodItemIngredientDatas)
+                    .ThenInclude(x => x.IngredientData);
 
             return allFoods.ToList();
         }
@@ -25,10 +28,11 @@ namespace DelightBistroMvc.Data.Repositories
 
         public FoodItemData? GetByIdIncludeMenuAndIngredientsLinks(int id)
         {
+            // Без AsNoTracking — сущность потом обновляется
             var foodItemInclude = _dbSet
                 .Include(x => x.MenuData)
-                .Include(x => x.IngredientsList)
-                .Include(fi => fi.FoodItemIngredientDatas) // Links
+                .Include(fi => fi.FoodItemIngredientDatas)
+                    .ThenInclude(x => x.IngredientData)
                 .FirstOrDefault(x => x.Id == id);
             return foodItemInclude;
         }

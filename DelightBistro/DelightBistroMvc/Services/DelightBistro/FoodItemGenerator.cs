@@ -105,8 +105,8 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         public FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData)
         {
-            var allIngredientsVM = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodItemData);
-            var selectedIngredientsViewModel = _ingredientGenerator.GetSelectedCreateIngredientViewModelFromIngredientsList(allIngredientsVM);
+            // Только выбранные ингредиенты из join-сущности — без GetAll() справочника
+            var selectedIngredientsViewModel = _ingredientGenerator.MapSelectedIngredients(foodItemData);
 
             var foodItemViewModel = new FoodItemViewModel
             {
@@ -241,8 +241,9 @@ namespace DelightBistroMvc.Services.DelightBistro
                 {
                     var foodName = ReplaceSeparateSymbols(foodItem.Name);
                     var foodItemName = string.Join(";",
-                        (foodItem.IngredientsList
-                        .Select(x => x.Name)));
+                        foodItem.FoodItemIngredientDatas
+                            .Select(x => x.IngredientData?.Name)
+                            .Where(name => !string.IsNullOrEmpty(name)));
 
                     file.WriteLine($"{foodItem.Id},"
                         + $"{foodName},{foodItem.Price},"

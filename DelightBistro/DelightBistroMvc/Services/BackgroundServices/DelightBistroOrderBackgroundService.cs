@@ -21,12 +21,7 @@ namespace DelightBistroMvc.Services.BackgroundServices
                 using var di = _serviceProvider.CreateScope();
                 var orderRepository = di.ServiceProvider.GetRequiredService<IOrderRepository>();
 
-                var expiredOrders = orderRepository.GetExpiredOrderDatas();
-
-                if (expiredOrders.Any())
-                {
-                    orderRepository.DeleteRange(expiredOrders);
-                }
+                orderRepository.DeleteExpiredOrderDatas();
 
                 await Task.Delay(DELAY_BETWEEN_ORDER_TIME_CHECK * 1000, stoppingToken);
             }

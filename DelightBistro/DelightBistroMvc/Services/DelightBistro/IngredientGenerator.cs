@@ -45,14 +45,20 @@ namespace DelightBistroMvc.Services.DelightBistro
         {
             var ingredientsData = _ingredientsRepository.GetAll();
 
-            var ingredientsViewModel = ingredientsData.Select(x => new CreateIngredientViewModel
+            var ingredientsViewModel = ingredientsData.Select(i => new CreateIngredientViewModel
             {
-                Id = x.Id,
-                Name = x.Name,
-                IsSelected = foodItemData != null && foodItemData.IngredientsList.Any(i => i.Id == x.Id),
+                Id = i.Id,
+                Name = i.Name,
+
+                //IsSelected = foodItemData != null && foodItemData.IngredientsList.Any(i => i.Id == x.Id),
+                IsSelected = foodItemData != null
+                    && foodItemData.FoodItemIngredientDatas
+                        .Any(links => links.IngredientDataId == i.Id),
+
                 Quantity = foodItemData?.FoodItemIngredientDatas
-                .FirstOrDefault(fi => fi.IngredientDataId == x.Id)?
-                .QuantityOfIngredients ?? 10
+                    .FirstOrDefault(fi => fi.IngredientDataId == i.Id)?
+                    .QuantityOfIngredients ?? 10
+
             }).ToList();
 
             return ingredientsViewModel;
@@ -77,6 +83,21 @@ namespace DelightBistroMvc.Services.DelightBistro
                 .ToList();
 
             return links;
+        }
+
+        public List<CreateIngredientViewModel> MapSelectedIngredients(FoodItemData foodItemData)
+        {
+            var ingredientsVM = foodItemData.FoodItemIngredientDatas
+                .Select(links => new CreateIngredientViewModel
+                {
+                    Id = links.IngredientDataId,
+                    Name = links.IngredientData?.Name ?? string.Empty,
+                    IsSelected = true,
+                    Quantity = links.QuantityOfIngredients,
+                })
+                .ToList();
+
+            return ingredientsVM;
         }
     }
 }

@@ -57,7 +57,7 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         public List<MenuTypeViewModel> GetAllMenuViewModel(string filterName)
         {
-            var menuListDatas = _menuRepository.GetAllIncludeFoodItemsWithIngredients(filterName);
+            var menuListDatas = _menuRepository.GetAllIncludeFoodItemsWithIngredientsLinks(filterName);
             var menuVMList = menuListDatas.Select(ConvertMenuDataToViewModel).ToList();
 
             return menuVMList;
