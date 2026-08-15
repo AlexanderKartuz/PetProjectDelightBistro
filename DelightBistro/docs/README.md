@@ -37,7 +37,7 @@ ASP.NET Core MVC-приложение с модулями — отдельным
 
 | API | Папка | Порт | БД | Потребитель |
 |-----|-------|------|-----|-------------|
-| DelightBistroMinimalApi | [minimal-apis/delight-bistro/](minimal-apis/delight-bistro/) | 7090 | WebNet23Tea | DelightBistro MVC, [react-delight-bistro-app](../../react-delight-bistro-app/) |
+| DelightBistroMinimalApi | [minimal-apis/delight-bistro/](minimal-apis/delight-bistro/) ([JWT](minimal-apis/delight-bistro/jwt-auth.md)) | 7090 | WebNet23Tea (+ Users → WebNet23Online для login) | DelightBistro MVC, [react-delight-bistro-app](../../react-delight-bistro-app/) |
 
 → [minimal-apis/README.md](minimal-apis/README.md)
 
@@ -47,7 +47,7 @@ ASP.NET Core MVC-приложение с модулями — отдельным
 
 | Библиотека | Папка | Используют |
 |------------|-------|------------|
-| DelightBistroMvc.Data | [libraries/delight-bistro-mvc-data/](libraries/delight-bistro-mvc-data/) | DelightBistroMvc |
+| DelightBistroMvc.Data | [libraries/delight-bistro-mvc-data/](libraries/delight-bistro-mvc-data/) | DelightBistroMvc; DelightBistroMinimalApi (JWT) |
 | MazeCore | [libraries/maze-core/](libraries/maze-core/) | FirstConsoleApp |
 | DelightBistro.Services | [libraries/delight-bistro-services/](libraries/delight-bistro-services/) | DelightBistroMinimalApi |
 

@@ -1,10 +1,12 @@
 # DelightBistroMinimalApi
 
-> API каталога напитков с кэшированием (Memory или Redis), OutputCache, rate limiting и Serilog.
+> API каталога напитков с кэшированием (Memory или Redis), OutputCache, rate limiting, Serilog и JWT Bearer (login по пользователям MVC-БД).
 
 **Проект:** `DelightBistroMinimalApi/DelightBistroMinimalApi.csproj`  
 **Порт (HTTPS):** 7090  
 **Swagger:** `https://localhost:7090/swagger`
+
+**JWT:** [jwt-auth.md](jwt-auth.md) — настройка, login, роли, проверка в Swagger.
 
 ---
 
@@ -13,6 +15,8 @@
 Отдельный Minimal API для каталога напитков. Вынесен из DelightBistroMvc, чтобы кэш, Redis, rate limiting и Serilog жили на независимой БД `WebNet23Tea`. Потребители — JS модуля DelightBistro (`drink.js`) и `react-delight-bistro-app`.
 
 CRUD всегда идёт через `IDrinksCacheService`. Провайдер выбирается конфигом `Caching:Provider` (`Memory` | `Redis`) в `AddDelightBistroCaching` — отдельных `*Redis` URL нет.
+
+Аутентификация API — JWT Bearer (`AddDelightBistroJwtAuth`). Пользователи и пароли — из `WebNet23Online` через ProjectReference на DelightBistroMvc.Data; регистрация только в MVC.
 
 ---
 
@@ -30,39 +34,45 @@ CRUD всегда идёт через `IDrinksCacheService`. Провайдер 
 
 ## Эндпоинты
 
-| Метод | Путь | Описание | Request | Response |
-|-------|------|----------|---------|----------|
-| GET | `/` | Redirect на Swagger | — | 302 |
-| GET | `/GetDrinks` | Список (IDrinksCacheService + OutputCache, тег `drinks`) | — | `Drink[]` |
-| GET | `/GetDrink/{id}` | По id (vary by route, OutputCache 1 мин, тег `drink`) | route `id` | `Drink` / 404 |
-| POST | `/CreateDrink` | Создать, сброс тега `drinks` | body `Drink` | `Drink` |
-| PUT | `/ChangeDrink/{id}` | Изменить | route `id`, body `Drink` | `Drink` / 404 |
-| DELETE | `/DeleteDrink` | Удалить | body `int id` | 204 / 404 |
-| GET | `/Exception` | Тест exception middleware | — | error |
-| GET | `/redis-test` | Проверка Redis | — | string |
+| Метод | Путь | Описание | Auth | Request | Response |
+|-------|------|----------|------|---------|----------|
+| GET | `/` | Redirect на Swagger | — | — | 302 |
+| POST | `/login` | Выдача JWT | анонимно | `LoginRequest` | `LoginResponse` / 401 |
+| GET | `/GetDrinks` | Список (IDrinksCacheService + OutputCache, тег `drinks`) | анонимно | — | `Drink[]` |
+| GET | `/GetDrink/{id}` | По id (vary by route, OutputCache 1 мин, тег `drink`) | анонимно | route `id` | `Drink` / 404 |
+| POST | `/CreateDrink` | Создать, сброс тега `drinks` | пока открыт | body `Drink` | `Drink` |
+| PUT | `/ChangeDrink/{id}` | Изменить | пока открыт | route `id`, body `Drink` | `Drink` / 404 |
+| DELETE | `/DeleteDrink` | Удалить | **JWT + роль Admin** | body `int id` | 204 / 404 / 401 / 403 |
+| GET | `/Exception` | Тест exception middleware | — | — | error |
+| GET | `/redis-test` | Проверка Redis | — | — | string |
 
 `/redis-test` регистрируется **только** при `Caching:Provider = Redis`.
+
+Подробности JWT, claims и проверки в Swagger: [jwt-auth.md](jwt-auth.md).
 
 ---
 
 ## DbContext и БД
 
-| Параметр | Значение |
-|----------|----------|
-| DbContext | `MiniDbContext` |
-| База данных | `WebNet23Tea` |
-| Connection | LocalDB, ключ `ConnectionStrings:Drinks` |
+| Параметр | Напитки | Пользователи (JWT login) |
+|----------|---------|--------------------------|
+| DbContext | `MiniDbContext` | `WebContext` (DelightBistroMvc.Data) |
+| База данных | `WebNet23Tea` | `WebNet23Online` |
+| Connection | `ConnectionStrings:Drinks` | `ConnectionStrings:Users` |
 
-**Сущности:**
+**Сущности (напитки):**
 
 - `Drink` — таблица `Drinks` (`Name`, `Price`, `Description`, `ImgUrl`); раньше была `Tea` / `Teas`
 - `SeriLogEntry` — чтение `Logging.SeriLogs` (запись через Serilog sink, не через EF)
+
+**Пользователи:** `UserData` и роли — в MVC-БД; см. [jwt-auth.md](jwt-auth.md).
 
 ---
 
 ## Middleware и инфраструктура
 
 - **CORS:** default policy — any header/method, credentials, any origin
+- **JWT:** `AddDelightBistroJwtAuth` + `UseAuthentication` / `UseAuthorization`; Swagger Bearer — [jwt-auth.md](jwt-auth.md)
 - **Кэш / Redis:** см. ниже
 - **Rate limiting:** `AddCustomRateLimiter` — chained sliding window (IP + global), 429. Лимиты: `GlobalRateLimitingOptions`, `IpRateLimitingOptions`
 - **Прочее:** `UseCustomExeptionHandling`, `UseResponseHeader` (`Cache-Control: public, max-age=10` на успешные GET), `UseCustomRequestLogging`
@@ -110,9 +120,12 @@ dotnet ef migrations add {MigrationName} --project DelightBistro/DelightBistroMi
 
 - `Program.cs`
 - `Properties/launchSettings.json`
-- `appsettings.json` / `appsettings.Development.json`
+- `appsettings.json` / `appsettings.Development.json` — `Drinks`, `Users`, `Jwt`, `Caching`
 - `DbStuff/` — `MiniDbContext`, `Drink`, `SeriLogEntry`, `DrinkRepository`
 - `Services/Cache/` — `CachingServiceCollectionExtensions`, `IDrinksCacheService`, Memory/Redis реализации
+- `Services/Auth/` — JWT options, `JwtTokenService`, `AddDelightBistroJwtAuth` / Swagger JWT
+- `ModelsDto/` — `LoginRequest`, `LoginResponse`, `ApiErrorResponse`
 - `Constans/CacheKeys.cs`, `Constans/CacheTags.cs`
 - `Middlewares/`
 - ProjectReference → `DelightBistro.Sevices/DelightBistro.Services.csproj`
+- ProjectReference → `DelightBistroMvc.Data/DelightBistroMvc.Data.csproj`

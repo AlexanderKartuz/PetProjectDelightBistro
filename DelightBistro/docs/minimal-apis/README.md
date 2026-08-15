@@ -6,6 +6,6 @@
 
 | API | Папка | Порт | БД | Потребители |
 |-----|-------|------|-----|-------------|
-| DelightBistroMinimalApi | [delight-bistro/](delight-bistro/) | 7090 | WebNet23Tea | DelightBistro MVC, react-delight-bistro-app |
+| DelightBistroMinimalApi | [delight-bistro/](delight-bistro/) · [JWT](delight-bistro/jwt-auth.md) | 7090 | WebNet23Tea (+ Users → WebNet23Online) | DelightBistro MVC, react-delight-bistro-app |
 
 **Карта связей:** [integration-map.md](../integration-map.md)

@@ -87,7 +87,9 @@
 
 ## Внешние API-проекты
 
-Нет.
+Те же учётные записи (`UserData` в `WebNet23Online`) использует **DelightBistroMinimalApi** для `POST /login` и JWT Bearer. Регистрация по-прежнему только здесь (MVC); в API отдельного `/register` нет.
+
+→ [JWT в Minimal API](../../../minimal-apis/delight-bistro/jwt-auth.md)
 
 ---
 
