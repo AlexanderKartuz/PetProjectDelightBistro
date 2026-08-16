@@ -7,7 +7,9 @@ namespace DelightBistroMinimalApi.ModelsDto
     {
         [Required]
         public string Login { get; set; } = string.Empty;
+
         [Required]
+        [MinLength(3)]
         public string Password { get; set; } = string.Empty;
     }
 }

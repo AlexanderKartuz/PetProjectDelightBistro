@@ -14,9 +14,9 @@ API выдаёт JWT после проверки логина/пароля че�
 
 ```text
 MVC Registration → UserData (WebNet23Online)
-POST /login      → ValidateCredetials + JwtTokenService → accessToken
+POST /login      → IEndpointValidator → ValidateCredetials + JwtTokenService → accessToken
 Authorization: Bearer … → JwtBearer → HttpContext.User
-DeleteDrink      → RequireRole(Admin)
+DELETE /DeleteDrink/{id} → RequireRole(Admin)
 ```
 
 ---
@@ -83,13 +83,13 @@ ProjectReference: `DelightBistroMvc.Data`.
 
 | Метод | Путь | Auth |
 |-------|------|------|
-| POST | `/login` | Анонимно. Body: `LoginRequest` (`login`, `password`). Успех: `LoginResponse` (`accessToken`, `expiresInMinutes`). Неверные данные: **401** |
+| POST | `/login` | Анонимно. Body: `LoginRequest` (`login`, `password`). Пустой/невалидный body: **400**. Успех: `LoginResponse` (`accessToken`, `expiresInMinutes`). Неверные учётные данные: **401** |
 | GET | `/GetDrinks`, `/GetDrink/{id}` | Анонимно |
-| POST | `/CreateDrink` | Сейчас без `RequireAuthorization` |
-| PUT | `/ChangeDrink/{id}` | Сейчас без `RequireAuthorization` |
-| DELETE | `/DeleteDrink` | `.RequireAuthorization` + `RequireRole(Admin)` → без токена **401**, не Admin **403** |
+| POST | `/CreateDrink` | Сейчас без `RequireAuthorization` (body `DrinkRequest`, **400** при ошибках валидации) |
+| PUT | `/ChangeDrink/{id}` | Сейчас без `RequireAuthorization` (route `id` + body `DrinkRequest`) |
+| DELETE | `/DeleteDrink/{id}` | Route `id`. `.RequireAuthorization` + `RequireRole(Admin)` → без токена **401**, не Admin **403** |
 
-DTO: `ModelsDto/LoginRequest.cs`, `ModelsDto/LoginResponse.cs`.
+Auth DTO: `ModelsDto/LoginRequest.cs`, `ModelsDto/LoginResponse.cs`. Напитки: `ModelsDto/EntityDto/DrinkRequest.cs`, `DrinkResponse.cs`.
 
 ---
 
@@ -98,10 +98,11 @@ DTO: `ModelsDto/LoginRequest.cs`, `ModelsDto/LoginResponse.cs`.
 1. Создать пользователя в MVC (`/Auth/Registration`). Для Delete — в БД `WebNet23Online` выставить `Role = 99` (`UserRole.Admin`).
 2. `https://localhost:7090/swagger` → `POST /login` с `{ "login": "...", "password": "..." }`.
 3. Скопировать `accessToken` → **Authorize** (Bearer).
-4. Вызвать защищённый метод (например `DeleteDrink`).
+4. Вызвать `DELETE /DeleteDrink/{id}` (id в path, без body).
 
 | Ответ | Смысл |
 |-------|--------|
+| Login **400** | Не прошла валидация `LoginRequest` |
 | Login **401** | Нет пользователя / неверный пароль / неверная строка `Users` |
 | Мутация **401** | Нет или невалидный JWT |
 | Мутация **403** | Токен валиден, роли недостаточно |
@@ -132,7 +133,7 @@ JWT после выдачи в SQL не хранится: на каждом за
 
 ## Источники в коде
 
-- `Program.cs` — pipeline, `/login`, `RequireAuthorization` на Delete
+- `Program.cs` — pipeline, `/login`, `DELETE /DeleteDrink/{id}` + `RequireAuthorization`
 - `Services/Auth/Options/JwtOptions.cs`
 - `Services/Auth/Interfaces/IJwtTokenService.cs`
 - `Services/Auth/JwtTokenService.cs`

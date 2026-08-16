@@ -6,7 +6,7 @@
 
 - **DelightBistroMvc** использует `WebContext` ([DelightBistroMvc.Data](libraries/delight-bistro-mvc-data/README.md)) — БД `WebNet23Online` (LocalDB). Пароли — `UserData.PasswordHash` (BCrypt). Вход на сайте — **cookie** ([Auth](delight-bistro-mvc/modules/platform/auth.md)).
 - **Minimal API** для каталога напитков использует **отдельный** `MiniDbContext` и БД `WebNet23Tea` (`ConnectionStrings:Drinks`). Для **JWT login** API дополнительно регистрирует `WebContext` на `ConnectionStrings:Users` (та же `WebNet23Online`) и ProjectReference на DelightBistroMvc.Data — без дублирования пользователей.
-- Аутентификация API — **JWT Bearer** (`POST /login`, `DeleteDrink` — роль Admin). Подробно: [jwt-auth.md](minimal-apis/delight-bistro/jwt-auth.md).
+- Аутентификация API — **JWT Bearer** (`POST /login`, `DELETE /DeleteDrink/{id}` — роль Admin). DTO/валидация на границе HTTP. Подробно: [jwt-auth.md](minimal-apis/delight-bistro/jwt-auth.md), [README Minimal API](minimal-apis/delight-bistro/README.md).
 - Модуль DelightBistro вызывает Minimal API из JavaScript (`wwwroot/js/delight-bistro/drink.js`) по HTTPS. Сервер MVC API через HttpClient не вызывает.
 - Отдельная витрина [react-delight-bistro-app](../../react-delight-bistro-app/) (вне `.sln`) ходит в тот же API (`https://localhost:7090`).
 - Кэш каталога напитков — `IDrinksCacheService` (Memory или Redis по `Caching:Provider`) плюс OutputCache; логирование API — [DelightBistro.Services](libraries/delight-bistro-services/README.md) (`ConnectionStrings:Logging`).

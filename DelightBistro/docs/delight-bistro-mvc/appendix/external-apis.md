@@ -20,7 +20,7 @@ HttpClient-сервисы, зарегистрированные в `Program.cs`,
 |-----|------|---------|--------|
 | DelightBistroMinimalApi | 7090 | `delight-bistro/drink.js` | DelightBistro |
 
-Вне solution: `react-delight-bistro-app/src/services/drinks-service.ts` — тот же порт и эндпоинты `GetDrinks` / `CreateDrink` / `ChangeDrink` / `DeleteDrink` / `GetDrink/{id}`.
+Вне solution: `react-delight-bistro-app/src/services/drinks-service.ts` — тот же порт и эндпоинты `GetDrinks` / `CreateDrink` / `ChangeDrink/{id}` / `DeleteDrink/{id}` / `GetDrink/{id}`. Body create/update — поля как у `DrinkRequest` (`name`, `price`, …).
 
 → Подробнее: [integration-map.md](../../integration-map.md), [minimal-apis/README.md](../../minimal-apis/README.md)
 
