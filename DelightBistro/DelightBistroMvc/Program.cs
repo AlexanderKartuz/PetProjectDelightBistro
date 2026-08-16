@@ -11,6 +11,8 @@ using DelightBistroMvc.Services.Apis;
 using DelightBistroMvc.Services.BackgroundServices;
 using DelightBistroMvc.Services.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Services.Chat;
+using DelightBistroMvc.Services.Chat.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,6 +54,10 @@ builder.Services.AddScoped<IFoodItemGenerator, FoodItemGenerator>();
 builder.Services.AddScoped<IMenuTypeGenerator, MenuTypeGenerator>();
 builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
 builder.Services.AddScoped<IDelightBistroMainIndexGenerator, DelightBistroMainIndexGenerator>();
+
+// Chat
+builder.Services.AddSingleton<ChatPresenceService>();
+builder.Services.AddScoped<INewChatService, NewChatService>();
 
 // DataSeed
 builder.Services.AddScoped<IDelightBistroSeedService, DelightBistroSeedService>();
@@ -112,8 +118,10 @@ app.UseAuthorization();
 
 app.UseMiddleware<MyLocalizationMiddleware>();
 
+// hubs
 app.MapHub<DeligtBistroHub>("/my-hub/delightbistro");
 app.MapHub<NotificationHub>("/my-hub/notification");
+app.MapHub<NewChatHub>("/my-hub/new-chat");
 
 app.MapControllerRoute(
     name: "default",

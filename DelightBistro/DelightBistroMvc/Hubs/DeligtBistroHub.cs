@@ -1,20 +1,21 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
-using DelightBistroMvc.Hubs.Interfaces;
+﻿using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Services;
+using Microsoft.AspNetCore.SignalR;
+using System.Collections.Concurrent;
+using System.Security.Claims;
 
 namespace DelightBistroMvc.Hubs
 {
     public class DeligtBistroHub : Hub<IDeligtBistroHub>
     {
         // Общие пользователи
-        private static Dictionary<string, string> _chatUsers = new();
+        private static ConcurrentDictionary<string, string> _chatUsers = new();
         // DTO
         public record ChatUser(string connectionId, string userName);
 
         public Task SendMessage(string senderName, string message)
         {
-            return Clients.All.ReceiveMessage(senderName, message);
+            return Clients.All.ReceiveMessage(GetUserName(), message);
         }
 
         public override async Task OnConnectedAsync()
@@ -37,7 +38,7 @@ namespace DelightBistroMvc.Hubs
             {
                 var userName = _chatUsers[connectionId];
                 await Clients.Others.UserDisconnected(connectionId, userName);
-                _chatUsers.Remove(connectionId);
+                _chatUsers.TryRemove(connectionId, out _);
             }
 
             await base.OnDisconnectedAsync(exception);
@@ -55,8 +56,8 @@ namespace DelightBistroMvc.Hubs
             await Clients.Caller.ConnectedUsers(chatUsers);
             await Clients.Others.UserConnected(connectionId, userName);
         }
-        
-        public string GetUserName()
+
+        private string GetUserName()
         {
             var userName = Context.User?
                 .FindFirstValue(AuthService.COOCKIE_NAME_KEY)

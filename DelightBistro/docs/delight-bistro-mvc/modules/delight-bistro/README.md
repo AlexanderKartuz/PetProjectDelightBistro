@@ -1,6 +1,6 @@
 # DelightBistro
 
-> Ресторан: меню по типам, конструктор блюд, заказы, статистика, real-time чат и каталог напитков.
+> Ресторан: меню по типам, конструктор блюд, заказы, статистика, два SignalR-чата (legacy и NewChat с БД) и каталог напитков.
 
 **Контроллер:** `DelightBistroController`  
 **Layout:** `_LayoutDelightBistro.cshtml`  
@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index асинхронно подгружаются факты о котах и фото собак (`GetMainIndexViewModelAsync`); при недоступности API меню всё равно отдаётся. Сид меню/ингредиентов/блюд — `IDelightBistroSeedService.EnsureSeeded()` при старте приложения (`Program.cs`), не на каждый Index.
+Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index асинхронно подгружаются факты о котах и фото собак (`GetMainIndexViewModelAsync`); при недоступности API меню всё равно отдаётся. Сид меню/ингредиентов/блюд — `IDelightBistroSeedService.EnsureSeed()` при старте приложения (`Program.cs`), не на каждый Index.
 
 ---
 
@@ -26,9 +26,10 @@
 | `/DelightBistro/DeleteFoodItem?id=` | POST | Redirect | Employee |
 | `/DelightBistro/GenerateTable` | GET | CSV export | — |
 | `/DelightBistro/Stats` | `Stats` | `Stats.cshtml` | — |
-| `/DelightBistro/Chat` | `Chat` | `Chat.cshtml` | — |
+| `/DelightBistro/Chat` | `Chat` | `Chat.cshtml` | — (анонимы ок) |
+| `/DelightBistro/NewChat` | `NewChat` | `NewChat.cshtml` | — (анонимы ок) |
 
-POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
+POST `FoodBuilderData` → SignalR `NewFoodWasCreated` (хаб `DeligtBistroHub`).
 
 ---
 
@@ -44,27 +45,52 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 ## SignalR
 
+Два независимых хаба. Подробная карта: [appendix/signalr-hubs.md](../../appendix/signalr-hubs.md).
+
+### Legacy: `DeligtBistroHub`
+
 | Параметр | Значение |
 |----------|----------|
-| Hub | `DeligtBistroHub` *(typo в коде)* |
+| Hub | `DeligtBistroHub` *(typo в имени класса)* |
 | Маршрут | `/my-hub/delightbistro` |
+| Presence | `static ConcurrentDictionary` в хабе |
+| История | нет (только live) |
 
-**Client → Server:** `SendMessage`, `JoinChat`, `GetUserName`
-
+**Client → Server:** `SendMessage` (имя берётся на сервере), `JoinChat`  
 **Server → Client:** `NewFoodWasCreated`, `ReceiveMessage`, `UserConnected`, `UserDisconnected`, `SetUserName`, `ConnectedUsers`
+
+Клиент: `delight-bistro-signalr.js` (layout) + `delight-bistro-hub.js` (Index) + `delight-bistro-chat-hub.js` (`Chat`).
+
+### Новый чат: `NewChatHub`
+
+| Параметр | Значение |
+|----------|----------|
+| Hub | `NewChatHub` : `Hub<INewChatHub>` |
+| Маршрут | `/my-hub/new-chat` |
+| Группа | `"new-chat"` |
+| Presence | `ChatPresenceService` (Singleton, `ConcurrentDictionary`) |
+| Сообщения | БД через `INewChatService` / `IChatMessageRepository` |
+| Auth на хабе | нет — анонимы с именем `Anonimus-{suffix}` или cookie `UserName` |
+
+**Client → Server:** `JoinChat()`, `SendMessage(string text)`  
+**Server → Client:** `SetUserName`, `ReceiveHistory`, `ReceiveMessage`, `ConnectedUsers`, `UserConnected`, `UserDisconnected`
+
+Клиент: `wwwroot/js/delight-bistro/new-chat-hub.js` (`NewChat.cshtml`). Своё соединение, не шарит `delightBistroSignalR`.
 
 ---
 
 ## Сервисы и зависимости
 
-| Сервис | Назначение |
-|--------|------------|
-| `IFoodItemGenerator` | CRUD блюд, CSV/stats, фасады `GetAllFoodItemWithPermission` / `GetCreateFoodItemViewModel` |
-| `IMenuTypeGenerator` | Типы меню; Index — `GetAllMenuViewModel` через Include `FoodItemIngredientDatas` |
-| `IIngredientGenerator` | Форма: полный справочник; карточки: `MapSelectedIngredients` (join-сущность) |
-| `IDelightBistroMainIndexGenerator` | `GetMainIndexViewModelAsync` (+ CatFact/Dog) |
-| `IDelightBistroSeedService` | Сид при старте: меню → ингредиенты → блюда |
-| `IFoodItemRepository`, `IMenuRepository`, `IIngredientsRepository`, `IOrderRepository` | Data access |
+| Сервис | Lifetime | Назначение |
+|--------|----------|------------|
+| `IFoodItemGenerator` | Scoped | CRUD блюд, CSV/stats |
+| `IMenuTypeGenerator` | Scoped | Типы меню |
+| `IIngredientGenerator` | Scoped | Ингредиенты для форм/карточек |
+| `IDelightBistroMainIndexGenerator` | Scoped | `GetMainIndexViewModelAsync` (+ CatFact/Dog) |
+| `IDelightBistroSeedService` | Scoped | Сид при старте |
+| `INewChatService` / `NewChatService` | Scoped | Имя отправителя, сохранение/история сообщений чата |
+| `ChatPresenceService` | **Singleton** | Онлайн в NewChat (`connectionId` → displayName) |
+| `IFoodItemRepository`, `IMenuRepository`, `IIngredientsRepository`, `IOrderRepository`, `IChatMessageRepository` | Scoped | Data access |
 
 **Внешние HTTP API:** `CatFactApi`, `DogApi` (Index)
 
@@ -77,16 +103,19 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 | `FoodItemData` | Блюда |
 | `MenuData` | Меню |
 | `IngredientData` | Ингредиенты |
-| `FoodItemIngredientData` | M:M join с quantity — источник правды для состава блюда |
+| `FoodItemIngredientData` | M:M join с quantity |
 | `OrderData` | Заказы, M:M с FoodItem, FK UserId |
+| `ChatMessageData` | Сообщения NewChat: `SenderName`, `Text`, `CreatedAtUtc`, nullable `UserId` → `UserData.ChatMessages` |
+
+DbSet в `WebContext`: `Messages` → `ChatMessageData`. Индекс по `CreatedAtUtc` (неуникальный).
 
 ---
 
 ## Frontend
 
-- **Layout:** `_LayoutDelightBistro.cshtml`
+- **Layout:** `_LayoutDelightBistro.cshtml` (CDN SignalR 6.0.1 + `delight-bistro-signalr.js`)
 - **CSS:** `wwwroot/css/delight-bistro/` — `style.css`, `chat.css`, `delight-bistro-hub.css`
-- **JS:** `wwwroot/js/delight-bistro/` — `delight-bistro-signalr.js`, `delight-bistro-hub.js`, `delight-bistro-chat-hub.js`, `buy-button.js`, `all-foods.js`, `drink.js`, `preview-food-item.js`
+- **JS:** `wwwroot/js/delight-bistro/` — `delight-bistro-signalr.js`, `delight-bistro-hub.js`, `delight-bistro-chat-hub.js`, `new-chat-hub.js`, `buy-button.js`, `all-foods.js`, `drink.js`, `preview-food-item.js`
 
 > `Index.cshtml` всё ещё подключает `/js/delight-bistro/tea.js`. Файл переименован в `drink.js` — скрипт в view нужно поправить.
 
@@ -123,7 +152,7 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 ## Связанные модули
 
-- [Platform / Auth](../platform/auth.md) — заказ требует авторизации
+- [Platform / Auth](../platform/auth.md) — заказ требует авторизации; чат доступен и анонимам
 - [Notification](../notification/README.md) — глобальные уведомления на layout сайта
 
 ---
@@ -132,7 +161,11 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated`.
 
 - `Controllers/DelightBistroController.cs`
 - `Controllers/ApiControllers/DelightBistroController.cs`
-- `Hubs/DeligtBistroHub.cs`
+- `Hubs/DeligtBistroHub.cs`, `Hubs/NewChatHub.cs`
+- `Hubs/Interfaces/IDeligtBistroHub.cs`, `Hubs/Interfaces/INewChatHub.cs`
 - `Services/DelightBistro/`
+- `Services/Chat/` — `NewChatService`, `ChatPresenceService`
+- `Models/DTOs/Chat/`
 - `Services/BackgroundServices/DelightBistroOrderBackgroundService.cs`
-- `Views/DelightBistro/`
+- `Views/DelightBistro/` — в т.ч. `Chat.cshtml`, `NewChat.cshtml`
+- `wwwroot/js/delight-bistro/new-chat-hub.js`
