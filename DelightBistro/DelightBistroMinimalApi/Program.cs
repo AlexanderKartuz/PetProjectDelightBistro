@@ -1,14 +1,17 @@
 using DelightBistro.Services.Logging;
 using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
+using DelightBistroMinimalApi.Mappings;
 using DelightBistroMinimalApi.Middlewares;
 using DelightBistroMinimalApi.Middlewares.RateLimit;
 using DelightBistroMinimalApi.ModelsDto;
+using DelightBistroMinimalApi.ModelsDto.EntityDto;
 using DelightBistroMinimalApi.Services.Auth;
 using DelightBistroMinimalApi.Services.Auth.Interfaces;
 using DelightBistroMinimalApi.Services.Auth.Options;
 using DelightBistroMinimalApi.Services.Cache;
 using DelightBistroMinimalApi.Services.Cache.Interfaces;
+using DelightBistroMinimalApi.Validation;
 using DelightBistroMvc.Data.Enums;
 using DelightBistroMvc.Data.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +26,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Drinks");
 builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionString));
 builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
-
+builder.Services.AddScoped<IDrinkMapper, DrinkMapper>();
+builder.Services.AddScoped<IEndpointValidator, EndpointValidator>();
 
 var cachingOptions = builder.Services.AddDelightBistroCaching(builder.Configuration);
 
@@ -80,9 +84,16 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapPost("login", (
     LoginRequest request,
     IUserDataService userDataService,
+    IEndpointValidator endpointValidator,
     IJwtTokenService jwtTokenService,
     IOptions<JwtOptions> options) =>
 {
+    var validationError = endpointValidator.Validate(request);
+    if (validationError != null)
+    {
+        return validationError;
+    }
+
     var user = userDataService.ValidateCredetials(request.Login, request.Password);
     if (user is null)
     {
@@ -98,16 +109,16 @@ app.MapPost("login", (
 });
 
 
-app.MapGet("GetDrinks", async (IDrinksCacheService drinksCache) =>
+app.MapGet("GetDrinks", async (IDrinksCacheService drinksCache, IDrinkMapper drinkMapper) =>
 {
     var drinks = await drinksCache.GetDrinksAsync();
-
-    return Results.Ok(drinks);
+    var drinksResponse = drinkMapper.ToDrinkListResponse(drinks);
+    return Results.Ok(drinksResponse);
 
 }).CacheOutput(o => o.Tag(CacheTags.DRINKS));
 
 app.MapGet("GetDrink/{id}",
-    async (IDrinksCacheService drinksCache, int id) =>
+    async (IDrinksCacheService drinksCache, int id, IDrinkMapper drinkMapper) =>
 {
     var drink = await drinksCache.GetDrinkAsync(id);
 
@@ -116,7 +127,9 @@ app.MapGet("GetDrink/{id}",
         return Results.NotFound();
     }
 
-    return Results.Ok(drink);
+    var drinkResponse = drinkMapper.ToDrinkResponse(drink);
+
+    return Results.Ok(drinkResponse);
 
 }).CacheOutput(o => o
 .Tag(CacheTags.DRINK)
@@ -125,22 +138,44 @@ app.MapGet("GetDrink/{id}",
 
 app.MapPost("CreateDrink",
     async (IDrinksCacheService drinksCache,
-    [FromBody] Drink drink,
-    IOutputCacheStore outputCache) =>
+    [FromBody] DrinkRequest drinkRequiest,
+    IOutputCacheStore outputCache,
+    IDrinkMapper drinkMapper,
+    IEndpointValidator endpointValidator) =>
 {
-    var task1 = drinksCache.CreateDrinkAsync(drink);
+    var validationError = endpointValidator.Validate(drinkRequiest);
+    if (validationError != null)
+    {
+        return validationError;
+    }
+
+    var drinkData = drinkMapper.ToEntity(drinkRequiest);
+
+    var task1 = drinksCache.CreateDrinkAsync(drinkData);
     var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
     await Task.WhenAll(task1, task2);
 
-    return Results.Ok(drink);
+    var drinkResponse = drinkMapper.ToDrinkResponse(drinkData);
+
+    return Results.Ok(drinkResponse);
 });
 
 app.MapPut("ChangeDrink/{id}",
    async (IDrinksCacheService drinksCache,
-   int id, [FromBody] Drink drink,
-   IOutputCacheStore outputCache) =>
+   int id, [FromBody] DrinkRequest drinkRequiest,
+   IOutputCacheStore outputCache,
+    IDrinkMapper drinkMapper,
+    IEndpointValidator endpointValidator) =>
 {
-    var changedDrink = await drinksCache.ChangeDrinkAsync(id, drink);
+    var validationError = endpointValidator.Validate(drinkRequiest);
+    if (validationError != null)
+    {
+        return validationError;
+    }
+
+    var drinkData = drinkMapper.ToEntity(drinkRequiest);
+
+    var changedDrink = await drinksCache.ChangeDrinkAsync(id, drinkData);
 
     if (changedDrink == null)
     {
@@ -153,13 +188,17 @@ app.MapPut("ChangeDrink/{id}",
     var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
     await Task.WhenAll(task1, task2);
 
-    return Results.Ok(changedDrink);
+    var drinkResponse = drinkMapper.ToDrinkResponse(changedDrink);
+
+
+    return Results.Ok(drinkResponse);
 });
 
-app.MapDelete("DeleteDrink",
-    async (IDrinksCacheService drinksCache,
-    [FromBody] int id,
-    IOutputCacheStore outputCache) =>
+app.MapDelete("DeleteDrink/{id}",
+    async (
+        int id,
+        IDrinksCacheService drinksCache,
+        IOutputCacheStore outputCache) =>
 {
     var canDelete = await drinksCache.DeleteDrinkAsync(id);
     if (!canDelete)
@@ -171,7 +210,6 @@ app.MapDelete("DeleteDrink",
 
     var task1 = outputCache.EvictByTagAsync(cacheKey, default).AsTask();
     var task2 = outputCache.EvictByTagAsync(CacheTags.DRINKS, default).AsTask();
-    await Task.WhenAll(task1, task2);
     await Task.WhenAll(task1, task2);
     return Results.NoContent();
 })
