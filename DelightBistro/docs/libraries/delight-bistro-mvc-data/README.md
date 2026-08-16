@@ -31,19 +31,21 @@
 | Interface / Class | `IIngredientsRepository` / `IngredientsRepository` | Ингредиенты |
 | Interface / Class | `IOrderRepository` / `OrderRepository` | Заказы; `DeleteExpiredOrders` (`ExecuteDelete`) |
 | Interface / Class | `INotificationRepository` / `NotificationRepository` | Уведомления; индекс `(IsActive, TimeToPublish)` |
+| Interface / Class | `IChatMessageRepository` / `ChatMessageRepository` | Сообщения NewChat; `GetRecent(count)` |
 | Interface / Class | `IPasswordHasher` / `BCryptPasswordHasher` | BCrypt, work factor 11 |
 | Enum | `UserRole` | `User`, `Employee`, `Moderator`, `Admin` |
 
 **DbSet в `WebContext`:**
 
-- `Users` → `UserData` (`PasswordHash`, роль, язык, аватар; + `UserProfileData`)
+- `Users` → `UserData` (`PasswordHash`, роль, язык, аватар; + `UserProfileData`; коллекция `ChatMessages`)
 - `FoodItems` → `FoodItemData`
 - `Ingredients` → `IngredientData`
 - `Menus` → `MenuData`
 - `Orders` → `OrderData`
 - `Notifications` → `NotificationData`
+- `Messages` → `ChatMessageData` (`SenderName`, `Text`, `CreatedAtUtc`, nullable `UserId`)
 - Join: `FoodItemIngredientData` (M:M блюдо ↔ ингредиент с quantity; `HasPrecision` на quantity)
-- Индексы: `Orders.CreatedDateTime`; `Notifications (IsActive, TimeToPublish)`
+- Индексы: `Orders.CreatedDateTime`; `Notifications (IsActive, TimeToPublish)`; `ChatMessageData.CreatedAtUtc` (неуникальный)
 
 ---
 

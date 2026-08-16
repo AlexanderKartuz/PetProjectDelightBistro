@@ -56,7 +56,14 @@
 
 Real-time функции реализованы внутри MVC, не через Minimal API.
 
-→ [delight-bistro-mvc/appendix/signalr-hubs.md](delight-bistro-mvc/appendix/signalr-hubs.md)
+| Hub | Маршрут | Назначение |
+|-----|---------|------------|
+| `DeligtBistroHub` | `/my-hub/delightbistro` | Legacy-чат + тост «новое блюдо» |
+| `NewChatHub` | `/my-hub/new-chat` | Новый чат с историей в БД (`ChatMessageData`) |
+| `NotificationHub` | `/my-hub/notification` | Site-wide уведомления |
+
+→ [delight-bistro-mvc/appendix/signalr-hubs.md](delight-bistro-mvc/appendix/signalr-hubs.md)  
+→ Модуль: [modules/delight-bistro/README.md](delight-bistro-mvc/modules/delight-bistro/README.md)
 
 ---
 
