@@ -12,6 +12,8 @@ namespace DelightBistroMvc.Data
         public DbSet<MenuData> Menus { get; set; }
         public DbSet<OrderData> Orders { get; set; }
         public DbSet<NotificationData> Notifications { get; set; }
+        public DbSet<ChatMessageData> Messages { get; set; }
+
 
         public WebContext(DbContextOptions<WebContext> options) : base(options) { }
 
@@ -103,6 +105,24 @@ namespace DelightBistroMvc.Data
             modelBuilder.Entity<OrderData>()
                 .HasMany(x => x.FoodItems)
                 .WithMany(x => x.Orders);
+
+            //Chat
+            modelBuilder.Entity<ChatMessageData>()
+                .HasOne(m => m.User)
+                .WithMany(u => u.ChatMessages)
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ChatMessageData>()
+                .HasIndex(m => m.CreatedAtUtc);
+
+            modelBuilder.Entity<ChatMessageData>()
+                .Property(m => m.SenderName)
+                .HasMaxLength(50);
+
+            modelBuilder.Entity<ChatMessageData>()
+                .Property(m => m.Text)
+                .HasMaxLength(500);
 
             base.OnModelCreating(modelBuilder);
         }

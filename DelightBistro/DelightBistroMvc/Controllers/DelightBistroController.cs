@@ -163,5 +163,9 @@ namespace DelightBistroMvc.Controllers
             return View();
         }
 
+        public IActionResult NewChat()
+        {
+            return View();
+        }
     }
 }

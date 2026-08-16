@@ -26,5 +26,7 @@ namespace DelightBistroMvc.Data.Models
 
         public virtual List<NotificationData> Notifications { get; set; }
 
+        public virtual List<ChatMessageData> ChatMessages { get; set; } = new();
+
     }
 }
