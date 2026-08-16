@@ -1,6 +1,6 @@
 # DelightBistroMinimalApi
 
-> API каталога напитков с кэшированием (Memory или Redis), OutputCache, rate limiting, Serilog и JWT Bearer (login по пользователям MVC-БД).
+> API каталога напитков с кэшированием (Memory или Redis), OutputCache, rate limiting, Serilog, JWT Bearer и DTO/валидацией на границе HTTP.
 
 **Проект:** `DelightBistroMinimalApi/DelightBistroMinimalApi.csproj`  
 **Порт (HTTPS):** 7090  
@@ -14,7 +14,7 @@
 
 Отдельный Minimal API для каталога напитков. Вынесен из DelightBistroMvc, чтобы кэш, Redis, rate limiting и Serilog жили на независимой БД `WebNet23Tea`. Потребители — JS модуля DelightBistro (`drink.js`) и `react-delight-bistro-app`.
 
-CRUD всегда идёт через `IDrinksCacheService`. Провайдер выбирается конфигом `Caching:Provider` (`Memory` | `Redis`) в `AddDelightBistroCaching` — отдельных `*Redis` URL нет.
+CRUD всегда идёт через `IDrinksCacheService` (внутри — entity `Drink`). На HTTP-границе — DTO (`DrinkRequest` / `DrinkResponse`), ручной маппинг `IDrinkMapper` и DataAnnotations через `IEndpointValidator` (невалидный body → **400** ValidationProblem). Провайдер кэша — `Caching:Provider` (`Memory` | `Redis`) в `AddDelightBistroCaching`.
 
 Аутентификация API — JWT Bearer (`AddDelightBistroJwtAuth`). Пользователи и пароли — из `WebNet23Online` через ProjectReference на DelightBistroMvc.Data; регистрация только в MVC.
 
@@ -37,18 +37,31 @@ CRUD всегда идёт через `IDrinksCacheService`. Провайдер 
 | Метод | Путь | Описание | Auth | Request | Response |
 |-------|------|----------|------|---------|----------|
 | GET | `/` | Redirect на Swagger | — | — | 302 |
-| POST | `/login` | Выдача JWT | анонимно | `LoginRequest` | `LoginResponse` / 401 |
-| GET | `/GetDrinks` | Список (IDrinksCacheService + OutputCache, тег `drinks`) | анонимно | — | `Drink[]` |
-| GET | `/GetDrink/{id}` | По id (vary by route, OutputCache 1 мин, тег `drink`) | анонимно | route `id` | `Drink` / 404 |
-| POST | `/CreateDrink` | Создать, сброс тега `drinks` | пока открыт | body `Drink` | `Drink` |
-| PUT | `/ChangeDrink/{id}` | Изменить | пока открыт | route `id`, body `Drink` | `Drink` / 404 |
-| DELETE | `/DeleteDrink` | Удалить | **JWT + роль Admin** | body `int id` | 204 / 404 / 401 / 403 |
+| POST | `/login` | Выдача JWT | анонимно | `LoginRequest` | `LoginResponse` / **400** / 401 |
+| GET | `/GetDrinks` | Список (кэш + OutputCache, тег `drinks`) | анонимно | — | `DrinkResponse[]` |
+| GET | `/GetDrink/{id}` | По id (vary by route, OutputCache 1 мин, тег `drink`) | анонимно | route `id` | `DrinkResponse` / 404 |
+| POST | `/CreateDrink` | Создать, сброс тега `drinks` | пока открыт | body `DrinkRequest` | `DrinkResponse` / **400** |
+| PUT | `/ChangeDrink/{id}` | Изменить | пока открыт | route `id`, body `DrinkRequest` | `DrinkResponse` / **400** / 404 |
+| DELETE | `/DeleteDrink/{id}` | Удалить | **JWT + роль Admin** | route `id` | 204 / 404 / 401 / 403 |
 | GET | `/Exception` | Тест exception middleware | — | — | error |
 | GET | `/redis-test` | Проверка Redis | — | — | string |
 
 `/redis-test` регистрируется **только** при `Caching:Provider = Redis`.
 
+**Контракт id:** у `GetDrink` / `ChangeDrink` / `DeleteDrink` идентификатор только в **route**. Create — без id (выдаёт БД). Delete — без body.
+
+**Валидация:** `login`, `CreateDrink`, `ChangeDrink` вызывают `IEndpointValidator` (DataAnnotations на DTO). Ошибки → **400** `ValidationProblem` (`errors` по полям). Неверный логин/пароль после успешной валидации → **401**.
+
 Подробности JWT, claims и проверки в Swagger: [jwt-auth.md](jwt-auth.md).
+
+### DTO напитков
+
+| Класс | Файл | Назначение |
+|-------|------|------------|
+| `DrinkRequest` | `ModelsDto/EntityDto/DrinkRequest.cs` | Body Create/Change: `Name` (Required, MaxLength 50), `Price` (Range 0.1–500), `Description?`, `ImgUrl?` — **без `Id`** |
+| `DrinkResponse` | `ModelsDto/EntityDto/DrinkResponse.cs` | Ответ GET/POST/PUT: `Id`, `Name`, `Price`, `Description?`, `ImgUrl?` |
+
+Маппинг: `IDrinkMapper` / `DrinkMapper` (`Mappings/`). Entity `Drink` наружу из эндпоинтов не отдаётся.
 
 ---
 
@@ -91,7 +104,7 @@ CRUD всегда идёт через `IDrinksCacheService`. Провайдер 
 
 ### OutputCache
 
-Default expiration 60 сек. GET-список — тег `CacheTags.DRINKS` (`drinks`); GET по id — тег `drink`, `SetVaryByRouteValue("id")`, expire 1 мин. Create сбрасывает тег `drinks`. Change/Delete сейчас вызывают `EvictByTagAsync` со строкой-ключом, а не с тегом `CacheTags.DRINK`.
+Default expiration 60 сек. GET-список — тег `CacheTags.DRINKS` (`drinks`); GET по id — тег `drink`, `SetVaryByRouteValue("id")`, expire 1 мин. Create сбрасывает тег `drinks`. Change/Delete сейчас вызывают `EvictByTagAsync` со строкой-ключом, а не с тегом `CacheTags.DRINK` — кэш `GetDrink/{id}` после мутации может остаться до TTL.
 
 ---
 
@@ -100,7 +113,7 @@ Default expiration 60 сек. GET-список — тег `CacheTags.DRINKS` (`d
 | Потребитель | Файл | URL API |
 |-------------|------|---------|
 | DelightBistro MVC | `wwwroot/js/delight-bistro/drink.js` | `https://localhost:7090` (`GetDrinks`, `CreateDrink`) |
-| react-delight-bistro-app | `src/services/drinks-service.ts` | `https://localhost:7090` (полный CRUD) |
+| react-delight-bistro-app | `src/services/drinks-service.ts` | `https://localhost:7090` (полный CRUD; Delete — `DELETE /DeleteDrink/{id}`) |
 
 → [DelightBistro module](../../delight-bistro-mvc/modules/delight-bistro/README.md)
 
@@ -118,13 +131,16 @@ dotnet ef migrations add {MigrationName} --project DelightBistro/DelightBistroMi
 
 ## Источники в коде
 
-- `Program.cs`
+- `Program.cs` — эндпоинты, DI `IDrinkMapper` / `IEndpointValidator`
 - `Properties/launchSettings.json`
 - `appsettings.json` / `appsettings.Development.json` — `Drinks`, `Users`, `Jwt`, `Caching`
 - `DbStuff/` — `MiniDbContext`, `Drink`, `SeriLogEntry`, `DrinkRepository`
 - `Services/Cache/` — `CachingServiceCollectionExtensions`, `IDrinksCacheService`, Memory/Redis реализации
 - `Services/Auth/` — JWT options, `JwtTokenService`, `AddDelightBistroJwtAuth` / Swagger JWT
 - `ModelsDto/` — `LoginRequest`, `LoginResponse`, `ApiErrorResponse`
+- `ModelsDto/EntityDto/` — `DrinkRequest`, `DrinkResponse`
+- `Mappings/` — `IDrinkMapper`, `DrinkMapper`
+- `Validation/` — `IEndpointValidator`, `EndpointValidator`
 - `Constans/CacheKeys.cs`, `Constans/CacheTags.cs`
 - `Middlewares/`
 - ProjectReference → `DelightBistro.Sevices/DelightBistro.Services.csproj`
