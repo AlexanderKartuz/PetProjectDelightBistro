@@ -3,6 +3,7 @@ import type { Drink } from '../types/drinks.js';
 import { deleteDrink, getDrinks } from '../services/drinks-service.js';
 import { DrinkCard } from './drink-card.js';
 import { CreteDrinkForm } from './create-drinks-form.js';
+import { LoginForm } from './login-form.js';
 import type { ApiError } from '../types/errors.js';
 import { ErrorList } from './error-list.js';
 
@@ -70,6 +71,7 @@ export const DrinksList = function () {
   return (
     <section className="drink-list">
       <h2 className="drink-list-title">List of Drinks</h2>
+      <LoginForm />
       <ErrorList errors={errors} onRemove={removeError} />
       <div className="drink-list-grid">
         {drinks.map((drink) => (

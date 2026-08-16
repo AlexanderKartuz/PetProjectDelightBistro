@@ -5,6 +5,8 @@ export interface Drink {
   description?: string | null;
   imgUrl?: string | null;
 }
+
+/** Body Create/Change — как DrinkRequest в Minimal API (без id). */
 export interface CreateDrinkPayload {
   name: string;
   price: number;
