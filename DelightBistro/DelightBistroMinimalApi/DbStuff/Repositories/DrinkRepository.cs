@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DelightBistroMinimalApi.DbStuff.Models;
+using DelightBistroMinimalApi.DbStuff.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace DelightBistroMinimalApi.DbStuff
+namespace DelightBistroMinimalApi.DbStuff.Repositories
 {
     public class DrinkRepository : IDrinkRepository
     {

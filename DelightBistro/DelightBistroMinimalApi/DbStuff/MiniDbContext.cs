@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DelightBistroMinimalApi.DbStuff.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DelightBistroMinimalApi.DbStuff
 {
