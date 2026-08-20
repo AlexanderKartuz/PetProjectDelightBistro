@@ -15,23 +15,36 @@ namespace DelightBistro.Services.Logging
         {
             _logger = logger;
             _configuration = configuration;
-            _applicationName = configuration.GetSection("ApplicationName").Value;
+            _applicationName = configuration.GetSection("ApplicationName").Value ?? "Unknown";
         }
 
-        internal List<IDisposable> PushProperties(
+        //internal List<IDisposable> PushProperties(
+        //    string memberName,
+        //    string sourceFilePath,
+        //    int sourceLineNumber)
+        //{
+        //    var list = new List<IDisposable>
+        //    {
+        //        LogContext.PushProperty("MemberName", memberName),
+        //        LogContext.PushProperty("FilePath", sourceFilePath),
+        //        LogContext.PushProperty("LineNumber", sourceLineNumber),
+        //        LogContext.PushProperty("ApplicationName", _applicationName)
+        //    };
+
+        //    return list;
+        //}
+
+        private void Write(
+            Action<ILogger<T>> write,
             string memberName,
             string sourceFilePath,
             int sourceLineNumber)
         {
-            var list = new List<IDisposable>
-            {
-                LogContext.PushProperty("MemberName", memberName),
-                LogContext.PushProperty("FilePath", sourceFilePath),
-                LogContext.PushProperty("LineNumber", sourceLineNumber),
-                LogContext.PushProperty("ApplicationName", _applicationName)
-            };
-
-            return list;
+            using var memberNameProperty = LogContext.PushProperty("MemberName", memberName);
+            using var filePathProperty = LogContext.PushProperty("FilePath", sourceFilePath);
+            using var lineNumberProperty = LogContext.PushProperty("LineNumber", sourceLineNumber);
+            using var applicationNameProperty = LogContext.PushProperty("ApplicationName", _applicationName);
+            write(_logger);
         }
 
         public void LogAppCritical(Exception exception, string message,
@@ -39,13 +52,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogCritical(exception, message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogCritical(exception, message),
+                memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppCritical(string message,
@@ -53,13 +61,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogCritical(message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogCritical(message),
+                memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppDebug(string message,
@@ -67,13 +70,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogDebug(message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogDebug(message),
+                    memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppError(Exception exception, string message,
@@ -81,13 +79,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogError(exception, message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogError(exception, message),
+                    memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppError(string message,
@@ -95,13 +88,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogError(message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogError(message),
+                     memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppInformation(string message,
@@ -109,13 +97,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogInformation(message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogInformation(message),
+                     memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppTrace(string message,
@@ -123,13 +106,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogTrace(message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogTrace(message),
+                     memberName, sourceFilePath, sourceLineNumber);
         }
 
         public void LogAppWarning(string message,
@@ -137,13 +115,8 @@ namespace DelightBistro.Services.Logging
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            var list = PushProperties(memberName, sourceFilePath, sourceLineNumber);
-            _logger.LogWarning(message);
-
-            foreach (var item in list)
-            {
-                item.Dispose();
-            }
+            Write(logger => _logger.LogWarning(message),
+                    memberName, sourceFilePath, sourceLineNumber);
         }
     }
 }
