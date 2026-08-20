@@ -55,6 +55,14 @@ namespace DelightBistro.Services.Logging
             Write(logger => _logger.LogCritical(exception, message),
                 memberName, sourceFilePath, sourceLineNumber);
         }
+        public void LogAppCritical(Exception exception, string message, object?[] args,
+           [CallerMemberName] string memberName = "",
+           [CallerFilePath] string sourceFilePath = "",
+           [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogCritical(exception, message, args),
+                memberName, sourceFilePath, sourceLineNumber);
+        }
 
         public void LogAppCritical(string message,
             [CallerMemberName] string memberName = "",
@@ -62,6 +70,14 @@ namespace DelightBistro.Services.Logging
             [CallerLineNumber] int sourceLineNumber = 0)
         {
             Write(logger => _logger.LogCritical(message),
+                memberName, sourceFilePath, sourceLineNumber);
+        }
+        public void LogAppCritical(string message, object?[] args,
+          [CallerMemberName] string memberName = "",
+          [CallerFilePath] string sourceFilePath = "",
+          [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogCritical(message, args),
                 memberName, sourceFilePath, sourceLineNumber);
         }
 
@@ -73,6 +89,14 @@ namespace DelightBistro.Services.Logging
             Write(logger => _logger.LogDebug(message),
                     memberName, sourceFilePath, sourceLineNumber);
         }
+        public void LogAppDebug(string message, object?[] args,
+        [CallerMemberName] string memberName = "",
+        [CallerFilePath] string sourceFilePath = "",
+        [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogDebug(message, args),
+                    memberName, sourceFilePath, sourceLineNumber);
+        }
 
         public void LogAppError(Exception exception, string message,
             [CallerMemberName] string memberName = "",
@@ -80,6 +104,14 @@ namespace DelightBistro.Services.Logging
             [CallerLineNumber] int sourceLineNumber = 0)
         {
             Write(logger => _logger.LogError(exception, message),
+                    memberName, sourceFilePath, sourceLineNumber);
+        }
+        public void LogAppError(Exception exception, string message, object?[] args,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string sourceFilePath = "",
+            [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogError(exception, message, args),
                     memberName, sourceFilePath, sourceLineNumber);
         }
 
@@ -91,6 +123,14 @@ namespace DelightBistro.Services.Logging
             Write(logger => _logger.LogError(message),
                      memberName, sourceFilePath, sourceLineNumber);
         }
+        public void LogAppError(string message, object?[] args,
+         [CallerMemberName] string memberName = "",
+         [CallerFilePath] string sourceFilePath = "",
+         [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogError(message, args),
+                     memberName, sourceFilePath, sourceLineNumber);
+        }
 
         public void LogAppInformation(string message,
             [CallerMemberName] string memberName = "",
@@ -100,13 +140,30 @@ namespace DelightBistro.Services.Logging
             Write(logger => _logger.LogInformation(message),
                      memberName, sourceFilePath, sourceLineNumber);
         }
+        public void LogAppInformation(string message, object?[] args,
+         [CallerMemberName] string memberName = "",
+         [CallerFilePath] string sourceFilePath = "",
+         [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogInformation(message, args),
+                     memberName, sourceFilePath, sourceLineNumber);
+        }
+
 
         public void LogAppTrace(string message,
+         [CallerMemberName] string memberName = "",
+         [CallerFilePath] string sourceFilePath = "",
+         [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogTrace(message),
+                     memberName, sourceFilePath, sourceLineNumber);
+        }
+        public void LogAppTrace(string message, object?[] args,
             [CallerMemberName] string memberName = "",
             [CallerFilePath] string sourceFilePath = "",
             [CallerLineNumber] int sourceLineNumber = 0)
         {
-            Write(logger => _logger.LogTrace(message),
+            Write(logger => _logger.LogTrace(message, args),
                      memberName, sourceFilePath, sourceLineNumber);
         }
 
@@ -116,6 +173,14 @@ namespace DelightBistro.Services.Logging
             [CallerLineNumber] int sourceLineNumber = 0)
         {
             Write(logger => _logger.LogWarning(message),
+                    memberName, sourceFilePath, sourceLineNumber);
+        }
+        public void LogAppWarning(string message, object?[] args,
+         [CallerMemberName] string memberName = "",
+         [CallerFilePath] string sourceFilePath = "",
+         [CallerLineNumber] int sourceLineNumber = 0)
+        {
+            Write(logger => _logger.LogWarning(message, args),
                     memberName, sourceFilePath, sourceLineNumber);
         }
     }
