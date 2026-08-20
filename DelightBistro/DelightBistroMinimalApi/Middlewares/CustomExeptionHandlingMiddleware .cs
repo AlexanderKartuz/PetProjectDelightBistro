@@ -6,14 +6,11 @@ namespace DelightBistroMinimalApi.Middlewares
     public class CustomExeptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        //private readonly ILogger<CustomExeptionHandlingMiddleware> _logger;
 
         public CustomExeptionHandlingMiddleware(
-            RequestDelegate next
-            /*ILogger<CustomExeptionHandlingMiddleware> logger*/)
+            RequestDelegate next)
         {
             _next = next;
-            //_logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context,
