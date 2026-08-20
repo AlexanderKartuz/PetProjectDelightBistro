@@ -18,27 +18,11 @@ namespace DelightBistro.Services.Logging
             _applicationName = configuration.GetSection("ApplicationName").Value ?? "Unknown";
         }
 
-        //internal List<IDisposable> PushProperties(
-        //    string memberName,
-        //    string sourceFilePath,
-        //    int sourceLineNumber)
-        //{
-        //    var list = new List<IDisposable>
-        //    {
-        //        LogContext.PushProperty("MemberName", memberName),
-        //        LogContext.PushProperty("FilePath", sourceFilePath),
-        //        LogContext.PushProperty("LineNumber", sourceLineNumber),
-        //        LogContext.PushProperty("ApplicationName", _applicationName)
-        //    };
-
-        //    return list;
-        //}
-
         private void Write(
-            Action<ILogger<T>> write,
-            string memberName,
-            string sourceFilePath,
-            int sourceLineNumber)
+          Action<ILogger<T>> write,
+          string memberName,
+          string sourceFilePath,
+          int sourceLineNumber)
         {
             using var memberNameProperty = LogContext.PushProperty("MemberName", memberName);
             using var filePathProperty = LogContext.PushProperty("FilePath", sourceFilePath);
