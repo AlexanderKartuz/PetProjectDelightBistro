@@ -89,7 +89,36 @@ CRUD всегда идёт через `IDrinksCacheService` (внутри — en
 - **Кэш / Redis:** см. ниже
 - **Rate limiting:** `AddCustomRateLimiter` — chained sliding window (IP + global), 429. Лимиты: `GlobalRateLimitingOptions`, `IpRateLimitingOptions`
 - **Прочее:** `UseCustomExeptionHandling`, `UseResponseHeader` (`Cache-Control: public, max-age=10` на успешные GET), `UseCustomRequestLogging`
-- **Serilog:** `builder.ConfigureSeriLog()` + DI `IAppLogging<>` ([DelightBistro.Services](../../libraries/delight-bistro-services/README.md)); SQL — `ConnectionStrings:Logging`, таблица `Logging.SeriLogs`
+- **Serilog / IAppLogging:** см. ниже
+
+### Логирование (Serilog + IAppLogging)
+
+Библиотека: [DelightBistro.Services](../../libraries/delight-bistro-services/README.md).
+
+Регистрация в `Program.cs`:
+
+```csharp
+builder.Services.AddScoped(typeof(IAppLogging<>), typeof(AppLogging<>));
+builder.ConfigureSeriLog();
+```
+
+| Sink | Default min level | Куда |
+|------|-------------------|------|
+| Console | Information | stdout |
+| File | Warning | `Logging:File:path` или `logs/delight-bistro-.txt` (rolling day) |
+| MSSqlServer | Warning | `ConnectionStrings:Logging` → `Logging.SeriLogs` |
+
+`ApplicationName` — из `appsettings` (`DelightBistro.Api` / `… - Dev`).
+
+Middleware пишут через `IAppLogging<T>` (method injection в `InvokeAsync`, не в конструктор — сервис Scoped):
+
+| Middleware | Уровень | Что логирует |
+|------------|---------|--------------|
+| `CustomExeptionHandlingMiddleware` | Error / Critical | необработанные исключения; тест — `GET /Exception` |
+| `CustomRequestLoggingMiddleware` | Information | старт/конец запроса, длительность, status |
+| `ResponseHeaderMiddleware` | Information | `RequestId` + status после pipeline |
+
+Information по умолчанию виден в Console; Warning+ — в File и SQL (с `MemberName` / `FilePath` / `LineNumber` / `ApplicationName`).
 
 ### Кэш приложения (`IDrinksCacheService`)
 
@@ -133,7 +162,7 @@ dotnet ef migrations add {MigrationName} --project DelightBistro/DelightBistroMi
 
 - `Program.cs` — эндпоинты, DI `IDrinkMapper` / `IEndpointValidator`
 - `Properties/launchSettings.json`
-- `appsettings.json` / `appsettings.Development.json` — `Drinks`, `Users`, `Jwt`, `Caching`
+- `appsettings.json` / `appsettings.Development.json` — `Drinks`, `Users`, `Jwt`, `Caching`, `Logging`, `ApplicationName`
 - `DbStuff/` — `MiniDbContext`, `Drink`, `SeriLogEntry`, `DrinkRepository`
 - `Services/Cache/` — `CachingServiceCollectionExtensions`, `IDrinksCacheService`, Memory/Redis реализации
 - `Services/Auth/` — JWT options, `JwtTokenService`, `AddDelightBistroJwtAuth` / Swagger JWT
@@ -142,6 +171,6 @@ dotnet ef migrations add {MigrationName} --project DelightBistro/DelightBistroMi
 - `Mappings/` — `IDrinkMapper`, `DrinkMapper`
 - `Validation/` — `IEndpointValidator`, `EndpointValidator`
 - `Constans/CacheKeys.cs`, `Constans/CacheTags.cs`
-- `Middlewares/`
+- `Middlewares/` — `CustomExeptionHandlingMiddleware`, `CustomRequestLoggingMiddleware`, `ResponseHeaderMiddleware` (`IAppLogging`)
 - ProjectReference → `DelightBistro.Sevices/DelightBistro.Services.csproj`
 - ProjectReference → `DelightBistroMvc.Data/DelightBistroMvc.Data.csproj`

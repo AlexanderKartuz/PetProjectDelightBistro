@@ -1,17 +1,19 @@
-﻿namespace DelightBistroMinimalApi.Middlewares
+﻿using DelightBistro.Services.Logging;
+
+namespace DelightBistroMinimalApi.Middlewares
 {
     public class ResponseHeaderMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ResponseHeaderMiddleware> _logger;
 
-        public ResponseHeaderMiddleware(RequestDelegate next, ILogger<ResponseHeaderMiddleware> logger)
+        public ResponseHeaderMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(
+            HttpContext context,
+            IAppLogging<ResponseHeaderMiddleware> appLogging)
         {
             var requestId = Guid.NewGuid().ToString("N")[..12];
             context.Items["RequestId"] = requestId;
@@ -31,7 +33,9 @@
 
             await _next(context);
 
-            _logger.LogInformation("RequestId={RequestId} | Status={Status}", requestId, context.Response.StatusCode);
+            appLogging.LogAppInformation(
+                "RequestId={RequestId} | Status={Status}",
+                new object?[] { requestId, context.Response.StatusCode });
         }
     }
 

@@ -1,21 +1,20 @@
-﻿using DelightBistroMinimalApi.ModelsDto;
+﻿using DelightBistro.Services.Logging;
+using DelightBistroMinimalApi.ModelsDto;
 
 namespace DelightBistroMinimalApi.Middlewares
 {
     public class CustomExeptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<CustomExeptionHandlingMiddleware> _logger;
 
         public CustomExeptionHandlingMiddleware(
-            RequestDelegate next,
-            ILogger<CustomExeptionHandlingMiddleware> logger)
+            RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context,
+            IAppLogging<CustomExeptionHandlingMiddleware> appLogging)
         {
             try
             {
@@ -25,14 +24,18 @@ namespace DelightBistroMinimalApi.Middlewares
             {
                 if (context.Response.HasStarted)
                 {
-                    _logger.LogError(ex, "Cannot write error response, already started");
+                    appLogging.LogAppCritical(ex, "Cannot write error response, already started");
                     throw;
                 }
 
-                _logger.LogError(ex, "Exception in {Method} {Path}:{Message} ",
+                appLogging.LogAppError(ex, "Exception in {Method} {Path}:{Message} ",
+                    new object?[]
+                    {
                     context.Request.Method,
                     context.Request.Path,
-                    ex.Message);
+                    ex.Message
+                    });
+
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
                 var response = new ApiErrorResponse("Внутренняя ошибка сервера", 500, ex.Message);

@@ -10,10 +10,11 @@ namespace DelightBistro.Services.Logging
 {
     public static class LoggingConfiguration
     {
-        private static readonly string OutPutTemplate =
-            @"[{Timestamp: yy-MMM-dd HH:mm:ss} {Level} {ApplicationName}:
-            {SourceContext} {NewLine} Message: {Message} {NewLine} in method
-            {MemberName} at {FilePath} : {LineNumber} {NewLine} {Exception} {NewLine}";
+        private static readonly string OutputTemplate =
+            "[{Timestamp:yy-MMM-dd HH:mm:ss} {Level}] {ApplicationName} {SourceContext}{NewLine}" +
+            "Message: {Message}{NewLine}" +
+            "in method {MemberName} at {FilePath}:{LineNumber}{NewLine}" +
+            "{Exception}{NewLine}";
 
         private static readonly ColumnOptions ColumnOptions = new ColumnOptions
         {
@@ -38,6 +39,7 @@ namespace DelightBistro.Services.Logging
                 var connectionString = config.GetConnectionString("Logging");
                 var tableName = config["Logging:MSSqlServer:tableName"] ?? "SeriLogs";
                 var schema = config["Logging:MSSqlServer:schema"] ?? "Logging";
+                var filePath = config["Logging:File:path"] ?? "logs/delight-bistro-.txt";
 
                 // Уровень для каждого sink читаем отдельно из appsettings
                 var consoleLevel = ParseLogLevel(
@@ -64,10 +66,10 @@ namespace DelightBistro.Services.Logging
                     .Enrich.FromLogContext()
                     .Enrich.WithMachineName()
                     .WriteTo.File(
-                        path: "ErrorLog.txt",
+                        path: filePath,
                         rollingInterval: RollingInterval.Day,
                         restrictedToMinimumLevel: fileLevel,
-                        outputTemplate: OutPutTemplate)
+                        outputTemplate: OutputTemplate)
                     .WriteTo.Console(restrictedToMinimumLevel: consoleLevel)
                     .WriteTo.MSSqlServer(connectionString: connectionString,
                         sqlOptions,
