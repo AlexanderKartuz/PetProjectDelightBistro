@@ -16,9 +16,9 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces
         public bool Any();
         void Delete(List<int> ids);
         List<DataModel> GetByIds(List<int> ids);
-        List<DataModel> GetAllWithExpression(string? sortBy, 
-            string? direction, 
-            string? sortType, 
-            string? sortValue);
+        //List<DataModel> GetAllWithExpression(string? sortBy, 
+        //    string? direction, 
+        //    string? sortType, 
+        //    string? sortValue);
     }
 }

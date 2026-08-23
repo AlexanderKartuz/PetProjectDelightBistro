@@ -44,90 +44,90 @@ namespace DelightBistroMvc.Data.Repositories
             return _dbSet.ToList();
         }
 
-        public List<DataModel> GetAllWithExpression(string? sortBy,
-            string? direction,
-            string? sortType,
-            string? sortValue)
-        {
-            var dataSource = _dbSet
-                .AsQueryable();
+        //public List<DataModel> GetAllWithExpression(string? sortBy,
+        //    string? direction,
+        //    string? sortType,
+        //    string? sortValue)
+        //{
+        //    var dataSource = _dbSet
+        //        .AsQueryable();
 
-            if (sortBy is null)
-            {
-                return dataSource.ToList();
-            }
+        //    if (sortBy is null)
+        //    {
+        //        return dataSource.ToList();
+        //    }
 
-            // goal
-            // dataSource = dataSource.OrderBy(entity => entity.Id);
+        //    // goal
+        //    // dataSource = dataSource.OrderBy(entity => entity.Id);
 
-            // entity
-            var parameter = Expression.Parameter(typeof(DataModel), "entity");
+        //    // entity
+        //    var parameter = Expression.Parameter(typeof(DataModel), "entity");
 
-            // entity.Id
-            var field = Expression.Property(parameter, sortBy);
+        //    // entity.Id
+        //    var field = Expression.Property(parameter, sortBy);
 
-            // int
-            var sortPropertyType = typeof(DataModel)
-                .GetProperty(sortBy)!
-                .PropertyType;
+        //    // int
+        //    var sortPropertyType = typeof(DataModel)
+        //        .GetProperty(sortBy)!
+        //        .PropertyType;
 
-            // entity => entity.Id
-            var lambdaForOrder = Expression.Lambda(field, parameter);
+        //    // entity => entity.Id
+        //    var lambdaForOrder = Expression.Lambda(field, parameter);
 
-            var methodName = direction is null
-                || direction == "asc"
-                ? "OrderBy"
-                : "OrderByDescending";
+        //    var methodName = direction is null
+        //        || direction == "asc"
+        //        ? "OrderBy"
+        //        : "OrderByDescending";
 
-            // dataSource.OrderBy<DataModel, int>(entity => entity.Id);
-            var orderByMethod = typeof(Queryable)
-                .GetMethods()
-                .First(x => x.Name == methodName
-                    && x.GetParameters().Count() == 2)
-                .MakeGenericMethod(typeof(DataModel), sortPropertyType);
-            var sortedSource =
-                (IQueryable<DataModel>)orderByMethod.Invoke(null, [dataSource, lambdaForOrder])!;
+        //    // dataSource.OrderBy<DataModel, int>(entity => entity.Id);
+        //    var orderByMethod = typeof(Queryable)
+        //        .GetMethods()
+        //        .First(x => x.Name == methodName
+        //            && x.GetParameters().Count() == 2)
+        //        .MakeGenericMethod(typeof(DataModel), sortPropertyType);
+        //    var sortedSource =
+        //        (IQueryable<DataModel>)orderByMethod.Invoke(null, [dataSource, lambdaForOrder])!;
 
-            if (sortType is null || string.IsNullOrEmpty(sortType))
-            {
-                return sortedSource.ToList();
-            }
+        //    if (sortType is null || string.IsNullOrEmpty(sortType))
+        //    {
+        //        return sortedSource.ToList();
+        //    }
 
-            // dataSource.Where<DataModel>(entity => entity.Id > 50);
-            var convertedSortValue = Convert.ChangeType(sortValue, sortPropertyType);
-            var constSortValue = Expression.Constant(convertedSortValue);
-            Expression filterExpression;
-            //  entity.Id > 50
-            if (sortType == "more")
-            {
-                filterExpression = Expression.GreaterThan(field, constSortValue);
-            }
-            else if (sortType == "less")
-            {
-                filterExpression = Expression.LessThan(field, constSortValue);
-            }
-            else if (sortType == "eq")
-            {
-                filterExpression = Expression.Equal(field, constSortValue);
-            }
-            else
-            {
-                throw new Exception($"Unknown filter type: {sortType}");
-            }
+        //    // dataSource.Where<DataModel>(entity => entity.Id > 50);
+        //    var convertedSortValue = Convert.ChangeType(sortValue, sortPropertyType);
+        //    var constSortValue = Expression.Constant(convertedSortValue);
+        //    Expression filterExpression;
+        //    //  entity.Id > 50
+        //    if (sortType == "more")
+        //    {
+        //        filterExpression = Expression.GreaterThan(field, constSortValue);
+        //    }
+        //    else if (sortType == "less")
+        //    {
+        //        filterExpression = Expression.LessThan(field, constSortValue);
+        //    }
+        //    else if (sortType == "eq")
+        //    {
+        //        filterExpression = Expression.Equal(field, constSortValue);
+        //    }
+        //    else
+        //    {
+        //        throw new Exception($"Unknown filter type: {sortType}");
+        //    }
 
-            // entity => entity.id > 50
-            var lambdaForWhere = Expression.Lambda(filterExpression, parameter);
+        //    // entity => entity.id > 50
+        //    var lambdaForWhere = Expression.Lambda(filterExpression, parameter);
 
-            var whereMethod = typeof(Queryable)
-               .GetMethods()
-               .First(x => x.Name == "Where")
-               .MakeGenericMethod(typeof(DataModel));
+        //    var whereMethod = typeof(Queryable)
+        //       .GetMethods()
+        //       .First(x => x.Name == "Where")
+        //       .MakeGenericMethod(typeof(DataModel));
 
-            var filteredAndSortedSource =
-                (IQueryable<DataModel>)whereMethod.Invoke(null, [sortedSource, lambdaForWhere])!;
+        //    var filteredAndSortedSource =
+        //        (IQueryable<DataModel>)whereMethod.Invoke(null, [sortedSource, lambdaForWhere])!;
 
-            return filteredAndSortedSource.ToList();
-        }
+        //    return filteredAndSortedSource.ToList();
+        //}
 
         public virtual void Update(DataModel model)
         {
