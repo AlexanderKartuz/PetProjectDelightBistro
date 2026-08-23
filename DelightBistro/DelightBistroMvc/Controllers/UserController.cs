@@ -36,7 +36,7 @@ namespace DelightBistroMvc.Controllers
         public IActionResult Index(int cardId)
         {
             var usersFromDb = _userRepository.GetAllAsync();
-            var currentUser = _authService.GetUser()!;
+            var currentUser = _authService.GetUserAsync()!;
             var viewModel = new UserIndexViewModel
             {
                 Users = usersFromDb
@@ -70,7 +70,7 @@ namespace DelightBistroMvc.Controllers
                 UserName = _authService.GetUserName() ?? "unnamed",
                 Language = currentUserLanguage,
                 Languages = allLanguagesList,
-                AvatarUrl = _authService.GetUser().AvatarUrl
+                AvatarUrl = _authService.GetUserAsync().AvatarUrl
             };
             return View(viewModel);
         }
@@ -79,11 +79,11 @@ namespace DelightBistroMvc.Controllers
         public async Task<IActionResult> ChangeLanguageAsync(int userId, Language language)
         {
             _userDataService.UpdateLanguage(userId, language);
-            var user = _authService.GetUser();
+            var user = _authService.GetUserAsync();
 
             await HttpContext.SignOutAsync();
 
-            await _authService.SignIn(user);
+            await _authService.SignInAsync(user);
 
             return RedirectToAction(nameof(Profile));
         }
@@ -91,7 +91,7 @@ namespace DelightBistroMvc.Controllers
         [Authorize]
         public IActionResult UpdateAvatar(IFormFile avatar)
         {
-            var user = _authService.GetUser()!;
+            var user = _authService.GetUserAsync()!;
             var userId = user.Id;
             var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
             var pathToFolder = "images\\avatars";
@@ -113,13 +113,13 @@ namespace DelightBistroMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfileAsync(UserProfileViewModel viewModel)
         {
-            var user = _authService.GetUser();
+            var user = _authService.GetUserAsync();
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;
             user.Mobilephone = viewModel.Mobilephone;
             _userDataService.UpdateProfile(user);
             await HttpContext.SignOutAsync();
-            await _authService.SignIn(user);
+            await _authService.SignInAsync(user);
             return RedirectToAction(nameof(Profile));
         }
 
@@ -156,7 +156,7 @@ namespace DelightBistroMvc.Controllers
                 return Forbid();
             }
 
-            var user = _authService.GetUser();
+            var user = _authService.GetUserAsync();
             if (!string.IsNullOrEmpty(user?.AvatarUrl))
             {
                 var avatarPath = Path.Combine(_webHostEnvironment.WebRootPath,

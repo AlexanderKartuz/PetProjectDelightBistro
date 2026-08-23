@@ -43,7 +43,7 @@ namespace DelightBistro.Tests.Services
         public void GetFoodsWithPermission_Admin_CanDeleteAll()
         {
             // Prepare
-            _authServiceMock.Setup(x => x.GetUser()).Returns(new UserData
+            _authServiceMock.Setup(x => x.GetUserAsync()).Returns(new UserData
             {
                 Id = 1,
                 Name = "admin",
@@ -67,7 +67,7 @@ namespace DelightBistro.Tests.Services
         public void GetFoodsWithPermission_Creator_CanDeleteOwn()
         {
             // Prepare
-            _authServiceMock.Setup(x => x.GetUser()).Returns(new UserData
+            _authServiceMock.Setup(x => x.GetUserAsync()).Returns(new UserData
             {
                 Id = 10,
                 Name = "creator",

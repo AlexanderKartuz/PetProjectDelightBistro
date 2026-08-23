@@ -84,7 +84,7 @@ namespace DelightBistro.Tests.Services
         {
             //Prepare
             var user = new UserData { Id = 1, Name = "admin" };
-            _authServiceMock.Setup(x => x.GetUser()).Returns(user); // admin
+            _authServiceMock.Setup(x => x.GetUserAsync()).Returns(user); // admin
 
             var createIngredientVm = new CreateIngredientViewModel
             {

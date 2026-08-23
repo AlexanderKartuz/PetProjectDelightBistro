@@ -58,7 +58,7 @@ namespace DelightBistroMvc.Controllers
             timeToPublish = timeToPublish.AddHours(time.Hour);
             timeToPublish = timeToPublish.AddMinutes(time.Minute);
 
-            var user = _authService.GetUser()!;
+            var user = _authService.GetUserAsync()!;
 
             var dbModel = new Data.Models.NotificationData
             {

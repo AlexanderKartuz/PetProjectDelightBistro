@@ -41,7 +41,7 @@ namespace DelightBistroMvc.Services
             return userId;
         }
 
-        public UserData? GetUser()
+        public async Task<UserData?> GetUserAsync()
         {
             var userId = GetUserId();
             if (userId <= 0)
@@ -49,7 +49,7 @@ namespace DelightBistroMvc.Services
                 return null;
             }
 
-            return _userRepository.GetAsync(userId);
+            return await _userRepository.GetAsync(userId);
         }
 
         public string? GetUserName()
@@ -109,7 +109,7 @@ namespace DelightBistroMvc.Services
             return language;
         }
 
-        public async Task SignIn(UserData user)
+        public async Task SignInAsync(UserData user)
         {
             var claims = new List<Claim>
             {

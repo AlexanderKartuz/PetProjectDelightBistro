@@ -23,7 +23,7 @@ namespace DelightBistroMvc.Services.DelightBistro
             var menuData = new MenuData
             {
                 Name = viewModel.Name,
-                Creator = _authService.GetUser()
+                Creator = _authService.GetUserAsync()
             };
 
             _menuRepository.AddAsync(menuData);

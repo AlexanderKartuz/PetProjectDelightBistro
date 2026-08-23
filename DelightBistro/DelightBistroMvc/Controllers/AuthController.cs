@@ -36,7 +36,7 @@ namespace DelightBistroMvc.Controllers
                 return View(viewModel);
             }
 
-            var user = _userDataService.ValidateCredetials(viewModel.Login, viewModel.Password);
+            var user = await _userDataService.ValidateCredetialsAsync(viewModel.Login, viewModel.Password);
             if (user == null)
             {
                 ModelState.AddModelError(
@@ -45,7 +45,7 @@ namespace DelightBistroMvc.Controllers
                 return View(viewModel);
             }
 
-            await _authService.SignIn(user);
+            await _authService.SignInAsync(user);
 
             return RedirectToAction("Index", "DelightBistro");
         }
@@ -80,9 +80,9 @@ namespace DelightBistroMvc.Controllers
                 Mobilephone = viewModel.Mobilephone,
             };
 
-            _userDataService.Register(user);
+            await _userDataService.RegisterAsync(user);
 
-            await _authService.SignIn(user);
+            await _authService.SignInAsync(user);
 
             return RedirectToAction("Index", "DelightBistro");
         }

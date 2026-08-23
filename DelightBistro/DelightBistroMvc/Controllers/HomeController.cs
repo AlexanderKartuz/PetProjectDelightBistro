@@ -26,7 +26,7 @@ namespace DelightBistroMvc.Controllers
         public IActionResult Index()
         {
             var viewModel = new IndexViewModel();
-            var user = _authService.GetUser();
+            var user = _authService.GetUserAsync();
             if (user is not null)
             {
                 viewModel.UserName = user.Name;

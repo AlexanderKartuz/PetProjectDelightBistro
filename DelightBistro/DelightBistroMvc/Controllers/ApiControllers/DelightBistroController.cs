@@ -70,7 +70,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
                 CreatedDateTime = DateTime.UtcNow,
                 FoodItems = selectedFoodItems,
                 TotalPrice = totalPrice,
-                User = _authService.GetUser()
+                User = _authService.GetUserAsync()
             };
             _orderRepository.AddAsync(orderData);
 

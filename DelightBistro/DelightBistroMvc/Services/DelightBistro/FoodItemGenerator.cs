@@ -44,7 +44,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 MenuData = selectedMenu,
 
                 FoodItemIngredientDatas = links,
-                Creator = _authService.GetUser()
+                Creator = _authService.GetUserAsync()
             };
 
             _foodItemRepository.AddAsync(newFoodItemData);
@@ -166,7 +166,7 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         public AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel)
         {
-            var currentUser = _authService.GetUser()!;
+            var currentUser = _authService.GetUserAsync()!;
             var isAdmin = currentUser?.Role == UserRole.Admin;
             var currentUserId = currentUser?.Id;
 

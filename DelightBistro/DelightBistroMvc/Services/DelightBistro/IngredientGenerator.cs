@@ -23,7 +23,7 @@ namespace DelightBistroMvc.Services.DelightBistro
             {
                 Name = ingredient.Name,
                 Price = ingredient.Price,
-                Creator = _authService.GetUser()
+                Creator = _authService.GetUserAsync()
             };
 
             _ingredientsRepository.AddAsync(ingredientData);
