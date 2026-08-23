@@ -30,7 +30,7 @@ namespace DelightBistroMvc.Controllers
         public IActionResult Index()
         {
             var viewModels = _notificationRepository
-                .GetAll()
+                .GetAllAsync()
                 .Select(x => new SingleNotificationViewModel
                 {
                     Id = x.Id,
@@ -66,7 +66,7 @@ namespace DelightBistroMvc.Controllers
                 TimeToPublish = timeToPublish,
                 Author = user
             };
-            _notificationRepository.Add(dbModel);
+            _notificationRepository.AddAsync(dbModel);
             return RedirectToAction(nameof(Index));
         }
     }

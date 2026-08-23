@@ -95,9 +95,9 @@ namespace DelightBistro.Tests.Services
 
             _foodItemGenerator.DeleteFoodItem(id);
 
-            _foodItemRepositoryMock.Verify(r => r.Delete(id), Times.Once());
-            _foodItemRepositoryMock.Verify(r => r.Remove(It.IsAny<FoodItemData>()), Times.Never());
-            _foodItemRepositoryMock.Verify(r => r.Get(It.IsAny<int>()), Times.Never());
+            _foodItemRepositoryMock.Verify(r => r.DeleteAsync(id), Times.Once());
+            _foodItemRepositoryMock.Verify(r => r.RemoveAsync(It.IsAny<FoodItemData>()), Times.Never());
+            _foodItemRepositoryMock.Verify(r => r.GetAsync(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
@@ -205,7 +205,7 @@ namespace DelightBistro.Tests.Services
                     new CreateIngredientViewModel(){ Id=2, Name ="Foo3"},
 
                 });
-            _menuRepositoryMock.Setup(mr => mr.GetAll())
+            _menuRepositoryMock.Setup(mr => mr.GetAllAsync())
                 .Returns(new List<MenuData>
                 {
                     new MenuData { Id = 1, Name = "Soops" },

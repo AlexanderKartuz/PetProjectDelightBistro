@@ -34,12 +34,12 @@ namespace DelightBistroMvc.Data.Services.UserService
             user.Role = UserRole.User;
             user.Language = Language.English;
 
-            _userRepository.Add(user);
+            _userRepository.AddAsync(user);
         }
 
         public void UpdateLanguage(int userId, Language language)
         {
-            var user = _userRepository.Get(userId)
+            var user = _userRepository.GetAsync(userId)
                 ?? throw new InvalidOperationException($"User {userId} not found");
 
             user.Language = language;
@@ -48,7 +48,7 @@ namespace DelightBistroMvc.Data.Services.UserService
 
         public void UpdateProfile(UserData userData)
         {
-            var user = _userRepository.Get(userData.Id)
+            var user = _userRepository.GetAsync(userData.Id)
                 ?? throw new InvalidOperationException($"User {userData.Id} not found");
 
             user.FirstName = userData.FirstName;

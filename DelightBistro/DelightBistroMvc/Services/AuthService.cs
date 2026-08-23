@@ -49,7 +49,7 @@ namespace DelightBistroMvc.Services
                 return null;
             }
 
-            return _userRepository.Get(userId);
+            return _userRepository.GetAsync(userId);
         }
 
         public string? GetUserName()

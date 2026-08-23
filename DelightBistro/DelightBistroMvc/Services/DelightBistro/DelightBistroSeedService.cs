@@ -28,7 +28,7 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         private void FillFoodItemData()
         {
-            if (_foodItemRepository.Any())
+            if (_foodItemRepository.AnyAsync())
             {
                 return;
             }
@@ -40,7 +40,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 ImgURL = "https://png.klev.club/uploads/posts/2024-03/png-klev-club-p-stakan-vodi-png-9.png",
 
             };
-            _foodItemRepository.Add(foodItemData);
+            _foodItemRepository.AddAsync(foodItemData);
 
             var cesarSalad = new FoodItemData
             {
@@ -48,31 +48,31 @@ namespace DelightBistroMvc.Services.DelightBistro
                 Price = 15m,
                 ImgURL = "/images/delight-bistro/CesarSalad.jpg",
             };
-            _foodItemRepository.Add(cesarSalad);
+            _foodItemRepository.AddAsync(cesarSalad);
         }
 
         private void FillIngredientData()
         {
-            if (_ingredientsRepository.Any())
+            if (_ingredientsRepository.AnyAsync())
             {
                 return;
             }
-            _ingredientsRepository.Add(new IngredientData { Name = "Креветки", Price = 40 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Шампиньоны", Price = 12 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Лайм", Price = 9 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Паста", Price = 8 });
+            _ingredientsRepository.AddAsync(new IngredientData { Name = "Креветки", Price = 40 });
+            _ingredientsRepository.AddAsync(new IngredientData { Name = "Шампиньоны", Price = 12 });
+            _ingredientsRepository.AddAsync(new IngredientData { Name = "Лайм", Price = 9 });
+            _ingredientsRepository.AddAsync(new IngredientData { Name = "Паста", Price = 8 });
         }
 
         public void FillMenuData()
         {
-            if (_menuRepository.Any())
+            if (_menuRepository.AnyAsync())
             {
                 return;
             }
 
-            _menuRepository.Add(new MenuData { Name = "Soups" });
-            _menuRepository.Add(new MenuData { Name = "Hot" });
-            _menuRepository.Add(new MenuData { Name = "Salads" });
+            _menuRepository.AddAsync(new MenuData { Name = "Soups" });
+            _menuRepository.AddAsync(new MenuData { Name = "Hot" });
+            _menuRepository.AddAsync(new MenuData { Name = "Salads" });
         }
     }
 }

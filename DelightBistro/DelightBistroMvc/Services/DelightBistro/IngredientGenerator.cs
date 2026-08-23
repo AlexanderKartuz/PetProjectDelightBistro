@@ -26,12 +26,12 @@ namespace DelightBistroMvc.Services.DelightBistro
                 Creator = _authService.GetUser()
             };
 
-            _ingredientsRepository.Add(ingredientData);
+            _ingredientsRepository.AddAsync(ingredientData);
         }
 
         public List<CreateIngredientViewModel> GenerateIngredientsViewModelFromFoodItemData(FoodItemData? foodItemData = null)
         {
-            var ingredientsData = _ingredientsRepository.GetAll();
+            var ingredientsData = _ingredientsRepository.GetAllAsync();
 
             var ingredientsViewModel = ingredientsData.Select(i => new CreateIngredientViewModel
             {

@@ -53,7 +53,7 @@ namespace DelightBistroMvc.Services.Chat
                 CreatedAtUtc = DateTime.UtcNow,
                 UserId = userId
             };
-            _messageRepository.Add(messageData);
+            _messageRepository.AddAsync(messageData);
 
             return MapToDto(messageData);
         }

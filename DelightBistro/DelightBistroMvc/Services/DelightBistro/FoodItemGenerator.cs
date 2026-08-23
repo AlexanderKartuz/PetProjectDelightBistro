@@ -47,7 +47,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 Creator = _authService.GetUser()
             };
 
-            _foodItemRepository.Add(newFoodItemData);
+            _foodItemRepository.AddAsync(newFoodItemData);
 
             GetImgFile(viewModel, newFoodItemData);
 
@@ -81,7 +81,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 changedFoodItemData.FoodItemIngredientDatas.Add(item);
             }
 
-            _foodItemRepository.Update(changedFoodItemData);
+            _foodItemRepository.UpdateAsync(changedFoodItemData);
             GetImgFile(viewModel, changedFoodItemData);
         }
 
@@ -139,7 +139,7 @@ namespace DelightBistroMvc.Services.DelightBistro
 
         public List<SelectListItem> SelectMenuList()
         {
-            var allMenuData = _menuRepository.GetAll();
+            var allMenuData = _menuRepository.GetAllAsync();
             var menuListItems = new List<SelectListItem>();
             menuListItems.AddRange(allMenuData.Select(x => new SelectListItem
             {
@@ -154,14 +154,14 @@ namespace DelightBistroMvc.Services.DelightBistro
             MenuData? menuData = null;
             if (viewModel.MenuId != null)
             {
-                menuData = _menuRepository.Get(viewModel.MenuId.Value);
+                menuData = _menuRepository.GetAsync(viewModel.MenuId.Value);
             }
             return menuData;
         }
 
         public void DeleteFoodItem(int id)
         {
-            _foodItemRepository.Delete(id);
+            _foodItemRepository.DeleteAsync(id);
         }
 
         public AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel)
@@ -200,7 +200,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 }
 
                 foodItemData.ImgURL = $"/images/delight-bistro/{fileName}";
-                _foodItemRepository.Update(foodItemData);
+                _foodItemRepository.UpdateAsync(foodItemData);
             }
         }
 

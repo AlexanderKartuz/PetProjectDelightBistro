@@ -31,7 +31,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
 
         public bool Delete([FromQuery] List<int> ids)
         {
-            _foodItemRepository.Delete(ids);
+            _foodItemRepository.DeleteAsync(ids);
             return true;
         }
 
@@ -50,7 +50,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
             }
 
             var selectedIds = createOrder.foodItemIds;
-            var selectedFoodItems = _foodItemRepository.GetByIds(selectedIds);
+            var selectedFoodItems = _foodItemRepository.GetByIdsAsync(selectedIds);
 
             if (selectedFoodItems.IsNullOrEmpty())
             {
@@ -72,7 +72,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
                 TotalPrice = totalPrice,
                 User = _authService.GetUser()
             };
-            _orderRepository.Add(orderData);
+            _orderRepository.AddAsync(orderData);
 
             // Ответ клиенту
             var responseDto = new

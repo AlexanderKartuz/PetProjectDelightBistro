@@ -26,7 +26,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 Creator = _authService.GetUser()
             };
 
-            _menuRepository.Add(menuData);
+            _menuRepository.AddAsync(menuData);
         }
 
         public MenuTypeViewModel ConvertMenuDataToViewModel(MenuData menuData)

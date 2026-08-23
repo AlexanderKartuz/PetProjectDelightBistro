@@ -35,7 +35,7 @@ namespace DelightBistroMvc.Controllers
         [IsModerator]
         public IActionResult Index(int cardId)
         {
-            var usersFromDb = _userRepository.GetAll();
+            var usersFromDb = _userRepository.GetAllAsync();
             var currentUser = _authService.GetUser()!;
             var viewModel = new UserIndexViewModel
             {
@@ -105,7 +105,7 @@ namespace DelightBistroMvc.Controllers
             }
 
             user.AvatarUrl = $"/images/avatars/{fileName}";
-            _userRepository.Update(user);
+            _userRepository.UpdateAsync(user);
 
             return RedirectToAction(nameof(Profile));
         }
@@ -135,7 +135,7 @@ namespace DelightBistroMvc.Controllers
             using (var file = System.IO.File.CreateText(path))
             {
                 file.WriteLine($"Id,Name,Language");
-                var users = _userRepository.GetAll();
+                var users = _userRepository.GetAllAsync();
                 foreach (var user in users)
                 {
                     file.WriteLine($"{user.Id},{user.Name},{user.Language}");
@@ -167,7 +167,7 @@ namespace DelightBistroMvc.Controllers
                 }
             }
 
-            _userRepository.Delete(userId);
+            _userRepository.DeleteAsync(userId);
             await HttpContext.SignOutAsync();
 
             return RedirectToAction(nameof(HomeController.Index), "Home");

@@ -11,9 +11,9 @@ public class NotificationRepository : BaseRepository<NotificationData>,
     {
     }
 
-    public override List<NotificationData> GetAll()
+    public override Task<List<NotificationData>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return _dbSet.Include(x => x.Author).ToList();
+        return _dbSet.Include(x => x.Author).ToListAsync(cancellationToken);
     }
 
     public List<NotificationData> GetByLastNotifications()

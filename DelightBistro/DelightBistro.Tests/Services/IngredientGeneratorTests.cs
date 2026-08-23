@@ -97,7 +97,7 @@ namespace DelightBistro.Tests.Services
 
             // Verify
             _ingredientRepositoryMock.Verify(x =>
-                x.Add(It.Is<IngredientData>(i =>
+                x.AddAsync(It.Is<IngredientData>(i =>
                     i.Name == "Cheese"
                     && i.Price == 20
                     && i.Creator == user)),
@@ -113,7 +113,7 @@ namespace DelightBistro.Tests.Services
                 new IngredientData() {Id = 2, Name = "ingredient2",},
             };
 
-            _ingredientRepositoryMock.Setup(ir => ir.GetAll())
+            _ingredientRepositoryMock.Setup(ir => ir.GetAllAsync())
                 .Returns(ingredientDatas);
 
             FoodItemData? foodData = null;
@@ -140,7 +140,7 @@ namespace DelightBistro.Tests.Services
             };
 
             _ingredientRepositoryMock
-                .Setup(ir => ir.GetAll())
+                .Setup(ir => ir.GetAllAsync())
                 .Returns(ingredientDatas);
 
             // IsSelected только из FoodItemIngredientDatas (IngredientsList не учитывается)
@@ -220,14 +220,14 @@ namespace DelightBistro.Tests.Services
                 Assert.That(result[1].Quantity, Is.EqualTo(10));
             }));
 
-            _ingredientRepositoryMock.Verify(r => r.GetAll(), Times.Never);
+            _ingredientRepositoryMock.Verify(r => r.GetAllAsync(), Times.Never);
         }
 
         [Test]
         public void GenerateIngredientsViewModel_WhenIngredientsListIsEmpty_ReturnEmptyList()
         {
             _ingredientRepositoryMock
-                .Setup(ir => ir.GetAll())
+                .Setup(ir => ir.GetAllAsync())
                 .Returns(new List<IngredientData>());
 
             var result = _ingredientGenerator
