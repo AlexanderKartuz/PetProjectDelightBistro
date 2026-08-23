@@ -1,4 +1,4 @@
-﻿using DelightBistroMvc.Data.Repositories.Interfaces;
+﻿using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 
 namespace DelightBistroMvc.Services.BackgroundServices
 {

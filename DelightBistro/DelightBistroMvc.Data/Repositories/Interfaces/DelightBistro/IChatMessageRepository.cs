@@ -1,6 +1,6 @@
 ﻿using DelightBistroMvc.Data.Models;
 
-namespace DelightBistroMvc.Data.Repositories.Interfaces
+namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IChatMessageRepository : IBaseRepository<ChatMessageData>
     {

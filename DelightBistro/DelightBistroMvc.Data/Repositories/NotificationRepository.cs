@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DelightBistroMvc.Data.Models;
-using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 
 namespace DelightBistroMvc.Data.Repositories;
 

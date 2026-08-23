@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using DelightBistroMvc.Controllers.CustomAuthAttribute;
-using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Hubs;
 using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Models.Notification;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 
 namespace DelightBistroMvc.Controllers
 {

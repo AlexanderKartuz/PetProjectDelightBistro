@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Hubs;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 
 namespace DelightBistroMvc.Services.BackgroundServices
 {

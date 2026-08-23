@@ -1,5 +1,5 @@
 ﻿using DelightBistroMvc.Data.Models;
-using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DTOs.Chat;
 using DelightBistroMvc.Services.Chat.Interfaces;
 using System.Security.Claims;
