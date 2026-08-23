@@ -6,6 +6,7 @@ namespace DelightBistroMinimalApi.DbStuff.Repositories
     public class SeriLogRepository : ISeriLogRepository
     {
         private readonly MiniDbContext _context;
+        private const int DAYS_TO_DELETE = -5;
 
         public SeriLogRepository(MiniDbContext context)
         {
@@ -14,7 +15,7 @@ namespace DelightBistroMinimalApi.DbStuff.Repositories
 
         public async Task<int> CleanupAsync(CancellationToken ct)
         {
-            var deleteTime = DateTime.UtcNow.AddDays(-5);
+            var deleteTime = DateTime.UtcNow.AddDays(DAYS_TO_DELETE);
 
             var query = _context.LogEntries
                 .Where(e => e.TimeStamp != null && e.TimeStamp < deleteTime);
