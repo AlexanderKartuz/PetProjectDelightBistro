@@ -19,7 +19,7 @@ namespace DelightBistroMvc.Services
         private IHttpContextAccessor _httpContextAccessor;
         private readonly IUserRepository _userRepository;
 
-        [AutoRegister]
+        //[AutoRegister]
         public AuthService(IHttpContextAccessor httpContextAccessor,
             IUserRepository userRepository)
         {
@@ -41,7 +41,7 @@ namespace DelightBistroMvc.Services
             return userId;
         }
 
-        public async Task<UserData?> GetUserAsync()
+        public async Task<UserData?> GetUserAsync(CancellationToken cancellationToken= default)
         {
             var userId = GetUserId();
             if (userId <= 0)
@@ -49,7 +49,7 @@ namespace DelightBistroMvc.Services
                 return null;
             }
 
-            return await _userRepository.GetAsync(userId);
+            return await _userRepository.GetAsync(userId, cancellationToken);
         }
 
         public string? GetUserName()
@@ -150,6 +150,5 @@ namespace DelightBistroMvc.Services
 
             return true;
         }
-
     }
 }

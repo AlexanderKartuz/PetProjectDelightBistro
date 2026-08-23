@@ -54,7 +54,7 @@ namespace DelightBistroMvc.Data.Services.UserService
                 ?? throw new InvalidOperationException($"User {userId} not found");
 
             user.Language = language;
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 

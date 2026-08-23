@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using DelightBistroMvc.Data.Models;
-using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.Auth;
-using DelightBistroMvc.Services;
 using DelightBistroMvc.Services.Interfaces;
 using DelightBistroMvc.Data.Services.UserService;
 
@@ -29,14 +27,16 @@ namespace DelightBistroMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(LoginViewModel viewModel)
+        public async Task<IActionResult> LoginAsync(
+            LoginViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
 
-            var user = await _userDataService.ValidateCredetialsAsync(viewModel.Login, viewModel.Password);
+            var user = await _userDataService
+                .ValidateCredetialsAsync(viewModel.Login, viewModel.Password);
             if (user == null)
             {
                 ModelState.AddModelError(
@@ -57,7 +57,9 @@ namespace DelightBistroMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegistrationAsync(RegisterViewModel viewModel)
+        public async Task<IActionResult> RegistrationAsync(
+            RegisterViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -80,8 +82,7 @@ namespace DelightBistroMvc.Controllers
                 Mobilephone = viewModel.Mobilephone,
             };
 
-            await _userDataService.RegisterAsync(user);
-
+            await _userDataService.RegisterAsync(user, cancellationToken);
             await _authService.SignInAsync(user);
 
             return RedirectToAction("Index", "DelightBistro");
