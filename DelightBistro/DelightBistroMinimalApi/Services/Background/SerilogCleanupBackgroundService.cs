@@ -21,10 +21,10 @@ namespace DelightBistroMinimalApi.Services.Background
             {
                 using var scope = _serviceProvider.CreateScope();
 
-                var cleanup = scope.ServiceProvider
+                var loggerRepository = scope.ServiceProvider
                     .GetRequiredService<ISeriLogRepository>();
 
-                await cleanup.CleanupAsync(stoppingToken);
+                await loggerRepository.CleanupAsync(stoppingToken);
 
                 await Task.Delay(TimeSpan.FromDays(10), stoppingToken);
             }
