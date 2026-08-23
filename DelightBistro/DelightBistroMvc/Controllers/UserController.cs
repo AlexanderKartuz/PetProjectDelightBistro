@@ -10,33 +10,39 @@ using DelightBistroMvc.Models.User;
 using DelightBistroMvc.Services;
 using DelightBistroMvc.Services.Interfaces;
 using DelightBistroMvc.Data.Services.UserService;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 
 namespace DelightBistroMvc.Controllers
 {
     [Authorize]
     public class UserController : Controller
     {
-        public IAuthService _authService;
-        public IUserRepository _userRepository;
-        public IWebHostEnvironment _webHostEnvironment;
-        private IUserDataService _userDataService;
+        public readonly IAuthService _authService;
+        public readonly IUserRepository _userRepository;
+        public readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IUserDataService _userDataService;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UserController(IAuthService authService,
             IUserRepository userRepository,
             IWebHostEnvironment webHostEnvironment,
-            IUserDataService userDataService)
+            IUserDataService userDataService,
+            IUnitOfWork unitOfWork)
         {
             _authService = authService;
             _userRepository = userRepository;
             _webHostEnvironment = webHostEnvironment;
             _userDataService = userDataService;
+            _unitOfWork = unitOfWork;
         }
 
         [IsModerator]
-        public IActionResult Index(int cardId)
+        public async Task<IActionResult> IndexAsync(int cardId,
+            CancellationToken cancellationToken = default)
         {
-            var usersFromDb = _userRepository.GetAllAsync();
-            var currentUser = _authService.GetUserAsync()!;
+            var usersFromDb = await _userRepository.GetAllAsync(cancellationToken);
+            var currentUser = await _authService.GetUserAsync(cancellationToken)
+                ?? throw new InvalidOperationException("Current user not found");
             var viewModel = new UserIndexViewModel
             {
                 Users = usersFromDb
@@ -51,8 +57,12 @@ namespace DelightBistroMvc.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Profile()
+        [Authorize]
+        public async Task<IActionResult> Profile(CancellationToken cancellationToken = default)
         {
+            var cuurentUser = await _authService.GetUserAsync(cancellationToken)
+                ?? throw new InvalidOperationException("Current user not found");
+
             var currentUserLanguage = _authService.GetLanguage();
             var allLanguagesList = Enum
                 .GetNames<Language>()
@@ -70,28 +80,33 @@ namespace DelightBistroMvc.Controllers
                 UserName = _authService.GetUserName() ?? "unnamed",
                 Language = currentUserLanguage,
                 Languages = allLanguagesList,
-                AvatarUrl = _authService.GetUserAsync().AvatarUrl
+                AvatarUrl = cuurentUser.AvatarUrl,
             };
             return View(viewModel);
         }
 
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ChangeLanguageAsync(int userId, Language language)
+        public async Task<IActionResult> ChangeLanguageAsync(
+            int userId,
+            Language language, CancellationToken cancellationToken = default)
         {
-            _userDataService.UpdateLanguage(userId, language);
-            var user = _authService.GetUserAsync();
+            await _userDataService.UpdateLanguageAsync(userId, language, cancellationToken: cancellationToken);
+            var user = await _authService.GetUserAsync()
+                ?? throw new InvalidOperationException("Current user not found");
 
             await HttpContext.SignOutAsync();
-
             await _authService.SignInAsync(user);
 
             return RedirectToAction(nameof(Profile));
         }
 
         [Authorize]
-        public IActionResult UpdateAvatar(IFormFile avatar)
+        public async Task<IActionResult> UpdateAvatarAsync(
+            IFormFile avatar,
+            CancellationToken cancellationToken = default)
         {
-            var user = _authService.GetUserAsync()!;
+            var user = await _authService.GetUserAsync(cancellationToken)!;
             var userId = user.Id;
             var pathToWwwRootFolder = _webHostEnvironment.WebRootPath;
             var pathToFolder = "images\\avatars";
@@ -101,44 +116,50 @@ namespace DelightBistroMvc.Controllers
 
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
-                avatar.CopyTo(fileStream); // copy to our PC
+                await avatar.CopyToAsync(fileStream); // copy to our PC
             }
 
             user.AvatarUrl = $"/images/avatars/{fileName}";
-            _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return RedirectToAction(nameof(Profile));
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfileAsync(UserProfileViewModel viewModel)
+        public async Task<IActionResult> UpdateProfileAsync(
+            UserProfileViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
-            var user = _authService.GetUserAsync();
+            var user = await _authService.GetUserAsync(cancellationToken);
+
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;
             user.Mobilephone = viewModel.Mobilephone;
-            _userDataService.UpdateProfile(user);
+
+            await _userDataService.UpdateProfileAsync(user, cancellationToken);
             await HttpContext.SignOutAsync();
             await _authService.SignInAsync(user);
+
             return RedirectToAction(nameof(Profile));
         }
 
         [IsAdmin]
         public IActionResult DeleteUser()
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexAsync));
         }
 
-        public IActionResult GenerateReport()
+        public async Task<IActionResult> GenerateReportAsync(CancellationToken cancellationToken = default)
         {
             var path = System.IO.Path.GetTempFileName();
             using (var file = System.IO.File.CreateText(path))
             {
                 file.WriteLine($"Id,Name,Language");
-                var users = _userRepository.GetAllAsync();
+                var users = await _userRepository.GetAllAsync(cancellationToken);
                 foreach (var user in users)
                 {
-                    file.WriteLine($"{user.Id},{user.Name},{user.Language}");
+                    await file.WriteLineAsync($"{user.Id},{user.Name},{user.Language}");
                 }
             }
 
@@ -148,7 +169,9 @@ namespace DelightBistroMvc.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAccountAsync(int userId)
+        public async Task<IActionResult> DeleteAccountAsync(
+            int userId,
+            CancellationToken cancellationToken = default)
         {
             var currentUserId = _authService.GetUserId();
             if (currentUserId != userId)
@@ -156,7 +179,8 @@ namespace DelightBistroMvc.Controllers
                 return Forbid();
             }
 
-            var user = _authService.GetUserAsync();
+            var user = await _authService.GetUserAsync(cancellationToken)
+                ?? throw new InvalidOperationException("Current user not found");
             if (!string.IsNullOrEmpty(user?.AvatarUrl))
             {
                 var avatarPath = Path.Combine(_webHostEnvironment.WebRootPath,
@@ -167,10 +191,11 @@ namespace DelightBistroMvc.Controllers
                 }
             }
 
-            _userRepository.DeleteAsync(userId);
+            await _userRepository.DeleteAsync(userId);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             await HttpContext.SignOutAsync();
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(HomeController.IndexAsync), "Home");
         }
     }
 }

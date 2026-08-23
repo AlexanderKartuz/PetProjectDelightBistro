@@ -62,7 +62,7 @@ namespace DelightBistroMvc.Data.Services.UserService
             UserData userData,
             CancellationToken cancellationToken = default)
         {
-            var user = await _userRepository.GetAsync(userData.Id)
+            var user = await _userRepository.GetAsync(userData.Id, cancellationToken)
                 ?? throw new InvalidOperationException($"User {userData.Id} not found");
 
             user.FirstName = userData.FirstName;

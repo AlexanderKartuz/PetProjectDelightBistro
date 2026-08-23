@@ -7,18 +7,20 @@ using DelightBistroMvc.Hubs;
 using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 
 
 namespace DelightBistroMvc.Controllers
 {
     public class DelightBistroController : Controller
     {
-        private IDelightBistroMainIndexGenerator _delightBistroMainIndexGenerator;
-        private IFoodItemGenerator _foodItemGenerator;
-        private IMenuTypeGenerator _menuTypeGenerator;
-        private IIngredientGenerator _ingredientGenerator;
+        private readonly IDelightBistroMainIndexGenerator _delightBistroMainIndexGenerator;
+        private readonly IFoodItemGenerator _foodItemGenerator;
+        private readonly IMenuTypeGenerator _menuTypeGenerator;
+        private readonly IIngredientGenerator _ingredientGenerator;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
+        private readonly IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
 
 
         public DelightBistroController(IFoodItemGenerator foodItemGenerator,
@@ -26,7 +28,8 @@ namespace DelightBistroMvc.Controllers
             IIngredientGenerator ingredientGenerator,
             IHubContext<DeligtBistroHub,
             IDeligtBistroHub> deligtBistroHub,
-            IDelightBistroMainIndexGenerator delightBistroMainIndexGenerator)
+            IDelightBistroMainIndexGenerator delightBistroMainIndexGenerator,
+            IUnitOfWork unitOfWork)
         {
 
             _foodItemGenerator = foodItemGenerator;
@@ -35,6 +38,7 @@ namespace DelightBistroMvc.Controllers
 
             _deligtBistroHub = deligtBistroHub;
             _delightBistroMainIndexGenerator = delightBistroMainIndexGenerator;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index(string menuType)

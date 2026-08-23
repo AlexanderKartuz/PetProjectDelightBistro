@@ -12,21 +12,17 @@ namespace DelightBistroMvc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAuthService _authService;
-        private readonly IUserRepository _userRepository;
 
-        public HomeController(ILogger<HomeController> logger,
-            IUserRepository userRepository,
-            IAuthService authService)
+        public HomeController(ILogger<HomeController> logger, IAuthService authService)
         {
             _logger = logger;
-            _userRepository = userRepository;
             _authService = authService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync(CancellationToken cancellationToken = default)
         {
             var viewModel = new IndexViewModel();
-            var user = _authService.GetUserAsync();
+            var user = await _authService.GetUserAsync(cancellationToken);
             if (user is not null)
             {
                 viewModel.UserName = user.Name;
