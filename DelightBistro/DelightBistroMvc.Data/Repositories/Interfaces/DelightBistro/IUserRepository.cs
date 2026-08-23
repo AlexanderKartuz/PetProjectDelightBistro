@@ -5,7 +5,7 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IUserRepository : IBaseRepository<UserData>
     {
-        UserData? GetByName(string login);
+        Task<UserData?> GetByNameAsync(string login, CancellationToken cancellationToken = default);
         bool IsNameUniq(string login);
     }
 }
