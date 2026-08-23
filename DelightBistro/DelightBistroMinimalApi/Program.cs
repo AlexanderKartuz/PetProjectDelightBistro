@@ -1,6 +1,8 @@
 using DelightBistro.Services.Logging;
 using DelightBistroMinimalApi.Constans;
 using DelightBistroMinimalApi.DbStuff;
+using DelightBistroMinimalApi.DbStuff.Repositories;
+using DelightBistroMinimalApi.DbStuff.Repositories.Interfaces;
 using DelightBistroMinimalApi.Mappings;
 using DelightBistroMinimalApi.Middlewares;
 using DelightBistroMinimalApi.Middlewares.RateLimit;
@@ -9,6 +11,7 @@ using DelightBistroMinimalApi.ModelsDto.EntityDto;
 using DelightBistroMinimalApi.Services.Auth;
 using DelightBistroMinimalApi.Services.Auth.Interfaces;
 using DelightBistroMinimalApi.Services.Auth.Options;
+using DelightBistroMinimalApi.Services.Background;
 using DelightBistroMinimalApi.Services.Cache;
 using DelightBistroMinimalApi.Services.Cache.Interfaces;
 using DelightBistroMinimalApi.Validation;
@@ -28,6 +31,7 @@ builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionStr
 builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
 builder.Services.AddScoped<IDrinkMapper, DrinkMapper>();
 builder.Services.AddScoped<IEndpointValidator, EndpointValidator>();
+builder.Services.AddHostedService<SerilogCleanupBackgroundService>();
 
 var cachingOptions = builder.Services.AddDelightBistroCaching(builder.Configuration);
 

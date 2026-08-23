@@ -1,4 +1,4 @@
-﻿namespace DelightBistroMinimalApi.DbStuff
+﻿namespace DelightBistroMinimalApi.DbStuff.Models
 {
     public class Drink
     {

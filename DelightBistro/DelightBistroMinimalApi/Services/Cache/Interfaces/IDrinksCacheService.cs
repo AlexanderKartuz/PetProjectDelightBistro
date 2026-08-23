@@ -1,4 +1,4 @@
-﻿using DelightBistroMinimalApi.DbStuff;
+﻿using DelightBistroMinimalApi.DbStuff.Models;
 
 namespace DelightBistroMinimalApi.Services.Cache.Interfaces
 {

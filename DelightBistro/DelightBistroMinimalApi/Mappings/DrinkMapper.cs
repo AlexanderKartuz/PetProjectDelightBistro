@@ -1,4 +1,4 @@
-﻿using DelightBistroMinimalApi.DbStuff;
+﻿using DelightBistroMinimalApi.DbStuff.Models;
 using DelightBistroMinimalApi.ModelsDto.EntityDto;
 
 namespace DelightBistroMinimalApi.Mappings

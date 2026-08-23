@@ -1,5 +1,6 @@
 ﻿using DelightBistroMinimalApi.Constans;
-using DelightBistroMinimalApi.DbStuff;
+using DelightBistroMinimalApi.DbStuff.Models;
+using DelightBistroMinimalApi.DbStuff.Repositories.Interfaces;
 using DelightBistroMinimalApi.Services.Cache.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 
