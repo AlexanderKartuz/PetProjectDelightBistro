@@ -131,7 +131,8 @@ namespace DelightBistroMvc.Controllers
             UserProfileViewModel viewModel,
             CancellationToken cancellationToken = default)
         {
-            var user = await _authService.GetUserAsync(cancellationToken);
+            var user = await _authService.GetUserAsync(cancellationToken)
+                ?? throw new InvalidOperationException("Current user not found");
 
             user.FirstName = viewModel.FirstName;
             user.LastName = viewModel.LastName;

@@ -32,7 +32,7 @@ namespace DelightBistroMvc.Controllers
         }
 
 
-        public async Task<IActionResult> IndexAsync(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
         {
             var notifications = await _notificationRepository.GetAllAsync(cancellationToken);
             var viewModels = notifications
@@ -52,7 +52,7 @@ namespace DelightBistroMvc.Controllers
         public IActionResult SendInstantNotification(string text)
         {
             _notificationHub.Clients.All.NewMessage(text);
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -79,7 +79,7 @@ namespace DelightBistroMvc.Controllers
             await _notificationRepository.AddAsync(dbModel, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -7,8 +7,7 @@ namespace DelightBistroMinimalApi.Services.Background
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public SerilogCleanupBackgroundService(IServiceProvider serviceProvider,
-            ISeriLogRepository seriLogRepository)
+        public SerilogCleanupBackgroundService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

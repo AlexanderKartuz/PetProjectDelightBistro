@@ -8,7 +8,9 @@ namespace DelightBistroMvc.Data.Repositories
     {
         public MenuRepository(WebContext webContext) : base(webContext) { }
 
-        public Task<List<MenuData>> GetAllIncludeFoodItemsWithIngredientsLinksAsync(string filterMenuName, CancellationToken cancellationToken = default)
+        public Task<List<MenuData>> GetAllIncludeFoodItemsWithIngredientsLinksAsync(
+            string filterMenuName, 
+            CancellationToken cancellationToken = default)
         {
             var query = _dbSet
             .AsNoTracking()

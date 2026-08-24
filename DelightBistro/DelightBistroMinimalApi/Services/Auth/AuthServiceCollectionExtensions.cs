@@ -2,16 +2,14 @@
 using DelightBistroMinimalApi.Services.Auth.Options;
 using DelightBistroMvc.Data;
 using DelightBistroMvc.Data.Repositories;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Data.Services.PasswordHasher;
 using DelightBistroMvc.Data.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DelightBistroMinimalApi.Services.Auth
@@ -35,6 +33,7 @@ namespace DelightBistroMinimalApi.Services.Auth
                 ?? throw new InvalidOperationException("ConnectionString: Users обязателен для JWT login.");
 
             services.AddDbContext<WebContext>(op => op.UseSqlServer(userConnection));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IUserDataService, UserDataService>();

@@ -114,7 +114,7 @@ namespace DelightBistroMvc.Controllers
                 viewModel.Menus = await _foodItemGenerator
                     .SelectMenuListAsync(cancellationToken);
                 viewModel.IngredientsList = await _ingredientGenerator
-                    .GenerateIngredientsViewModelFromFoodItemDataAsync(cancellation: cancellationToken);
+                    .GenerateIngredientsViewModelFromFoodItemDataAsync(cancellationToken: cancellationToken);
                 return View(viewModel);
             }
 
