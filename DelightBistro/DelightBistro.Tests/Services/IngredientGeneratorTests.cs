@@ -1,5 +1,6 @@
 using DelightBistroMvc.Data.DataModels;
 using DelightBistroMvc.Data.Models;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.DelightBistro;
@@ -13,22 +14,27 @@ namespace DelightBistro.Tests.Services
         private IngredientGenerator _ingredientGenerator;
         private Mock<IIngredientsRepository> _ingredientRepositoryMock;
         private Mock<IAuthService> _authServiceMock;
+        private Mock<IUnitOfWork> _unitOfWorkMock;
 
         [SetUp]
         public void Setup()
         {
             _ingredientRepositoryMock = new Mock<IIngredientsRepository>();
             _authServiceMock = new Mock<IAuthService>();
+            _unitOfWorkMock = new Mock<IUnitOfWork>();
+            _unitOfWorkMock
+                .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
 
             _ingredientGenerator = new IngredientGenerator(
                 _ingredientRepositoryMock.Object,
-                _authServiceMock.Object);
+                _authServiceMock.Object,
+                _unitOfWorkMock.Object);
         }
 
         [Test]
         public void GetSelected_ReturnOnlySelected()
         {
-            // Prepare
             var ingredients = new List<CreateIngredientViewModel>
             {
                 new CreateIngredientViewModel(){Id=1, Name="Lime", IsSelected=true},
@@ -36,11 +42,9 @@ namespace DelightBistro.Tests.Services
                 new CreateIngredientViewModel(){Id=3, Name="Lime", IsSelected=true},
             };
 
-            // Act
             var result = _ingredientGenerator
                 .GetSelectedCreateIngredientViewModelFromIngredientsList(ingredients);
 
-            // Assert
             Assert.That(result.Select(x => x.Id), Is.EqualTo(new[] { 1, 3 }));
         }
 
@@ -59,32 +63,30 @@ namespace DelightBistro.Tests.Services
         [TestCase(-6, 10)]
         public void GetLinks_SetsQuatityCorrectly(decimal quantity, decimal expectedQuantity)
         {
-            // Prepare
             var createFoodItemViewModel = new CreateFoodItemViewModel
             {
                 IngredientsList =
                 {
                     new(){ Id=1, IsSelected=true, Quantity=quantity},
-                    new(){ Id=2, IsSelected=false, Quantity=100}, // not selected
+                    new(){ Id=2, IsSelected=false, Quantity=100},
                 }
             };
 
-            // Act
             var links = _ingredientGenerator
                 .GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(createFoodItemViewModel);
 
-            // Assert
             Assert.That(links, Has.Count.EqualTo(1));
             Assert.That(links[0].IngredientDataId, Is.EqualTo(1));
             Assert.That(links[0].QuantityOfIngredients, Is.EqualTo(expectedQuantity));
         }
 
         [Test]
-        public void CreateIngredientData_WithAuthUser()
+        public async Task CreateIngredientData_WithAuthUser()
         {
-            //Prepare
             var user = new UserData { Id = 1, Name = "admin" };
-            _authServiceMock.Setup(x => x.GetUserAsync()).Returns(user); // admin
+            _authServiceMock
+                .Setup(x => x.GetUserAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(user);
 
             var createIngredientVm = new CreateIngredientViewModel
             {
@@ -92,20 +94,22 @@ namespace DelightBistro.Tests.Services
                 Price = 20,
             };
 
-            // Act
-            _ingredientGenerator.CreateIngredientDataAsync(createIngredientVm);
+            await _ingredientGenerator.CreateIngredientDataAsync(createIngredientVm);
 
-            // Verify
             _ingredientRepositoryMock.Verify(x =>
                 x.AddAsync(It.Is<IngredientData>(i =>
                     i.Name == "Cheese"
                     && i.Price == 20
-                    && i.Creator == user)),
+                    && i.Creator == user),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+            _unitOfWorkMock.Verify(
+                u => u.SaveChangesAsync(It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
         [Test]
-        public void GenerateIngredientsViewModelFromFoodItemData_WhenFoodItemIsNool()
+        public async Task GenerateIngredientsViewModelFromFoodItemData_WhenFoodItemIsNool()
         {
             var ingredientDatas = new List<IngredientData>
             {
@@ -113,12 +117,13 @@ namespace DelightBistro.Tests.Services
                 new IngredientData() {Id = 2, Name = "ingredient2",},
             };
 
-            _ingredientRepositoryMock.Setup(ir => ir.GetAllAsync())
-                .Returns(ingredientDatas);
+            _ingredientRepositoryMock
+                .Setup(ir => ir.GetAllAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(ingredientDatas);
 
             FoodItemData? foodData = null;
 
-            var result = _ingredientGenerator
+            var result = await _ingredientGenerator
                 .GenerateIngredientsViewModelFromFoodItemDataAsync(foodData);
 
             Assert.Multiple(new Action(() =>
@@ -130,7 +135,7 @@ namespace DelightBistro.Tests.Services
         }
 
         [Test]
-        public void GenerateIngredientsViewModelFromFoodItemData_WhenFoodExists()
+        public async Task GenerateIngredientsViewModelFromFoodItemData_WhenFoodExists()
         {
             var ingredientDatas = new List<IngredientData>
             {
@@ -140,10 +145,9 @@ namespace DelightBistro.Tests.Services
             };
 
             _ingredientRepositoryMock
-                .Setup(ir => ir.GetAllAsync())
-                .Returns(ingredientDatas);
+                .Setup(ir => ir.GetAllAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(ingredientDatas);
 
-            // IsSelected только из FoodItemIngredientDatas (IngredientsList не учитывается)
             var foodData = new FoodItemData
             {
                 Id = 5,
@@ -159,7 +163,8 @@ namespace DelightBistro.Tests.Services
                 }
             };
 
-            var result = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemDataAsync(foodData);
+            var result = await _ingredientGenerator
+                .GenerateIngredientsViewModelFromFoodItemDataAsync(foodData);
 
             Assert.Multiple(new Action(() =>
             {
@@ -220,17 +225,19 @@ namespace DelightBistro.Tests.Services
                 Assert.That(result[1].Quantity, Is.EqualTo(10));
             }));
 
-            _ingredientRepositoryMock.Verify(r => r.GetAllAsync(), Times.Never);
+            _ingredientRepositoryMock.Verify(
+                r => r.GetAllAsync(It.IsAny<CancellationToken>()),
+                Times.Never);
         }
 
         [Test]
-        public void GenerateIngredientsViewModel_WhenIngredientsListIsEmpty_ReturnEmptyList()
+        public async Task GenerateIngredientsViewModel_WhenIngredientsListIsEmpty_ReturnEmptyList()
         {
             _ingredientRepositoryMock
-                .Setup(ir => ir.GetAllAsync())
-                .Returns(new List<IngredientData>());
+                .Setup(ir => ir.GetAllAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<IngredientData>());
 
-            var result = _ingredientGenerator
+            var result = await _ingredientGenerator
                 .GenerateIngredientsViewModelFromFoodItemDataAsync();
 
             Assert.That(result, Is.Empty);

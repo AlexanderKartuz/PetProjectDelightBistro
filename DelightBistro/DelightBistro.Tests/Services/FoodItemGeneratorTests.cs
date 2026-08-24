@@ -1,12 +1,12 @@
 ﻿using DelightBistroMvc.Data.DataModels;
 using DelightBistroMvc.Data.Enums;
 using DelightBistroMvc.Data.Models;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Moq;
 
 
@@ -14,12 +14,13 @@ namespace DelightBistro.Tests.Services
 {
     public class FoodItemGeneratorTests
     {
-        private FoodItemGenerator _foodItemGenerator; // real object
+        private FoodItemGenerator _foodItemGenerator;
         private Mock<IFoodItemRepository> _foodItemRepositoryMock;
         private Mock<IMenuRepository> _menuRepositoryMock;
         private Mock<IIngredientGenerator> _ingredientGeneratorMock;
         private Mock<IAuthService> _authServiceMock;
         private Mock<IWebHostEnvironment> _webHostEnvironmentMock;
+        private Mock<IUnitOfWork> _unitOfWorkMock;
 
         [SetUp]
         public void Setup()
@@ -29,26 +30,31 @@ namespace DelightBistro.Tests.Services
             _ingredientGeneratorMock = new Mock<IIngredientGenerator>();
             _authServiceMock = new Mock<IAuthService>();
             _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
+            _unitOfWorkMock = new Mock<IUnitOfWork>();
+            _unitOfWorkMock
+                .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
 
             _foodItemGenerator = new FoodItemGenerator(
                 _foodItemRepositoryMock.Object,
                 _menuRepositoryMock.Object,
                 _ingredientGeneratorMock.Object,
                 _authServiceMock.Object,
-                _webHostEnvironmentMock.Object
-                );
+                _webHostEnvironmentMock.Object,
+                _unitOfWorkMock.Object);
         }
 
         [Test]
-        public void GetFoodsWithPermission_Admin_CanDeleteAll()
+        public async Task GetFoodsWithPermission_Admin_CanDeleteAll()
         {
-            // Prepare
-            _authServiceMock.Setup(x => x.GetUserAsync()).Returns(new UserData
-            {
-                Id = 1,
-                Name = "admin",
-                Role = UserRole.Admin,
-            });
+            _authServiceMock
+                .Setup(x => x.GetUserAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new UserData
+                {
+                    Id = 1,
+                    Name = "admin",
+                    Role = UserRole.Admin,
+                });
 
             var foods = new List<FoodItemViewModel>
             {
@@ -56,23 +62,23 @@ namespace DelightBistro.Tests.Services
                 new FoodItemViewModel(){ Id=2, CreatorId=1},
             };
 
-            // Act
-            var result = _foodItemGenerator.GetFoodsWithPermission(foods);
+            var result = await _foodItemGenerator.GetFoodsWithPermissionAsync(foods);
 
             Assert.That(result.IsAdmin, Is.True);
             Assert.That(result.FoodItems.All(x => x.CanDelete), Is.True);
         }
 
         [Test]
-        public void GetFoodsWithPermission_Creator_CanDeleteOwn()
+        public async Task GetFoodsWithPermission_Creator_CanDeleteOwn()
         {
-            // Prepare
-            _authServiceMock.Setup(x => x.GetUserAsync()).Returns(new UserData
-            {
-                Id = 10,
-                Name = "creator",
-                Role = UserRole.Moderator,
-            });
+            _authServiceMock
+                .Setup(x => x.GetUserAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new UserData
+                {
+                    Id = 10,
+                    Name = "creator",
+                    Role = UserRole.Moderator,
+                });
 
             var foods = new List<FoodItemViewModel>
             {
@@ -80,8 +86,7 @@ namespace DelightBistro.Tests.Services
                 new FoodItemViewModel(){ Id=2, CreatorId=1},
             };
 
-            // Act
-            var result = _foodItemGenerator.GetFoodsWithPermission(foods);
+            var result = await _foodItemGenerator.GetFoodsWithPermissionAsync(foods);
 
             Assert.That(result.IsAdmin, Is.False);
             Assert.That(result.FoodItems[0].CanDelete, Is.True);
@@ -89,15 +94,24 @@ namespace DelightBistro.Tests.Services
         }
 
         [Test]
-        public void DeleteFoodItem_CallsDelete()
+        public async Task DeleteFoodItem_CallsDelete()
         {
             const int id = 10;
 
-            _foodItemGenerator.DeleteFoodItem(id);
+            await _foodItemGenerator.DeleteFoodItemAsync(id);
 
-            _foodItemRepositoryMock.Verify(r => r.DeleteAsync(id), Times.Once());
-            _foodItemRepositoryMock.Verify(r => r.RemoveAsync(It.IsAny<FoodItemData>()), Times.Never());
-            _foodItemRepositoryMock.Verify(r => r.GetAsync(It.IsAny<int>()), Times.Never());
+            _foodItemRepositoryMock.Verify(
+                r => r.DeleteAsync(id, It.IsAny<CancellationToken>()),
+                Times.Once());
+            _unitOfWorkMock.Verify(
+                u => u.SaveChangesAsync(It.IsAny<CancellationToken>()),
+                Times.Once());
+            _foodItemRepositoryMock.Verify(
+                r => r.RemoveAsync(It.IsAny<FoodItemData>(), It.IsAny<CancellationToken>()),
+                Times.Never());
+            _foodItemRepositoryMock.Verify(
+                r => r.GetAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()),
+                Times.Never());
         }
 
         [Test]
@@ -110,21 +124,22 @@ namespace DelightBistro.Tests.Services
             };
 
             _ingredientGeneratorMock.Setup(ig =>
-            ig.GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(changedFoodItem))
+                ig.GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(changedFoodItem))
                 .Returns(new List<FoodItemIngredientData>());
 
-            _foodItemRepositoryMock.Setup(r =>
-            r.GetByIdIncludeMenuAndIngredientsLinks(changedFoodItem.Id))
-                .Returns((FoodItemData?)null);
+            _foodItemRepositoryMock
+                .Setup(r => r.GetByIdIncludeMenuAndIngredientsLinksAsync(
+                    changedFoodItem.Id,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync((FoodItemData?)null);
 
-            Assert.Throws<InvalidOperationException>(new TestDelegate(() =>
-            _foodItemGenerator.ChangeFoodItemDataAsync(changedFoodItem)));
+            Assert.ThrowsAsync<InvalidOperationException>(
+                (Func<Task>)(() => _foodItemGenerator.ChangeFoodItemDataAsync(changedFoodItem)));
         }
 
         [Test]
         public void ConvertToFoodItemVM()
         {
-            // Prepare
             var foodData = new FoodItemData
             {
                 Id = 10,
@@ -144,24 +159,25 @@ namespace DelightBistro.Tests.Services
                     new CreateIngredientViewModel(){ Id = 3, IsSelected = true},
                 });
 
-            // Act
-            var result = _foodItemGenerator.ConvertToFoodItemVM(foodData);
+            var result = _foodItemGenerator.ConvertToFoodItemVm(foodData);
 
-            // Assert
             Assert.That(result.Id, Is.EqualTo(10));
             Assert.That(result.MenuType, Is.EqualTo("Общее меню"));
             Assert.That(result.IngredientsList, Has.Count.EqualTo(2));
             _ingredientGeneratorMock.Verify(ig => ig.MapSelectedIngredients(foodData), Times.Once);
             _ingredientGeneratorMock.Verify(
-                ig => ig.GenerateIngredientsViewModelFromFoodItemDataAsync(It.IsAny<FoodItemData>()),
+                ig => ig.GenerateIngredientsViewModelFromFoodItemDataAsync(
+                    It.IsAny<FoodItemData>(),
+                    It.IsAny<CancellationToken>()),
                 Times.Never);
         }
 
         [Test]
-        public void GetFoodItemStatsViewModels_RepositoryMap()
+        public async Task GetFoodItemStatsViewModels_RepositoryMap()
         {
-            _foodItemRepositoryMock.Setup(fr => fr.GetFoodItemStats())
-                .Returns(new List<FoodItemStatsDataModel>
+            _foodItemRepositoryMock
+                .Setup(fr => fr.GetFoodItemStatsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<FoodItemStatsDataModel>
                 {
                     new FoodItemStatsDataModel
                     {
@@ -173,9 +189,8 @@ namespace DelightBistro.Tests.Services
                     },
                 });
 
-            var result = _foodItemGenerator.GetFoodItemStatsViewModelsAsync();
+            var result = await _foodItemGenerator.GetFoodItemStatsViewModelsAsync();
 
-            // Assert
             Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].FoodItemName, Is.EqualTo("Foo"));
             Assert.That(result[0].IngredientCount, Is.EqualTo(5));
@@ -187,7 +202,7 @@ namespace DelightBistro.Tests.Services
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void ConvertToCreateFoodItemVM(bool exist)
+        public async Task ConvertToCreateFoodItemVM(bool exist)
         {
             FoodItemData? foodData = exist ? (new FoodItemData
             {
@@ -197,27 +212,26 @@ namespace DelightBistro.Tests.Services
                 ImgURL = "/img.png",
             }) : null;
 
-            _ingredientGeneratorMock.Setup(ig =>
-            ig.GenerateIngredientsViewModelFromFoodItemDataAsync(foodData))
-                .Returns(new List<CreateIngredientViewModel>
+            _ingredientGeneratorMock
+                .Setup(ig => ig.GenerateIngredientsViewModelFromFoodItemDataAsync(
+                    foodData,
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<CreateIngredientViewModel>
                 {
                     new CreateIngredientViewModel(){ Id=1, Name ="Foo2"},
                     new CreateIngredientViewModel(){ Id=2, Name ="Foo3"},
-
                 });
-            _menuRepositoryMock.Setup(mr => mr.GetAllAsync())
-                .Returns(new List<MenuData>
+            _menuRepositoryMock
+                .Setup(mr => mr.GetAllAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<MenuData>
                 {
                     new MenuData { Id = 1, Name = "Soops" },
                     new MenuData { Id = 2, Name = "Soops2" },
                     new MenuData { Id = 3, Name = "Soops3" }
-
                 });
 
-            // Act
-            var result = _foodItemGenerator.ConvertToCreateFoodItemVm(foodData);
+            var result = await _foodItemGenerator.ConvertToCreateFoodItemVmAsync(foodData);
 
-            // Assert
             if (exist)
             {
                 Assert.That(result.Id, Is.EqualTo(1));
