@@ -8,8 +8,8 @@ Hosted services DelightBistroMvc.
 
 | Сервис | Файл | Интервал | Модуль | Назначение |
 |--------|------|----------|--------|------------|
-| `NotificationBackgroundService` | `Services/BackgroundServices/NotificationBackgroundService.cs` | 30 сек | Notification | Scope на итерацию; опрос активных уведомлений (`UtcNow`), broadcast `NewMessage` |
-| `DelightBistroOrderBackgroundService` | `Services/BackgroundServices/DelightBistroOrderBackgroundService.cs` | 24 ч | DelightBistro | Scope на итерацию; `IOrderRepository.DeleteExpiredOrders` (`ExecuteDelete`) |
+| `NotificationBackgroundService` | `Services/BackgroundServices/NotificationBackgroundService.cs` | 30 сек | Notification | Scope на итерацию; `GetReadyToPublishAsync` → Update → `IUnitOfWork.SaveChangesAsync`; broadcast `NewMessage` |
+| `DelightBistroOrderBackgroundService` | `Services/BackgroundServices/DelightBistroOrderBackgroundService.cs` | 24 ч | DelightBistro | Scope на итерацию; `IOrderRepository.DeleteExpiredOrderDatasAsync` (`ExecuteDeleteAsync`, без UoW) |
 
 ---
 
