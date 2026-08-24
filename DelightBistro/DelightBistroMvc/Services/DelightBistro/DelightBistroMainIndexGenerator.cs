@@ -22,12 +22,13 @@ namespace DelightBistroMvc.Services.DelightBistro
             _dogApi = dogApi;
         }
 
-        public async Task<MainIndexViewModel> GetMainIndexViewModelAsync(string menuType)
+        public async Task<MainIndexViewModel> GetMainIndexViewModelAsync(string menuType,
+            CancellationToken cancellationToken = default)
         {
             var catFactTask = _catFactApi.GetCatFact();
             var dogTask = _dogApi.GetDog();
 
-            var menus = _menuTypeGenerator.GetAllMenuViewModel(menuType);
+            var menus = await _menuTypeGenerator.GetAllMenuViewModelAsync(menuType, cancellationToken);
 
             CatFactDto catFact;
             DogDto dogDto;

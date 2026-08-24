@@ -10,7 +10,7 @@
 
 ## Назначение
 
-Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index асинхронно подгружаются факты о котах и фото собак (`GetMainIndexViewModelAsync`); при недоступности API меню всё равно отдаётся. Сид меню/ингредиентов/блюд — `IDelightBistroSeedService.EnsureSeed()` при старте приложения (`Program.cs`), не на каждый Index.
+Модуль ресторана с полным циклом: создание меню, ингредиентов и блюд, оформление заказов, чат персонала, статистика и CSV-экспорт. Каталог напитков вынесен в отдельный Minimal API. На Index асинхронно подгружаются факты о котах и фото собак (`GetMainIndexViewModelAsync`); при недоступности API меню всё равно отдаётся. Сид меню/ингредиентов/блюд — `IDelightBistroSeedService.EnsureSeedAsync()` при старте (`Program.cs`, один `SaveChangesAsync` в конце), не на каждый Index.
 
 ---
 
@@ -90,7 +90,8 @@ POST `FoodBuilderData` → SignalR `NewFoodWasCreated` (хаб `DeligtBistroHub`
 | `IDelightBistroSeedService` | Scoped | Сид при старте |
 | `INewChatService` / `NewChatService` | Scoped | Имя отправителя, сохранение/история сообщений чата |
 | `ChatPresenceService` | **Singleton** | Онлайн в NewChat (`connectionId` → displayName) |
-| `IFoodItemRepository`, `IMenuRepository`, `IIngredientsRepository`, `IOrderRepository`, `IChatMessageRepository` | Scoped | Data access |
+| `IFoodItemRepository`, `IMenuRepository`, `IIngredientsRepository`, `IOrderRepository`, `IChatMessageRepository` | Scoped | Data access (без SaveChanges) |
+| `IUnitOfWork` | Scoped | `SaveChangesAsync` после мутаций генераторов / API / чата |
 
 **Внешние HTTP API:** `CatFactApi`, `DogApi` (Index)
 
@@ -134,7 +135,7 @@ DbSet в `WebContext`: `Messages` → `ChatMessageData`. Индекс по `Crea
 
 | Сервис | Интервал | Назначение |
 |--------|----------|------------|
-| `DelightBistroOrderBackgroundService` | 24ч | `ExecuteDelete` просроченных заказов |
+| `DelightBistroOrderBackgroundService` | 24ч | `DeleteExpiredOrderDatasAsync` (`ExecuteDeleteAsync`) |
 
 ---
 

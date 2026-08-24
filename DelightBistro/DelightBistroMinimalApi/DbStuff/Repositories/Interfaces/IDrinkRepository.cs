@@ -1,4 +1,6 @@
-﻿namespace DelightBistroMinimalApi.DbStuff
+﻿using DelightBistroMinimalApi.DbStuff.Models;
+
+namespace DelightBistroMinimalApi.DbStuff.Repositories.Interfaces
 {
     public interface IDrinkRepository
     {

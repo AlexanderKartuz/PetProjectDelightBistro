@@ -1,5 +1,6 @@
 ﻿using DelightBistroMvc.Data.Models;
-using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
+using Microsoft.EntityFrameworkCore;
 
 namespace DelightBistroMvc.Data.Repositories
 {
@@ -9,13 +10,15 @@ namespace DelightBistroMvc.Data.Repositories
         {
         }
 
-        public List<ChatMessageData> GetRecent(int count)
+        public async Task<List<ChatMessageData>> GetRecentAsync(
+            int count,
+            CancellationToken cancellationToken = default)
         {
-            return _dbSet
+            return await _dbSet
                 .OrderByDescending(m => m.CreatedAtUtc)
                 .Take(count)
                 .OrderBy(m => m.CreatedAtUtc)
-                .ToList();
+                .ToListAsync(cancellationToken);
         }
     }
 }

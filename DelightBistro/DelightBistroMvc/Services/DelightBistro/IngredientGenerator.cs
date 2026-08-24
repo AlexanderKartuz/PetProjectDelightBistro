@@ -1,5 +1,6 @@
 ﻿using DelightBistroMvc.Data.DataModels;
 using DelightBistroMvc.Data.Models;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
@@ -8,30 +9,36 @@ namespace DelightBistroMvc.Services.DelightBistro
 {
     public class IngredientGenerator : IIngredientGenerator
     {
-        private IIngredientsRepository _ingredientsRepository;
-        private IAuthService _authService;
+        private readonly IIngredientsRepository _ingredientsRepository;
+        private readonly IAuthService _authService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public IngredientGenerator(IIngredientsRepository ingredientsRepository, IAuthService authService)
+        public IngredientGenerator(IIngredientsRepository ingredientsRepository, IAuthService authService, IUnitOfWork unitOfWork)
         {
             _ingredientsRepository = ingredientsRepository;
             _authService = authService;
+            _unitOfWork = unitOfWork;
         }
 
-        public void CreateIngredientData(CreateIngredientViewModel ingredient)
+        public async Task CreateIngredientDataAsync(CreateIngredientViewModel ingredient,
+            CancellationToken cancellationToken = default)
         {
             var ingredientData = new IngredientData
             {
                 Name = ingredient.Name,
                 Price = ingredient.Price,
-                Creator = _authService.GetUser()
+                Creator = await _authService.GetUserAsync(cancellationToken)
             };
 
-            _ingredientsRepository.Add(ingredientData);
+            await _ingredientsRepository.AddAsync(ingredientData, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public List<CreateIngredientViewModel> GenerateIngredientsViewModelFromFoodItemData(FoodItemData? foodItemData = null)
+        public async Task<List<CreateIngredientViewModel>> GenerateIngredientsViewModelFromFoodItemDataAsync(
+            FoodItemData? foodItemData = null,
+            CancellationToken cancellationToken = default)
         {
-            var ingredientsData = _ingredientsRepository.GetAll();
+            var ingredientsData = await _ingredientsRepository.GetAllAsync(cancellationToken);
 
             var ingredientsViewModel = ingredientsData.Select(i => new CreateIngredientViewModel
             {

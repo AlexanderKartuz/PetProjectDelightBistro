@@ -1,36 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using DelightBistroMvc.Controllers.CustomAuthAttribute;
-using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Hubs;
 using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Models.Notification;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
+using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Models;
 
 namespace DelightBistroMvc.Controllers
 {
     [IsAdmin]
     public class NotificationController : Controller
     {
-        private IHubContext<NotificationHub, INotificationHub> _notificationHub;
-        private INotificationRepository _notificationRepository;
-        private IAuthService _authService;
+        private readonly IHubContext<NotificationHub, INotificationHub> _notificationHub;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IAuthService _authService;
+        private readonly IUnitOfWork _unitOfWork;
 
         public NotificationController(
             IHubContext<NotificationHub, INotificationHub> notificationHub,
             INotificationRepository notificationRepository,
-            IAuthService authService)
+            IAuthService authService,
+            IUnitOfWork unitOfWork)
         {
             _notificationHub = notificationHub;
             _notificationRepository = notificationRepository;
             _authService = authService;
+            _unitOfWork = unitOfWork;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
         {
-            var viewModels = _notificationRepository
-                .GetAll()
+            var notifications = await _notificationRepository.GetAllAsync(cancellationToken);
+            var viewModels = notifications
                 .Select(x => new SingleNotificationViewModel
                 {
                     Id = x.Id,
@@ -52,21 +57,28 @@ namespace DelightBistroMvc.Controllers
 
 
         [HttpPost]
-        public IActionResult SavePreparedNotification(string text, DateTime date, DateTime time)
+        public async Task<IActionResult> SavePreparedNotificationAsync(
+            string text,
+            DateTime date,
+            DateTime time,
+            CancellationToken cancellationToken = default)
         {
             var timeToPublish = date;
             timeToPublish = timeToPublish.AddHours(time.Hour);
             timeToPublish = timeToPublish.AddMinutes(time.Minute);
 
-            var user = _authService.GetUser()!;
+            var user = await _authService.GetUserAsync(cancellationToken)
+                ?? throw new InvalidOperationException("Current user not found");
 
-            var dbModel = new Data.Models.NotificationData
+            var dbModel = new NotificationData
             {
                 Text = text,
                 TimeToPublish = timeToPublish,
                 Author = user
             };
-            _notificationRepository.Add(dbModel);
+            await _notificationRepository.AddAsync(dbModel, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return RedirectToAction(nameof(Index));
         }
     }

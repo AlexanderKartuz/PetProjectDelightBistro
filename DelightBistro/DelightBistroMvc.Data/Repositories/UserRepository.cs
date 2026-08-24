@@ -2,6 +2,7 @@
 using DelightBistroMvc.Data.Models;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Data.Services.PasswordHasher;
+using Microsoft.EntityFrameworkCore;
 
 namespace DelightBistroMvc.Data.Repositories
 {
@@ -13,10 +14,9 @@ namespace DelightBistroMvc.Data.Repositories
 
         }
 
-        public UserData? GetByName(string login)
+        public Task<UserData?> GetByNameAsync(string login, CancellationToken cancellationToken = default)
         {
-            var user = _dbSet.FirstOrDefault(x => x.Name == login);
-            return user;
+            return _dbSet.FirstOrDefaultAsync(x => x.Name == login, cancellationToken);
         }
 
         public bool IsNameUniq(string login)

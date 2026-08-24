@@ -5,8 +5,8 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IFoodItemRepository : IDelightBistroRepository<FoodItemData>, IBaseRepository<FoodItemData>
     {
-        List<FoodItemData> GetAllIncludeMenuAndIngredients();
-        FoodItemData? GetByIdIncludeMenuAndIngredientsLinks(int id);
-        List<FoodItemStatsDataModel> GetFoodItemStats();
+        Task<List<FoodItemData>> GetAllIncludeMenuAndIngredientsAsync(CancellationToken cancellation = default);
+        Task<FoodItemData?> GetByIdIncludeMenuAndIngredientsLinksAsync(int id, CancellationToken cancellation = default);
+        Task<List<FoodItemStatsDataModel>> GetFoodItemStatsAsync(CancellationToken cancellation = default);
     }
 }

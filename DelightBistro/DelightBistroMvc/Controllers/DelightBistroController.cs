@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using DelightBistroMvc.Controllers.CustomAuthAttribute;
-using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Hubs;
 using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Models.DelightBistro;
@@ -13,12 +12,12 @@ namespace DelightBistroMvc.Controllers
 {
     public class DelightBistroController : Controller
     {
-        private IDelightBistroMainIndexGenerator _delightBistroMainIndexGenerator;
-        private IFoodItemGenerator _foodItemGenerator;
-        private IMenuTypeGenerator _menuTypeGenerator;
-        private IIngredientGenerator _ingredientGenerator;
+        private readonly IDelightBistroMainIndexGenerator _delightBistroMainIndexGenerator;
+        private readonly IFoodItemGenerator _foodItemGenerator;
+        private readonly IMenuTypeGenerator _menuTypeGenerator;
+        private readonly IIngredientGenerator _ingredientGenerator;
 
-        private IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
+        private readonly IHubContext<DeligtBistroHub, IDeligtBistroHub> _deligtBistroHub;
 
 
         public DelightBistroController(IFoodItemGenerator foodItemGenerator,
@@ -37,9 +36,11 @@ namespace DelightBistroMvc.Controllers
             _delightBistroMainIndexGenerator = delightBistroMainIndexGenerator;
         }
 
-        public async Task<IActionResult> Index(string menuType)
+        public async Task<IActionResult> Index(string menuType,
+            CancellationToken cancellationToken = default)
         {
-            var viewModel = await _delightBistroMainIndexGenerator.GetMainIndexViewModelAsync(menuType);
+            var viewModel = await _delightBistroMainIndexGenerator
+                .GetMainIndexViewModelAsync(menuType, cancellationToken);
 
             return View(viewModel);
         }
@@ -55,13 +56,14 @@ namespace DelightBistroMvc.Controllers
         [HttpPost]
         [Authorize]
         [IsModerator]
-        public IActionResult CreateMenu(CreateMenuViewModel viewModel)
+        public async Task<IActionResult> CreateMenu(CreateMenuViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
-            _menuTypeGenerator.CreateMenuData(viewModel);
+            await _menuTypeGenerator.CreateMenuDataAsync(viewModel, cancellationToken);
 
             return RedirectToAction(nameof(Index));
         }
@@ -77,14 +79,15 @@ namespace DelightBistroMvc.Controllers
         [HttpPost]
         [Authorize]
         [IsModerator]
-        public IActionResult CreateIngredient(CreateIngredientViewModel viewModel)
+        public async Task<IActionResult> CreateIngredient(CreateIngredientViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
 
-            _ingredientGenerator.CreateIngredientData(viewModel);
+            await _ingredientGenerator.CreateIngredientDataAsync(viewModel, cancellationToken);
 
             return RedirectToAction(nameof(Index));
         }
@@ -92,9 +95,10 @@ namespace DelightBistroMvc.Controllers
         [HttpGet]
         [Authorize]
         [IsModerator]
-        public IActionResult FoodBuilderData(int id)
+        public async Task<IActionResult> FoodBuilderData(int id, CancellationToken cancellationToken = default)
         {
-            var createFoodItemVM = _foodItemGenerator.GetCreateFoodItemViewModel(id > 0 ? id : null);
+            var createFoodItemVM = await _foodItemGenerator
+                .GetCreateFoodItemViewModelAsync(id > 0 ? id : null, cancellationToken);
 
             return View(createFoodItemVM);
         }
@@ -102,35 +106,40 @@ namespace DelightBistroMvc.Controllers
         [HttpPost]
         [Authorize]
         [IsModerator]
-        public IActionResult FoodBuilderData(CreateFoodItemViewModel viewModel)
+        public async Task<IActionResult> FoodBuilderData(CreateFoodItemViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
-                viewModel.Menus = _foodItemGenerator.SelectMenuList();
-                viewModel.IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData();
+                viewModel.Menus = await _foodItemGenerator
+                    .SelectMenuListAsync(cancellationToken);
+                viewModel.IngredientsList = await _ingredientGenerator
+                    .GenerateIngredientsViewModelFromFoodItemDataAsync(cancellationToken: cancellationToken);
                 return View(viewModel);
             }
 
             if (viewModel.Id == 0)
             {
-                _foodItemGenerator.CreateFoodItemData(viewModel);
+                await _foodItemGenerator
+                    .CreateFoodItemDataAsync(viewModel, cancellationToken);
 
-                _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
+                await _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
 
                 return RedirectToAction(nameof(Index));
             }
-            _foodItemGenerator.ChangeFoodItemData(viewModel);
+            await _foodItemGenerator.ChangeFoodItemDataAsync(viewModel, cancellationToken);
 
-            _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
+            await _deligtBistroHub.Clients.All.NewFoodWasCreated(viewModel.Name, viewModel.Price);
 
             return RedirectToAction(nameof(AllFoodItems));
         }
 
         [Authorize]
         [IsEmployee]
-        public IActionResult AllFoodItems()
+        public async Task<IActionResult> AllFoodItems(CancellationToken cancellationToken = default)
         {
-            var foodItemsWithPermissionVM = _foodItemGenerator.GetAllFoodItemWithPermission();
+            var foodItemsWithPermissionVM = await _foodItemGenerator
+                .GetAllFoodItemWithPermissionAsync(cancellationToken);
 
             return View(foodItemsWithPermissionVM);
         }
@@ -138,22 +147,24 @@ namespace DelightBistroMvc.Controllers
         [Authorize]
         [IsEmployee]
         [HttpPost]
-        public IActionResult DeleteFoodItem(int id = 0)
+        public async Task<IActionResult> DeleteFoodItem(int id = 0,
+            CancellationToken cancellationToken = default)
         {
-            _foodItemGenerator.DeleteFoodItem(id);
+            await _foodItemGenerator.DeleteFoodItemAsync(id, cancellationToken);
 
             return RedirectToAction(nameof(AllFoodItems));
         }
 
-        public IActionResult GenerateTable()
+        public async Task<IActionResult> GenerateTable(CancellationToken cancellationToken = default)
         {
-            var fileStream = _foodItemGenerator.GenerateTable();
+            var fileStream = await _foodItemGenerator.GenerateTableAsync(cancellationToken);
 
             return File(fileStream, "text/csv");
         }
-        public IActionResult Stats()
+        public async Task<IActionResult> Stats(CancellationToken cancellationToken = default)
         {
-            var viewModels = _foodItemGenerator.GetFoodItemStatsViewModels();
+            var viewModels = await _foodItemGenerator
+                .GetFoodItemStatsViewModelsAsync(cancellationToken);
 
             return View(viewModels);
         }

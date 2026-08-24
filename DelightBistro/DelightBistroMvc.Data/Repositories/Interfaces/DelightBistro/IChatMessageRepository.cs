@@ -1,6 +1,6 @@
 ﻿using DelightBistroMvc.Data.Models;
 
-namespace DelightBistroMvc.Data.Repositories.Interfaces
+namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IChatMessageRepository : IBaseRepository<ChatMessageData>
     {
@@ -8,6 +8,6 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces
         /// Последние сообщения по дате
         /// </summary>
         /// <returns></returns>
-        List<ChatMessageData> GetRecent(int count);
+        Task<List<ChatMessageData>> GetRecentAsync(int count, CancellationToken cancellationToken = default);
     }
 }

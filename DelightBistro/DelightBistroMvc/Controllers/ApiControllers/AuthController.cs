@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
+﻿using Microsoft.AspNetCore.Mvc;
+using DelightBistroMvc.Data.Services.UserService;
 
 namespace DelightBistroMvc.Controllers.ApiControllers
 {
@@ -8,17 +7,18 @@ namespace DelightBistroMvc.Controllers.ApiControllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IUserRepository _userRepository;
+        private readonly IUserDataService _userDataService;
 
-        public AuthController(IUserRepository userRepository)
+        public AuthController(IUserDataService userDataService)
         {
-            _userRepository = userRepository;
+            _userDataService = userDataService;
         }
 
+        [HttpGet]
         public bool IsLoginFree(string login)
         {
             //Thread.Sleep(1000);
-            return _userRepository.IsNameUniq(login);
+            return _userDataService.IsNameUniq(login);
         }
     }
 }

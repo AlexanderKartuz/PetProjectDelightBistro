@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DelightBistroMvc.Data.Models;
-using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 
 namespace DelightBistroMvc.Data.Repositories;
 
@@ -11,16 +11,16 @@ public class NotificationRepository : BaseRepository<NotificationData>,
     {
     }
 
-    public override List<NotificationData> GetAll()
+    public override Task<List<NotificationData>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return _dbSet.Include(x => x.Author).ToList();
+        return _dbSet.Include(x => x.Author).ToListAsync(cancellationToken);
     }
 
-    public List<NotificationData> GetByLastNotifications()
+    public async Task<List<NotificationData>> GetReadyToPublishAsync(CancellationToken cancellationToken = default)
     {
-        return _dbSet
+        return await _dbSet
             .Where(x => x.TimeToPublish < DateTime.UtcNow
                 && x.IsActive)
-            .ToList();
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 }

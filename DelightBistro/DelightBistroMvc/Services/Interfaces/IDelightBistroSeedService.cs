@@ -2,6 +2,6 @@
 {
     public interface IDelightBistroSeedService
     {
-        void EnsureSeed();
+        Task EnsureSeedAsync(CancellationToken cancellationToken = default);
     }
 }

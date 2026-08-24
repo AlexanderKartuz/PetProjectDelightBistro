@@ -43,7 +43,7 @@ DELETE /DeleteDrink/{id} → RequireRole(Admin)
 
 1. `Configure<JwtOptions>` + валидация длины `Key`
 2. `AddDbContext<WebContext>` на `ConnectionStrings:Users`
-3. `IUserRepository` / `UserRepository`, `IPasswordHasher` / `BCryptPasswordHasher`, `IUserDataService` / `UserDataService`
+3. `IUnitOfWork` / `UnitOfWork`, `IUserRepository` / `UserRepository`, `IPasswordHasher` / `BCryptPasswordHasher`, `IUserDataService` / `UserDataService`
 4. `IJwtTokenService` / `JwtTokenService`
 5. `AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(...)` — `TokenValidationParameters` (Issuer, Audience, Lifetime, SigningKey, `ClockSkew` 1 мин)
 6. `AddAuthorization()` — обязательно для `UseAuthorization` / `RequireAuthorization`

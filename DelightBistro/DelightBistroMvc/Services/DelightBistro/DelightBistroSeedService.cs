@@ -1,4 +1,5 @@
 ﻿using DelightBistroMvc.Data.Models;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
 
@@ -9,26 +10,32 @@ namespace DelightBistroMvc.Services.DelightBistro
         private readonly IFoodItemRepository _foodItemRepository;
         private readonly IMenuRepository _menuRepository;
         private readonly IIngredientsRepository _ingredientsRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DelightBistroSeedService(IFoodItemRepository foodItemRepository,
+        public DelightBistroSeedService(
+            IFoodItemRepository foodItemRepository,
             IMenuRepository menuRepository,
-            IIngredientsRepository ingredientsRepository)
+            IIngredientsRepository ingredientsRepository,
+            IUnitOfWork unitOfWork)
         {
             _foodItemRepository = foodItemRepository;
             _menuRepository = menuRepository;
             _ingredientsRepository = ingredientsRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public void EnsureSeed()
+        public async Task EnsureSeedAsync(CancellationToken cancellationToken = default)
         {
-            FillFoodItemData();
-            FillIngredientData();
-            FillMenuData();
+            await FillFoodItemDataAsync(cancellationToken);
+            await FillIngredientDataAsync(cancellationToken);
+            await FillMenuDataAsync(cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        private void FillFoodItemData()
+        private async Task FillFoodItemDataAsync(CancellationToken cancellationToken = default)
         {
-            if (_foodItemRepository.Any())
+            if (await _foodItemRepository.AnyAsync(cancellationToken))
             {
                 return;
             }
@@ -40,7 +47,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                 ImgURL = "https://png.klev.club/uploads/posts/2024-03/png-klev-club-p-stakan-vodi-png-9.png",
 
             };
-            _foodItemRepository.Add(foodItemData);
+            await _foodItemRepository.AddAsync(foodItemData, cancellationToken);
 
             var cesarSalad = new FoodItemData
             {
@@ -48,31 +55,31 @@ namespace DelightBistroMvc.Services.DelightBistro
                 Price = 15m,
                 ImgURL = "/images/delight-bistro/CesarSalad.jpg",
             };
-            _foodItemRepository.Add(cesarSalad);
+            await _foodItemRepository.AddAsync(cesarSalad, cancellationToken);
         }
 
-        private void FillIngredientData()
+        private async Task FillIngredientDataAsync(CancellationToken cancellationToken = default)
         {
-            if (_ingredientsRepository.Any())
+            if (await _ingredientsRepository.AnyAsync(cancellationToken))
             {
                 return;
             }
-            _ingredientsRepository.Add(new IngredientData { Name = "Креветки", Price = 40 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Шампиньоны", Price = 12 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Лайм", Price = 9 });
-            _ingredientsRepository.Add(new IngredientData { Name = "Паста", Price = 8 });
+            await _ingredientsRepository.AddAsync(new IngredientData { Name = "Креветки", Price = 40 }, cancellationToken);
+            await _ingredientsRepository.AddAsync(new IngredientData { Name = "Шампиньоны", Price = 12 }, cancellationToken);
+            await _ingredientsRepository.AddAsync(new IngredientData { Name = "Лайм", Price = 9 }, cancellationToken);
+            await _ingredientsRepository.AddAsync(new IngredientData { Name = "Паста", Price = 8 }, cancellationToken);
         }
 
-        public void FillMenuData()
+        private async Task FillMenuDataAsync(CancellationToken cancellationToken = default)
         {
-            if (_menuRepository.Any())
+            if (await _menuRepository.AnyAsync(cancellationToken))
             {
                 return;
             }
 
-            _menuRepository.Add(new MenuData { Name = "Soups" });
-            _menuRepository.Add(new MenuData { Name = "Hot" });
-            _menuRepository.Add(new MenuData { Name = "Salads" });
+            await _menuRepository.AddAsync(new MenuData { Name = "Soups" }, cancellationToken);
+            await _menuRepository.AddAsync(new MenuData { Name = "Hot" }, cancellationToken);
+            await _menuRepository.AddAsync(new MenuData { Name = "Salads" }, cancellationToken);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace DelightBistroMvc.Data.Repositories
     {
         public FoodItemRepository(WebContext context) : base(context) { }
 
-        public List<FoodItemData> GetAllIncludeMenuAndIngredients()
+        public Task<List<FoodItemData>> GetAllIncludeMenuAndIngredientsAsync(CancellationToken cancellation = default)
         {
             var allFoods = _dbSet
                 .AsNoTracking()
@@ -18,7 +18,7 @@ namespace DelightBistroMvc.Data.Repositories
                 .Include(x => x.FoodItemIngredientDatas)
                     .ThenInclude(x => x.IngredientData);
 
-            return allFoods.ToList();
+            return allFoods.ToListAsync(cancellationToken: cancellation);
         }
 
         public bool IsNameFree(string name)
@@ -26,18 +26,19 @@ namespace DelightBistroMvc.Data.Repositories
             return !_dbSet.Any(x => x.Name == name);
         }
 
-        public FoodItemData? GetByIdIncludeMenuAndIngredientsLinks(int id)
+        public Task<FoodItemData?> GetByIdIncludeMenuAndIngredientsLinksAsync(int id, CancellationToken cancellation = default)
         {
             // Без AsNoTracking — сущность потом обновляется
             var foodItemInclude = _dbSet
                 .Include(x => x.MenuData)
                 .Include(fi => fi.FoodItemIngredientDatas)
                     .ThenInclude(x => x.IngredientData)
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id, cancellation);
+
             return foodItemInclude;
         }
 
-        public List<FoodItemStatsDataModel> GetFoodItemStats()
+        public Task<List<FoodItemStatsDataModel>> GetFoodItemStatsAsync(CancellationToken cancellation = default)
         {
             var sql = @"SELECT 
             FI.[Name] as FoodItemName,
@@ -53,7 +54,7 @@ namespace DelightBistroMvc.Data.Repositories
             var results = _context
                 .Database
                 .SqlQueryRaw<FoodItemStatsDataModel>(sql)
-                .ToList();
+                .ToListAsync(cancellation);
 
             return results;
         }

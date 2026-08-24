@@ -29,7 +29,7 @@ namespace DelightBistroMvc.Hubs
 
             await Groups.AddToGroupAsync(connectionId, CHAT_GROUP_NAME);
 
-            var history = _chatService.GetRecentMessage();
+            var history = await _chatService.GetRecentMessageAsync();
             var others = _chatPresenceService.GetOthers(connectionId);
 
             // МОжно ли Task.WhenAll()?
@@ -47,7 +47,7 @@ namespace DelightBistroMvc.Hubs
                 ?? _chatService.ResolveDisplayName(Context.User, connectionId);
 
             var userId = _chatService.TryGetUserId(Context.User);
-            var messageDto = _chatService.SaveMessage(userName, text, userId);
+            var messageDto = await _chatService.SaveMessageAsync(userName, text, userId);
 
             if (messageDto == null)
             {
