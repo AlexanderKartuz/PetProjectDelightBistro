@@ -6,8 +6,8 @@ namespace DelightBistroMvc.Services.Interfaces
 {
     public interface IIngredientGenerator
     {
-        void CreateIngredientData(CreateIngredientViewModel ingredient);
-        List<CreateIngredientViewModel> GenerateIngredientsViewModelFromFoodItemData(FoodItemData? foodItemData = null);
+        Task CreateIngredientDataAsync(CreateIngredientViewModel ingredient, CancellationToken cancellation = default);
+        Task<List<CreateIngredientViewModel>> GenerateIngredientsViewModelFromFoodItemDataAsync(FoodItemData? foodItemData = null, CancellationToken cancellation = default);
         List<CreateIngredientViewModel> GetSelectedCreateIngredientViewModelFromIngredientsList(List<CreateIngredientViewModel> ingredientsViewModel);
         List<FoodItemIngredientData> GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(CreateFoodItemViewModel viewModel);
         List<CreateIngredientViewModel> MapSelectedIngredients(FoodItemData foodItemData);

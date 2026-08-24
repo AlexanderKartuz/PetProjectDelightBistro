@@ -93,7 +93,7 @@ namespace DelightBistro.Tests.Services
             };
 
             // Act
-            _ingredientGenerator.CreateIngredientData(createIngredientVm);
+            _ingredientGenerator.CreateIngredientDataAsync(createIngredientVm);
 
             // Verify
             _ingredientRepositoryMock.Verify(x =>
@@ -119,7 +119,7 @@ namespace DelightBistro.Tests.Services
             FoodItemData? foodData = null;
 
             var result = _ingredientGenerator
-                .GenerateIngredientsViewModelFromFoodItemData(foodData);
+                .GenerateIngredientsViewModelFromFoodItemDataAsync(foodData);
 
             Assert.Multiple(new Action(() =>
             {
@@ -159,7 +159,7 @@ namespace DelightBistro.Tests.Services
                 }
             };
 
-            var result = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodData);
+            var result = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemDataAsync(foodData);
 
             Assert.Multiple(new Action(() =>
             {
@@ -231,7 +231,7 @@ namespace DelightBistro.Tests.Services
                 .Returns(new List<IngredientData>());
 
             var result = _ingredientGenerator
-                .GenerateIngredientsViewModelFromFoodItemData();
+                .GenerateIngredientsViewModelFromFoodItemDataAsync();
 
             Assert.That(result, Is.Empty);
         }

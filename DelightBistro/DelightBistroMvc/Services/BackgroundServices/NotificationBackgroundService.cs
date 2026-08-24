@@ -2,6 +2,7 @@
 using DelightBistroMvc.Hubs.Interfaces;
 using DelightBistroMvc.Hubs;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 
 namespace DelightBistroMvc.Services.BackgroundServices
 {
@@ -15,16 +16,19 @@ namespace DelightBistroMvc.Services.BackgroundServices
             _serviceProvider = serviceProvider;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 using var di = _serviceProvider.CreateScope();
-                var notificationRepository = di.ServiceProvider.GetRequiredService<INotificationRepository>();
-                var hub = di.ServiceProvider.GetRequiredService<IHubContext<NotificationHub, INotificationHub>>();
+                var serviceProvider = di.ServiceProvider;
 
-                // var span = new TimeSpan(DELAY_BETWEEN_NOTIFICATION_CHECK * 10 * 1000 * 1000);
-                var notificationsToShow = notificationRepository.GetByLastNotifications();
+                var notificationRepository = serviceProvider.GetRequiredService<INotificationRepository>();
+                var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+                var hub = serviceProvider.GetRequiredService<IHubContext<NotificationHub, INotificationHub>>();
+
+                var notificationsToShow = await notificationRepository
+                    .GetReadyToPublishAsync(cancellationToken);
 
                 if (notificationsToShow.Count > 0)
                 {
@@ -35,10 +39,11 @@ namespace DelightBistroMvc.Services.BackgroundServices
                         notification.IsActive = false;
                     }
 
-                    notificationRepository.Update(notificationsToShow);
+                    await notificationRepository.UpdateAsync(notificationsToShow, cancellationToken);
+                    await unitOfWork.SaveChangesAsync(cancellationToken);
                 }
 
-                await Task.Delay(DELAY_BETWEEN_NOTIFICATION_CHECK * 1000, stoppingToken);
+                await Task.Delay(DELAY_BETWEEN_NOTIFICATION_CHECK * 1000, cancellationToken);
             }
         }
     }

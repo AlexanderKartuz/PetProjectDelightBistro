@@ -32,7 +32,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> DeleteAsync([FromQuery] List<int> ids,
+        public async Task<bool> Delete([FromQuery] List<int> ids,
             CancellationToken cancellationToken = default)
         {
             await _foodItemRepository.DeleteAsync(ids, cancellationToken);
@@ -42,7 +42,7 @@ namespace DelightBistroMvc.Controllers.ApiControllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateOrderAsync([FromBody] CreateOrderDto createOrder,
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createOrder,
             CancellationToken cancellationToken = default)
         {
             if (createOrder.foodItemIds.IsNullOrEmpty())

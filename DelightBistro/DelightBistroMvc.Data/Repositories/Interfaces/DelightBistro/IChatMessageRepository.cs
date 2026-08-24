@@ -8,6 +8,6 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
         /// Последние сообщения по дате
         /// </summary>
         /// <returns></returns>
-        List<ChatMessageData> GetRecent(int count);
+        Task<List<ChatMessageData>> GetRecentAsync(int count, CancellationToken cancellationToken = default);
     }
 }

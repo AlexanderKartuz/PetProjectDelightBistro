@@ -19,7 +19,7 @@ namespace DelightBistroMvc.Controllers
             _authService = authService;
         }
 
-        public async Task<IActionResult> IndexAsync(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
         {
             var viewModel = new IndexViewModel();
             var user = await _authService.GetUserAsync(cancellationToken);

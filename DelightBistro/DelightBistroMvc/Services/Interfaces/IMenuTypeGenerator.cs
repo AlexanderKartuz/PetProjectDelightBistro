@@ -5,7 +5,7 @@ namespace DelightBistroMvc.Services.Interfaces
 {
     public interface IMenuTypeGenerator
     {
-        void CreateMenuData(CreateMenuViewModel viewModel);
-        List<MenuTypeViewModel> GetAllMenuViewModel(string sortMenuName="");
+        Task CreateMenuDataAsync(CreateMenuViewModel viewModel, CancellationToken cancellationToken = default);
+        Task<List<MenuTypeViewModel>> GetAllMenuViewModelAsync(string sortMenuName = "", CancellationToken cancellationToken = default);
     }
 }

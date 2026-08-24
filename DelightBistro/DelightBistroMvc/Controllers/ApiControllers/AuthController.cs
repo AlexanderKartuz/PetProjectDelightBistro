@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
+﻿using Microsoft.AspNetCore.Mvc;
 using DelightBistroMvc.Data.Services.UserService;
 
 namespace DelightBistroMvc.Controllers.ApiControllers

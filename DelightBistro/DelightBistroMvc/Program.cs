@@ -113,9 +113,9 @@ if (!app.Environment.IsDevelopment())
 // DataSeed
 using (var scope = app.Services.CreateScope())
 {
-    scope.ServiceProvider
-        .GetRequiredService<IDelightBistroSeedService>()
-        .EnsureSeed();
+    await scope.ServiceProvider
+         .GetRequiredService<IDelightBistroSeedService>()
+         .EnsureSeedAsync();
 }
 
 app.UseHttpsRedirection();

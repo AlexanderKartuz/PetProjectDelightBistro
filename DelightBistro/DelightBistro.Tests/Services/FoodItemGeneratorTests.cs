@@ -118,7 +118,7 @@ namespace DelightBistro.Tests.Services
                 .Returns((FoodItemData?)null);
 
             Assert.Throws<InvalidOperationException>(new TestDelegate(() =>
-            _foodItemGenerator.ChangeFoodItemData(changedFoodItem)));
+            _foodItemGenerator.ChangeFoodItemDataAsync(changedFoodItem)));
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace DelightBistro.Tests.Services
             Assert.That(result.IngredientsList, Has.Count.EqualTo(2));
             _ingredientGeneratorMock.Verify(ig => ig.MapSelectedIngredients(foodData), Times.Once);
             _ingredientGeneratorMock.Verify(
-                ig => ig.GenerateIngredientsViewModelFromFoodItemData(It.IsAny<FoodItemData>()),
+                ig => ig.GenerateIngredientsViewModelFromFoodItemDataAsync(It.IsAny<FoodItemData>()),
                 Times.Never);
         }
 
@@ -173,7 +173,7 @@ namespace DelightBistro.Tests.Services
                     },
                 });
 
-            var result = _foodItemGenerator.GetFoodItemStatsViewModels();
+            var result = _foodItemGenerator.GetFoodItemStatsViewModelsAsync();
 
             // Assert
             Assert.That(result, Has.Count.EqualTo(1));
@@ -198,7 +198,7 @@ namespace DelightBistro.Tests.Services
             }) : null;
 
             _ingredientGeneratorMock.Setup(ig =>
-            ig.GenerateIngredientsViewModelFromFoodItemData(foodData))
+            ig.GenerateIngredientsViewModelFromFoodItemDataAsync(foodData))
                 .Returns(new List<CreateIngredientViewModel>
                 {
                     new CreateIngredientViewModel(){ Id=1, Name ="Foo2"},
@@ -215,7 +215,7 @@ namespace DelightBistro.Tests.Services
                 });
 
             // Act
-            var result = _foodItemGenerator.ConvertToCreateFoodItemVM(foodData);
+            var result = _foodItemGenerator.ConvertToCreateFoodItemVm(foodData);
 
             // Assert
             if (exist)

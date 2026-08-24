@@ -16,11 +16,11 @@ public class NotificationRepository : BaseRepository<NotificationData>,
         return _dbSet.Include(x => x.Author).ToListAsync(cancellationToken);
     }
 
-    public List<NotificationData> GetByLastNotifications()
+    public async Task<List<NotificationData>> GetReadyToPublishAsync(CancellationToken cancellationToken = default)
     {
-        return _dbSet
+        return await _dbSet
             .Where(x => x.TimeToPublish < DateTime.UtcNow
                 && x.IsActive)
-            .ToList();
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 }

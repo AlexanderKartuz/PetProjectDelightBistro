@@ -4,6 +4,6 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro
 {
     public interface IOrderRepository : IBaseRepository<OrderData>
     {
-        void DeleteExpiredOrderDatas();
+        Task<int> DeleteExpiredOrderDatasAsync(CancellationToken cancellationToken = default);
     }
 }

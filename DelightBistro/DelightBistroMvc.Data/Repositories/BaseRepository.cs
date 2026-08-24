@@ -49,7 +49,9 @@ namespace DelightBistroMvc.Data.Repositories
             }
         }
 
-        public virtual Task DeleteRangeAsync(List<DataModel> models, CancellationToken cancellationToken = default)
+        public virtual Task DeleteRangeAsync(
+            List<DataModel> models, 
+            CancellationToken cancellationToken = default)
         {
             _dbSet.RemoveRange(models);
             return Task.CompletedTask;

@@ -37,7 +37,7 @@ namespace DelightBistroMvc.Controllers
         }
 
         [IsModerator]
-        public async Task<IActionResult> IndexAsync(int cardId,
+        public async Task<IActionResult> Index(int cardId,
             CancellationToken cancellationToken = default)
         {
             var usersFromDb = await _userRepository.GetAllAsync(cancellationToken);
@@ -87,7 +87,7 @@ namespace DelightBistroMvc.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ChangeLanguageAsync(
+        public async Task<IActionResult> ChangeLanguage(
             int userId,
             Language language, CancellationToken cancellationToken = default)
         {
@@ -102,7 +102,7 @@ namespace DelightBistroMvc.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UpdateAvatarAsync(
+        public async Task<IActionResult> UpdateAvatar(
             IFormFile avatar,
             CancellationToken cancellationToken = default)
         {
@@ -127,7 +127,7 @@ namespace DelightBistroMvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfileAsync(
+        public async Task<IActionResult> UpdateProfile(
             UserProfileViewModel viewModel,
             CancellationToken cancellationToken = default)
         {
@@ -147,10 +147,10 @@ namespace DelightBistroMvc.Controllers
         [IsAdmin]
         public IActionResult DeleteUser()
         {
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> GenerateReportAsync(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GenerateReport(CancellationToken cancellationToken = default)
         {
             var path = System.IO.Path.GetTempFileName();
             using (var file = System.IO.File.CreateText(path))
@@ -169,7 +169,7 @@ namespace DelightBistroMvc.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAccountAsync(
+        public async Task<IActionResult> DeleteAccount(
             int userId,
             CancellationToken cancellationToken = default)
         {
@@ -195,7 +195,7 @@ namespace DelightBistroMvc.Controllers
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             await HttpContext.SignOutAsync();
 
-            return RedirectToAction(nameof(HomeController.IndexAsync), "Home");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

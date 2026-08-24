@@ -1,4 +1,5 @@
 ﻿using DelightBistroMvc.Data.Models;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DTOs.Chat;
 using DelightBistroMvc.Services.Chat.Interfaces;
@@ -10,15 +11,20 @@ namespace DelightBistroMvc.Services.Chat
     {
         private const int MAX_TEXT_LENGTH = 500;
         private readonly IChatMessageRepository _messageRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public NewChatService(IChatMessageRepository messageRepository)
+        public NewChatService(IChatMessageRepository messageRepository, IUnitOfWork unitOfWork)
         {
             _messageRepository = messageRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public IReadOnlyList<ChatMessageDto> GetRecentMessage(int count = 10)
+        public async Task<IReadOnlyList<ChatMessageDto>> GetRecentMessageAsync(
+            int count = 10,
+            CancellationToken cancellationToken = default)
         {
-            return _messageRepository.GetRecent(count).Select(MapToDto).ToList();
+            var list = await _messageRepository.GetRecentAsync(count, cancellationToken);
+            return list.Select(MapToDto).ToList();
         }
 
         public string ResolveDisplayName(ClaimsPrincipal? user, string connectionId)
@@ -33,7 +39,10 @@ namespace DelightBistroMvc.Services.Chat
             return nameFromCoockie;
         }
 
-        public ChatMessageDto? SaveMessage(string senderName, string text, int? userId)
+        public async Task<ChatMessageDto?> SaveMessageAsync(string senderName,
+            string text,
+            int? userId,
+            CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -53,7 +62,8 @@ namespace DelightBistroMvc.Services.Chat
                 CreatedAtUtc = DateTime.UtcNow,
                 UserId = userId
             };
-            _messageRepository.AddAsync(messageData);
+            await _messageRepository.AddAsync(messageData, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return MapToDto(messageData);
         }

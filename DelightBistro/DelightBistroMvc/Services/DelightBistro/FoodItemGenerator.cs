@@ -4,6 +4,7 @@ using DelightBistroMvc.Data.Models;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Models.DelightBistro;
 using DelightBistroMvc.Services.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 
 namespace DelightBistroMvc.Services.DelightBistro
 {
@@ -12,26 +13,30 @@ namespace DelightBistroMvc.Services.DelightBistro
         private IFoodItemRepository _foodItemRepository;
         private IMenuRepository _menuRepository;
         private IIngredientGenerator _ingredientGenerator;
+        private readonly IUnitOfWork _unitOfWork;
         private IAuthService _authService;
         private IWebHostEnvironment _webHostEnvironment;
 
         public FoodItemGenerator(
-            IFoodItemRepository foodItemRepository
-            , IMenuRepository menuRepository
-            , IIngredientGenerator ingredientGenerator
-            , IAuthService authService
-            , IWebHostEnvironment webHostEnvironment)
+            IFoodItemRepository foodItemRepository,
+            IMenuRepository menuRepository,
+            IIngredientGenerator ingredientGenerator,
+            IAuthService authService,
+            IWebHostEnvironment webHostEnvironment,
+            IUnitOfWork unitOfWork)
         {
             _foodItemRepository = foodItemRepository;
             _menuRepository = menuRepository;
             _ingredientGenerator = ingredientGenerator;
             _authService = authService;
             _webHostEnvironment = webHostEnvironment;
+            _unitOfWork = unitOfWork;
         }
 
-        public void CreateFoodItemData(CreateFoodItemViewModel viewModel)
+        public async Task CreateFoodItemDataAsync(CreateFoodItemViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
-            var selectedMenu = GetSelectedMenu(viewModel);
+            var selectedMenu = await GetSelectedMenuAsync(viewModel, cancellationToken);
 
             var links = _ingredientGenerator.GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(viewModel);
 
@@ -44,35 +49,34 @@ namespace DelightBistroMvc.Services.DelightBistro
                 MenuData = selectedMenu,
 
                 FoodItemIngredientDatas = links,
-                Creator = _authService.GetUserAsync()
+                Creator = await _authService.GetUserAsync(cancellationToken)
             };
 
-            _foodItemRepository.AddAsync(newFoodItemData);
+            await _foodItemRepository.AddAsync(newFoodItemData, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            GetImgFile(viewModel, newFoodItemData);
-
+            await GetImgFileAsync(viewModel, newFoodItemData, cancellationToken);
         }
 
-        public void ChangeFoodItemData(CreateFoodItemViewModel viewModel)
+        public async Task ChangeFoodItemDataAsync(CreateFoodItemViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
             if (viewModel.Id <= 0)
             {
                 return;
             }
 
-            var links = _ingredientGenerator.GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(viewModel);
+            var links = _ingredientGenerator
+                .GetLinksFoodItemIngredientDataFromCreateFoodItemViewModel(viewModel);
 
-            var changedFoodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(viewModel.Id);
-
-            if (changedFoodItemData == null)
-            {
-                throw new InvalidOperationException($"Блюдо с Id = {viewModel.Id} не найдено");
-            }
+            var changedFoodItemData = await _foodItemRepository
+                .GetByIdIncludeMenuAndIngredientsLinksAsync(viewModel.Id, cancellationToken)
+                ?? throw new InvalidOperationException($"Блюдо с Id = {viewModel.Id} не найдено");
 
             changedFoodItemData.Name = viewModel.Name;
             changedFoodItemData.Price = viewModel.Price;
             changedFoodItemData.ImgURL = viewModel.ImgUrl;
-            changedFoodItemData.MenuData = GetSelectedMenu(viewModel);
+            changedFoodItemData.MenuData = await GetSelectedMenuAsync(viewModel, cancellationToken);
 
             changedFoodItemData.FoodItemIngredientDatas.Clear();
 
@@ -81,11 +85,12 @@ namespace DelightBistroMvc.Services.DelightBistro
                 changedFoodItemData.FoodItemIngredientDatas.Add(item);
             }
 
-            _foodItemRepository.UpdateAsync(changedFoodItemData);
-            GetImgFile(viewModel, changedFoodItemData);
+            await _foodItemRepository.UpdateAsync(changedFoodItemData, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await GetImgFileAsync(viewModel, changedFoodItemData, cancellationToken);
         }
 
-        public FoodItemViewModel ConvertToFoodItemVM(FoodItemData foodItemData)
+        public FoodItemViewModel ConvertToFoodItemVm(FoodItemData foodItemData)
         {
             var selectedIngredientsViewModel = _ingredientGenerator.MapSelectedIngredients(foodItemData);
 
@@ -106,20 +111,23 @@ namespace DelightBistroMvc.Services.DelightBistro
             return foodItemViewModel;
         }
 
-        public CreateFoodItemViewModel ConvertToCreateFoodItemVM(FoodItemData? foodItemData = null)
+        public async Task<CreateFoodItemViewModel> ConvertToCreateFoodItemVmAsync(
+            FoodItemData? foodItemData = null,
+            CancellationToken cancellationToken = default)
         {
             if (foodItemData == null)
             {
                 var createFoodItemVM = new CreateFoodItemViewModel()
                 {
-                    Menus = SelectMenuList(),
-                    IngredientsList = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodItemData)
+                    Menus = await SelectMenuListAsync(cancellationToken),
+                    IngredientsList = await _ingredientGenerator
+                    .GenerateIngredientsViewModelFromFoodItemDataAsync(foodItemData, cancellationToken)
                 };
 
                 return createFoodItemVM;
             }
 
-            var allIngredientsVM = _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemData(foodItemData);
+            var allIngredientsVM = await _ingredientGenerator.GenerateIngredientsViewModelFromFoodItemDataAsync(foodItemData, cancellationToken);
 
             var viewModel = new CreateFoodItemViewModel
             {
@@ -131,15 +139,15 @@ namespace DelightBistroMvc.Services.DelightBistro
                 MenuId = foodItemData.MenuData?.Id,
 
                 IngredientsList = allIngredientsVM,
-                Menus = SelectMenuList()
+                Menus = await SelectMenuListAsync(cancellationToken)
             };
 
             return viewModel;
         }
 
-        public List<SelectListItem> SelectMenuList()
+        public async Task<List<SelectListItem>> SelectMenuListAsync(CancellationToken cancellationToken = default)
         {
-            var allMenuData = _menuRepository.GetAllAsync();
+            var allMenuData = await _menuRepository.GetAllAsync(cancellationToken);
             var menuListItems = new List<SelectListItem>();
             menuListItems.AddRange(allMenuData.Select(x => new SelectListItem
             {
@@ -149,24 +157,31 @@ namespace DelightBistroMvc.Services.DelightBistro
             return menuListItems;
         }
 
-        private MenuData? GetSelectedMenu(CreateFoodItemViewModel viewModel)
+        private async Task<MenuData?> GetSelectedMenuAsync(
+            CreateFoodItemViewModel viewModel,
+            CancellationToken cancellationToken = default)
         {
-            MenuData? menuData = null;
-            if (viewModel.MenuId != null)
+            if (viewModel.MenuId == null)
             {
-                menuData = _menuRepository.GetAsync(viewModel.MenuId.Value);
+                return null;
             }
+            var menuData = await _menuRepository
+                .GetAsync(viewModel.MenuId.Value, cancellationToken);
+
             return menuData;
         }
 
-        public void DeleteFoodItem(int id)
+        public async Task DeleteFoodItemAsync(int id, CancellationToken cancellationToken = default)
         {
-            _foodItemRepository.DeleteAsync(id);
+            await _foodItemRepository.DeleteAsync(id, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public AllFoodItemWithPermissionViewModel GetFoodsWithPermission(List<FoodItemViewModel> foodItemsViewModel)
+        public async Task<AllFoodItemWithPermissionViewModel> GetFoodsWithPermissionAsync(
+            List<FoodItemViewModel> foodItemsViewModel,
+            CancellationToken cancellationToken = default)
         {
-            var currentUser = _authService.GetUserAsync()!;
+            var currentUser = await _authService.GetUserAsync(cancellationToken);
             var isAdmin = currentUser?.Role == UserRole.Admin;
             var currentUserId = currentUser?.Id;
 
@@ -185,7 +200,10 @@ namespace DelightBistroMvc.Services.DelightBistro
             return viewModel;
         }
 
-        private void GetImgFile(CreateFoodItemViewModel viewModel, FoodItemData foodItemData)
+        private async Task GetImgFileAsync(
+            CreateFoodItemViewModel viewModel,
+            FoodItemData foodItemData,
+            CancellationToken cancellationToken = default)
         {
             if (viewModel.Image != null)
             {
@@ -194,25 +212,28 @@ namespace DelightBistroMvc.Services.DelightBistro
                 var fileName = $"fooditem-{foodItemData.Id}.jpg";
                 var path = Path.Combine(pathToWwwRotFolder, pathToFolder, fileName);
 
-                using (var foodItemImgFile = new FileStream(path, FileMode.Create))
+                await using (var foodItemImgFile = new FileStream(path, FileMode.Create))
                 {
-                    viewModel.Image.CopyTo(foodItemImgFile);
+                    await viewModel.Image.CopyToAsync(foodItemImgFile, cancellationToken);
                 }
 
                 foodItemData.ImgURL = $"/images/delight-bistro/{fileName}";
-                _foodItemRepository.UpdateAsync(foodItemData);
+
+                await _foodItemRepository.UpdateAsync(foodItemData, cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
         }
 
-        public FileStream GenerateTable()
+        public async Task<FileStream> GenerateTableAsync(CancellationToken cancellationToken = default)
         {
             var path = Path.GetTempFileName();
 
-            using (var file = File.CreateText(path))
+            await using (var file = File.CreateText(path))
             {
-                file.WriteLine($"Id,Name,Price,ImgUrl,MenuType,IngredientsList");
+                await file.WriteLineAsync($"Id,Name,Price,ImgUrl,MenuType,IngredientsList");
 
-                var foodDatas = _foodItemRepository.GetAllIncludeMenuAndIngredients();
+                var foodDatas = await _foodItemRepository
+                    .GetAllIncludeMenuAndIngredientsAsync(cancellationToken);
 
                 foreach (var foodItem in foodDatas)
                 {
@@ -222,7 +243,7 @@ namespace DelightBistroMvc.Services.DelightBistro
                             .Select(x => x.IngredientData?.Name)
                             .Where(name => !string.IsNullOrEmpty(name)));
 
-                    file.WriteLine($"{foodItem.Id},"
+                    await file.WriteLineAsync($"{foodItem.Id},"
                         + $"{foodName},{foodItem.Price},"
                         + $"{foodItem.ImgURL ?? ""},"
                         + $"{foodItem.MenuData?.Name ?? ""},"
@@ -249,43 +270,50 @@ namespace DelightBistroMvc.Services.DelightBistro
             return name;
         }
 
-        public List<FoodItemStatsViewModel> GetFoodItemStatsViewModels()
+        public async Task<List<FoodItemStatsViewModel>> GetFoodItemStatsViewModelsAsync(CancellationToken cancellationToken = default)
         {
-            var allFoodItemStatsDataModel = _foodItemRepository.GetFoodItemStats();
+            var allFoodItemStatsDataModel = await _foodItemRepository
+                .GetFoodItemStatsAsync(cancellationToken);
 
-            var allFoodItemStatsViewModel = allFoodItemStatsDataModel.Select(x => new FoodItemStatsViewModel
-            {
-                FoodItemName = x.FoodItemName,
-                IngredientCount = x.IngredientCount,
-                FoodItemPrice = x.FoodItemPrice,
-                TotalPriceIngredient = x.TotalPriceIngredient,
-                Profit = x.Profit,
-            }).ToList();
+            var allFoodItemStatsViewModel = allFoodItemStatsDataModel
+                .Select(x => new FoodItemStatsViewModel
+                {
+                    FoodItemName = x.FoodItemName,
+                    IngredientCount = x.IngredientCount,
+                    FoodItemPrice = x.FoodItemPrice,
+                    TotalPriceIngredient = x.TotalPriceIngredient,
+                    Profit = x.Profit,
+                }).ToList();
 
             return allFoodItemStatsViewModel;
         }
 
-        public AllFoodItemWithPermissionViewModel GetAllFoodItemWithPermission()
+        public async Task<AllFoodItemWithPermissionViewModel> GetAllFoodItemWithPermissionAsync(CancellationToken cancellationToken = default)
         {
-            var foodItemsDatas = _foodItemRepository.GetAllIncludeMenuAndIngredients();
+            var foodItemsDatas = await _foodItemRepository
+                .GetAllIncludeMenuAndIngredientsAsync(cancellationToken);
             var foodItemsViewModel = foodItemsDatas
-                .Select(ConvertToFoodItemVM)
+                .Select(ConvertToFoodItemVm)
                 .ToList();
-            var foodsWithPermissionVM = GetFoodsWithPermission(foodItemsViewModel);
+
+            var foodsWithPermissionVM = await GetFoodsWithPermissionAsync(foodItemsViewModel, cancellationToken);
 
             return foodsWithPermissionVM;
         }
 
-        public CreateFoodItemViewModel GetCreateFoodItemViewModel(int? id = null)
+        public async Task<CreateFoodItemViewModel> GetCreateFoodItemViewModelAsync(
+            int? id = null,
+            CancellationToken cancellationToken = default)
         {
             if (id is null or <= 0)
             {
-                return ConvertToCreateFoodItemVM();
+                return await ConvertToCreateFoodItemVmAsync(cancellationToken: cancellationToken);
             }
 
-            var foodItemData = _foodItemRepository.GetByIdIncludeMenuAndIngredientsLinks(id.Value);
+            var foodItemData = await _foodItemRepository
+                .GetByIdIncludeMenuAndIngredientsLinksAsync(id.Value, cancellationToken);
 
-            var createFoodVM = ConvertToCreateFoodItemVM(foodItemData);
+            var createFoodVM = await ConvertToCreateFoodItemVmAsync(foodItemData, cancellationToken);
             return createFoodVM;
         }
     }
