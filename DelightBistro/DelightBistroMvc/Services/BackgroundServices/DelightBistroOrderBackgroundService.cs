@@ -1,4 +1,4 @@
-﻿using DelightBistroMvc.Data.Repositories.Interfaces;
+﻿using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 
 namespace DelightBistroMvc.Services.BackgroundServices
 {
@@ -12,18 +12,18 @@ namespace DelightBistroMvc.Services.BackgroundServices
             _serviceProvider = serviceProvider;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
 
 
-            while (!stoppingToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 using var di = _serviceProvider.CreateScope();
                 var orderRepository = di.ServiceProvider.GetRequiredService<IOrderRepository>();
 
-                orderRepository.DeleteExpiredOrderDatas();
+                await orderRepository.DeleteExpiredOrderDatasAsync(cancellationToken);
 
-                await Task.Delay(DELAY_BETWEEN_ORDER_TIME_CHECK * 1000, stoppingToken);
+                await Task.Delay(DELAY_BETWEEN_ORDER_TIME_CHECK * 1000, cancellationToken);
             }
         }
     }

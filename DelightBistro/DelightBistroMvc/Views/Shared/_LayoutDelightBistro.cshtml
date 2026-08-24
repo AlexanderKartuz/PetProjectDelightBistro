@@ -46,7 +46,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">@Home.Index_Logout</a>
                             </li>
                             <li class="nav-item">
-                                <span class="nav-link text-dark">Hello, @authService.GetUser().Name (@authService.GetRole())</span>
+                                <span class="nav-link text-dark">Hello, @authService.GetUserName() (@authService.GetRole())</span>
                             </li>
                         }
                         else

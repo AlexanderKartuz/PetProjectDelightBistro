@@ -31,7 +31,7 @@ builder.Services.AddDbContext<MiniDbContext>(op => op.UseSqlServer(connectionStr
 builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
 builder.Services.AddScoped<IDrinkMapper, DrinkMapper>();
 builder.Services.AddScoped<IEndpointValidator, EndpointValidator>();
-builder.Services.AddHostedService<SerilogCleanupBackgroundService>();
+builder.Services.AddScoped<ISeriLogRepository, SeriLogRepository>();
 
 var cachingOptions = builder.Services.AddDelightBistroCaching(builder.Configuration);
 
@@ -85,7 +85,7 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-app.MapPost("login", (
+app.MapPost("login", async (
     LoginRequest request,
     IUserDataService userDataService,
     IEndpointValidator endpointValidator,
@@ -98,7 +98,7 @@ app.MapPost("login", (
         return validationError;
     }
 
-    var user = userDataService.ValidateCredetials(request.Login, request.Password);
+    var user = await userDataService.ValidateCredetialsAsync(request.Login, request.Password);
     if (user is null)
     {
         return Results.Unauthorized();

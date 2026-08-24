@@ -7,7 +7,7 @@ namespace DelightBistroMvc.Services.Chat.Interfaces
     {
         string ResolveDisplayName(ClaimsPrincipal? user, string connectionId);
         int? TryGetUserId(ClaimsPrincipal? user);
-        ChatMessageDto? SaveMessage(string senderName, string text, int? userId);
-        IReadOnlyList<ChatMessageDto> GetRecentMessage(int count = 10);
+        Task<ChatMessageDto?> SaveMessageAsync(string senderName, string text, int? userId, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<ChatMessageDto>> GetRecentMessageAsync(int count = 10, CancellationToken cancellationToken = default);
     }
 }

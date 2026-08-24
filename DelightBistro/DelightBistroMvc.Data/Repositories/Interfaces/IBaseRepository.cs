@@ -5,20 +5,16 @@ namespace DelightBistroMvc.Data.Repositories.Interfaces
     public interface IBaseRepository<DataModel>
         where DataModel : BaseModel
     {
-        public void Add(DataModel model);
-        public List<DataModel> GetAll();
-        public void Remove(DataModel model);
-        public DataModel? Get(int id);
-        public void Update(DataModel model);
-        public void Update(List<DataModel> models);
-        public void Delete(int id);
-        void DeleteRange(List<DataModel> models);
-        public bool Any();
-        void Delete(List<int> ids);
-        List<DataModel> GetByIds(List<int> ids);
-        //List<DataModel> GetAllWithExpression(string? sortBy, 
-        //    string? direction, 
-        //    string? sortType, 
-        //    string? sortValue);
+        Task AddAsync(DataModel model, CancellationToken cancellationToken = default);
+        Task<List<DataModel>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task RemoveAsync(DataModel model, CancellationToken cancellationToken = default);
+        Task<DataModel?> GetAsync(int id, CancellationToken cancellationToken = default);
+        Task UpdateAsync(DataModel model, CancellationToken cancellationToken = default);
+        Task UpdateAsync(List<DataModel> models, CancellationToken cancellationToken = default);
+        Task DeleteAsync(int id, CancellationToken cancellationToken = default);
+        Task DeleteRangeAsync(List<DataModel> models, CancellationToken cancellationToken = default);
+        Task<bool> AnyAsync(CancellationToken cancellationToken = default);
+        Task DeleteAsync(List<int> ids, CancellationToken cancellationToken = default);
+        Task<List<DataModel>> GetByIdsAsync(List<int> ids, CancellationToken cancellationToken = default);
     }
 }

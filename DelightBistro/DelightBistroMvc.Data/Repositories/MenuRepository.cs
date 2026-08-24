@@ -8,24 +8,26 @@ namespace DelightBistroMvc.Data.Repositories
     {
         public MenuRepository(WebContext webContext) : base(webContext) { }
 
-        public List<MenuData> GetAllIncludeFoodItemsWithIngredientsLinks(string filterMenuName)
+        public Task<List<MenuData>> GetAllIncludeFoodItemsWithIngredientsLinksAsync(
+            string filterMenuName, 
+            CancellationToken cancellationToken = default)
         {
-            var allMenus = _dbSet
+            var query = _dbSet
             .AsNoTracking()
             .Include(x => x.Creator)
             .Include(x => x.FoodItems)
                 .ThenInclude(f => f.Creator)
             .Include(x => x.FoodItems)
                 .ThenInclude(x => x.FoodItemIngredientDatas)
-                    .ThenInclude(x => x.IngredientData);
-            
+                    .ThenInclude(x => x.IngredientData)
+            .AsQueryable();
+
             if (!string.IsNullOrEmpty(filterMenuName))
             {
-                var filterMenu = allMenus.Where(x => x.Name == filterMenuName).ToList();
-                return filterMenu;
+                query = query.Where(x => x.Name == filterMenuName);
             }
 
-            return allMenus.ToList();
+            return query.ToListAsync(cancellationToken);
         }
 
         public bool IsNameFree(string name)

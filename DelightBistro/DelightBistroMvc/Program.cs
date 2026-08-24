@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Quartz;
 using DelightBistroMvc.Data;
+using DelightBistroMvc.Data.Repositories;
+using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Data.Services.PasswordHasher;
 using DelightBistroMvc.Data.Services.UserService;
 using DelightBistroMvc.Hubs;
@@ -9,15 +10,16 @@ using DelightBistroMvc.RelfectionTools;
 using DelightBistroMvc.Services;
 using DelightBistroMvc.Services.Apis;
 using DelightBistroMvc.Services.BackgroundServices;
-using DelightBistroMvc.Services.DelightBistro;
-using DelightBistroMvc.Services.Interfaces;
 using DelightBistroMvc.Services.Chat;
 using DelightBistroMvc.Services.Chat.Interfaces;
+using DelightBistroMvc.Services.DelightBistro;
+using DelightBistroMvc.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Quartz;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSignalR();
 
 var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WebNet23Online;Integrated Security=True;Connect Timeout=30;";
 builder.Services.AddDbContext<WebContext>(op => op.UseSqlServer(connectionString));
@@ -54,8 +56,10 @@ builder.Services.AddScoped<IFoodItemGenerator, FoodItemGenerator>();
 builder.Services.AddScoped<IMenuTypeGenerator, MenuTypeGenerator>();
 builder.Services.AddScoped<IIngredientGenerator, IngredientGenerator>();
 builder.Services.AddScoped<IDelightBistroMainIndexGenerator, DelightBistroMainIndexGenerator>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Chat
+builder.Services.AddSignalR();
 builder.Services.AddSingleton<ChatPresenceService>();
 builder.Services.AddScoped<INewChatService, NewChatService>();
 
@@ -63,17 +67,25 @@ builder.Services.AddScoped<INewChatService, NewChatService>();
 builder.Services.AddScoped<IDelightBistroSeedService, DelightBistroSeedService>();
 
 // Repositories
-builder.Services.ResolveRepositories();
-builder.Services.ResolveByAttribute();
+//builder.Services.ResolveRepositories();
+//builder.Services.ResolveByAttribute();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IFoodItemRepository, FoodItemRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddHostedService<DelightBistroOrderBackgroundService>();
 
 builder.Services.AddQuartzHostedService(options =>
 {
     options.WaitForJobsToComplete = true;
 });
-builder.Services.AddHostedService<DelightBistroOrderBackgroundService>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -101,9 +113,9 @@ if (!app.Environment.IsDevelopment())
 // DataSeed
 using (var scope = app.Services.CreateScope())
 {
-    scope.ServiceProvider
-        .GetRequiredService<IDelightBistroSeedService>()
-        .EnsureSeed();
+    await scope.ServiceProvider
+         .GetRequiredService<IDelightBistroSeedService>()
+         .EnsureSeedAsync();
 }
 
 app.UseHttpsRedirection();

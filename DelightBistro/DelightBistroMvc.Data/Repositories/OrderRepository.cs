@@ -1,5 +1,5 @@
 ﻿using DelightBistroMvc.Data.Models;
-using DelightBistroMvc.Data.Repositories.Interfaces;
+using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using Microsoft.EntityFrameworkCore;
 
 namespace DelightBistroMvc.Data.Repositories
@@ -9,13 +9,13 @@ namespace DelightBistroMvc.Data.Repositories
         private const int EXPIRED_MONTHS = -1;
         public OrderRepository(WebContext context) : base(context) { }
 
-        public void DeleteExpiredOrderDatas()
+        public Task<int> DeleteExpiredOrderDatasAsync(CancellationToken cancellationToken = default)
         {
             var oneMonthAgo = DateTime.UtcNow.AddMonths(EXPIRED_MONTHS);
 
-            var expiredOrders = _dbSet
+            return _dbSet
                 .Where(x => x.CreatedDateTime < oneMonthAgo)
-                .ExecuteDelete();
+                .ExecuteDeleteAsync(cancellationToken: cancellationToken);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace DelightBistroMvc.Services.Interfaces;
 public interface IAuthService
 {
     UserRole GetRole();
-    UserData? GetUser();
+    Task<UserData?> GetUserAsync(CancellationToken cancellationToken = default);
     int GetUserId();
     string? GetUserName();
     bool IsAuthenticated();
@@ -15,5 +15,5 @@ public interface IAuthService
     bool IsCurrentUserAtLeastEmployee();
     bool IsUser();
     Language GetLanguage();
-    Task SignIn(UserData user);
+    Task SignInAsync(UserData user);
 }

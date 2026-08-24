@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using DelightBistroMvc.Data.Models;
 using DelightBistroMvc.Data.Repositories.Interfaces;
 
@@ -17,160 +16,79 @@ namespace DelightBistroMvc.Data.Repositories
             _dbSet = _context.Set<DataModel>();
         }
 
-        public virtual void Add(DataModel model)
+        public virtual Task AddAsync(DataModel model, CancellationToken cancellationToken = default)
         {
-            _dbSet.Add(model);
-            _context.SaveChanges();
+            return _dbSet.AddAsync(model, cancellationToken).AsTask();
+            //_context.SaveChanges();
         }
 
-        public virtual void Remove(DataModel model)
+        public virtual Task RemoveAsync(DataModel model, CancellationToken cancellationToken = default)
         {
             _dbSet.Remove(model);
-            _context.SaveChanges();
+            return Task.CompletedTask;
+            //_context.SaveChanges();
         }
 
-        public virtual DataModel? Get(int id)
+        public virtual async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
-            return _dbSet.FirstOrDefault(x => x.Id == id);
-        }
-
-        public virtual bool Any()
-        {
-            return _dbSet.Any();
-        }
-
-        public virtual List<DataModel> GetAll()
-        {
-            return _dbSet.ToList();
-        }
-
-        //public List<DataModel> GetAllWithExpression(string? sortBy,
-        //    string? direction,
-        //    string? sortType,
-        //    string? sortValue)
-        //{
-        //    var dataSource = _dbSet
-        //        .AsQueryable();
-
-        //    if (sortBy is null)
-        //    {
-        //        return dataSource.ToList();
-        //    }
-
-        //    // goal
-        //    // dataSource = dataSource.OrderBy(entity => entity.Id);
-
-        //    // entity
-        //    var parameter = Expression.Parameter(typeof(DataModel), "entity");
-
-        //    // entity.Id
-        //    var field = Expression.Property(parameter, sortBy);
-
-        //    // int
-        //    var sortPropertyType = typeof(DataModel)
-        //        .GetProperty(sortBy)!
-        //        .PropertyType;
-
-        //    // entity => entity.Id
-        //    var lambdaForOrder = Expression.Lambda(field, parameter);
-
-        //    var methodName = direction is null
-        //        || direction == "asc"
-        //        ? "OrderBy"
-        //        : "OrderByDescending";
-
-        //    // dataSource.OrderBy<DataModel, int>(entity => entity.Id);
-        //    var orderByMethod = typeof(Queryable)
-        //        .GetMethods()
-        //        .First(x => x.Name == methodName
-        //            && x.GetParameters().Count() == 2)
-        //        .MakeGenericMethod(typeof(DataModel), sortPropertyType);
-        //    var sortedSource =
-        //        (IQueryable<DataModel>)orderByMethod.Invoke(null, [dataSource, lambdaForOrder])!;
-
-        //    if (sortType is null || string.IsNullOrEmpty(sortType))
-        //    {
-        //        return sortedSource.ToList();
-        //    }
-
-        //    // dataSource.Where<DataModel>(entity => entity.Id > 50);
-        //    var convertedSortValue = Convert.ChangeType(sortValue, sortPropertyType);
-        //    var constSortValue = Expression.Constant(convertedSortValue);
-        //    Expression filterExpression;
-        //    //  entity.Id > 50
-        //    if (sortType == "more")
-        //    {
-        //        filterExpression = Expression.GreaterThan(field, constSortValue);
-        //    }
-        //    else if (sortType == "less")
-        //    {
-        //        filterExpression = Expression.LessThan(field, constSortValue);
-        //    }
-        //    else if (sortType == "eq")
-        //    {
-        //        filterExpression = Expression.Equal(field, constSortValue);
-        //    }
-        //    else
-        //    {
-        //        throw new Exception($"Unknown filter type: {sortType}");
-        //    }
-
-        //    // entity => entity.id > 50
-        //    var lambdaForWhere = Expression.Lambda(filterExpression, parameter);
-
-        //    var whereMethod = typeof(Queryable)
-        //       .GetMethods()
-        //       .First(x => x.Name == "Where")
-        //       .MakeGenericMethod(typeof(DataModel));
-
-        //    var filteredAndSortedSource =
-        //        (IQueryable<DataModel>)whereMethod.Invoke(null, [sortedSource, lambdaForWhere])!;
-
-        //    return filteredAndSortedSource.ToList();
-        //}
-
-        public virtual void Update(DataModel model)
-        {
-            _dbSet.Update(model);
-            _context.SaveChanges();
-        }
-
-        public virtual void Delete(int id)
-        {
-            var user = _dbSet.FirstOrDefault(x => x.Id == id);
-            if (user != null)
+            var entity = await _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
+            if (entity != null)
             {
-                _dbSet.Remove(user);
-                _context.SaveChanges();
+                _dbSet.Remove(entity);
+                //_context.SaveChanges();
             }
         }
 
-        public virtual void Delete(List<int> ids)
+        public virtual async Task DeleteAsync(List<int> ids, CancellationToken cancellationToken = default)
         {
-            var models = _dbSet.Where(x => ids.Contains(x.Id));
-            if (models.Any())
+            var models = await _dbSet.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+            if (models.Count > 0)
             {
                 _dbSet.RemoveRange(models);
-                _context.SaveChanges();
+                //_context.SaveChanges();
             }
         }
 
-        public virtual List<DataModel> GetByIds(List<int> ids)
-        {
-            var foodItems = _dbSet.Where(x => ids.Contains(x.Id)).ToList();
-            return foodItems;
-        }
-
-        public void Update(List<DataModel> models)
-        {
-            _dbSet.UpdateRange(models);
-            _context.SaveChanges();
-        }
-
-        public void DeleteRange(List<DataModel> models)
+        public virtual Task DeleteRangeAsync(
+            List<DataModel> models, 
+            CancellationToken cancellationToken = default)
         {
             _dbSet.RemoveRange(models);
-            _context.SaveChanges();
+            return Task.CompletedTask;
+            //_context.SaveChanges();
+        }
+
+        public virtual Task<DataModel?> GetAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return _dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
+        }
+
+        public virtual Task<List<DataModel>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return _dbSet.ToListAsync(cancellationToken: cancellationToken);
+        }
+
+        public virtual Task<List<DataModel>> GetByIdsAsync(List<int> ids, CancellationToken cancellationToken = default)
+        {
+            return _dbSet.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+        }
+        public virtual Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+        {
+            return _dbSet.AnyAsync(cancellationToken: cancellationToken);
+        }
+
+        public virtual Task UpdateAsync(DataModel model, CancellationToken cancellationToken = default)
+        {
+            _dbSet.Update(model);
+            return Task.CompletedTask;
+            //_context.SaveChanges();
+        }
+
+        public virtual Task UpdateAsync(List<DataModel> models, CancellationToken cancellationToken = default)
+        {
+            _dbSet.UpdateRange(models);
+            return Task.CompletedTask;
+            //_context.SaveChanges();
         }
     }
 }

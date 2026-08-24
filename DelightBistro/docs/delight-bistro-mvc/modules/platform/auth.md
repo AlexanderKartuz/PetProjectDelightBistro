@@ -48,7 +48,8 @@
 | Сервис | Назначение |
 |--------|------------|
 | `IUserDataService` | `ValidateCredetials`, `Register`, `IsNameUniq` |
-| `IUserRepository` | `GetByName`, `IsNameUniq`, CRUD |
+| `IUserRepository` | `GetByNameAsync`, `IsNameUniq`, CRUD |
+| `IUnitOfWork` | `SaveChangesAsync` (через `IUserDataService` при Register/Update) |
 | `IAuthService` | Claims cookie, `SignIn(user)` |
 | `IPasswordHasher` / `BCryptPasswordHasher` | Хэш и проверка пароля (DI в `Program.cs`) |
 

@@ -5,10 +5,10 @@ namespace DelightBistroMvc.Data.Services.UserService
 {
     public interface IUserDataService
     {
-        UserData? ValidateCredetials(string login, string password);
+        Task<UserData?> ValidateCredetialsAsync(string login, string password, CancellationToken cancellationToken = default);
         bool IsNameUniq(string name);
-        void Register(UserData user);
-        void UpdateLanguage(int UserId, Language language);
-        void UpdateProfile(UserData user);
+        Task RegisterAsync(UserData user, CancellationToken cancellationToken = default);
+        Task UpdateLanguageAsync(int UserId, Language language, CancellationToken cancellationToken = default);
+        Task UpdateProfileAsync(UserData user, CancellationToken cancellationToken = default);
     }
 }

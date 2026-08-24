@@ -1,5 +1,6 @@
 ﻿using DelightBistroMvc.Data.Enums;
 using DelightBistroMvc.Data.Models;
+using DelightBistroMvc.Data.Repositories.Interfaces;
 using DelightBistroMvc.Data.Repositories.Interfaces.DelightBistro;
 using DelightBistroMvc.Data.Services.PasswordHasher;
 using Microsoft.EntityFrameworkCore.Update;
@@ -9,12 +10,16 @@ namespace DelightBistroMvc.Data.Services.UserService
     public class UserDataService : IUserDataService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private IPasswordHasher _passwordHasher;
 
-        public UserDataService(IUserRepository userRepository, IPasswordHasher passwordHasher)
+        public UserDataService(IUserRepository userRepository,
+            IPasswordHasher passwordHasher,
+            IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _unitOfWork = unitOfWork;
         }
 
         public bool IsNameUniq(string name)
@@ -23,7 +28,9 @@ namespace DelightBistroMvc.Data.Services.UserService
             return isNameUniq;
         }
 
-        public void Register(UserData user)
+        public async Task RegisterAsync(
+            UserData user,
+            CancellationToken cancellationToken = default)
         {
             if (!IsNameUniq(user.Name))
             {
@@ -34,32 +41,43 @@ namespace DelightBistroMvc.Data.Services.UserService
             user.Role = UserRole.User;
             user.Language = Language.English;
 
-            _userRepository.Add(user);
+            await _userRepository.AddAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public void UpdateLanguage(int userId, Language language)
+        public async Task UpdateLanguageAsync(
+            int userId,
+            Language language,
+            CancellationToken cancellationToken = default)
         {
-            var user = _userRepository.Get(userId)
+            var user = await _userRepository.GetAsync(userId, cancellationToken)
                 ?? throw new InvalidOperationException($"User {userId} not found");
 
             user.Language = language;
-            _userRepository.Update(user);
+            await _userRepository.UpdateAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public void UpdateProfile(UserData userData)
+        public async Task UpdateProfileAsync(
+            UserData userData,
+            CancellationToken cancellationToken = default)
         {
-            var user = _userRepository.Get(userData.Id)
+            var user = await _userRepository.GetAsync(userData.Id, cancellationToken)
                 ?? throw new InvalidOperationException($"User {userData.Id} not found");
 
             user.FirstName = userData.FirstName;
             user.LastName = userData.LastName;
             user.Mobilephone = userData.Mobilephone;
-            _userRepository.Update(user);
+            await _userRepository.UpdateAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public UserData? ValidateCredetials(string login, string password)
+        public async Task<UserData?> ValidateCredetialsAsync(
+            string login,
+            string password,
+            CancellationToken cancellationToken = default)
         {
-            var user = _userRepository.GetByName(login);
+            var user = await _userRepository.GetByNameAsync(login, cancellationToken);
 
             if (user == null)
             {
